@@ -1,0 +1,13 @@
+# Normalize all text files to LF, in the repository and in the working tree.
+# This overrides core.autocrlf, which is set to true on this machine.
+* text=auto eol=lf
+
+# Never apply line-ending conversion to these.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.woff binary
+*.woff2 binary
