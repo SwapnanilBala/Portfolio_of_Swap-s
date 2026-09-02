@@ -45,7 +45,7 @@ function GatedVideo({
           alt={media.alt}
           width={media.width}
           height={media.height}
-          sizes="(max-width: 46rem) 100vw, 34rem"
+          sizes="(max-width: 46rem) 100vw, 48rem"
         />
         <span className="poster-gate-label">
           <span>{labels.play}</span>
@@ -83,7 +83,7 @@ export function ProjectMedia({ media, labels }: Props) {
             alt={media.alt}
             width={media.width}
             height={media.height}
-            sizes="(max-width: 46rem) 100vw, 34rem"
+            sizes="(max-width: 46rem) 100vw, 48rem"
           />
         )}
       </div>

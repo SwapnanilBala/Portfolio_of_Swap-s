@@ -136,11 +136,21 @@ improvement on one of its own projects. A slow portfolio refutes its own copy.
 - Every image and video carries explicit `width` and `height`. Omitting them
   causes reflow on load and a Cumulative Layout Shift penalty.
 - Images go through `next/image`.
-- **Only record what cannot be linked.** Lagna Atelier and Robust Health are
-  both live; a video of a clickable site is a worse version of the click. The
-  one clip worth its bandwidth is the palm-reading flow, because no visitor will
-  upload a photo of their hand to a stranger's portfolio, so that interaction is
-  otherwise invisible.
+- **Only *record* what cannot be linked.** A video of a clickable site is a
+  worse version of the click. The one clip worth its bandwidth is the
+  palm-reading flow, because no visitor will upload a photo of their hand to a
+  stranger's portfolio, so that interaction is otherwise invisible.
+- **Static screenshots are a deliberate exception, added on request.** Lagna
+  Atelier and Robust Health each carry one WebP screenshot of their landing
+  state (51 KB and 82 KB). They earn their place differently from video: a
+  skimming reader gets something to look at without a click, and the cost is a
+  lazy-loaded image rather than a media element. Do not remove them as a
+  "correction" to the rule above.
+- **Figures break out of the prose measure to the full content width.** A
+  screenshot squeezed into the 34rem column is illegible, which turns evidence
+  into decoration. The breakout is disabled below the 46rem breakpoint. If you
+  add a figure, check it at 360px and just above 736px, where the maths is
+  tightest.
 - A link whose `href` is unset must not render as a dead link. Filter it out.
 
 ## The hero demo

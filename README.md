@@ -53,15 +53,15 @@ Search the repo with `git grep -n TODO` at any time.
 
 **`lib/content.ts`**
 
-- Lagna Atelier — live URL and repo URL (`links`). Until an `href` is set these
-  links are filtered out, so nothing renders as a dead link.
-- Robust Health — live URL, repo URL, the one plain sentence describing what it
-  does for a user (`summary`), and the rest of the stack.
+- Lagna Atelier — repo URL. The live URL is set. Until an `href` is set a link
+  is filtered out, so nothing renders as a dead link.
+- Robust Health — repo URL, and confirmation of the `summary`. That sentence was
+  derived from the live site's own copy rather than supplied directly, so check
+  it describes the product the way you want. The rest of the stack is also open.
 - Co-op discovery pipeline — gutter figures, stack, repo URL.
 - P2G Mobility Tech — the accomplishment line.
-- The palm-reading clip for Lagna Atelier. A commented-out `media` block with
-  the required shape is in place; fill in real `width`, `height` and
-  `durationSeconds` once recorded.
+- The palm-reading clip for Lagna Atelier. Its screenshot is in place, but the
+  clip is still the one thing a link cannot substitute for.
 
 **`public/`**
 
@@ -74,6 +74,17 @@ Search the repo with `git grep -n TODO` at any time.
   comment banner at the top of the file.
 
 ## Adding media
+
+Screenshots live in `public/media/` as WebP and are declared in `lib/content.ts`
+with explicit `width` and `height`. On screens above 46rem a figure breaks out
+of the prose measure to the full content width, because a screenshot narrow
+enough to fit the measure is too small to read.
+
+To refresh a screenshot, capture at 2x and downscale:
+
+```bash
+node -e "require('sharp')('in.png').resize({width:1600}).webp({quality:82}).toFile('public/media/out.webp')"
+```
 
 Video is poster-gated — the `<video>` element does not mount until a visitor
 clicks the poster, so clips cost nothing on page load. Put files in

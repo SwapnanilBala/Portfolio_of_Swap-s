@@ -88,27 +88,25 @@ export const content: SiteContent = {
         "PWA",
       ],
       links: [
-        // TODO: paste the live URL. Until href is set this link is filtered out, not rendered dead.
-        { role: "live" },
-        // TODO: paste the repo URL.
+        { role: "live", href: "https://large-astro-web-app.vercel.app/" },
+        // TODO: paste the repo URL. Until href is set this link is filtered
+        // out, not rendered dead.
         { role: "source" },
       ],
-      // TODO: record the palm-reading flow — the one interaction a visitor will never
-      // perform on a stranger's site, so it cannot be replaced by a link. Then fill in:
-      //
-      // media: [
-      //   {
-      //     kind: "video",
-      //     src: "/media/lagna-palm-reading.webm",
-      //     poster: "/media/lagna-palm-reading-poster.webp",
-      //     alt: "A hand photograph being analysed into labelled palm lines with confidence scores.",
-      //     caption: "Uploading a palm photograph and receiving per-line confidence scores.",
-      //     width: 1280,
-      //     height: 720,
-      //     durationSeconds: 0, // measured length, under 15
-      //   },
-      // ],
-      // Keep it WebM/VP9, under ~2 MB, under 15 seconds.
+      media: [
+        {
+          kind: "image",
+          src: "/media/lagna-atelier.webp",
+          alt: "The Lagna Atelier chart builder: a four-step birth-details form beside a live sky preview panel.",
+          caption:
+            "The chart builder. The sky preview fills in as each birth detail is entered.",
+          width: 1600,
+          height: 1000,
+        },
+      ],
+      // TODO: still worth recording the palm-reading flow as a clip — it is the
+      // one interaction a visitor will never perform on a stranger's site, so a
+      // link cannot substitute for it. WebM/VP9, under ~2 MB, under 15 seconds.
     },
 
     {
@@ -116,9 +114,10 @@ export const content: SiteContent = {
       name: "Robust Health",
       period: "2025",
       status: "shipped",
-      // TODO: replace with your one plain sentence describing what this does for a user.
+      // TODO: confirm this sentence. It is derived from the live site's own copy,
+      // not supplied directly, so rewrite it if it misdescribes the product.
       summary:
-        "TODO — one plain sentence describing what Robust Health does for a user.",
+        "A training, nutrition, and recovery planner that builds a weekly programme and adjusts it against the adherence and recovery data you log.",
       gutter: [
         { value: "−50%", label: "load time, web" },
         { value: "−67%", label: "load time, mobile" },
@@ -129,10 +128,20 @@ export const content: SiteContent = {
       // TODO: complete the stack. Next.js is inferred from the use of next/image; the rest is unknown.
       stack: ["Next.js", "TODO — rest of the stack"],
       links: [
-        // TODO: paste the live URL.
-        { role: "live" },
+        { role: "live", href: "https://app.robusthealth.in/" },
         // TODO: paste the repo URL.
         { role: "source" },
+      ],
+      media: [
+        {
+          kind: "image",
+          src: "/media/robust-health.webp",
+          alt: "The Robust Health landing page, showing the weekly programming pitch above counters for plans generated and workouts completed.",
+          caption:
+            "The landing page. Everything past this point is behind sign-in, so this is where a visitor without an account stops.",
+          width: 1600,
+          height: 1000,
+        },
       ],
     },
 

@@ -479,7 +479,19 @@ a:hover {
    ========================================================================== */
 
 figure {
-  margin: var(--step-3) 0 0;
+  margin: var(--step-4) 0 0;
+}
+
+/* Figures break out of the prose measure to the full content width. A
+   screenshot squeezed into a 34rem column is too small to read, which turns
+   evidence into decoration; the gutter beside a figure is empty by then
+   anyway. Prose keeps its measure -- only figures break out. */
+@media (min-width: 46.0625rem) {
+  .prose > figure {
+    margin-left: calc(-1 * (var(--gutter) + var(--column-gap)));
+    width: calc(100% + var(--gutter) + var(--column-gap));
+    max-width: none;
+  }
 }
 
 .media-frame {
