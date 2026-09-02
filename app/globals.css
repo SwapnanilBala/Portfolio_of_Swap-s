@@ -162,6 +162,11 @@ table {
   margin-top: var(--step-2);
 }
 
+/* Holds the period line above the figures, both inside the gutter column. */
+.entry-gutter-col > .gutter {
+  margin-top: var(--step-2);
+}
+
 .fact-value {
   display: block;
   color: var(--brass);
@@ -561,7 +566,15 @@ figcaption {
 @media (prefers-reduced-motion: no-preference) {
   .reveal {
     animation: reveal 520ms cubic-bezier(0.2, 0.6, 0.2, 1) both;
-    animation-delay: var(--reveal-delay, 0ms);
+  }
+
+  /* Three steps is the entire budget. There is no fourth. */
+  .reveal[data-reveal="2"] {
+    animation-delay: 90ms;
+  }
+
+  .reveal[data-reveal="3"] {
+    animation-delay: 180ms;
   }
 
   @keyframes reveal {
