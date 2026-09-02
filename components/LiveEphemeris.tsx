@@ -1,11 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { ChartSnapshot, EphemerisBody } from "@/lib/types";
+import type { ChartSnapshot, EphemerisBody, HeroContent } from "@/lib/types";
 
 interface Props {
-  readonly caption: string;
-  readonly note: string;
+  readonly content: HeroContent;
 }
 
 /* ==========================================================================
@@ -28,9 +27,10 @@ interface Props {
 
           import { computeSnapshot } from "@/lib/ephemeris";
 
-     3. Delete the `PLACEHOLDER` string from the table caption below, and
-        update `hero.ephemerisNote` in `lib/content.ts` — it currently tells
-        the reader the positions are not real yet, which stops being true.
+     3. In `lib/content.ts`, drop the "PLACEHOLDER — " prefix from
+        `hero.ephemerisTableCaption`, and rewrite `hero.ephemerisNote` — it
+        currently tells the reader the positions are not real yet, which
+        stops being true.
 
    Do not move the `performance.now()` brackets in the effect. They wrap the
    calculation and nothing else. If they ever come to include the render or
@@ -127,7 +127,29 @@ function formatClock(at: Date): string {
   return `${hh}:${mm}:${ss} UTC`;
 }
 
-export function LiveEphemeris({ caption, note }: Props) {
+/**
+ * The measurement is reported, never rounded up into something that looks
+ * better. When the calculation finishes faster than performance.now() can
+ * resolve, the honest statement is that it was below the clock's resolution --
+ * printing "0.000 ms" would read as a broken component rather than a fast one.
+ */
+function formatElapsed(content: HeroContent, elapsedMs: number): string {
+  return elapsedMs >= 0.01
+    ? `${elapsedMs.toFixed(2)} ms`
+    : content.ephemerisBelowResolution;
+}
+
+function footLead(content: HeroContent, snapshot: ChartSnapshot): string {
+  const [lead = ""] = content.ephemerisFoot.split("{elapsed}");
+  return lead.replace("{bodies}", snapshot.bodies.length.toString());
+}
+
+function footTail(content: HeroContent): string {
+  const [, tail = ""] = content.ephemerisFoot.split("{elapsed}");
+  return tail;
+}
+
+export function LiveEphemeris({ content }: Props) {
   // Null until the browser has actually computed something. Calling new Date()
   // during render would make the server and client disagree and produce an
   // intermittent hydration mismatch. Deferring is also the honest architecture:
@@ -145,26 +167,29 @@ export function LiveEphemeris({ caption, note }: Props) {
     setSnapshot({ ...computed, elapsedMs });
   }, []);
 
+  const columns = content.ephemerisColumns;
+
   return (
-    <section className="ephemeris" aria-label={caption}>
-      <p className="ephemeris-caption">{caption}</p>
+    <section className="ephemeris" aria-label={content.ephemerisCaption}>
+      <p className="ephemeris-caption">{content.ephemerisCaption}</p>
 
       {snapshot === null ? (
-        <p className="ephemeris-loading">Computing in your browser...</p>
+        <p className="ephemeris-loading">{content.ephemerisLoading}</p>
       ) : (
         <>
           <table className="ephemeris-table">
             <caption>
-              PLACEHOLDER — {snapshot.ayanamsha} ayanamsha{" "}
-              {snapshot.ayanamshaValue.toFixed(4)}° at{" "}
-              {formatClock(snapshot.computedAt)}
+              {content.ephemerisTableCaption
+                .replace("{ayanamsha}", snapshot.ayanamsha)
+                .replace("{value}", snapshot.ayanamshaValue.toFixed(4))
+                .replace("{time}", formatClock(snapshot.computedAt))}
             </caption>
             <thead>
               <tr>
-                <th scope="col">Body</th>
-                <th scope="col">Sidereal</th>
-                <th scope="col">Sign</th>
-                <th scope="col">Motion</th>
+                <th scope="col">{columns.body}</th>
+                <th scope="col">{columns.position}</th>
+                <th scope="col">{columns.sign}</th>
+                <th scope="col">{columns.motion}</th>
               </tr>
             </thead>
             <tbody>
@@ -175,7 +200,9 @@ export function LiveEphemeris({ caption, note }: Props) {
                   <td>{body.sign}</td>
                   <td>
                     {body.retrograde ? (
-                      <span className="ephemeris-retro">R</span>
+                      <span className="ephemeris-retro">
+                        {content.ephemerisRetrograde}
+                      </span>
                     ) : (
                       <span aria-hidden="true">{"–"}</span>
                     )}
@@ -186,16 +213,16 @@ export function LiveEphemeris({ caption, note }: Props) {
           </table>
 
           <p className="ephemeris-foot">
-            {snapshot.bodies.length} bodies in{" "}
+            {footLead(content, snapshot)}
             <span className="ephemeris-elapsed">
-              {snapshot.elapsedMs.toFixed(3)} ms
-            </span>{" "}
-            on your machine, with no network request.
+              {formatElapsed(content, snapshot.elapsedMs)}
+            </span>
+            {footTail(content)}
           </p>
         </>
       )}
 
-      <p className="ephemeris-note">{note}</p>
+      <p className="ephemeris-note">{content.ephemerisNote}</p>
     </section>
   );
 }

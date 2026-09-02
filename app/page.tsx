@@ -30,7 +30,11 @@ export default function Page() {
       <section className="section reveal" data-reveal="2">
         <SectionHeading heading={content.sections.projects} />
         {projects.map((project) => (
-          <ProjectEntry key={project.slug} project={project} />
+          <ProjectEntry
+            key={project.slug}
+            project={project}
+            mediaLabels={content.mediaLabels}
+          />
         ))}
       </section>
 

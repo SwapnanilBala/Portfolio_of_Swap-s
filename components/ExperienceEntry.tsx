@@ -25,7 +25,9 @@ export function ExperienceEntry({ experience }: Props) {
       </div>
 
       <div className="prose">
-        <h3 className="entry-title">{experience.role}</h3>
+        <div className="entry-head">
+          <h3 className="entry-title">{experience.role}</h3>
+        </div>
         <p className="entry-summary">
           {experience.org}, {experience.team} team, {experience.location}
         </p>

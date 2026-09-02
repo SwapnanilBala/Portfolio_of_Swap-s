@@ -110,8 +110,10 @@ table {
    Left gutter: checkable figures, monospace. Right: prose, serif.
    ========================================================================== */
 
+/* The padding is added on top of the measure: box-sizing is border-box, so a
+   bare max-width would eat into the prose column and shorten the measure. */
 .shell {
-  max-width: var(--shell);
+  max-width: calc(var(--shell) + 2 * var(--step-3));
   margin-inline: auto;
   padding: var(--step-5) var(--step-3) var(--step-6);
 }
@@ -360,15 +362,20 @@ table {
    Project and experience entries
    ========================================================================== */
 
+/* The status badge sits beside the title but outside the <h3>, so the
+   heading's accessible name is the project name and nothing else. */
+.entry-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--step-2);
+}
+
 .entry-title {
   font-family: var(--serif);
   font-size: var(--size-title);
   font-weight: 500;
   line-height: 1.25;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: var(--step-2);
 }
 
 .entry-status {
@@ -586,6 +593,14 @@ figcaption {
       opacity: 1;
       transform: none;
     }
+  }
+}
+
+/* The reveal holds its opening frame until the animation advances. A printed
+   page never advances it, so the animation is dropped entirely for print. */
+@media print {
+  .reveal {
+    animation: none;
   }
 }
 

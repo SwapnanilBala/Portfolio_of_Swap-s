@@ -2,10 +2,11 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import type { Media, VideoMedia } from "@/lib/types";
+import type { Media, MediaLabels, VideoMedia } from "@/lib/types";
 
 interface Props {
   readonly media: Media;
+  readonly labels: MediaLabels;
 }
 
 function formatDuration(totalSeconds: number): string {
@@ -22,7 +23,13 @@ function formatDuration(totalSeconds: number): string {
  * case where a browser mounts it eagerly anyway, and `playsInline` stops iOS
  * from hijacking playback into fullscreen.
  */
-function GatedVideo({ media }: { readonly media: VideoMedia }) {
+function GatedVideo({
+  media,
+  labels,
+}: {
+  readonly media: VideoMedia;
+  readonly labels: MediaLabels;
+}) {
   const [playing, setPlaying] = useState(false);
 
   if (!playing) {
@@ -31,7 +38,7 @@ function GatedVideo({ media }: { readonly media: VideoMedia }) {
         type="button"
         className="poster-gate"
         onClick={() => setPlaying(true)}
-        aria-label={`Play the clip: ${media.caption}`}
+        aria-label={labels.playAria.replace("{caption}", media.caption)}
       >
         <Image
           src={media.poster}
@@ -41,7 +48,7 @@ function GatedVideo({ media }: { readonly media: VideoMedia }) {
           sizes="(max-width: 46rem) 100vw, 34rem"
         />
         <span className="poster-gate-label">
-          <span>Play clip</span>
+          <span>{labels.play}</span>
           <span>{formatDuration(media.durationSeconds)}</span>
         </span>
       </button>
@@ -64,12 +71,12 @@ function GatedVideo({ media }: { readonly media: VideoMedia }) {
   );
 }
 
-export function ProjectMedia({ media }: Props) {
+export function ProjectMedia({ media, labels }: Props) {
   return (
     <figure>
       <div className="media-frame">
         {media.kind === "video" ? (
-          <GatedVideo media={media} />
+          <GatedVideo media={media} labels={labels} />
         ) : (
           <Image
             src={media.src}

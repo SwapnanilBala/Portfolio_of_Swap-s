@@ -167,10 +167,30 @@ export interface Profile {
   readonly resumeHref: string;
 }
 
+export interface EphemerisColumns {
+  readonly body: string;
+  readonly position: string;
+  readonly sign: string;
+  readonly motion: string;
+}
+
 export interface HeroContent {
   readonly statement: readonly string[];
   readonly ephemerisCaption: string;
   readonly ephemerisNote: string;
+  readonly ephemerisLoading: string;
+  readonly ephemerisColumns: EphemerisColumns;
+  /** Template. Tokens: {ayanamsha} {value} {time} */
+  readonly ephemerisTableCaption: string;
+  /** Template. Tokens: {bodies} {elapsed} */
+  readonly ephemerisFoot: string;
+  /**
+   * Substituted for {elapsed} when the measurement rounds to zero. The
+   * placeholder engine is faster than the browser clock can resolve, and
+   * printing "0.000 ms" would read as broken rather than as fast.
+   */
+  readonly ephemerisBelowResolution: string;
+  readonly ephemerisRetrograde: string;
 }
 
 export type SectionId = "projects" | "experience" | "contact";
@@ -180,6 +200,12 @@ export interface SectionHeading {
   readonly title: string;
   /** A verifiable count of entries, not a sequence marker. */
   readonly count: string;
+}
+
+export interface MediaLabels {
+  readonly play: string;
+  /** Template. Token: {caption} */
+  readonly playAria: string;
 }
 
 export interface ContactRoute {
@@ -198,5 +224,6 @@ export interface SiteContent {
   readonly experience: readonly Experience[];
   readonly contact: readonly string[];
   readonly contactRoutes: readonly ContactRoute[];
+  readonly mediaLabels: MediaLabels;
   readonly colophon: string;
 }

@@ -31,6 +31,22 @@ export const content: SiteContent = {
     // Honest while the placeholder is in place. See the TODO in LiveEphemeris.tsx.
     ephemerisNote:
       "Placeholder arithmetic until the Lagna Atelier ephemeris core is extracted. The timing is real; the positions are not yet.",
+    ephemerisLoading: "Computing in your browser...",
+    ephemerisColumns: {
+      body: "Body",
+      position: "Sidereal",
+      sign: "Sign",
+      motion: "Motion",
+    },
+    // TODO: drop the "PLACEHOLDER — " prefix when the real engine is swapped in.
+    ephemerisTableCaption:
+      "PLACEHOLDER — {ayanamsha} ayanamsha {value}° at {time}",
+    // Reads correctly both ways: "...in 1.42 ms, with no..." and
+    // "...in less time than the browser clock can resolve, with no...".
+    ephemerisFoot:
+      "{bodies} bodies computed on your machine in {elapsed}, with no network request.",
+    ephemerisBelowResolution: "less time than the browser clock can resolve",
+    ephemerisRetrograde: "R",
   },
 
   sections: {
@@ -190,6 +206,11 @@ export const content: SiteContent = {
       href: "/resume.pdf",
     },
   ],
+
+  mediaLabels: {
+    play: "Play clip",
+    playAria: "Play the clip: {caption}",
+  },
 
   colophon:
     "Built with Next.js and plain CSS — no component library, no CSS framework, no analytics, no cookies. Type is Newsreader and JetBrains Mono, self-hosted at build time.",

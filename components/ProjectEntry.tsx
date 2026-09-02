@@ -1,4 +1,4 @@
-import type { Project } from "@/lib/types";
+import type { MediaLabels, Project } from "@/lib/types";
 import {
   LINK_LABELS,
   STATUS_LABELS,
@@ -9,9 +9,10 @@ import { ProjectMedia } from "@/components/ProjectMedia";
 
 interface Props {
   readonly project: Project;
+  readonly mediaLabels: MediaLabels;
 }
 
-export function ProjectEntry({ project }: Props) {
+export function ProjectEntry({ project, mediaLabels }: Props) {
   // A link without a destination is dropped rather than rendered dead.
   const links = project.links.filter(isResolvedLink);
 
@@ -35,14 +36,12 @@ export function ProjectEntry({ project }: Props) {
       </div>
 
       <div className="prose">
-        <h3 className="entry-title">
-          {project.name}
+        <div className="entry-head">
+          <h3 className="entry-title">{project.name}</h3>
           {isBadgedStatus(project.status) ? (
-            <span className="entry-status">
-              {STATUS_LABELS[project.status]}
-            </span>
+            <p className="entry-status">{STATUS_LABELS[project.status]}</p>
           ) : null}
-        </h3>
+        </div>
 
         <p className="entry-summary">{project.summary}</p>
 
@@ -69,7 +68,7 @@ export function ProjectEntry({ project }: Props) {
         ) : null}
 
         {project.media?.map((media) => (
-          <ProjectMedia key={media.src} media={media} />
+          <ProjectMedia key={media.src} media={media} labels={mediaLabels} />
         ))}
       </div>
     </article>

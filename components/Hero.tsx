@@ -28,7 +28,7 @@ export function Hero({ profile, hero, routes }: Props) {
       </ul>
 
       {/* Replacing this one line with a static hero is the whole swap. */}
-      <LiveEphemeris caption={hero.ephemerisCaption} note={hero.ephemerisNote} />
+      <LiveEphemeris content={hero} />
     </header>
   );
 }
