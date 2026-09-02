@@ -167,6 +167,30 @@ export const content: SiteContent = {
     "The fastest way to reach me is email. I read it daily and reply the same day on weekdays.",
   ],
 
+  contactRoutes: [
+    {
+      key: "email",
+      label: "bala.s@northeastern.edu",
+      href: "mailto:bala.s@northeastern.edu",
+    },
+    {
+      key: "github",
+      label: "github.com/SwapnanilBala",
+      href: "https://github.com/SwapnanilBala",
+    },
+    {
+      key: "linkedin",
+      label: "linkedin.com/in/swapnanil-bala-854b722a7",
+      href: "https://linkedin.com/in/swapnanil-bala-854b722a7",
+    },
+    {
+      key: "resume",
+      // TODO: this 404s until you drop the PDF at public/resume.pdf.
+      label: "download the resume (PDF)",
+      href: "/resume.pdf",
+    },
+  ],
+
   colophon:
     "Built with Next.js and plain CSS — no component library, no CSS framework, no analytics, no cookies. Type is Newsreader and JetBrains Mono, self-hosted at build time.",
 };

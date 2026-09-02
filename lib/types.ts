@@ -182,6 +182,14 @@ export interface SectionHeading {
   readonly count: string;
 }
 
+export interface ContactRoute {
+  /** Short key shown in the gutter column of the contact list. */
+  readonly key: string;
+  /** The link text. Says what happens, and is never "Learn more". */
+  readonly label: string;
+  readonly href: string;
+}
+
 export interface SiteContent {
   readonly profile: Profile;
   readonly hero: HeroContent;
@@ -189,5 +197,6 @@ export interface SiteContent {
   readonly projects: readonly Project[];
   readonly experience: readonly Experience[];
   readonly contact: readonly string[];
+  readonly contactRoutes: readonly ContactRoute[];
   readonly colophon: string;
 }
