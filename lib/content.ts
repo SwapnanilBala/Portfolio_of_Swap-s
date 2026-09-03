@@ -13,7 +13,7 @@ export const content: SiteContent = {
   profile: {
     name: "Swapnanil Bala",
     seeking:
-      "AI Engineer. M.S. Data Science at Northeastern's Khoury College. Spring 2027 co-op.",
+      "AI engineer. M.S. Data Science at Northeastern's Khoury College.",
     location: "Boston, Massachusetts",
     email: "bala.s@northeastern.edu",
     github: "https://github.com/SwapnanilBala",
@@ -26,7 +26,7 @@ export const content: SiteContent = {
 
   hero: {
     statement: [
-      "I build systems where the hard part is the arithmetic, not the plumbing. My main project computes sidereal astronomical positions from first principles in hand-written TypeScript, with no ephemeris service behind it.",
+      "I build the calculation layer myself. Lagna Atelier computes sidereal astronomical positions in hand-written TypeScript, with no ephemeris service behind it.",
     ],
     // The keys below feed LiveEphemeris, which is currently unmounted from
     // Hero.tsx. They are kept so restoring the demo stays a one-line change.
@@ -66,7 +66,7 @@ export const content: SiteContent = {
       status: "shipped",
       flagship: true,
       summary:
-        "A local-first sidereal astrology engine whose entire calculation stack is hand-written TypeScript. No database, no accounts, no server-side compute — charts are computed in the browser and persisted to localStorage across five device-scoped profiles.",
+        "A local-first sidereal astrology engine. The whole calculation stack is hand-written TypeScript: no database, no accounts, no server-side compute. Charts are computed in the browser and saved to localStorage across five device-scoped profiles.",
       gutter: [
         { value: "63,000", label: "lines of TypeScript" },
         { value: "561", label: "tests" },
@@ -76,8 +76,8 @@ export const content: SiteContent = {
       details: [
         "The ayanamsha model is IAU-2006 precession over astronomy-engine, calibrated against Swiss Ephemeris epochs. Six ayanamshas across six house systems, with Meeus true-node, retrograde and combustion handling.",
         "Fifteen derived engines sit above that core: 23 divisional charts from D1 to D60, Vimshottari dashas, 51 yogas, Shadbala, Ashtakavarga, transits, Varshaphal, and Panchanga muhurta search.",
-        "Interpretation is rules-as-data. The DSL is Zod-validated over a closed 15-operator predicate union with build-time binding checks, so a malformed rule fails the build rather than the render.",
-        "Rarity claims come from a seeded Monte Carlo harness over population-weighted birth sampling. They are measured rather than asserted.",
+        "Interpretation is rules-as-data. The DSL is Zod-validated over a closed 15-operator predicate union with build-time binding checks, so a malformed rule fails at build time.",
+        "Rarity claims are measured, not asserted: a seeded Monte Carlo harness runs them over population-weighted birth sampling.",
         "Palm readings run GPT-4o Vision with per-line confidence normalised against MediaPipe hand landmarks, exported as a PDF report.",
       ],
       stack: [
@@ -124,7 +124,7 @@ export const content: SiteContent = {
         { value: "−67%", label: "load time, mobile" },
       ],
       details: [
-        "Both reductions are Lighthouse-measured, and came from next/image compression and route-level code splitting of the dashboard.",
+        "Both reductions are Lighthouse-measured, from next/image compression and route-level code splitting of the dashboard.",
         "Authentication is Supabase Row-Level Security with OAuth 2.0 through Google, GitHub and Discord.",
         "Members and trainers get separate dashboards, with tiered subscriptions and CSRF protection.",
       ],
@@ -147,7 +147,7 @@ export const content: SiteContent = {
           src: "/media/robust-health.webp",
           alt: "The Robust Health landing page, showing the weekly programming pitch above counters for plans generated and workouts completed.",
           caption:
-            "The landing page. Everything past this point is behind sign-in, so this is where a visitor without an account stops.",
+            "The landing page. Everything past this point is behind sign-in.",
           width: 1600,
           height: 1000,
         },
@@ -166,8 +166,8 @@ export const content: SiteContent = {
         { value: "3", label: "approaches compared" },
       ],
       details: [
-        "Both transformers are benchmarked against a TF-IDF and logistic-regression baseline, so the output is a precision, recall and F1 comparison across three approaches rather than a single accuracy number for whichever won.",
-        "SHAP runs at token level, so a classification arrives with the phrases that drove it instead of a bare label.",
+        "Both transformers are benchmarked against a TF-IDF and logistic-regression baseline. The output is a precision, recall and F1 comparison across all three approaches.",
+        "SHAP runs at token level, so each classification comes with the phrases that drove it.",
       ],
       stack: [
         "Python",
@@ -194,15 +194,15 @@ export const content: SiteContent = {
       location: "Kolkata, India",
       gutter: [{ value: "3 mo", label: "duration" }],
       details: [
-        "Cleaned and consolidated the operational Excel datasets behind the internal dashboards: resolving missing values, recovering lost source files, and standardising records so weekly reporting could run off them.",
+        "Cleaned and consolidated the operational Excel datasets behind the internal dashboards: resolved missing values, recovered lost source files, and standardised records so weekly reporting could run off them.",
         "Wrote SQL against the production database and built the recurring operational reports the project lead worked from.",
-        "Went out on field customer acquisition, pitching the pay-to-own financing programme to e-rickshaw operators and framing the lithium-ion upgrade against the lead-acid batteries they were running.",
+        "Went out on field customer acquisition, pitching the pay-to-own financing programme to e-rickshaw operators and the lithium-ion upgrade against the lead-acid batteries they were already running.",
       ],
     },
   ],
 
   contact: [
-    "The fastest way to reach me is email. I read it daily and reply the same day on weekdays.",
+    "Email is the fastest way to reach me. I read it daily and reply the same day on weekdays.",
   ],
 
   contactRoutes: [
