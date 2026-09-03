@@ -154,28 +154,32 @@ export const content: SiteContent = {
     },
 
     {
-      slug: "coop-discovery-pipeline",
-      name: "Co-op discovery pipeline",
-      period: "2026—",
-      status: "in-progress",
+      slug: "fake-news-classifier",
+      name: "Fake news classifier",
+      // TODO: dates. The resume lists this project without any, and guessing a
+      // range is exactly the kind of invention that does not survive a question.
+      period: "TODO",
+      status: "shipped",
       summary:
-        "A scheduled ingestion pipeline over Workday's public job API. It normalises postings, scores them against a structured candidate profile using embeddings, and surfaces the few worth a tailored application.",
-      // TODO: fill these in once the pipeline has run for a while. The sparse gutter
-      // beside two populated ones is intentional — it should read as an admission.
+        "Multi-class misinformation detection over the LIAR dataset, fine-tuning DistilBERT and RoBERTa and reporting both against a classical baseline.",
       gutter: [
-        { value: "TODO", label: "postings ingested" },
-        { value: "TODO", label: "surfaced per week" },
+        { value: "2", label: "transformers fine-tuned" },
+        { value: "3", label: "approaches compared" },
       ],
       details: [
-        "Polling happens server-side against the Workday CXS JSON endpoint, because that API sends no CORS headers and a browser-only architecture is therefore ruled out.",
-        "Postings dedupe on requisition ID, so re-polling is idempotent.",
-        "Ranking is embedding similarity followed by an LLM pass that produces a one-line rationale per match.",
-        "It stops short of automated submission by design. Work-authorisation and sponsorship questions answered by a bot are a false statement on an employment application, and no throughput gain justifies that.",
+        "Both transformers are benchmarked against a TF-IDF and logistic-regression baseline, so the output is a precision, recall and F1 comparison across three approaches rather than a single accuracy number for whichever won.",
+        "SHAP runs at token level, so a classification arrives with the phrases that drove it instead of a bare label.",
       ],
-      // TODO: complete the stack once it settles.
-      stack: ["TODO — stack for the discovery pipeline"],
+      stack: [
+        "Python",
+        "PyTorch",
+        "DistilBERT",
+        "RoBERTa",
+        "SHAP",
+        "Scikit-Learn",
+      ],
       links: [
-        // TODO: paste the repo URL if and when this becomes public.
+        // TODO: paste the repo URL.
         { role: "source" },
       ],
     },

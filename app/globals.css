@@ -35,6 +35,10 @@
   --column-gap: 2.75rem;
   --shell: calc(var(--gutter) + var(--column-gap) + var(--measure));
 
+  /* Plate padding. Interactive section plates need real interior space, and it
+     has to scale or the 34rem measure gets squeezed on small screens. */
+  --plate-pad: clamp(1rem, 2.2vw, 1.75rem);
+
   /* Spacing */
   --step-1: 0.5rem;
   --step-2: 0.875rem;
@@ -119,9 +123,31 @@ table {
 /* The padding is added on top of the measure: box-sizing is border-box, so a
    bare max-width would eat into the prose column and shorten the measure. */
 .shell {
-  max-width: calc(var(--shell) + 2 * var(--step-3));
+  max-width: calc(var(--shell) + 2 * var(--plate-pad) + 2 * var(--step-3));
   margin-inline: auto;
   padding: var(--step-5) var(--step-3) var(--step-6);
+}
+
+/* ==========================================================================
+   Plates
+   Entries are bordered plates on the inset ground rather than hairline-
+   separated blocks, and they respond to pointer and keyboard.
+
+   This overrides two rules in CLAUDE.md, on request: the ban on cards, and the
+   motion budget's "no hover transitions on entries". The ban exists because
+   identical rounded cards with a soft grey shadow are a generated-design tell,
+   so the plate is built to be the other thing: square corners, a hairline
+   border that goes brass, a brass tab on the leading edge, and a one-step
+   tonal lift. No blur, no shadow, no scale. The cue is colour first, so it
+   still reads with motion disabled.
+   ========================================================================== */
+
+.entry,
+.ephemeris {
+  position: relative;
+  background: var(--field-inset);
+  border: 1px solid var(--rule);
+  padding: var(--plate-pad);
 }
 
 .entry {
@@ -131,17 +157,63 @@ table {
   align-items: start;
 }
 
-/* The hairline that separates entries. One rule, no cards, no shadows. */
-.entry + .entry,
-.section + .section {
-  border-top: 1px solid var(--rule);
-  margin-top: var(--step-4);
-  padding-top: var(--step-4);
+/* The brass tab. Offset onto the border itself so it reads as an index marker
+   on the plate's edge rather than a rule drawn inside it. */
+.entry::before,
+.ephemeris::before {
+  content: "";
+  position: absolute;
+  inset-block: -1px;
+  left: -1px;
+  width: 2px;
+  background: var(--brass);
+  opacity: 0;
 }
 
-.section {
+.entry:hover,
+.entry:focus-within,
+.ephemeris:hover,
+.ephemeris:focus-within {
+  border-color: var(--brass);
+  background: var(--field);
+}
+
+.entry:hover::before,
+.entry:focus-within::before,
+.ephemeris:hover::before,
+.ephemeris:focus-within::before {
+  opacity: 1;
+}
+
+/* Motion is additive. Everything above is already legible without it, so a
+   reduced-motion visitor loses the travel and keeps the feedback. */
+@media (prefers-reduced-motion: no-preference) {
+  .entry,
+  .ephemeris {
+    transition:
+      border-color 160ms ease,
+      background-color 160ms ease,
+      transform 160ms ease;
+  }
+
+  .entry::before,
+  .ephemeris::before {
+    transition: opacity 160ms ease;
+  }
+
+  .entry:hover,
+  .ephemeris:hover {
+    transform: translateY(-2px);
+  }
+}
+
+.entry + .entry {
+  margin-top: var(--step-3);
+}
+
+.section,
+.section + .section {
   margin-top: var(--step-5);
-  padding-top: var(--step-4);
 }
 
 .prose {
@@ -200,6 +272,7 @@ table {
    ========================================================================== */
 
 .section-heading {
+  padding-inline: var(--plate-pad);
   display: grid;
   grid-template-columns: var(--gutter) minmax(0, 1fr);
   gap: var(--column-gap);
@@ -226,6 +299,7 @@ table {
    ========================================================================== */
 
 .hero {
+  padding-inline: var(--plate-pad);
   padding-bottom: var(--step-4);
 }
 
@@ -271,9 +345,6 @@ table {
 
 .ephemeris {
   margin-top: var(--step-4);
-  border: 1px solid var(--rule);
-  background: var(--field-inset);
-  padding: var(--step-3);
   max-width: var(--measure);
 }
 
@@ -577,6 +648,7 @@ figcaption {
 
 .colophon {
   margin-top: var(--step-5);
+  padding-inline: var(--plate-pad);
   padding-top: var(--step-3);
   border-top: 1px solid var(--rule);
   font-family: var(--mono);

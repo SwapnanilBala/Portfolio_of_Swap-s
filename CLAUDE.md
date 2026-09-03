@@ -113,7 +113,9 @@ even if asked to make the page "more impressive":
 - Tracked-out ALL-CAPS eyebrow labels above headings
 - Meta strings joined with middle dots (`A · B · C`)
 - Arrows appended to link or button text
-- Identical rounded cards with the same soft grey shadow under each
+- Identical rounded cards with the same soft grey shadow under each (entries
+  are now plates, on request — square corners, hairline border, brass edge tab,
+  no shadow and no blur. The tell is the shadowed rounded card, not the panel)
 - Gradient washes used as decoration
 - Numbered `01 / 02 / 03` markers (the content is not a sequence)
 - A cream background with high-contrast serif and terracotta accent (the field
@@ -125,8 +127,17 @@ even if asked to make the page "more impressive":
 
 ### Motion budget
 
-One page-load reveal, staggered across at most three sections. That is the
-entire budget. No hover transitions on entries. No scroll-triggered fade-ins.
+One page-load reveal, staggered across at most three sections. No
+scroll-triggered fade-ins.
+
+**Amended on request:** entries and the ephemeris plate now carry a hover and
+focus-within transition — border to brass, a brass edge tab, a one-step tonal
+lift and a 2px rise over 160ms. The original rule said no hover transitions on
+entries; the page was judged too static without them. The constraint that
+survived is that the interaction is legible without motion: colour and the tab
+carry the state, and only the transform and the transitions sit inside
+`prefers-reduced-motion: no-preference`. Do not add shadow, blur or scale to
+this — those are what the card ban is actually about.
 
 The animation lives inside `@media (prefers-reduced-motion: no-preference)`.
 Nothing is hidden outside that query, so reduced-motion visitors get the
