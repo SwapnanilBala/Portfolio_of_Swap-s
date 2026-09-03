@@ -27,8 +27,9 @@ export const content: SiteContent = {
   hero: {
     statement: [
       "I build systems where the hard part is the arithmetic, not the plumbing. My main project computes sidereal astronomical positions from first principles in hand-written TypeScript, with no ephemeris service behind it.",
-      "The table below is not a screenshot. It was computed in your browser while this page loaded, and the elapsed time underneath it was measured, not written down.",
     ],
+    // The keys below feed LiveEphemeris, which is currently unmounted from
+    // Hero.tsx. They are kept so restoring the demo stays a one-line change.
     ephemerisCaption: "Sidereal positions, computed on load",
     // Honest while the placeholder is in place. See the TODO in LiveEphemeris.tsx.
     ephemerisNote:

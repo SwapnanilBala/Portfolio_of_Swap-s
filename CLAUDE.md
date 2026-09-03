@@ -174,6 +174,14 @@ improvement on one of its own projects. A slow portfolio refutes its own copy.
 
 ## The hero demo
 
+**Currently unmounted.** It shipped a placeholder engine, which meant the hero
+led with a table of positions that were not real and a caption admitting it. An
+unfinished demo above the fold is a worse first impression than no demo, and the
+Lagna Atelier screenshot immediately below already shows the real product. The
+component, its content keys and its styles all remain; restoring it is the one
+line described in `components/Hero.tsx`. Everything below still governs it, and
+should be re-read before it goes back in.
+
 `components/LiveEphemeris.tsx` demonstrates rather than claims. On load it
 computes sidereal positions in the visitor's browser and reports the measured
 elapsed milliseconds beneath a real `<table>`.

@@ -72,8 +72,9 @@ Search the repo with `git grep -n TODO` at any time.
 
 **`components/LiveEphemeris.tsx`**
 
-- Ships a clearly marked placeholder engine. Swap-in instructions are in the
-  comment banner at the top of the file.
+- Ships a clearly marked placeholder engine, and is unmounted from the hero
+  until a real one exists. Swap-in instructions are in the comment banner at
+  the top of the file; the restore is described in `components/Hero.tsx`.
 
 ## Adding media
 
@@ -128,7 +129,9 @@ rather than a value from memory.
 
 - Fonts are Newsreader and JetBrains Mono, self-hosted at build time by
   `next/font`. There is no runtime request to Google and no layout shift.
-- The hero computes its table in your browser on load and reports the measured
-  elapsed time. Nothing about it touches a server.
+- The hero's live ephemeris table is currently unmounted. It shipped a
+  placeholder engine, so it displayed positions that were not real. The
+  component and its content keys are still in the repo; see the comment in
+  `components/Hero.tsx` for the one-line restore.
 - Line endings are normalised to LF by `.gitattributes`, which overrides
   `core.autocrlf` on Windows checkouts.
