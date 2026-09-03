@@ -157,9 +157,7 @@ export const content: SiteContent = {
     {
       slug: "fake-news-classifier",
       name: "Fake news classifier",
-      // TODO: dates. The resume lists this project without any, and guessing a
-      // range is exactly the kind of invention that does not survive a question.
-      period: "TODO",
+      period: "Fall 2025",
       status: "shipped",
       summary:
         "Multi-class misinformation detection over the LIAR dataset, fine-tuning DistilBERT and RoBERTa and reporting both against a classical baseline.",
