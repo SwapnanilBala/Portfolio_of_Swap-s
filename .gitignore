@@ -22,3 +22,6 @@ next-env.d.ts
 Thumbs.db
 desktop.ini
 *.log
+
+# agent instructions (hand-written, kept local)
+CLAUDE.md
