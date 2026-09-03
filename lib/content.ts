@@ -106,6 +106,42 @@ export const content: SiteContent = {
           width: 1600,
           height: 1000,
         },
+        {
+          kind: "image",
+          src: "/media/lagna-atelier-chart.webp",
+          alt: "The Lagna Atelier natal wheel, showing planetary glyphs across twelve houses around a Cancer lagna, beneath three summary cards.",
+          caption:
+            "The computed chart. The three cards above the wheel are picked from its matched findings.",
+          width: 1600,
+          height: 1202,
+        },
+        {
+          kind: "image",
+          src: "/media/lagna-atelier-ashtakavarga.webp",
+          alt: "The Lagna Atelier Ashtakavarga panel, showing a 92.6%-of-average dial for the first house beside a twelve-house bindus bar chart.",
+          caption:
+            "Ashtakavarga support per house, scored against the 28.1 average. The note flags why these twelve total 367 against a 337 pool.",
+          width: 1600,
+          height: 1028,
+        },
+        {
+          kind: "image",
+          src: "/media/lagna-atelier-report.webp",
+          alt: "The Lagna Atelier report index, listing placements, dasha periods, twenty divisional charts from D1 to D60, and the matched findings.",
+          caption:
+            "The report index. Twenty vargas from D1 to D60, dasha periods, and 14 matched findings, each behind its own view.",
+          width: 1560,
+          height: 994,
+        },
+        {
+          kind: "image",
+          src: "/media/lagna-atelier-tools.webp",
+          alt: "The Lagna Atelier end-of-reading panel, offering current transits, partner comparison, and the full advanced tool list.",
+          caption:
+            "The end of a reading. Three next tools, each picking up without repeating what was just covered.",
+          width: 1600,
+          height: 539,
+        },
       ],
       // TODO: still worth recording the palm-reading flow as a clip — it is the
       // one interaction a visitor will never perform on a stranger's site, so a
