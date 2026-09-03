@@ -18,7 +18,9 @@ export const content: SiteContent = {
     email: "bala.s@northeastern.edu",
     github: "https://github.com/SwapnanilBala",
     linkedin: "https://linkedin.com/in/swapnanil-bala-854b722a7",
-    // TODO: drop the actual PDF at public/resume.pdf. This link 404s until you do.
+    // Scrubbed copy of the Sep 2026 resume: phone number removed and the
+    // personal address swapped for the Northeastern one, since the repo is
+    // public. Regenerate with the same treatment if you replace the PDF.
     resumeHref: "/resume.pdf",
   },
 
@@ -218,7 +220,6 @@ export const content: SiteContent = {
     },
     {
       key: "resume",
-      // TODO: this 404s until you drop the PDF at public/resume.pdf.
       label: "download the resume (PDF)",
       href: "/resume.pdf",
     },

@@ -64,8 +64,11 @@ Search the repo with `git grep -n TODO` at any time.
 
 **`public/`**
 
-- `resume.pdf` is referenced but not present. The resume link 404s until you
-  add it.
+- `resume.pdf` is the Sep 2026 resume with the phone number redacted and the
+  personal email replaced by the Northeastern one, because this repo is public.
+  The redaction removes the glyphs from the content stream rather than drawing
+  over them, so the old values are not recoverable by selecting or extracting
+  text. If you drop in a newer resume, give it the same treatment.
 
 **`components/LiveEphemeris.tsx`**
 
