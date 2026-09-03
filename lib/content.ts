@@ -114,19 +114,25 @@ export const content: SiteContent = {
       name: "Robust Health",
       period: "2025",
       status: "shipped",
-      // TODO: confirm this sentence. It is derived from the live site's own copy,
-      // not supplied directly, so rewrite it if it misdescribes the product.
       summary:
-        "A training, nutrition, and recovery planner that builds a weekly programme and adjusts it against the adherence and recovery data you log.",
+        "A training and nutrition planner with separate member and trainer dashboards. Workout plans are generated per member through the Anthropic API.",
       gutter: [
         { value: "−50%", label: "load time, web" },
         { value: "−67%", label: "load time, mobile" },
       ],
       details: [
-        "Both reductions came from next/image compression and route-level code splitting of the dashboard.",
+        "Both reductions are Lighthouse-measured, and came from next/image compression and route-level code splitting of the dashboard.",
+        "Authentication is Supabase Row-Level Security with OAuth 2.0 through Google, GitHub and Discord.",
+        "Members and trainers get separate dashboards, with tiered subscriptions and CSRF protection.",
       ],
-      // TODO: complete the stack. Next.js is inferred from the use of next/image; the rest is unknown.
-      stack: ["Next.js", "TODO — rest of the stack"],
+      stack: [
+        "TypeScript",
+        "Next.js",
+        "Anthropic API",
+        "NeonDB (Postgres)",
+        "Supabase Auth",
+        "Vercel",
+      ],
       links: [
         { role: "live", href: "https://app.robusthealth.in/" },
         // TODO: paste the repo URL.
@@ -183,7 +189,9 @@ export const content: SiteContent = {
       location: "Kolkata, India",
       gutter: [{ value: "3 mo", label: "duration" }],
       details: [
-        "TODO — what you actually did here, and what was hard about it. One line, specific enough that it could not appear on someone else's page.",
+        "Cleaned and consolidated the operational Excel datasets behind the internal dashboards: resolving missing values, recovering lost source files, and standardising records so weekly reporting could run off them.",
+        "Wrote SQL against the production database and built the recurring operational reports the project lead worked from.",
+        "Went out on field customer acquisition, pitching the pay-to-own financing programme to e-rickshaw operators and framing the lithium-ion upgrade against the lead-acid batteries they were running.",
       ],
     },
   ],

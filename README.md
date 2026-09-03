@@ -55,11 +55,10 @@ Search the repo with `git grep -n TODO` at any time.
 
 - Lagna Atelier — repo URL. The live URL is set. Until an `href` is set a link
   is filtered out, so nothing renders as a dead link.
-- Robust Health — repo URL, and confirmation of the `summary`. That sentence was
-  derived from the live site's own copy rather than supplied directly, so check
-  it describes the product the way you want. The rest of the stack is also open.
-- Co-op discovery pipeline — gutter figures, stack, repo URL.
-- P2G Mobility Tech — the accomplishment line.
+- Robust Health — repo URL. The summary, details and stack were filled in from
+  the Sep 2026 resume.
+- Co-op discovery pipeline — gutter figures, stack, repo URL. This project is
+  not on the resume, so none of it could be filled in from there.
 - The palm-reading clip for Lagna Atelier. Its screenshot is in place, but the
   clip is still the one thing a link cannot substitute for.
 

@@ -500,9 +500,14 @@ figure {
   }
 }
 
+/* Screenshots of dark UIs would otherwise bleed to a hard edge and read as
+   black slabs dropped on the beige. The inset showing through as a mat around
+   the capture makes each one read as a mounted plate instead. Scales with the
+   viewport so the mat stays proportional once a figure breaks out. */
 .media-frame {
   border: 1px solid var(--rule);
   background: var(--field-inset);
+  padding: clamp(0.875rem, 2vw, 1.5rem);
 }
 
 .poster-gate {
