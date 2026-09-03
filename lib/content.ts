@@ -146,10 +146,45 @@ export const content: SiteContent = {
           kind: "image",
           src: "/media/robust-health.webp",
           alt: "The Robust Health landing page, showing the weekly programming pitch above counters for plans generated and workouts completed.",
-          caption:
-            "The landing page. Everything past this point is behind sign-in.",
+          caption: "The landing page. Everything below is behind sign-in.",
           width: 1600,
           height: 1000,
+        },
+        {
+          kind: "image",
+          src: "/media/robust-health-onboarding.webp",
+          alt: "The Robust Health onboarding screen, offering a personalised plan or a quick start on an existing programme.",
+          caption:
+            "Onboarding. A new member either answers for a tailored week or starts on a ready-made programme.",
+          width: 1600,
+          height: 840,
+        },
+        {
+          kind: "image",
+          src: "/media/robust-health-dashboard.webp",
+          alt: "The Robust Health member dashboard, showing the next workout beside a five-session week and the active programme's day, calorie and sleep targets.",
+          caption:
+            "The member dashboard. Next session, the week's five workouts, and the active programme's targets.",
+          width: 1600,
+          height: 1053,
+        },
+        {
+          kind: "image",
+          src: "/media/robust-health-workout.webp",
+          alt: "The Robust Health workout player, showing a dips exercise with four tappable sets, rest, RPE and tempo, above an embedded form video.",
+          caption:
+            "The workout player. Sets are tapped off as they are completed, with rest, RPE and tempo carried per exercise.",
+          width: 1600,
+          height: 1284,
+        },
+        {
+          kind: "image",
+          src: "/media/robust-health-analytics.webp",
+          alt: "The Robust Health analytics view on a new account, with zeroed workout, weight and calorie-compliance cards above empty trend charts.",
+          caption:
+            "Analytics, on an account with nothing logged yet. Weight, frequency and calorie compliance fill in from there.",
+          width: 1600,
+          height: 1088,
         },
       ],
     },
