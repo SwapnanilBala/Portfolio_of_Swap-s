@@ -18,9 +18,14 @@ A sloppy portfolio is a negative work sample no matter what the copy says.
 Two readers, and the page serves both without asking either to pick a mode:
 
 - A recruiter, 40–90 seconds, does not read paragraphs, scanning for evidence
-  and contact details. Their path is the column of figures down the left.
+  and contact details. Their path is the column of figures: down the left below
+  74rem, down the right rail above it.
 - An engineer who arrives later and reads exactly one project closely. Their
-  path is the prose on the right.
+  path is the prose, which sits opposite the figures in either arrangement.
+
+Both paths survive the two layouts because the split is the same either way —
+one column of checkable numbers, one column of prose, never interleaved. Which
+side each lands on is the part that changes.
 
 ## Stack — non-negotiable
 
@@ -83,8 +88,21 @@ This comes from the subject matter: the flagship project is a hand-written
 sidereal calculation engine, and that world's vernacular is dense numeric
 tables, precise alignment, and marginal annotation.
 
-- **Layout.** A narrow left gutter of checkable figures in monospace; prose to
-  the right in a text serif. Entries separated by a single hairline rule.
+- **Layout.** Two arrangements, by width. Below 74rem: a narrow left gutter of
+  checkable figures in monospace, prose to the right in a text serif. At 74rem
+  and above the page goes asymmetric on request — prose holds the left at its
+  measure, and the gutter and figures move into a 30rem right rail, which is
+  where the dead space used to be.
+
+  The asymmetric layout moves the gutter off the left edge, so the recruiter
+  path described below now runs down the inside edge of the rail instead of the
+  outside edge of the page. The figures sit directly under the gutter facts, so
+  it is still one vertical run of numbers rather than two scattered groups.
+
+  The rail is 30rem because that leaves a figure about 430px wide. It is sized
+  from legibility, not from what balanced the columns. Below 74rem the rail
+  would be too narrow for a screenshot to survive, so the layout reverts rather
+  than shrinking the evidence.
 - **The gutter is for numbers a stranger could independently verify** — dates,
   line counts, test counts, measured deltas. **Never put an adjective in the
   gutter.** Its entire authority comes from containing no claims about quality.
@@ -165,11 +183,11 @@ improvement on one of its own projects. A slow portfolio refutes its own copy.
   skimming reader gets something to look at without a click, and the cost is a
   lazy-loaded image rather than a media element. Do not remove them as a
   "correction" to the rule above.
-- **Figures break out of the prose measure to the full content width.** A
-  screenshot squeezed into the 34rem column is illegible, which turns evidence
-  into decoration. The breakout is disabled below the 46rem breakpoint. If you
-  add a figure, check it at 360px and just above 736px, where the maths is
-  tightest.
+- **Figures are never inside the prose measure.** A screenshot squeezed into
+  the 34rem column is illegible, which turns evidence into decoration. They are
+  a grid area of their own (`.entry-figures`), not a child of `.prose`: full
+  plate width below 74rem, right rail above it. If you add a figure, check it at
+  360px, 900px and 1280px — one per arrangement.
 - A link whose `href` is unset must not render as a dead link. Filter it out.
 
 ## The hero demo

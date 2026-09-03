@@ -67,10 +67,19 @@ export function ProjectEntry({ project, mediaLabels }: Props) {
           </ul>
         ) : null}
 
-        {project.media?.map((media) => (
-          <ProjectMedia key={media.src} media={media} labels={mediaLabels} />
-        ))}
       </div>
+
+      {/* Figures are a grid sibling of the prose, not a child of it. Above the
+          wide breakpoint they occupy the right rail beside the text; below it
+          they span the full plate. Either way they are never constrained to the
+          34rem measure, where a screenshot is too small to be evidence. */}
+      {project.media && project.media.length > 0 ? (
+        <div className="entry-figures">
+          {project.media.map((media) => (
+            <ProjectMedia key={media.src} media={media} labels={mediaLabels} />
+          ))}
+        </div>
+      ) : null}
     </article>
   );
 }

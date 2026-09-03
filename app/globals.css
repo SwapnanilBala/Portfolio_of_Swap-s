@@ -32,6 +32,9 @@
   /* Measure. ~34rem keeps prose under roughly 75 characters. */
   --measure: 34rem;
   --gutter: 11rem;
+  /* Width of the right rail in the asymmetric layout. Sized so a screenshot in
+     it stays legible; below the 70rem breakpoint the rail does not exist. */
+  --rail: 30rem;
   --column-gap: 2.75rem;
   --shell: calc(var(--gutter) + var(--column-gap) + var(--measure));
 
@@ -218,6 +221,68 @@ table {
 
 .prose {
   max-width: var(--measure);
+  min-width: 0;
+}
+
+/* ==========================================================================
+   Asymmetric layout
+   Above 70rem the page stops being one centred stack. Prose holds the left at
+   its measure, and the figures column plus the numeric gutter move into a
+   right rail, which is where the empty space used to be.
+
+   This moves the gutter off the left edge, which CLAUDE.md describes as the
+   recruiter's scan path. The figures stay adjacent to it, so the column of
+   checkable numbers is still a single vertical run -- it now runs down the
+   inside edge of the rail rather than the outside edge of the page.
+
+   Below 74rem nothing changes: the rail would be too narrow for a screenshot
+   to be legible, and an illegible figure is decoration. The rail is sized from
+   that constraint -- 30rem leaves a figure about 430px wide -- not from what
+   made the columns look balanced.
+   ========================================================================== */
+@media (min-width: 74rem) {
+  .shell {
+    max-width: calc(
+      var(--measure) + var(--column-gap) + var(--rail) + 2 * var(--plate-pad) +
+        2 * var(--step-3)
+    );
+  }
+
+  .entry {
+    grid-template-columns: var(--measure) minmax(0, 1fr);
+  }
+
+  /* Prose spans both rows so the rail can stack facts over figures beside it. */
+  .entry > .prose {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+  }
+
+  .entry > .entry-gutter-col {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .entry > .entry-figures {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  /* The heading flips with the entries: title over the prose, count over the
+     rail, so both columns keep a consistent left edge down the page. */
+  .section-heading {
+    grid-template-columns: var(--measure) minmax(0, 1fr);
+  }
+
+  .section-heading > h2 {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .section-heading > .section-count {
+    grid-column: 2;
+    grid-row: 1;
+  }
 }
 
 .prose > * + * {
@@ -559,16 +624,12 @@ figure {
   margin: var(--step-4) 0 0;
 }
 
-/* Figures break out of the prose measure to the full content width. A
-   screenshot squeezed into a 34rem column is too small to read, which turns
-   evidence into decoration; the gutter beside a figure is empty by then
-   anyway. Prose keeps its measure -- only figures break out. */
-@media (min-width: 46.0625rem) {
-  .prose > figure {
-    margin-left: calc(-1 * (var(--gutter) + var(--column-gap)));
-    width: calc(100% + var(--gutter) + var(--column-gap));
-    max-width: none;
-  }
+/* Figures are their own grid area, so they never inherit the prose measure.
+   By default they span the whole plate; the wide layout below moves them into
+   the right rail instead. */
+.entry-figures {
+  grid-column: 1 / -1;
+  min-width: 0;
 }
 
 /* Screenshots of dark UIs would otherwise bleed to a hard edge and read as
