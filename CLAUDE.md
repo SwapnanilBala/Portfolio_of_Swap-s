@@ -88,9 +88,15 @@ tables, precise alignment, and marginal annotation.
 - **The gutter is for numbers a stranger could independently verify** — dates,
   line counts, test counts, measured deltas. **Never put an adjective in the
   gutter.** Its entire authority comes from containing no claims about quality.
-- **Palette.** Deep navy field (`#10192b`), brass accent (`#cfa93f`), warm
-  off-white text, muted blue-grey secondary. Navy and brass is instrument-panel
-  and sextant territory, which is the point.
+- **Palette.** Warm beige field (`#ede4d3`), deep brass accent (`#73550e`),
+  dark warm-brown text, muted brown secondary. Beige and brass is aged-almanac
+  paper rather than instrument panel, which suits the ephemeris metaphor as
+  well as the navy did.
+
+  This replaced the original deep navy field (`#10192b`) on request. Brass was
+  kept and darkened rather than swapped for terracotta, which keeps the page
+  clear of the forbidden cream-and-terracotta tell below. Do not revert to navy
+  as a "correction" — the lighter field is the decision now.
 - **Type.** Newsreader for all prose. JetBrains Mono for numeric data and
   index-like structural labels only — never as decoration for small text.
   `font-variant-numeric: tabular-nums` on every column of figures; proportional
@@ -110,7 +116,9 @@ even if asked to make the page "more impressive":
 - Identical rounded cards with the same soft grey shadow under each
 - Gradient washes used as decoration
 - Numbered `01 / 02 / 03` markers (the content is not a sequence)
-- A cream background with high-contrast serif and terracotta accent
+- A cream background with high-contrast serif and terracotta accent (the field
+  is beige, but the accent is brass and the serif is not maximum-contrast — the
+  banned thing is that specific trio, not a light background)
 - Near-black with a single acid-green or vermilion accent
 - Accenting one word of a headline in a different colour or weight
 - Tinted near-black (`#0b0b0b`, `#111`) standing in for black
@@ -187,7 +195,7 @@ reader the positions are not real.
   outline, 3px offset.
 - Semantic elements: `<table>` for tabular data, `<button>` for the poster gate,
   headings in document order, `<figure>`/`<figcaption>` for media.
-- Colour contrast verified against the navy field by computation, not assumed.
+- Colour contrast verified against the beige field by computation, not assumed.
   Every foreground token clears WCAG AA for normal text against both `--field`
   and `--field-inset`.
 - Responsive to 360px: the gutter collapses above the prose and its figures

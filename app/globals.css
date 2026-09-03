@@ -1,23 +1,29 @@
 /* ==========================================================================
    Tokens
-   The palette is instrument-panel: a deep navy field with a brass accent.
-   Every contrast ratio below was computed against --field, not assumed.
+   The palette is a warm beige field with a deep brass accent. Every contrast
+   ratio below was computed against both --field and --field-inset, not
+   assumed, and clears WCAG AA for normal text.
    ========================================================================== */
 
 :root {
-  /* Field */
-  --field: #10192b;
-  --field-inset: #141f35;
-  --rule: #26334e;
+  color-scheme: light;
 
-  /* Ink. Ratios are against --field. */
-  --ink: #f2ede3; /* 15.1:1 */
-  --ink-muted: #93a2be; /*  6.8:1 */
-  --ink-faint: #7c8aa6; /*  5.1:1 */
+  /* Field */
+  --field: #ede4d3;
+  --field-inset: #e3d8c2;
+  --rule: #c8ba9e;
+
+  /* A veil over media, so a label stays legible on any frame beneath it. */
+  --field-veil: rgba(237, 228, 211, 0.92);
+
+  /* Ink. Ratios are against --field and --field-inset in that order. */
+  --ink: #2b2114; /* 12.5:1  11.2:1 */
+  --ink-muted: #5a4f3c; /*  6.4:1   5.7:1 */
+  --ink-faint: #635740; /*  5.6:1   5.0:1 */
 
   /* Accent */
-  --brass: #cfa93f; /*  7.9:1 */
-  --brass-deep: #a8862b; /*  5.1:1 */
+  --brass: #73550e; /*  5.5:1   4.9:1 */
+  --brass-deep: #5e4508; /*  7.1:1   6.4:1 */
 
   /* Families. The two variables are injected by next/font in layout.tsx. */
   --serif: var(--font-newsreader), Georgia, "Times New Roman", serif;
@@ -520,7 +526,7 @@ figure {
   justify-content: space-between;
   gap: var(--step-2);
   padding: var(--step-2);
-  background: rgba(16, 25, 43, 0.86);
+  background: var(--field-veil);
   border-top: 1px solid var(--rule);
   font-family: var(--mono);
   font-size: var(--size-label);

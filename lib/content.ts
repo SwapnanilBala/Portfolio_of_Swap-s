@@ -13,7 +13,7 @@ export const content: SiteContent = {
   profile: {
     name: "Swapnanil Bala",
     seeking:
-      "M.S. Data Science at Northeastern's Khoury College. Looking for a Spring 2027 co-op in full-stack, AI engineering, or AI product engineering.",
+      "AI Engineer. M.S. Data Science at Northeastern's Khoury College. Spring 2027 co-op.",
     location: "Boston, Massachusetts",
     email: "bala.s@northeastern.edu",
     github: "https://github.com/SwapnanilBala",
