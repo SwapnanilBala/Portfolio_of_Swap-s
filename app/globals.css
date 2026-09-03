@@ -252,10 +252,9 @@ table {
     grid-template-columns: var(--measure) minmax(0, 1fr);
   }
 
-  /* Prose spans both rows so the rail can stack facts over figures beside it. */
   .entry > .prose {
     grid-column: 1;
-    grid-row: 1 / span 2;
+    grid-row: 1;
   }
 
   .entry > .entry-gutter-col {
@@ -263,9 +262,37 @@ table {
     grid-row: 1;
   }
 
+  /* The series spans both columns, but each figure inside it repeats the parent
+     template, so the plate still lands in the rail -- same column, same ~430px
+     -- and the annotation fills the column beside it. That column was empty
+     from wherever the prose ended down to the last plate: with five figures the
+     dead run was taller than the entry itself. */
   .entry > .entry-figures {
-    grid-column: 2;
+    grid-column: 1 / -1;
     grid-row: 2;
+  }
+
+  .entry-figures > figure {
+    display: grid;
+    grid-template-columns: var(--measure) minmax(0, 1fr);
+    gap: var(--column-gap);
+    align-items: start;
+  }
+
+  .entry-figures > figure > .media-frame {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  /* Held to a narrower measure and pushed to the far side of its column, so the
+     annotation sits against the plate it describes rather than stranded at the
+     page edge. Text stays ragged-right; only the block moves. */
+  .entry-figures > figure > figcaption {
+    grid-column: 1;
+    grid-row: 1;
+    max-width: 20rem;
+    margin-top: 0;
+    margin-left: auto;
   }
 
   /* The heading flips with the entries: title over the prose, count over the
@@ -671,12 +698,17 @@ figure {
   font-variant-numeric: tabular-nums;
 }
 
+/* The annotation, not a label. At 74rem and up it leaves the underside of the
+   plate and sits in the margin to its left; see the wide block below. Mono was
+   right when this was one terse line and is wrong now that it is three or four
+   -- CLAUDE.md reserves the mono for numeric data and structural labels, so a
+   run of prose this long belongs in the serif. */
 figcaption {
   margin-top: var(--step-1);
-  font-family: var(--mono);
-  font-size: var(--size-label);
-  color: var(--ink-faint);
-  line-height: 1.5;
+  font-size: var(--size-small);
+  color: var(--ink-muted);
+  line-height: 1.6;
+  text-wrap: pretty;
 }
 
 /* ==========================================================================

@@ -102,7 +102,7 @@ export const content: SiteContent = {
           src: "/media/lagna-atelier.webp",
           alt: "The Lagna Atelier chart builder: a four-step birth-details form beside a live sky preview panel.",
           caption:
-            "The chart builder. The sky preview fills in as each birth detail is entered.",
+            "A four-step birth-details form, with the sky preview resolving beside it as each field is entered. There is no submit step: the chart is computed in the browser as the form fills.",
           width: 1600,
           height: 1000,
         },
@@ -111,7 +111,7 @@ export const content: SiteContent = {
           src: "/media/lagna-atelier-chart.webp",
           alt: "The Lagna Atelier natal wheel, showing planetary glyphs across twelve houses around a Cancer lagna, beneath three summary cards.",
           caption:
-            "The computed chart. The three cards above the wheel are picked from its matched findings.",
+            "The computed wheel for a Cancer lagna, planetary glyphs placed across twelve houses. The three cards above it — first impression, the Mercury dasha running to April 2034, and the strongest planet — are selected from the chart's own matched findings.",
           width: 1600,
           height: 1202,
         },
@@ -120,7 +120,7 @@ export const content: SiteContent = {
           src: "/media/lagna-atelier-ashtakavarga.webp",
           alt: "The Lagna Atelier Ashtakavarga panel, showing a 92.6%-of-average dial for the first house beside a twelve-house bindus bar chart.",
           caption:
-            "Ashtakavarga support per house, scored against the 28.1 average. The note flags why these twelve total 367 against a 337 pool.",
+            "Every house scored against the 28.1-bindu average rather than against a maximum, with the first house broken out at 92.6% of it. The footnote flags that these twelve total 367 against a 337 pool — a discrepancy reported rather than smoothed over.",
           width: 1600,
           height: 1028,
         },
@@ -129,7 +129,7 @@ export const content: SiteContent = {
           src: "/media/lagna-atelier-report.webp",
           alt: "The Lagna Atelier report index, listing placements, dasha periods, twenty divisional charts from D1 to D60, and the matched findings.",
           caption:
-            "The report index. Twenty vargas from D1 to D60, dasha periods, and 14 matched findings, each behind its own view.",
+            "Placements, calculation settings and dasha periods across the top. Below them, all twenty vargas from D1 to D60 and the fourteen matched findings, each behind its own view rather than stacked into one scrolling report.",
           width: 1560,
           height: 994,
         },
@@ -138,7 +138,7 @@ export const content: SiteContent = {
           src: "/media/lagna-atelier-tools.webp",
           alt: "The Lagna Atelier end-of-reading panel, offering current transits, partner comparison, and the full advanced tool list.",
           caption:
-            "The end of a reading. Three next tools, each picking up without repeating what was just covered.",
+            "Where a finished reading hands off: today's transits against the natal chart, a two-profile partner comparison, or the wider specialist list. Each continues from the reading rather than repeating it.",
           width: 1600,
           height: 539,
         },
@@ -182,7 +182,8 @@ export const content: SiteContent = {
           kind: "image",
           src: "/media/robust-health.webp",
           alt: "The Robust Health landing page, showing the weekly programming pitch above counters for plans generated and workouts completed.",
-          caption: "The landing page. Everything below is behind sign-in.",
+          caption:
+            "The public landing page. Everything past it sits behind sign-in, so the plates below are captured from inside an account.",
           width: 1600,
           height: 1000,
         },
@@ -191,7 +192,7 @@ export const content: SiteContent = {
           src: "/media/robust-health-onboarding.webp",
           alt: "The Robust Health onboarding screen, offering a personalised plan or a quick start on an existing programme.",
           caption:
-            "Onboarding. A new member either answers for a tailored week or starts on a ready-made programme.",
+            "Two ways in: a three-to-five minute questionnaire that generates a tailored first week, or a ready-made programme with optional body details for nutrition targets. Switching between them keeps whatever has already been entered.",
           width: 1600,
           height: 840,
         },
@@ -200,7 +201,7 @@ export const content: SiteContent = {
           src: "/media/robust-health-dashboard.webp",
           alt: "The Robust Health member dashboard, showing the next workout beside a five-session week and the active programme's day, calorie and sleep targets.",
           caption:
-            "The member dashboard. Next session, the week's five workouts, and the active programme's targets.",
+            "The next session up front, the week's five workouts listed beside it, and the active Push/Pull/Legs programme below with its day count, calorie and sleep targets.",
           width: 1600,
           height: 1053,
         },
@@ -209,7 +210,7 @@ export const content: SiteContent = {
           src: "/media/robust-health-workout.webp",
           alt: "The Robust Health workout player, showing a dips exercise with four tappable sets, rest, RPE and tempo, above an embedded form video.",
           caption:
-            "The workout player. Sets are tapped off as they are completed, with rest, RPE and tempo carried per exercise.",
+            "One exercise at a time — three of seven here — with a form video above it. Sets are tapped off individually, and rest, RPE and tempo are carried per exercise rather than set once for the session.",
           width: 1600,
           height: 1284,
         },
@@ -218,7 +219,7 @@ export const content: SiteContent = {
           src: "/media/robust-health-analytics.webp",
           alt: "The Robust Health analytics view on a new account, with zeroed workout, weight and calorie-compliance cards above empty trend charts.",
           caption:
-            "Analytics, on an account with nothing logged yet. Weight, frequency and calorie compliance fill in from there.",
+            "Captured on a new account, so every figure reads zero and both trend charts are empty. Weight, workout frequency and calorie compliance populate from logged sessions; plan history is already listing two.",
           width: 1600,
           height: 1088,
         },
