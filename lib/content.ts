@@ -103,8 +103,8 @@ export const content: SiteContent = {
           alt: "The Lagna Atelier chart builder: a four-step birth-details form beside a live sky preview panel.",
           caption:
             "A four-step birth-details form, with the sky preview resolving beside it as each field is entered. There is no submit step: the chart is computed in the browser as the form fills.",
-          width: 1530,
-          height: 995,
+          width: 1559,
+          height: 964,
         },
         {
           kind: "image",
@@ -113,7 +113,7 @@ export const content: SiteContent = {
           caption:
             "The computed wheel for a Cancer lagna, planetary glyphs placed across twelve houses. The three cards above it — first impression, the Mercury dasha running to April 2034, and the strongest planet — are selected from the chart's own matched findings.",
           width: 1528,
-          height: 1202,
+          height: 1052,
         },
         {
           kind: "image",
@@ -122,7 +122,7 @@ export const content: SiteContent = {
           caption:
             "Every house scored against the 28.1-bindu average rather than against a maximum, with the first house broken out at 92.6% of it. The footnote flags that these twelve total 367 against a 337 pool — a discrepancy reported rather than smoothed over.",
           width: 1571,
-          height: 1028,
+          height: 1001,
         },
         {
           kind: "image",
@@ -131,7 +131,7 @@ export const content: SiteContent = {
           caption:
             "Placements, calculation settings and dasha periods across the top. Below them, all twenty vargas from D1 to D60 and the fourteen matched findings, each behind its own view rather than stacked into one scrolling report.",
           width: 1545,
-          height: 994,
+          height: 961,
         },
         {
           kind: "image",
@@ -140,7 +140,7 @@ export const content: SiteContent = {
           caption:
             "Where a finished reading hands off: today's transits against the natal chart, a two-profile partner comparison, or the wider specialist list. Each continues from the reading rather than repeating it.",
           width: 1600,
-          height: 522,
+          height: 482,
         },
       ],
       // TODO: still worth recording the palm-reading flow as a clip — it is the
@@ -184,7 +184,7 @@ export const content: SiteContent = {
           alt: "The Robust Health landing page, showing the weekly programming pitch above counters for plans generated and workouts completed.",
           caption:
             "The public landing page. Everything past it sits behind sign-in, so the plates below are captured from inside an account.",
-          width: 1550,
+          width: 1569,
           height: 963,
         },
         {
@@ -194,7 +194,7 @@ export const content: SiteContent = {
           caption:
             "Two ways in: a three-to-five minute questionnaire that generates a tailored first week, or a ready-made programme with optional body details for nutrition targets. Switching between them keeps whatever has already been entered.",
           width: 1041,
-          height: 775,
+          height: 713,
         },
         {
           kind: "image",
@@ -203,7 +203,7 @@ export const content: SiteContent = {
           caption:
             "The next session up front, the week's five workouts listed beside it, and the active Push/Pull/Legs programme below with its day count, calorie and sleep targets.",
           width: 1098,
-          height: 989,
+          height: 631,
         },
         {
           kind: "image",
@@ -212,7 +212,7 @@ export const content: SiteContent = {
           caption:
             "One exercise at a time — three of seven here — with a form video above it. Sets are tapped off individually, and rest, RPE and tempo are carried per exercise rather than set once for the session.",
           width: 728,
-          height: 1284,
+          height: 1091,
         },
         {
           kind: "image",
