@@ -103,8 +103,8 @@ export const content: SiteContent = {
           alt: "The Lagna Atelier chart builder: a four-step birth-details form beside a live sky preview panel.",
           caption:
             "A four-step birth-details form, with the sky preview resolving beside it as each field is entered. There is no submit step: the chart is computed in the browser as the form fills.",
-          width: 1600,
-          height: 1000,
+          width: 1530,
+          height: 995,
         },
         {
           kind: "image",
@@ -112,7 +112,7 @@ export const content: SiteContent = {
           alt: "The Lagna Atelier natal wheel, showing planetary glyphs across twelve houses around a Cancer lagna, beneath three summary cards.",
           caption:
             "The computed wheel for a Cancer lagna, planetary glyphs placed across twelve houses. The three cards above it — first impression, the Mercury dasha running to April 2034, and the strongest planet — are selected from the chart's own matched findings.",
-          width: 1600,
+          width: 1528,
           height: 1202,
         },
         {
@@ -121,7 +121,7 @@ export const content: SiteContent = {
           alt: "The Lagna Atelier Ashtakavarga panel, showing a 92.6%-of-average dial for the first house beside a twelve-house bindus bar chart.",
           caption:
             "Every house scored against the 28.1-bindu average rather than against a maximum, with the first house broken out at 92.6% of it. The footnote flags that these twelve total 367 against a 337 pool — a discrepancy reported rather than smoothed over.",
-          width: 1600,
+          width: 1571,
           height: 1028,
         },
         {
@@ -130,7 +130,7 @@ export const content: SiteContent = {
           alt: "The Lagna Atelier report index, listing placements, dasha periods, twenty divisional charts from D1 to D60, and the matched findings.",
           caption:
             "Placements, calculation settings and dasha periods across the top. Below them, all twenty vargas from D1 to D60 and the fourteen matched findings, each behind its own view rather than stacked into one scrolling report.",
-          width: 1560,
+          width: 1545,
           height: 994,
         },
         {
@@ -140,7 +140,7 @@ export const content: SiteContent = {
           caption:
             "Where a finished reading hands off: today's transits against the natal chart, a two-profile partner comparison, or the wider specialist list. Each continues from the reading rather than repeating it.",
           width: 1600,
-          height: 539,
+          height: 522,
         },
       ],
       // TODO: still worth recording the palm-reading flow as a clip — it is the
@@ -184,8 +184,8 @@ export const content: SiteContent = {
           alt: "The Robust Health landing page, showing the weekly programming pitch above counters for plans generated and workouts completed.",
           caption:
             "The public landing page. Everything past it sits behind sign-in, so the plates below are captured from inside an account.",
-          width: 1600,
-          height: 1000,
+          width: 1550,
+          height: 963,
         },
         {
           kind: "image",
@@ -193,8 +193,8 @@ export const content: SiteContent = {
           alt: "The Robust Health onboarding screen, offering a personalised plan or a quick start on an existing programme.",
           caption:
             "Two ways in: a three-to-five minute questionnaire that generates a tailored first week, or a ready-made programme with optional body details for nutrition targets. Switching between them keeps whatever has already been entered.",
-          width: 1600,
-          height: 840,
+          width: 1041,
+          height: 775,
         },
         {
           kind: "image",
@@ -202,8 +202,8 @@ export const content: SiteContent = {
           alt: "The Robust Health member dashboard, showing the next workout beside a five-session week and the active programme's day, calorie and sleep targets.",
           caption:
             "The next session up front, the week's five workouts listed beside it, and the active Push/Pull/Legs programme below with its day count, calorie and sleep targets.",
-          width: 1600,
-          height: 1053,
+          width: 1098,
+          height: 989,
         },
         {
           kind: "image",
@@ -211,7 +211,7 @@ export const content: SiteContent = {
           alt: "The Robust Health workout player, showing a dips exercise with four tappable sets, rest, RPE and tempo, above an embedded form video.",
           caption:
             "One exercise at a time — three of seven here — with a form video above it. Sets are tapped off individually, and rest, RPE and tempo are carried per exercise rather than set once for the session.",
-          width: 1600,
+          width: 728,
           height: 1284,
         },
         {
@@ -220,8 +220,8 @@ export const content: SiteContent = {
           alt: "The Robust Health analytics view on a new account, with zeroed workout, weight and calorie-compliance cards above empty trend charts.",
           caption:
             "Captured on a new account, so every figure reads zero and both trend charts are empty. Weight, workout frequency and calorie compliance populate from logged sessions; plan history is already listing two.",
-          width: 1600,
-          height: 1088,
+          width: 1357,
+          height: 1084,
         },
       ],
     },
