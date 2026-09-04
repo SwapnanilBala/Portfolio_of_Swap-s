@@ -13,6 +13,13 @@
   --field-inset: #e3d8c2;
   --rule: #c8ba9e;
 
+  /* The mat a capture is mounted on. Deliberately not --field-inset: that is
+     the plate's own ground, so the mat was invisible at rest and then appeared
+     on hover when the plate lifted to --field. Five figures growing an inner
+     rectangle at once is a state change nobody asked for. Darker than both
+     plate grounds, so it reads the same either way. */
+  --mat: #d8cbb0;
+
   /* A veil over media, so a label stays legible on any frame beneath it. */
   --field-veil: rgba(237, 228, 211, 0.92);
 
@@ -660,12 +667,17 @@ figure {
 }
 
 /* Screenshots of dark UIs would otherwise bleed to a hard edge and read as
-   black slabs dropped on the beige. The inset showing through as a mat around
-   the capture makes each one read as a mounted plate instead. Scales with the
-   viewport so the mat stays proportional once a figure breaks out. */
+   black slabs dropped on the beige. A mat around the capture makes each one
+   read as a mounted plate instead. Scales with the viewport so the mat stays
+   proportional once a figure breaks out.
+
+   The mat has its own token rather than borrowing --field-inset. Sharing it
+   with the plate meant the mat was the same value as the ground it sat on, so
+   there was no visible mount until the plate lifted on hover and it abruptly
+   appeared. --mat is darker than both plate grounds and never changes. */
 .media-frame {
   border: 1px solid var(--rule);
-  background: var(--field-inset);
+  background: var(--mat);
   padding: clamp(0.875rem, 2vw, 1.5rem);
 }
 
