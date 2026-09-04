@@ -124,24 +124,6 @@ export const content: SiteContent = {
           width: 1571,
           height: 982,
         },
-        {
-          kind: "image",
-          src: "/media/lagna-atelier-report.webp",
-          alt: "The Lagna Atelier report index, listing placements, dasha periods, twenty divisional charts from D1 to D60, and the matched findings.",
-          caption:
-            "Placements, calculation settings and dasha periods across the top. Below them, all twenty vargas from D1 to D60 and the fourteen matched findings, each behind its own view rather than stacked into one scrolling report.",
-          width: 1538,
-          height: 961,
-        },
-        {
-          kind: "image",
-          src: "/media/lagna-atelier-tools.webp",
-          alt: "The Lagna Atelier end-of-reading panel, offering current transits, partner comparison, and the full advanced tool list.",
-          caption:
-            "Where a finished reading hands off: today's transits against the natal chart, a two-profile partner comparison, or the wider specialist list. Each continues from the reading rather than repeating it.",
-          width: 1600,
-          height: 480,
-        },
       ],
       // TODO: still worth recording the palm-reading flow as a clip — it is the
       // one interaction a visitor will never perform on a stranger's site, so a
@@ -180,15 +162,6 @@ export const content: SiteContent = {
       media: [
         {
           kind: "image",
-          src: "/media/robust-health.webp",
-          alt: "The Robust Health landing page, showing the weekly programming pitch above counters for plans generated and workouts completed.",
-          caption:
-            "The public landing page. Everything past it sits behind sign-in, so the plates below are captured from inside an account.",
-          width: 1569,
-          height: 981,
-        },
-        {
-          kind: "image",
           src: "/media/robust-health-onboarding.webp",
           alt: "The Robust Health onboarding screen, offering a personalised plan or a quick start on an existing programme.",
           caption:
@@ -201,7 +174,7 @@ export const content: SiteContent = {
           src: "/media/robust-health-dashboard.webp",
           alt: "The Robust Health member dashboard, showing the next workout beside a five-session week and the active programme's day, calorie and sleep targets.",
           caption:
-            "The next session up front, the week's five workouts listed beside it, and the active Push/Pull/Legs programme below with its day count, calorie and sleep targets.",
+            "Everything from here sits behind sign-in, so this and the plate below it are captured from inside an account. The next session up front, the week's five workouts listed beside it, and the active Push/Pull/Legs programme with its day count, calorie and sleep targets.",
           width: 1054,
           height: 631,
         },
@@ -213,15 +186,6 @@ export const content: SiteContent = {
             "One exercise at a time — three of seven here — with a form video above it. Sets are tapped off individually, and rest, RPE and tempo are carried per exercise rather than set once for the session.",
           width: 728,
           height: 1091,
-        },
-        {
-          kind: "image",
-          src: "/media/robust-health-analytics.webp",
-          alt: "The Robust Health analytics view on a new account, with zeroed workout, weight and calorie-compliance cards above empty trend charts.",
-          caption:
-            "Captured on a new account, so every figure reads zero and both trend charts are empty. Weight, workout frequency and calorie compliance populate from logged sessions; plan history is already listing two.",
-          width: 1357,
-          height: 997,
         },
       ],
     },
