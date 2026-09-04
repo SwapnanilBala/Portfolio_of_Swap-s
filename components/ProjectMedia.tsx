@@ -9,6 +9,21 @@ interface Props {
   readonly labels: MediaLabels;
 }
 
+/**
+ * The width the image actually occupies, per layout arrangement. Measured, not
+ * assumed: 26.75rem inside the right rail at 74rem and up, at most 44.75rem in
+ * the middle band where a figure spans the plate, and at most 84.5vw below
+ * 46rem. Each is rounded up to the next whole unit.
+ *
+ * This is not decorative. The old value claimed 48rem above 46rem, which was
+ * true of the symmetric layout this started as; once the figures moved into a
+ * 30rem rail it made every wide viewport fetch a 1080px-wide file for a 430px
+ * slot. `sizes` cannot read a custom property, so these track the tokens by
+ * hand -- if `--rail`, `--measure` or the frame padding change, re-measure.
+ */
+const FIGURE_SIZES =
+  "(min-width: 74rem) 27rem, (min-width: 46rem) 45rem, 85vw";
+
 function formatDuration(totalSeconds: number): string {
   const minutes = Math.floor(totalSeconds / 60);
   const seconds = Math.floor(totalSeconds % 60);
@@ -45,7 +60,7 @@ function GatedVideo({
           alt={media.alt}
           width={media.width}
           height={media.height}
-          sizes="(max-width: 46rem) 100vw, 48rem"
+          sizes={FIGURE_SIZES}
         />
         <span className="poster-gate-label">
           <span>{labels.play}</span>
@@ -83,7 +98,7 @@ export function ProjectMedia({ media, labels }: Props) {
             alt={media.alt}
             width={media.width}
             height={media.height}
-            sizes="(max-width: 46rem) 100vw, 48rem"
+            sizes={FIGURE_SIZES}
           />
         )}
       </div>
