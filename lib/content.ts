@@ -103,7 +103,7 @@ export const content: SiteContent = {
           alt: "The Lagna Atelier chart builder: a four-step birth-details form beside a live sky preview panel.",
           caption:
             "A four-step birth-details form, with the sky preview resolving beside it as each field is entered. There is no submit step: the chart is computed in the browser as the form fills.",
-          width: 1559,
+          width: 1542,
           height: 964,
         },
         {
@@ -122,7 +122,7 @@ export const content: SiteContent = {
           caption:
             "Every house scored against the 28.1-bindu average rather than against a maximum, with the first house broken out at 92.6% of it. The footnote flags that these twelve total 367 against a 337 pool — a discrepancy reported rather than smoothed over.",
           width: 1571,
-          height: 1001,
+          height: 982,
         },
         {
           kind: "image",
@@ -130,7 +130,7 @@ export const content: SiteContent = {
           alt: "The Lagna Atelier report index, listing placements, dasha periods, twenty divisional charts from D1 to D60, and the matched findings.",
           caption:
             "Placements, calculation settings and dasha periods across the top. Below them, all twenty vargas from D1 to D60 and the fourteen matched findings, each behind its own view rather than stacked into one scrolling report.",
-          width: 1545,
+          width: 1538,
           height: 961,
         },
         {
@@ -140,7 +140,7 @@ export const content: SiteContent = {
           caption:
             "Where a finished reading hands off: today's transits against the natal chart, a two-profile partner comparison, or the wider specialist list. Each continues from the reading rather than repeating it.",
           width: 1600,
-          height: 482,
+          height: 480,
         },
       ],
       // TODO: still worth recording the palm-reading flow as a clip — it is the
@@ -185,7 +185,7 @@ export const content: SiteContent = {
           caption:
             "The public landing page. Everything past it sits behind sign-in, so the plates below are captured from inside an account.",
           width: 1569,
-          height: 963,
+          height: 981,
         },
         {
           kind: "image",
@@ -194,7 +194,7 @@ export const content: SiteContent = {
           caption:
             "Two ways in: a three-to-five minute questionnaire that generates a tailored first week, or a ready-made programme with optional body details for nutrition targets. Switching between them keeps whatever has already been entered.",
           width: 1041,
-          height: 713,
+          height: 701,
         },
         {
           kind: "image",
@@ -202,7 +202,7 @@ export const content: SiteContent = {
           alt: "The Robust Health member dashboard, showing the next workout beside a five-session week and the active programme's day, calorie and sleep targets.",
           caption:
             "The next session up front, the week's five workouts listed beside it, and the active Push/Pull/Legs programme below with its day count, calorie and sleep targets.",
-          width: 1098,
+          width: 1054,
           height: 631,
         },
         {
@@ -221,7 +221,7 @@ export const content: SiteContent = {
           caption:
             "Captured on a new account, so every figure reads zero and both trend charts are empty. Weight, workout frequency and calorie compliance populate from logged sessions; plan history is already listing two.",
           width: 1357,
-          height: 1084,
+          height: 997,
         },
       ],
     },
