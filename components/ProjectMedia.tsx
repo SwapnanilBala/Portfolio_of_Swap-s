@@ -11,18 +11,20 @@ interface Props {
 
 /**
  * The width the image actually occupies, per layout arrangement. Measured, not
- * assumed: 26.75rem inside the right rail at 74rem and up, at most 44.75rem in
- * the middle band where a figure spans the plate, and at most 84.5vw below
- * 46rem. Each is rounded up to the next whole unit.
+ * assumed: at most 40.79rem beside its annotation at 74rem and up, at most
+ * 44.75rem in the middle band where a figure spans the plate, and at most
+ * 84.5vw below 46rem. Each is rounded up to the next whole unit.
  *
  * This is not decorative. The old value claimed 48rem above 46rem, which was
  * true of the symmetric layout this started as; once the figures moved into a
  * 30rem rail it made every wide viewport fetch a 1080px-wide file for a 430px
  * slot. `sizes` cannot read a custom property, so these track the tokens by
- * hand -- if `--rail`, `--measure` or the frame padding change, re-measure.
+ * hand -- if `--rail`, `--measure`, `--annotation` or the frame padding change,
+ * re-measure. Under-declaring is the worse direction: it serves an image the
+ * browser then has to upscale.
  */
 const FIGURE_SIZES =
-  "(min-width: 74rem) 27rem, (min-width: 46rem) 45rem, 85vw";
+  "(min-width: 74rem) 41rem, (min-width: 46rem) 45rem, 85vw";
 
 function formatDuration(totalSeconds: number): string {
   const minutes = Math.floor(totalSeconds / 60);

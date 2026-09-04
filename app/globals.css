@@ -42,6 +42,10 @@
   /* Width of the right rail in the asymmetric layout. Sized so a screenshot in
      it stays legible; below the 70rem breakpoint the rail does not exist. */
   --rail: 30rem;
+  /* Width of a figure's marginal annotation in the asymmetric layout. Unchanged
+     from the max-width the captions already used, so widening the plate beside
+     them costs them nothing. */
+  --annotation: 20rem;
   --column-gap: 2.75rem;
   --shell: calc(var(--gutter) + var(--column-gap) + var(--measure));
 
@@ -269,11 +273,22 @@ table {
     grid-row: 1;
   }
 
-  /* The series spans both columns, but each figure inside it repeats the parent
-     template, so the plate still lands in the rail -- same column, same ~430px
-     -- and the annotation fills the column beside it. That column was empty
-     from wherever the prose ended down to the last plate: with five figures the
-     dead run was taller than the entry itself. */
+  /* The series spans both columns. Each figure then sets a template of its own
+     rather than repeating the parent's: the plate takes the wide column and the
+     annotation a fixed --annotation margin beside it.
+
+     This is the amendment described in CLAUDE.md. Repeating the parent template
+     put the plate in the 30rem rail, which capped the image at 428px -- smaller
+     than the 716px the same plate gets in the middle band, so the evidence
+     shrank as the display grew. The plate now gets 654px and the dip is 9%
+     rather than 41%.
+
+     What it costs is the alignment argument: the rail no longer holds one
+     unbroken run of gutter facts and plates, because the plates have moved to
+     the prose's left edge and the rail carries the annotations instead. The
+     annotation column is a fixed width, so its left edge is straight down the
+     page, and the recruiter's scan path is still one column -- of captions and
+     figures rather than of figures alone. */
   .entry > .entry-figures {
     grid-column: 1 / -1;
     grid-row: 2;
@@ -281,25 +296,23 @@ table {
 
   .entry-figures > figure {
     display: grid;
-    grid-template-columns: var(--measure) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr) var(--annotation);
     gap: var(--column-gap);
     align-items: start;
   }
 
   .entry-figures > figure > .media-frame {
-    grid-column: 2;
+    grid-column: 1;
     grid-row: 1;
   }
 
-  /* Held to a narrower measure and pushed to the far side of its column, so the
-     annotation sits against the plate it describes rather than stranded at the
-     page edge. Text stays ragged-right; only the block moves. */
+  /* Sits in the margin beside the plate it describes rather than under it. The
+     column is exactly --annotation wide, so the block needs no max-width and no
+     auto margin to find its edge. Text stays ragged-right. */
   .entry-figures > figure > figcaption {
-    grid-column: 1;
+    grid-column: 2;
     grid-row: 1;
-    max-width: 20rem;
     margin-top: 0;
-    margin-left: auto;
   }
 
   /* The heading flips with the entries: title over the prose, count over the
