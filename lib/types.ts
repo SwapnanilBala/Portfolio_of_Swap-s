@@ -66,6 +66,13 @@ interface MediaBase {
   readonly width: number;
   readonly height: number;
   readonly alt: string;
+  /**
+   * Placeholder shown while the still decodes, as a data URL. Required, like
+   * `poster` below and for the same reason: every capture here is a dark
+   * screenshot on a beige page, so one without a placeholder snaps in from
+   * nothing. Values come from `BLUR_PLACEHOLDERS` in `lib/blur.ts`.
+   */
+  readonly blurDataURL: string;
 }
 
 export interface ImageMedia extends MediaBase {

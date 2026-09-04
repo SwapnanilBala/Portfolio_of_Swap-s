@@ -1,3 +1,4 @@
+import { BLUR_PLACEHOLDERS } from "@/lib/blur";
 import type { SiteContent } from "@/lib/types";
 
 /**
@@ -105,6 +106,7 @@ export const content: SiteContent = {
             "A four-step birth-details form, with the sky preview resolving beside it as each field is entered. There is no submit step: the chart is computed in the browser as the form fills.",
           width: 1542,
           height: 964,
+          blurDataURL: BLUR_PLACEHOLDERS["/media/lagna-atelier.webp"],
         },
         {
           kind: "image",
@@ -114,6 +116,7 @@ export const content: SiteContent = {
             "The computed wheel for a Cancer lagna, planetary glyphs placed across twelve houses. The three cards above it — first impression, the Mercury dasha running to April 2034, and the strongest planet — are selected from the chart's own matched findings.",
           width: 1528,
           height: 1052,
+          blurDataURL: BLUR_PLACEHOLDERS["/media/lagna-atelier-chart.webp"],
         },
         {
           kind: "image",
@@ -123,6 +126,7 @@ export const content: SiteContent = {
             "Every house scored against the 28.1-bindu average rather than against a maximum, with the first house broken out at 92.6% of it. The footnote flags that these twelve total 367 against a 337 pool — a discrepancy reported rather than smoothed over.",
           width: 1571,
           height: 982,
+          blurDataURL: BLUR_PLACEHOLDERS["/media/lagna-atelier-ashtakavarga.webp"],
         },
       ],
       // TODO: still worth recording the palm-reading flow as a clip — it is the
@@ -168,6 +172,7 @@ export const content: SiteContent = {
             "Two ways in: a three-to-five minute questionnaire that generates a tailored first week, or a ready-made programme with optional body details for nutrition targets. Switching between them keeps whatever has already been entered.",
           width: 1041,
           height: 701,
+          blurDataURL: BLUR_PLACEHOLDERS["/media/robust-health-onboarding.webp"],
         },
         {
           kind: "image",
@@ -177,6 +182,7 @@ export const content: SiteContent = {
             "Everything from here sits behind sign-in, so this and the plate below it are captured from inside an account. The next session up front, the week's five workouts listed beside it, and the active Push/Pull/Legs programme with its day count, calorie and sleep targets.",
           width: 1054,
           height: 631,
+          blurDataURL: BLUR_PLACEHOLDERS["/media/robust-health-dashboard.webp"],
         },
         {
           kind: "image",
@@ -186,6 +192,7 @@ export const content: SiteContent = {
             "One exercise at a time — three of seven here — with a form video above it. Sets are tapped off individually, and rest, RPE and tempo are carried per exercise rather than set once for the session.",
           width: 728,
           height: 1091,
+          blurDataURL: BLUR_PLACEHOLDERS["/media/robust-health-workout.webp"],
         },
       ],
     },

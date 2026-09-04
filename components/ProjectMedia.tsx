@@ -63,6 +63,8 @@ function GatedVideo({
           width={media.width}
           height={media.height}
           sizes={FIGURE_SIZES}
+          placeholder="blur"
+          blurDataURL={media.blurDataURL}
         />
         <span className="poster-gate-label">
           <span>{labels.play}</span>
@@ -101,6 +103,8 @@ export function ProjectMedia({ media, labels }: Props) {
             width={media.width}
             height={media.height}
             sizes={FIGURE_SIZES}
+            placeholder="blur"
+            blurDataURL={media.blurDataURL}
           />
         )}
       </div>
