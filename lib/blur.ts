@@ -28,7 +28,8 @@ export type BlurredMedia =
   | "/media/lagna-atelier.webp"
   | "/media/robust-health-dashboard.webp"
   | "/media/robust-health-onboarding.webp"
-  | "/media/robust-health-workout.webp";
+  | "/media/robust-health-workout.webp"
+  | "/media/swapnanil-bala.webp";
 
 export const BLUR_PLACEHOLDERS: Readonly<Record<BlurredMedia, string>> = {
   "/media/lagna-atelier-ashtakavarga.webp":
@@ -43,4 +44,6 @@ export const BLUR_PLACEHOLDERS: Readonly<Record<BlurredMedia, string>> = {
     "data:image/webp;base64,UklGRjgAAABXRUJQVlA4ICwAAACwAQCdASoMAAgAAwBSJZwAAsaYcR0AAP7zLrNp+lupYC/TExYmMcuGcjgAAA==",
   "/media/robust-health-workout.webp":
     "data:image/webp;base64,UklGRlYAAABXRUJQVlA4IEoAAACwAwCdASoMABIAPt1apkyopSOiMAgBEBuJZwAAW+gc4mIfKW5gEAD+8qMakbSA5kIUj5Ea6Uz7+HtD8QNT4TRnNOgU3Pg2kAAAAA==",
+  "/media/swapnanil-bala.webp":
+    "data:image/webp;base64,UklGRlQAAABXRUJQVlA4IEgAAADwAQCdASoMAAwAAwBSJYwCdAD1dZnR0AAA/qNTdjaxNxcJGgdOgb4oHO35VnOqKJKoMIH13zmfwqKjizZ3JzFv0PPWdASCcAA=",
 };

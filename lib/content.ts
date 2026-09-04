@@ -23,6 +23,13 @@ export const content: SiteContent = {
     // personal address swapped for the Northeastern one, since the repo is
     // public. Regenerate with the same treatment if you replace the PDF.
     resumeHref: "/resume.pdf",
+    portrait: {
+      src: "/media/swapnanil-bala.webp",
+      alt: "Swapnanil Bala in a grey suit and dark red tie, on a deck above a pond, bare autumn treeline behind.",
+      width: 400,
+      height: 400,
+      blurDataURL: BLUR_PLACEHOLDERS["/media/swapnanil-bala.webp"],
+    },
   },
 
   hero: {

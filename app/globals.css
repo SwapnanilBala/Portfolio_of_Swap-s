@@ -46,6 +46,11 @@
      from the max-width the captions already used, so widening the plate beside
      them costs them nothing. */
   --annotation: 20rem;
+  /* The hero portrait. 12.5rem is the widest the 400px source fills at 2x
+     without upscaling, so the plate is sized by the photograph rather than by
+     the space available beside it. Inside the 11rem gutter column it caps to
+     the column instead. */
+  --portrait: 12.5rem;
   --column-gap: 2.75rem;
   --shell: calc(var(--gutter) + var(--column-gap) + var(--measure));
 
@@ -313,9 +318,41 @@ table {
    Hero
    ========================================================================== */
 
+/* The hero takes the same two columns as every entry below it, so the portrait
+   lands on the figures column and flips sides with it: the gutter column below
+   74rem, the right rail above. Vertical rhythm stays with the children's own
+   margins, which is why the row gap is zero rather than --column-gap. */
 .hero {
   padding-inline: var(--plate-pad);
   padding-bottom: var(--step-4);
+  display: grid;
+  grid-template-columns: var(--gutter) minmax(0, 1fr);
+  column-gap: var(--column-gap);
+  row-gap: 0;
+  align-items: start;
+}
+
+.hero-body {
+  min-width: 0;
+}
+
+/* Mounted like a capture: the same hairline border and mat, square corners, no
+   shadow. It deliberately does not take the plate's hover treatment -- nothing
+   in it is interactive, and a lift on a static portrait is decoration.
+
+   The width caps at --portrait rather than filling its column, because the
+   source is 400px square and stretching it past that trades a sharp small
+   photograph for a soft large one. */
+.hero-portrait {
+  width: min(100%, var(--portrait));
+  border: 1px solid var(--rule);
+  background: var(--mat);
+  padding: var(--step-1);
+}
+
+.hero-portrait img {
+  width: 100%;
+  height: auto;
 }
 
 .hero-name {
@@ -753,6 +790,23 @@ figcaption {
     );
   }
 
+  /* The hero flips with the entries. The portrait crosses to the rail, where
+     its left edge lines up with the gutter facts running down the page below
+     it, and the name reclaims the full measure. */
+  .hero {
+    grid-template-columns: var(--measure) minmax(0, 1fr);
+  }
+
+  .hero > .hero-body {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .hero > .hero-portrait {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
   .entry {
     grid-template-columns: var(--measure) minmax(0, 1fr);
   }
@@ -832,6 +886,14 @@ figcaption {
    ========================================================================== */
 
 @media (max-width: 46rem) {
+  /* One column. The portrait is first in the DOM, so it stacks above the name
+     without needing to be reordered, and keeps its own width rather than
+     stretching to the viewport. */
+  .hero {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: var(--step-3);
+  }
+
   .entry,
   .section-heading {
     grid-template-columns: minmax(0, 1fr);

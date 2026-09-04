@@ -60,7 +60,12 @@ export function isBadgedStatus(status: ProjectStatus): status is BadgedStatus {
 
 /* ------------------------------------------------------------------ media */
 
-interface MediaBase {
+/**
+ * The invariants every still on the site shares -- project media and the hero
+ * portrait alike. Exported because the portrait is not project media, has no
+ * `kind` to discriminate on, and still must not be able to ship without them.
+ */
+export interface ImageAsset {
   readonly src: string;
   /** Explicit intrinsic dimensions. Omitting these causes layout shift. */
   readonly width: number;
@@ -75,7 +80,7 @@ interface MediaBase {
   readonly blurDataURL: string;
 }
 
-export interface ImageMedia extends MediaBase {
+export interface ImageMedia extends ImageAsset {
   readonly kind: "image";
   readonly caption?: string;
 }
@@ -86,7 +91,7 @@ export interface ImageMedia extends MediaBase {
  * performance budget. That state is made impossible to express rather than
  * merely discouraged.
  */
-export interface VideoMedia extends MediaBase {
+export interface VideoMedia extends ImageAsset {
   readonly kind: "video";
   readonly poster: string;
   readonly caption: string;
@@ -172,6 +177,12 @@ export interface Profile {
   readonly github: string;
   readonly linkedin: string;
   readonly resumeHref: string;
+  /**
+   * The hero portrait. Typed as an ImageAsset so it cannot ship without
+   * intrinsic dimensions, alt text or a placeholder: it is the first image on
+   * the page and the one best placed to shift the layout under the name.
+   */
+  readonly portrait: ImageAsset;
 }
 
 export interface EphemerisColumns {
