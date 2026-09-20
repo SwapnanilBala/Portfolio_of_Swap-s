@@ -220,15 +220,22 @@ export const content: SiteContent = {
       name: "Fake news classifier",
       period: "Fall 2025",
       status: "shipped",
+      // Was "Multi-class misinformation detection". It is binary: the repo's
+      // RESULTS.md collapses LIAR's six-way truthfulness rating to FAKE/REAL
+      // and drops the ambiguous middle. Every figure below is from that file,
+      // which the source link now reaches.
       summary:
-        "Multi-class misinformation detection over the LIAR dataset, fine-tuning DistilBERT and RoBERTa and reporting both against a classical baseline.",
+        "Binary fake-news classification on the LIAR dataset, collapsing its six-way truthfulness rating to FAKE and REAL and fine-tuning DistilBERT and RoBERTa against a TF-IDF baseline.",
       gutter: [
-        { value: "2", label: "transformers fine-tuned" },
-        { value: "3", label: "approaches compared" },
+        { value: "0.558", label: "macro F1, best model" },
+        { value: "+0.033", label: "over TF-IDF baseline" },
       ],
       details: [
-        "Both transformers are benchmarked against a TF-IDF and logistic-regression baseline. The output is a precision, recall and F1 comparison across all three approaches.",
+        "The headline result is a small one, and reported as such: DistilBERT reaches 0.558 macro F1 against the TF-IDF and logistic-regression baseline's 0.525. Short political claims carry very little signal either way — the baseline's AUC is 0.549, barely above chance.",
+        "RoBERTa collapsed to a single class, with recall of exactly 0.5000 every epoch, scoring 0.372 — the same as always predicting the majority class. It is reported at that number rather than dropped from the comparison, and is not yet diagnosed.",
+        "Oversampling the minority class backfired: validation loss climbed from 0.68 to 2.37 over ten epochs while accuracy drifted upward. Undersampling the majority instead gave the flattest run and the best score, on 40% less data.",
         "SHAP runs at token level, so each classification comes with the phrases that drove it.",
+        "The open gap is evaluation: the test split is tokenised but never scored, and validation also drove model selection, so there is no clean held-out estimate.",
       ],
       stack: [
         "Python",
