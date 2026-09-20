@@ -293,6 +293,11 @@ export const content: SiteContent = {
 
   contact: [
     "Email is the fastest way to reach me. I read it daily and reply the same day on weekdays.",
+    // The section was one sentence over four routes already shown in the hero,
+    // so it repeated itself and added nothing at the point a reader has just
+    // finished the projects. This is what is actually useful there: the time
+    // zone, for scheduling, and an explicit offer against the source links.
+    "I am on Eastern time. Two of the three projects above link their source, and I am glad to walk through either — including the parts that did not work.",
   ],
 
   contactRoutes: [
