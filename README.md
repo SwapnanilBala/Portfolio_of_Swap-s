@@ -39,6 +39,13 @@ That is deliberate.
 **`app/globals.css` — every style rule.** Design tokens are custom properties at
 the top under `:root`. Change `--brass` there and the whole accent moves.
 
+The site ships two themes: the beige field in `:root`, and a cyanotype dark
+pair in the `@media (prefers-color-scheme: dark)` block directly below it. It
+follows the operating system — there is no toggle. Only the ten colour tokens
+differ between them; no rule further down the file holds a literal colour, which
+is what keeps a second theme to ten lines. If you add one, add it as a token in
+both blocks or the themes drift.
+
 Components in `components/` take typed props and render. They should not contain
 English prose.
 

@@ -1,12 +1,17 @@
 /* ==========================================================================
    Tokens
-   The palette is a warm beige field with a deep brass accent. Every contrast
-   ratio below was computed against both --field and --field-inset, not
-   assumed, and clears WCAG AA for normal text.
+   The palette is a warm beige field with a deep brass accent, paired with a
+   cyanotype dark theme in the block directly below. Every contrast ratio here
+   was computed against both --field and --field-inset, not assumed, and clears
+   WCAG AA for normal text.
+
+   Colour lives only in these two blocks. No rule further down the file holds a
+   literal colour, which is the whole reason a second theme is ten lines rather
+   than an audit -- keep it that way.
    ========================================================================== */
 
 :root {
-  color-scheme: light;
+  color-scheme: light dark;
 
   /* Field */
   --field: #ede4d3;
@@ -75,6 +80,47 @@
   --size-label: 0.75rem;
 
   --leading-prose: 1.65;
+}
+
+/* ==========================================================================
+   Dark pair -- cyanotype
+   The same page printed as a cyanotype: prussian blue ground, pale ink, the
+   brass accent lifted to carry on a dark field. Only the ten colour tokens
+   move.
+
+   Ratios below were computed against --field and --field-inset *in this mode*,
+   not inherited from the light pair.
+
+   A dark pair earns its place on this page specifically. All six project
+   captures are screenshots of dark UIs; on the beige field they read as slabs
+   dropped on paper, which is the problem --mat was invented to defuse. Here
+   they sit on a ground of their own tone and the mat does much less work.
+   ========================================================================== */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Field */
+    --field: #0e2233;
+    --field-inset: #14293c;
+    --rule: #2a4459;
+
+    /* Same invariant as the light pair: darker than both plate grounds, so a
+       mounted capture reads identically at rest and when the plate lifts. */
+    --mat: #091a28;
+
+    --field-veil: rgba(14, 34, 51, 0.92);
+
+    /* Ink. Ratios are against --field and --field-inset in that order. */
+    --ink: #e9eff4; /* 14.0:1  12.8:1 */
+    --ink-muted: #a4bacb; /*  8.1:1   7.4:1 */
+    --ink-faint: #8fa8bb; /*  6.6:1   6.0:1 */
+
+    /* Accent. --brass-deep is the quieter variant here rather than the louder
+       one, exactly as it was in the navy theme this replaces: on a dark ground
+       "deeper" recedes. It carries rules, ticks and underlines, never body. */
+    --brass: #d9a842; /*  7.4:1   6.8:1 */
+    --brass-deep: #b4862c; /*  4.9:1   4.5:1 */
+  }
 }
 
 /* ==========================================================================
