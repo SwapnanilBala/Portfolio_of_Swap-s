@@ -172,6 +172,16 @@ export interface ChartSnapshot {
 export interface Profile {
   readonly name: string;
   readonly seeking: string;
+  /**
+   * Where he is and what he is asking for, in that order.
+   *
+   * Required, not optional. `seeking` says what he *is*; nothing said what he
+   * wanted, so the page answered neither of the two questions a recruiter
+   * applies first — is this person near me, and are they available when I need
+   * someone. A portfolio aimed at a co-op search that never names the co-op is
+   * the one omission the whole page cannot recover from.
+   */
+  readonly availability: string;
   readonly location: string;
   readonly email: string;
   readonly github: string;

@@ -56,6 +56,13 @@ export function Hero({ profile, hero, routes }: Props) {
       <div className="hero-body">
         <h1 className="hero-name">{profile.name}</h1>
         <p className="hero-seeking">{profile.seeking}</p>
+        {/*
+          Second line, same treatment: what he is, then where he is and what he
+          is asking for. It reuses .hero-seeking rather than introducing a
+          .hero-availability, because the two lines are the same kind of thing
+          and the stylesheet already spaces stacked siblings correctly.
+        */}
+        <p className="hero-seeking">{profile.availability}</p>
 
         <div className="hero-statement">
           {hero.statement.map((paragraph) => (

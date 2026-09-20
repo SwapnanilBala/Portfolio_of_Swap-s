@@ -15,6 +15,10 @@ export const content: SiteContent = {
     name: "Swapnanil Bala",
     seeking:
       "AI engineer. M.S. Data Science at Northeastern's Khoury College.",
+    // TODO: add the expected graduation date once it is fixed — a recruiter
+    // sizing a Spring 2027 co-op wants to know what follows it. Do not guess.
+    availability:
+      "Boston, Massachusetts. Available for a Spring 2027 co-op in full-stack, AI engineering or AI product engineering.",
     location: "Boston, Massachusetts",
     email: "bala.s@northeastern.edu",
     github: "https://github.com/SwapnanilBala",
