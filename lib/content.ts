@@ -18,14 +18,8 @@ export const content: SiteContent = {
     // sizing a Spring 2027 co-op wants to know what follows it. Do not guess.
     availability:
       "Boston, Massachusetts. Available for a Spring 2027 co-op in full-stack, AI engineering or AI product engineering.",
-    location: "Boston, Massachusetts",
-    email: "bala.s@northeastern.edu",
-    github: "https://github.com/SwapnanilBala",
-    linkedin: "https://linkedin.com/in/swapnanil-bala-854b722a7",
-    // Scrubbed copy of the Sep 2026 resume: phone number removed and the
-    // personal address swapped for the Northeastern one, since the repo is
-    // public. Regenerate with the same treatment if you replace the PDF.
-    resumeHref: "/resume.pdf",
+    // Contact details are not repeated here. They live once, in contactRoutes
+    // below, which is what both the hero links and the contact list render.
     portrait: {
       src: "/media/swapnanil-bala.webp",
       alt: "Swapnanil Bala in a grey suit and dark red tie, on a deck above a pond, bare autumn treeline behind.",
@@ -292,6 +286,9 @@ export const content: SiteContent = {
     },
     {
       key: "resume",
+      // Scrubbed copy of the Sep 2026 resume: phone number removed and the
+      // personal address swapped for the Northeastern one, since the repo is
+      // public. Regenerate with the same treatment if you replace the PDF.
       label: "download the resume (PDF)",
       href: "/resume.pdf",
     },

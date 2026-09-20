@@ -182,11 +182,21 @@ export interface Profile {
    * the one omission the whole page cannot recover from.
    */
   readonly availability: string;
-  readonly location: string;
-  readonly email: string;
-  readonly github: string;
-  readonly linkedin: string;
-  readonly resumeHref: string;
+  /*
+   * There is deliberately no `email`, `github`, `linkedin`, `resumeHref` or
+   * `location` here.
+   *
+   * All five used to exist, be populated, and render nowhere: Hero reads only
+   * `name`, `seeking` and `availability`, and both the hero link row and the
+   * contact list are built from `contactRoutes`. Four of them duplicated a
+   * route, so editing `profile.email` -- the obvious place to look -- changed
+   * nothing on the page while appearing to work. That is a silent failure on
+   * the one fact the site exists to deliver.
+   *
+   * Contact details belong to `ContactRoute` and live in exactly one place.
+   * `location` is part of `availability`, because where he is and when he is
+   * free are read together or not at all.
+   */
   /**
    * The hero portrait. Typed as an ImageAsset so it cannot ship without
    * intrinsic dimensions, alt text or a placeholder: it is the first image on
