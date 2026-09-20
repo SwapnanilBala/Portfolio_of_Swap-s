@@ -13,8 +13,7 @@ import type { SiteContent } from "@/lib/types";
 export const content: SiteContent = {
   profile: {
     name: "Swapnanil Bala",
-    seeking:
-      "AI engineer. M.S. Data Science at Northeastern's Khoury College.",
+    seeking: "AI engineer. M.S. Data Science at Northeastern's Khoury College.",
     // TODO: add the expected graduation date once it is fixed — a recruiter
     // sizing a Spring 2027 co-op wants to know what follows it. Do not guess.
     availability:
@@ -77,8 +76,14 @@ export const content: SiteContent = {
       period: "2025—",
       status: "shipped",
       flagship: true,
+      // Narrowed to what the repo backs now that the source link is live. The
+      // previous wording claimed "no database, no accounts, no server-side
+      // compute"; the README documents Google sign-in and a Neon Postgres for
+      // accounts and sessions. Local-first is still the real and interesting
+      // claim — it is the chart data that never leaves the device — so the
+      // claim is now the specific true one rather than the broad false one.
       summary:
-        "A local-first sidereal astrology engine. The whole calculation stack is hand-written TypeScript: no database, no accounts, no server-side compute. Charts are computed in the browser and saved to localStorage across five device-scoped profiles.",
+        "A sidereal astrology engine whose calculation stack is hand-written TypeScript. Chart data is local-first: readings, palm scans and drafts live in the browser across five device-scoped profiles and never sync, so signing in buys an identity rather than a library. Postgres holds accounts and sessions and nothing else.",
       gutter: [
         { value: "63,000", label: "lines of TypeScript" },
         { value: "561", label: "tests" },
@@ -98,15 +103,18 @@ export const content: SiteContent = {
         "TypeScript",
         "Zod",
         "astronomy-engine",
+        "Neon Postgres",
+        "Drizzle",
         "GPT-4o Vision",
         "MediaPipe",
         "PWA",
       ],
       links: [
         { role: "live", href: "https://large-astro-web-app.vercel.app/" },
-        // TODO: paste the repo URL. Until href is set this link is filtered
-        // out, not rendered dead.
-        { role: "source" },
+        {
+          role: "source",
+          href: "https://github.com/SwapnanilBala/Large_Astro_Web_App",
+        },
       ],
       media: [
         {
@@ -137,7 +145,8 @@ export const content: SiteContent = {
             "Every house scored against the 28.1-bindu average rather than against a maximum, with the first house broken out at 92.6% of it. The footnote flags that these twelve total 367 against a 337 pool — a discrepancy reported rather than smoothed over.",
           width: 1571,
           height: 982,
-          blurDataURL: BLUR_PLACEHOLDERS["/media/lagna-atelier-ashtakavarga.webp"],
+          blurDataURL:
+            BLUR_PLACEHOLDERS["/media/lagna-atelier-ashtakavarga.webp"],
         },
       ],
       // TODO: still worth recording the palm-reading flow as a clip — it is the
@@ -171,7 +180,10 @@ export const content: SiteContent = {
       ],
       links: [
         { role: "live", href: "https://app.robusthealth.in/" },
-        // TODO: paste the repo URL.
+        // TODO: paste the repo URL. Nothing public matches — the account has
+        // Vibe_Robust_Health_Android and Vibe_Robust_Health_IOS_App, which are
+        // the mobile prototypes, not the web app these plates come from. If the
+        // web repo is private it either stays a TODO or the link role goes.
         { role: "source" },
       ],
       media: [
@@ -183,7 +195,8 @@ export const content: SiteContent = {
             "Two ways in: a three-to-five minute questionnaire that generates a tailored first week, or a ready-made programme with optional body details for nutrition targets. Switching between them keeps whatever has already been entered.",
           width: 1041,
           height: 701,
-          blurDataURL: BLUR_PLACEHOLDERS["/media/robust-health-onboarding.webp"],
+          blurDataURL:
+            BLUR_PLACEHOLDERS["/media/robust-health-onboarding.webp"],
         },
         {
           kind: "image",
@@ -232,8 +245,10 @@ export const content: SiteContent = {
         "Scikit-Learn",
       ],
       links: [
-        // TODO: paste the repo URL.
-        { role: "source" },
+        {
+          role: "source",
+          href: "https://github.com/SwapnanilBala/Fake-News-Classifier",
+        },
       ],
     },
   ],
