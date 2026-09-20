@@ -20,10 +20,26 @@
 
   /* The mat a capture is mounted on. Deliberately not --field-inset: that is
      the plate's own ground, so the mat was invisible at rest and then appeared
-     on hover when the plate lifted to --field. Five figures growing an inner
-     rectangle at once is a state change nobody asked for. Darker than both
-     plate grounds, so it reads the same either way. */
+     on hover when the plate lifted. Five figures growing an inner rectangle at
+     once is a state change nobody asked for.
+
+     Two separate jobs, and only the first one transfers to the dark pair:
+
+       a. Stay clear of BOTH plate grounds, so the mount does not appear on
+          hover. Here that means darker than both; on a dark field it means
+          lighter than both. The rule is "clear of both", not "darker".
+       b. Separate the capture from the plate. On beige that is free -- a dark
+          screenshot is already 9-13:1 from this mat -- so the mat can afford
+          to sit a hair off the plate (1.14:1) and still work. The dark pair
+          gets none of that for free; see the note in that block. */
   --mat: #d8cbb0;
+
+  /* The plate's hover ground. Was --field, which is correct on beige and
+     backwards on the cyanotype: there --field is DARKER than --field-inset, so
+     "a one-step tonal lift" lifted the plate on one theme and sank it on the
+     other, against the 2px rise that runs in both. A token of its own means
+     each pair states its own direction. */
+  --plate-hover: #ede4d3;
 
   /* A veil over media, so a label stays legible on any frame beneath it. */
   --field-veil: rgba(237, 228, 211, 0.92);
@@ -73,10 +89,20 @@
 
   /* Type sizes */
   --size-display: clamp(2rem, 1.4rem + 2.6vw, 3rem);
+  /* Section headings. Their own step, because at --size-title they were the
+     same serif, size and weight as an entry title -- "Projects" and "Lagna
+     Atelier" rendered identically, so on a nine-viewport page the section
+     boundaries never announced themselves. */
+  --size-section: 1.75rem;
   --size-title: 1.375rem;
   --size-body: 1.0625rem;
   --size-small: 0.9375rem;
-  --size-figure: 1.0625rem;
+  /* The gutter figure. Was --size-body exactly, which meant the column the
+     whole layout is built around -- the one CLAUDE.md calls the recruiter's
+     path -- rendered at the size of the prose beside it and carried no more
+     weight than a sentence. Measured before choosing: the widest value on the
+     page, 63,000, is 86px of glyphs here, inside a 176px gutter column. */
+  --size-figure: 1.5rem;
   --size-label: 0.75rem;
 
   --leading-prose: 1.65;
@@ -94,7 +120,25 @@
    A dark pair earns its place on this page specifically. All six project
    captures are screenshots of dark UIs; on the beige field they read as slabs
    dropped on paper, which is the problem --mat was invented to defuse. Here
-   they sit on a ground of their own tone and the mat does much less work.
+   they sit on a ground of their own tone.
+
+   That last part cuts both ways, and the first draft of this block got it
+   wrong. "Sitting on a ground of their own tone" is exactly why the mat stops
+   working: measured on the outer 3px ring of each capture, the pixels that
+   actually touch the mount, the six separate from the beige mat at 8.7-12.6:1
+   and from the first dark mat at 1.06-1.26:1. The mount was invisible and the
+   captures bled into the plate -- the same failure the light pair invented
+   --mat to prevent, arrived at from the other side.
+
+   So the dark mat runs LIGHTER than both plate grounds rather than darker. It
+   is the one token whose direction flips, and it has to: on beige the mat is
+   nearly free-riding on a capture that is already 10:1 from everything, while
+   here it is the only thing doing the separating. Which is also why it sits
+   further off the plate than its beige counterpart, 2.41:1 against 1.14:1.
+   That is not an inconsistency to tidy up.
+
+   A cyanotype print mounted on a paler card is, as it happens, exactly what
+   this looks like.
    ========================================================================== */
 
 @media (prefers-color-scheme: dark) {
@@ -104,9 +148,17 @@
     --field-inset: #14293c;
     --rule: #2a4459;
 
-    /* Same invariant as the light pair: darker than both plate grounds, so a
-       mounted capture reads identically at rest and when the plate lifts. */
-    --mat: #091a28;
+    /* Clear of both plate grounds, as in the light pair -- but lighter, not
+       darker. See the block comment. Against --field-inset 2.41:1 and against
+       --plate-hover 2.13:1, so the mount holds still through a hover; against
+       the six capture edges 2.28:1 at the brightest and 3.28:1 at the darkest,
+       where the old value managed 1.06-1.26:1 and vanished. */
+    --mat: #3d6587;
+
+    /* A lift, matching the beige pair's direction rather than its token. That
+       one moves --field-inset -> --field at 1.119:1; this moves 1.133:1, so
+       both themes lift by the same perceived step. */
+    --plate-hover: #213242;
 
     --field-veil: rgba(14, 34, 51, 0.92);
 
@@ -181,6 +233,23 @@ table {
 }
 
 /* ==========================================================================
+   Selection
+   The last unstyled thing on the page: dragging across it produced the
+   browser's default blue, which belongs to neither pair.
+
+   Built from the two tokens rather than a literal, so it follows both themes
+   for free and keeps the "colour lives in the token blocks" rule intact.
+   Brass on field reads 5.5:1 on beige and 7.4:1 on the cyanotype -- the same
+   numbers already recorded for --brass, because it is the same pairing
+   inverted.
+   ========================================================================== */
+
+::selection {
+  background: var(--brass);
+  color: var(--field);
+}
+
+/* ==========================================================================
    Shell and the two-column entry grid
    Left gutter: checkable figures, monospace. Right: prose, serif.
    ========================================================================== */
@@ -240,7 +309,7 @@ table {
 .ephemeris:hover,
 .ephemeris:focus-within {
   border-color: var(--brass);
-  background: var(--field);
+  background: var(--plate-hover);
 }
 
 .entry:hover::before,
@@ -348,7 +417,7 @@ table {
 
 .section-heading h2 {
   font-family: var(--serif);
-  font-size: var(--size-title);
+  font-size: var(--size-section);
   font-weight: 500;
   letter-spacing: -0.005em;
 }

@@ -158,14 +158,56 @@ tables, precise alignment, and marginal annotation.
   to defuse. On the cyanotype ground they sit in their own tone.
 
   Two invariants hold across both themes, and a new token breaks the pair if it
-  ignores either. `--mat` is darker than both plate grounds, so a mounted
+  ignores either. `--mat` stays **clear of both plate grounds**, so a mounted
   capture looks the same at rest and when the plate lifts. `--field-veil` is its
   own theme's `--field` at 92%, so a poster label stays legible over any frame.
-  Note the elevation reads opposite by mode and that is intended: plates are
-  recessed below the page in light, raised above it in dark, which is the
-  convention in each. Hover resolves the plate to the page tone either way.
+
+  Note the plate's **resting** elevation reads opposite by mode, and that much
+  is intended: recessed below the page in light, raised above it in dark, which
+  is the convention in each. That sentence is about `--field-inset` against
+  `--field` and nothing else. It is **not** a statement about hover, which lifts
+  in both themes -- read the amendment below before treating "opposite by mode"
+  as a general principle and applying it there.
+
+  **Amended on request, and both amendments are the same lesson:** an invariant
+  phrased as a direction rather than a relationship does not survive the field
+  flipping.
+
+  `--mat` was "darker than both plate grounds". On beige that separates a dark
+  capture for free — 8.7–12.6:1, measured on the outer 3px ring of each capture,
+  the pixels that actually touch the mount — so the mat could sit a hair off the
+  plate (1.14:1) and still read. Carried into the cyanotype unchanged it gave
+  1.06–1.26:1: the mount vanished and the captures bled into the plate, which is
+  the exact failure `--mat` exists to prevent, reached from the other side. The
+  dark mat is therefore **lighter** than both plate grounds (`#3d6587`), and
+  sits further off the plate than its beige counterpart — 2.41:1 against 1.14:1
+  — because there it is the only thing doing the separating. That asymmetry is
+  load-bearing, not an oversight to tidy up.
+
+  Hover was "resolves the plate to the page tone either way", via
+  `background: var(--field)`. That is a coherent model on its own, but combined
+  with the `translateY(-2px)` that runs in *both* modes it made the colour and
+  the motion disagree: in dark, `--field` is darker than `--field-inset`, so the
+  plate sank while the transform raised it. Hover now reads **one step lighter
+  in both themes** through a `--plate-hover` token — 1.12:1 on beige, 1.13:1 on
+  the cyanotype, the same perceived step. What this costs is the "resolves to
+  the page tone" description, which no longer holds in dark: there the plate
+  goes from raised to further raised. That is the standard dark-UI elevation
+  convention and it agrees with the transform, which is why the trade was made
+  that way.
 - **Type.** Newsreader for all prose. JetBrains Mono for numeric data and
   index-like structural labels only — never as decoration for small text.
+
+  Two steps in the scale exist because the page had collapsed without them.
+  `--size-section` (1.75rem) keeps a section heading off `--size-title`: at the
+  same size, family and weight, "Projects" and "Lagna Atelier" rendered
+  identically, so on a nine-viewport page no section boundary announced itself.
+  `--size-figure` (1.5rem) keeps a gutter figure off `--size-body`: they were
+  the same 17px, which meant the column this whole layout is built around — the
+  one described above as the recruiter's path — carried no more weight than the
+  prose beside it. Checked before choosing: the widest value on the page,
+  63,000, is 86px of glyphs inside a 176px gutter column, and 360px still does
+  not overflow.
   `font-variant-numeric: tabular-nums` on every column of figures; proportional
   numerals make a numeric column look ragged and the whole design rests on that
   column being straight.
@@ -319,6 +361,10 @@ reader the positions are not real.
   and `--field-inset` of its own theme — the dark pair's ratios are computed
   against the cyanotype grounds, never inherited from the beige ones. Last
   audited live: 99 text-bearing elements in light, 95 in dark, zero failures.
+- `::selection` is brass on the field tone, built from the two tokens rather
+  than a literal so it follows both pairs — 5.5:1 on beige, 7.4:1 on the
+  cyanotype. Before this the one unstyled thing left on the page was the
+  browser's default blue, which belongs to neither.
 - Responsive to 360px: the gutter collapses above the prose and its figures
   reflow horizontally.
 
