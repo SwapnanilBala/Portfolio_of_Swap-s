@@ -89,8 +89,11 @@ export function Hero({ profile, hero, routes }: Props) {
           import { LiveEphemeris } from "@/components/LiveEphemeris";
         and render <LiveEphemeris content={hero} /> here. The component, its
         content keys in lib/content.ts, and the .ephemeris styles are all still
-        in place. Restore the second hero statement paragraph too — it referred
-        to "the table below" and was removed with the table.
+        in place.
+
+        The second hero statement paragraph has since been rewritten to stand
+        without the table, so there is nothing to restore there — do not add a
+        third on the way back in.
       */}
     </header>
   );

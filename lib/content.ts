@@ -32,6 +32,12 @@ export const content: SiteContent = {
   hero: {
     statement: [
       "I build the calculation layer myself. Lagna Atelier computes sidereal astronomical positions in hand-written TypeScript, with no ephemeris service behind it.",
+      // The hero led with the astrology engine and stopped there, so the first
+      // thing a reader met was one project in one domain. This is the second
+      // paragraph the table took with it when the demo was unmounted, rewritten
+      // to stand on its own: it names the other two and states the measurement
+      // rule the rest of the page is keeping.
+      "Two others sit below: a training planner generating weekly plans per member through the Anthropic API, and a LIAR-dataset classifier whose best model beat bag-of-words by 0.033 macro F1. Figures on this page that are not measured yet are marked TODO rather than filled in.",
     ],
     // The keys below feed LiveEphemeris, which is currently unmounted from
     // Hero.tsx. They are kept so restoring the demo stays a one-line change.
