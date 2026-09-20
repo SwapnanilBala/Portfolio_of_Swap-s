@@ -18,14 +18,14 @@ A sloppy portfolio is a negative work sample no matter what the copy says.
 Two readers, and the page serves both without asking either to pick a mode:
 
 - A recruiter, 40–90 seconds, does not read paragraphs, scanning for evidence
-  and contact details. Their path is the column of figures: down the left below
-  74rem, down the right rail above it.
+  and contact details. Their path is the right-hand edge of the spec tables,
+  where every figure on the page is aligned into one column.
 - An engineer who arrives later and reads exactly one project closely. Their
-  path is the prose, which sits opposite the figures in either arrangement.
+  path is the prose and the detail list above each spec table.
 
-Both paths survive the two layouts because the split is the same either way —
-one column of checkable numbers, one column of prose, never interleaved. Which
-side each lands on is the part that changes.
+Both paths work because the figures are a table rather than a paragraph: the
+recruiter reads down the figure edge without reading a sentence, and the
+engineer reads the prose without stepping over numbers.
 
 ## Stack — non-negotiable
 
@@ -83,111 +83,113 @@ catches incomplete content before a recruiter does:
 
 ## Design direction
 
-The organising metaphor is an **ephemeris page** — an astronomical almanac.
-This comes from the subject matter: the flagship project is a hand-written
-sidereal calculation engine, and that world's vernacular is dense numeric
-tables, precise alignment, and marginal annotation.
+The organising metaphor is a **dossier** — a technical spec sheet. This
+replaced the ephemeris-page metaphor on request, in a full visual overhaul
+chosen from four mocked directions. The subject matter still drives it: the
+flagship is a hand-written calculation engine, and the claim the whole page
+makes is that its figures are checkable. A spec sheet is the form that argues
+for itself.
 
-- **Layout.** Two arrangements, by width. Below 74rem: a narrow left gutter of
-  checkable figures in monospace, prose to the right in a text serif. At 74rem
-  and above the page goes asymmetric on request — prose holds the left at its
-  measure, and the gutter moves into a 30rem right rail, which is where the dead
-  space used to be.
+Do not restore the almanac reading of this — the plates, the right rail, the
+asymmetric two-arrangement layout, Newsreader. Those were deliberate and are
+now deliberately gone.
 
-  The asymmetric layout moves the gutter off the left edge, so the recruiter
-  path described below now runs down the inside edge of the rail instead of the
-  outside edge of the page.
+- **One ruled sheet, not a stack of plates.** Records are separated by
+  hairlines. Nothing is a bordered panel, nothing lifts on hover, nothing has a
+  shadow. A record is a row in a reference document, not a control; the links
+  inside it are the interactive part and they keep the focus ring.
 
-  The rail is 30rem because that is what the gutter facts want. Below 74rem the
-  rail would be too narrow for a screenshot to survive, so the layout reverts
-  rather than shrinking the evidence.
+  **This reverses two earlier amendments.** Entries used to be plates with a
+  hover transition, a brass edge tab and a 2px rise, added because the page was
+  judged too static. The dossier has no plates to lift, and a hover effect on a
+  non-interactive row is decoration. If the page reads as too static again, the
+  answer is not to re-add the lift.
 
-  **Amended on request: figures no longer sit in the rail.** They used to repeat
-  the parent template, which put each plate in the 30rem rail at about 430px
-  wide — but the same plate gets 716px in the arrangement *below* 74rem, so the
-  evidence shrank as the display grew. Each figure now sets its own template:
-  the plate takes the wide column at 652px, left edge flush with the prose, and
-  the annotation takes a fixed `--annotation` 20rem margin beside it.
+- **Two columns, one threshold.** A locator column and a body column, on the
+  same grid from the section heads down through every record. The locator
+  carries the record number and the period; the body carries everything else.
+  Below 46rem the locator stops being a column and becomes a line above the
+  record. Above 74rem only the column width and the sheet padding change.
 
-  This costs the claim that the rail is one unbroken vertical run of figures.
-  It is now a run of gutter facts and then marginal annotations, with the plates
-  down the left under the prose. The scan path is still a single column with a
-  straight edge — `--annotation` is a fixed width, so every caption starts at
-  the same x — but it is no longer a column made only of numbers. Do not
-  "restore" the figures to the rail: shrinking the plate by 35% to regain the
-  alignment is the wrong side of that trade, and it was made deliberately.
-  **The hero portrait sits on that same figures column.** The hero is the
-  same two-column grid as every entry below it, so the portrait flips sides
-  with the gutter: the 11rem gutter column below 74rem, the right rail above,
-  stacked above the name below 46rem. Its left edge therefore lines up with
-  the section counts and the gutter facts running down the page, which is the
-  one alignment the layout is actually built on.
+  There is no third arrangement. The old layout had two that had to be kept in
+  sync and a documented bug from exactly that; this has one structure and two
+  widths of it.
 
-  It is 12.5rem wide and stays there. The source is 400px square, so 12.5rem
-  is the widest box a 2x display fills without upscaling — the plate is sized
-  by the photograph, not by the 30rem of rail sitting next to it. Do not widen
-  it to "balance" the rail; that trades a sharp small portrait for a soft large
-  one, and softness on the one photograph of the author is a worse failure than
-  an unfilled column. If a higher-resolution original arrives, raise
-  `--portrait` and `PORTRAIT_WIDTH` in `components/Hero.tsx` together.
+- **The spec table is the point.** Gutter facts render as label-left,
+  figure-right, dotted rule between rows, two abreast above 46rem. The figures
+  land on a common right edge, so the eye runs that edge and reads the numbers
+  as data rather than as a list. It lives in the **body** column — at the
+  locator column's 132px a label like "lines of TypeScript" wraps and the
+  figure loses the edge it is supposed to line up on.
 
-  It is mounted like a capture — the same `--mat` ground, hairline border and
-  square corners — but takes no hover treatment, because nothing in it is
-  interactive and a lift on a static portrait is decoration.
+  The DOM order is value then label, which is the correct reading order for a
+  screen reader; the visual order is reversed in CSS. Do not "fix" the markup
+  to match the visual order.
+
 - **The gutter is for numbers a stranger could independently verify** — dates,
   line counts, test counts, measured deltas. **Never put an adjective in the
   gutter.** Its entire authority comes from containing no claims about quality.
-- **Palette.** Warm beige field (`#ede4d3`), deep brass accent (`#73550e`),
-  dark warm-brown text, muted brown secondary. Beige and brass is aged-almanac
-  paper rather than instrument panel, which suits the ephemeris metaphor as
-  well as the navy did.
+  An unmeasured figure renders as a marked `TODO`, not as an omission.
 
-  This replaced the original deep navy field (`#10192b`) on request. Brass was
-  kept and darkened rather than swapped for terracotta, which keeps the page
-  clear of the forbidden cream-and-terracotta tell below. Do not revert to navy
-  as a "correction" — the lighter field is the decision now.
+- **Records and figures are numbered, and that is a reversal.** The forbidden
+  list still bans decorative `01 / 02 / 03` sequence markers, and this is the
+  documented exception rather than a loophole: the record locator and the
+  figure citation are one system. "Fig 2.1" is findable from record 02 without
+  counting, which is the entire reason a caption can be pointed at in
+  conversation. The number is a reference, not a rank. A bare `01` on a block
+  with nothing citing it is still banned.
 
-  **Paired with a cyanotype dark theme**, added on request: prussian-blue field
-  (`#0e2233`), pale ink, brass lifted to `#d9a842` to carry on a dark ground.
-  It lives in a `@media (prefers-color-scheme: dark)` block under `:root` and
-  follows the OS. There is no toggle, and adding one was not asked for.
+- **Figures span both columns, below the record.** A plate confined to either
+  column is too small to be evidence. Two abreast above 46rem; a capture wider
+  than 2.2:1 takes the full width via `data-wide`.
 
-  The dark pair earns its place on this page rather than being a feature for its
-  own sake: all six project captures are screenshots of dark UIs, and on the
-  beige field they read as slabs dropped on paper — the problem `--mat` exists
-  to defuse. On the cyanotype ground they sit in their own tone.
+- **Palette is unchanged by the overhaul.** Warm beige field (`#ede4d3`), deep
+  brass accent (`#73550e`), dark warm-brown text, paired with the cyanotype
+  dark theme (`#0e2233` field, brass lifted to `#d9a842`) under
+  `@media (prefers-color-scheme: dark)`. It follows the OS; there is no toggle
+  and one was not asked for.
 
-  Two invariants hold across both themes, and a new token breaks the pair if it
-  ignores either. `--mat` is darker than both plate grounds, so a mounted
-  capture looks the same at rest and when the plate lifts. `--field-veil` is its
-  own theme's `--field` at 92%, so a poster label stays legible over any frame.
-  Note the elevation reads opposite by mode and that is intended: plates are
-  recessed below the page in light, raised above it in dark, which is the
-  convention in each. Hover resolves the plate to the page tone either way.
-- **Type.** Newsreader for all prose. JetBrains Mono for numeric data and
-  index-like structural labels only — never as decoration for small text.
-  `font-variant-numeric: tabular-nums` on every column of figures; proportional
-  numerals make a numeric column look ragged and the whole design rests on that
-  column being straight.
-- **Measure.** Prose constrained to ~34rem, keeping lines under ~75 characters.
-  Serif body line-height 1.65.
+  Colour lives only in the two token blocks at the top of `globals.css`. No
+  rule below them holds a literal colour — that is why a second theme is ten
+  lines rather than an audit. Two invariants hold across both: `--mat` is
+  darker than the field so a mounted capture reads the same either way, and
+  `--field-veil` is its own theme's `--field` at 92% so a poster label stays
+  legible.
+
+- **Type.** IBM Plex Sans for prose, IBM Plex Mono for every figure, label,
+  citation and structural mark. They are siblings on one skeleton, so the spec
+  tables and the prose belong to the same system and the digits align.
+
+  This replaced Newsreader and JetBrains Mono. Newsreader is a reading face
+  built for continuous prose and its warmth works against a page whose argument
+  is that the numbers are checkable. `font-variant-numeric: tabular-nums` on
+  every column of figures; proportional numerals make a numeric column ragged
+  and the design rests on that column being straight.
+
+  Both faces need explicit weights in `next/font` — neither is variable here,
+  so an omitted weight silently yields 400 only and every 500/600 rule falls
+  back to synthetic bold.
+
+- **Measure.** Prose constrained to ~66ch. Wider than the old 34rem because the
+  body column no longer competes with a figure rail for the same run.
 
 ### Forbidden
 
 These are the current tells of generated design. Do not produce any of them,
 even if asked to make the page "more impressive":
 
-- Tracked-out ALL-CAPS eyebrow labels above headings
+- Tracked-out ALL-CAPS eyebrow labels above headings (small mono labels *in*
+  the locator column and section heads are structural, not eyebrows)
 - Meta strings joined with middle dots (`A · B · C`)
 - Arrows appended to link or button text
-- Identical rounded cards with the same soft grey shadow under each (entries
-  are now plates, on request — square corners, hairline border, brass edge tab,
-  no shadow and no blur. The tell is the shadowed rounded card, not the panel)
+- Identical rounded cards with the same soft grey shadow under each
 - Gradient washes used as decoration
-- Numbered `01 / 02 / 03` markers (the content is not a sequence)
+- Numbered `01 / 02 / 03` markers used as decoration. The record locators and
+  figure citations are the documented exception above, because something cites
+  them; a number on a block nothing references is still banned
 - A cream background with high-contrast serif and terracotta accent (the field
-  is beige, but the accent is brass and the serif is not maximum-contrast — the
-  banned thing is that specific trio, not a light background)
+  is beige, but the accent is brass — the banned thing is that specific trio,
+  not a light background)
 - Near-black with a single acid-green or vermilion accent
 - Accenting one word of a headline in a different colour or weight
 - Tinted near-black (`#0b0b0b`, `#111`) standing in for black
@@ -195,16 +197,7 @@ even if asked to make the page "more impressive":
 ### Motion budget
 
 One page-load reveal, staggered across at most three sections. No
-scroll-triggered fade-ins.
-
-**Amended on request:** entries and the ephemeris plate now carry a hover and
-focus-within transition — border to brass, a brass edge tab, a one-step tonal
-lift and a 2px rise over 160ms. The original rule said no hover transitions on
-entries; the page was judged too static without them. The constraint that
-survived is that the interaction is legible without motion: colour and the tab
-carry the state, and only the transform and the transitions sit inside
-`prefers-reduced-motion: no-preference`. Do not add shadow, blur or scale to
-this — those are what the card ban is actually about.
+scroll-triggered fade-ins. No hover transitions — see the plate reversal above.
 
 The animation lives inside `@media (prefers-reduced-motion: no-preference)`.
 Nothing is hidden outside that query, so reduced-motion visitors get the
@@ -212,14 +205,11 @@ finished page immediately rather than a permanently invisible one.
 
 ### Cascade order in `globals.css`
 
-The `@media (min-width: 74rem)` asymmetric block must stay near the bottom of
-the file, after every base rule it overrides. It originally sat just under
-`.prose`, above the Hero and Section heading sections, so each of its
-equal-specificity overrides silently lost to the later base rule.
-`.section-heading` was the visible casualty: the count/title flip this file
-describes had never actually applied, and the count sat at the 11rem gutter
-while the entries beside it were already at the 34rem measure. Add new sections
-above that block, do not move it back up.
+The responsive blocks must stay at the bottom of the file, after every base
+rule they override. They win on source order at equal specificity, so moving
+them up silently loses every one of them. That is not hypothetical: the old
+asymmetric block sat mid-file for a while and `.section-heading` never
+actually applied.
 
 ## Performance
 
@@ -249,27 +239,33 @@ improvement on one of its own projects. A slow portfolio refutes its own copy.
 - **Crop to the content, not to the viewport.** A capture is cropped to the
   app's own content column and ends on a container boundary — never mid-word,
   mid-card, or under a sticky nav that overlaps what is behind it. A 1600px
-  browser-viewport shot rendered at 652px puts its UI text near 5px, which
+  browser-viewport shot rendered at 456px puts its UI text near 5px, which
   turns evidence into texture. Drop app chrome that carries no evidence; it is
   also where the blur redactions live. Aim for 16:10, and if the content will
   not take it without loss, keep the content and pick a clean ratio of its own
   (the workout plate is exactly 2:3 for this reason).
 - **Figures are never inside the prose measure.** A screenshot squeezed into
-  the 34rem column is illegible, which turns evidence into decoration. They are
-  a grid area of their own (`.entry-figures`), not a child of `.prose`: full
-  plate width below 74rem, and above it the wide column beside a 20rem
-  annotation. If you add a figure, check it at 360px, 900px and 1280px — one per
-  arrangement — and re-measure `FIGURE_SIZES` in `components/ProjectMedia.tsx`
-  if the slot changed.
-- **The portrait is `priority`, not lazy.** It is the largest thing above the
-  fold and so the likely LCP element; deferring it trades a measurable delay
-  for bytes fetched a moment later anyway. It is also the only image on the
-  site rendered without `sizes`. That is deliberate: a px-only `sizes` string
-  makes `next/image` emit the full fifteen-candidate ladder up to 3840w, and
-  for a 400px source eight of those candidates resolve to the same file.
-  Passing the display box instead yields two candidates — 256 at 1x, the native
-  400 at 2x. Height is derived from the asset's own ratio, so a non-square
+  the body column's ~66ch is illegible, which turns evidence into decoration.
+  They are a grid area of their own (`.entry-figures`) spanning both columns
+  below the record, not a child of `.prose`: one per row below 46rem, two
+  abreast above it. If you add a figure, check it at 360px, 900px and 1280px,
+  and re-measure `FIGURE_SIZES` in `components/ProjectMedia.tsx` if the slot
+  changed. It is currently 29rem / 90vw against a measured 456px maximum —
+  under-declaring is the worse direction, because it serves an image the
+  browser then upscales.
+- **The portrait is `priority`, not lazy.** It is above the fold and the likely
+  LCP element; deferring it trades a measurable delay for bytes fetched a
+  moment later anyway. It is also the only image on the site rendered without
+  `sizes`. That is deliberate: a px-only `sizes` string makes `next/image` emit
+  the full fifteen-candidate ladder up to 3840w, and for a 400px source most of
+  those resolve to the same file. Passing the display box instead yields a
+  short srcset. Height is derived from the asset's own ratio, so a non-square
   replacement still reserves the right space.
+
+  It is 104px wide (`--portrait`, and `PORTRAIT_WIDTH` in `components/Hero.tsx`
+  — change both together). Down from 200px with the overhaul: the dossier is
+  dense, and a portrait twice that size becomes the loudest thing in a masthead
+  whose job is to state three facts. The 400px source covers 2x comfortably.
 - A link whose `href` is unset must not render as a dead link. Filter it out.
 
 ## The hero demo
@@ -315,12 +311,18 @@ reader the positions are not real.
 - Semantic elements: `<table>` for tabular data, `<button>` for the poster gate,
   headings in document order, `<figure>`/`<figcaption>` for media.
 - Colour contrast verified by computation, not assumed, **in both themes**.
-  Every foreground token clears WCAG AA for normal text against both `--field`
-  and `--field-inset` of its own theme — the dark pair's ratios are computed
-  against the cyanotype grounds, never inherited from the beige ones. Last
-  audited live: 99 text-bearing elements in light, 95 in dark, zero failures.
-- Responsive to 360px: the gutter collapses above the prose and its figures
-  reflow horizontally.
+  Every foreground token clears WCAG AA for normal text against `--field`,
+  `--field-inset` **and `--mat`** of its own theme — the dark pair's ratios are
+  computed against the cyanotype grounds, never inherited from the beige ones.
+  Last audited live after the overhaul: 116 text-bearing elements in each
+  theme, zero failures; worst case 5.00:1 light, 4.93:1 dark.
+
+  `--mat` was added to that contract by a real failure. Figcaptions sit on the
+  mat, which is darker than either plate ground, and `--ink-faint` on `--mat`
+  measures 4.41:1 — under AA. Captions use `--ink-muted`. Any new text placed
+  on the mat has to be checked against the mat, not against the field.
+- Responsive to 360px: the locator column becomes a line above each record and
+  the figures go one per row. Verified at 360px with no horizontal overflow.
 
 ## Copy standard
 

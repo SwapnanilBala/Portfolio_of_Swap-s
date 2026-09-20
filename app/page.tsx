@@ -29,19 +29,25 @@ export default function Page() {
 
       <section className="section reveal" data-reveal="2">
         <SectionHeading heading={content.sections.projects} />
-        {projects.map((project) => (
+        {projects.map((project, index) => (
           <ProjectEntry
             key={project.slug}
             project={project}
             mediaLabels={content.mediaLabels}
+            ordinal={index + 1}
           />
         ))}
       </section>
 
       <section className="section reveal" data-reveal="3">
         <SectionHeading heading={content.sections.experience} />
-        {content.experience.map((experience) => (
-          <ExperienceEntry key={experience.slug} experience={experience} />
+        {content.experience.map((experience, index) => (
+          <ExperienceEntry
+            key={experience.slug}
+            experience={experience}
+            ordinal={index + 1}
+            affiliation={content.experienceAffiliation}
+          />
         ))}
       </section>
 

@@ -244,6 +244,15 @@ export interface MediaLabels {
   readonly play: string;
   /** Template. Token: {caption} */
   readonly playAria: string;
+  /**
+   * Template. Tokens: {record} {index}
+   *
+   * The figure citation, e.g. "Fig 1.2". It is a reference, not a sequence
+   * marker: a caption that can be pointed at is the reason the plates carry
+   * numbers at all. Lives here rather than being assembled in the component,
+   * so the vocabulary stays in one file like every other label.
+   */
+  readonly figureRef: string;
 }
 
 export interface ContactRoute {
@@ -262,6 +271,14 @@ export interface SiteContent {
   readonly experience: readonly Experience[];
   readonly contact: readonly string[];
   readonly contactRoutes: readonly ContactRoute[];
+  /**
+   * Template. Tokens: {org} {team} {location}
+   *
+   * ExperienceEntry used to build this sentence inline from three fields,
+   * which put English in a .tsx file. The template belongs here with the rest
+   * of the copy.
+   */
+  readonly experienceAffiliation: string;
   readonly mediaLabels: MediaLabels;
   readonly colophon: string;
 }

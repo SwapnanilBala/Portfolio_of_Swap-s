@@ -9,13 +9,17 @@ import type { ContactRoute, HeroContent, Profile } from "@/lib/types";
  *
  * This is the displayed box, not the file. The source is 400px square and
  * recorded as such in content; passing the display width lets next/image emit
- * a two-candidate srcset -- 256 at 1x, the native 400 at 2x -- instead of the
- * fifteen-candidate ladder a `sizes` string produces, eight of whose entries
- * would run past the source and resolve to the same file. Height is derived
- * from the asset's own ratio rather than assumed square, so the reserved space
- * stays correct if the photograph is ever replaced with one that is not.
+ * a short srcset instead of the fifteen-candidate ladder a `sizes` string
+ * produces, most of whose entries would run past the source and resolve to
+ * the same file. Height is derived from the asset's own ratio rather than
+ * assumed square, so the reserved space stays correct if the photograph is
+ * ever replaced with one that is not.
+ *
+ * 104px, down from 200px, because the dossier is dense and a portrait twice
+ * that size becomes the loudest thing in a masthead whose job is to state
+ * three facts. The 400px source now comfortably covers 2x.
  */
-const PORTRAIT_WIDTH = 200;
+const PORTRAIT_WIDTH = 104;
 
 interface Props {
   readonly profile: Profile;

@@ -1,19 +1,31 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { JetBrains_Mono, Newsreader } from "next/font/google";
+import { IBM_Plex_Mono, IBM_Plex_Sans } from "next/font/google";
 import { content } from "@/lib/content";
 import "./globals.css";
 
 // Self-hosted at build time by next/font: no runtime request to Google, and
 // no layout shift, because the metrics are known before the page is served.
-const newsreader = Newsreader({
+//
+// Plex replaced Newsreader and JetBrains Mono when the page became a dossier.
+// Newsreader is a reading face built for continuous prose; its warmth works
+// against a page whose argument is that the figures are checkable. Plex Sans
+// and Plex Mono are siblings on the same skeleton, so the spec tables and the
+// prose stay on one system rather than two, and their digits line up.
+//
+// Both need explicit weights: neither ships as a variable font here, so an
+// omitted weight silently gets 400 only and every 500/600 rule falls back to
+// synthetic bold.
+const plexSans = IBM_Plex_Sans({
   subsets: ["latin"],
+  weight: ["400", "500", "600"],
   display: "swap",
-  variable: "--font-newsreader",
+  variable: "--font-sans",
 });
 
-const jetbrainsMono = JetBrains_Mono({
+const plexMono = IBM_Plex_Mono({
   subsets: ["latin"],
+  weight: ["400", "500", "600"],
   display: "swap",
   variable: "--font-mono",
 });
@@ -40,7 +52,7 @@ export default function RootLayout({
   readonly children: ReactNode;
 }) {
   return (
-    <html lang="en" className={`${newsreader.variable} ${jetbrainsMono.variable}`}>
+    <html lang="en" className={`${plexSans.variable} ${plexMono.variable}`}>
       <body>{children}</body>
     </html>
   );

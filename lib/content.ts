@@ -329,7 +329,10 @@ export const content: SiteContent = {
   mediaLabels: {
     play: "Play clip",
     playAria: "Play the clip: {caption}",
+    figureRef: "Fig {record}.{index}",
   },
+
+  experienceAffiliation: "{org}, {team} team, {location}",
 
   colophon:
     "Built with Next.js and plain CSS — no component library, no CSS framework, no analytics, no cookies. Type is Newsreader and JetBrains Mono, self-hosted at build time.",

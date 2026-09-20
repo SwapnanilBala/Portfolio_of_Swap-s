@@ -7,24 +7,24 @@ import type { Media, MediaLabels, VideoMedia } from "@/lib/types";
 interface Props {
   readonly media: Media;
   readonly labels: MediaLabels;
+  /** The citation this plate carries, already resolved, e.g. "Fig 1.2". */
+  readonly reference: string;
 }
 
 /**
- * The width the image actually occupies, per layout arrangement. Measured, not
- * assumed: at most 40.79rem beside its annotation at 74rem and up, at most
- * 44.75rem in the middle band where a figure spans the plate, and at most
- * 84.5vw below 46rem. Each is rounded up to the next whole unit.
+ * The width the image actually occupies, per layout arrangement. Measured on
+ * the running layout, not derived on paper: 28.5rem with two plates abreast
+ * once the sheet caps at its 64rem max-width, and at most 84.5vw below 46rem
+ * where a plate spans the column alone.
  *
- * This is not decorative. The old value claimed 48rem above 46rem, which was
- * true of the symmetric layout this started as; once the figures moved into a
- * 30rem rail it made every wide viewport fetch a 1080px-wide file for a 430px
- * slot. `sizes` cannot read a custom property, so these track the tokens by
- * hand -- if `--rail`, `--measure`, `--annotation` or the frame padding change,
- * re-measure. Under-declaring is the worse direction: it serves an image the
- * browser then has to upscale.
+ * `sizes` cannot read a custom property, so these track the tokens by hand. If
+ * `--sheet`, `--index` or `--gap` change, re-measure. Under-declaring is the
+ * worse direction: it serves an image the browser then has to upscale.
  */
-const FIGURE_SIZES =
-  "(min-width: 74rem) 41rem, (min-width: 46rem) 45rem, 85vw";
+const FIGURE_SIZES = "(min-width: 46rem) 29rem, 90vw";
+
+/** A strip capture earns the full body column; a tall one does not. */
+const WIDE_RATIO = 2.2;
 
 function formatDuration(totalSeconds: number): string {
   const minutes = Math.floor(totalSeconds / 60);
@@ -90,9 +90,11 @@ function GatedVideo({
   );
 }
 
-export function ProjectMedia({ media, labels }: Props) {
+export function ProjectMedia({ media, labels, reference }: Props) {
+  const wide = media.width / media.height >= WIDE_RATIO;
+
   return (
-    <figure>
+    <figure data-wide={wide ? "true" : undefined}>
       <div className="media-frame">
         {media.kind === "video" ? (
           <GatedVideo media={media} labels={labels} />
@@ -107,10 +109,15 @@ export function ProjectMedia({ media, labels }: Props) {
             blurDataURL={media.blurDataURL}
           />
         )}
+        {media.caption === undefined ? null : (
+          <figcaption>
+            {/* The dash between citation and caption is punctuation, so the
+                stylesheet draws it rather than this file holding prose. */}
+            <span className="figure-ref">{reference}</span>
+            {media.caption}
+          </figcaption>
+        )}
       </div>
-      {media.caption === undefined ? null : (
-        <figcaption>{media.caption}</figcaption>
-      )}
     </figure>
   );
 }

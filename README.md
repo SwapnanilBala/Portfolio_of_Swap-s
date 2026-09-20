@@ -101,10 +101,10 @@ with explicit `width` and `height`, plus a `blurDataURL` drawn from
 `lib/blur.ts`. All three are required by the type, so a plate cannot ship
 without reserving its space or without a placeholder.
 
-A figure is never confined to the 34rem prose measure, because a screenshot
-that narrow is too small to read. Below 74rem it spans the full plate width;
-above it, the plate takes the wide column and its caption a 20rem margin
-alongside, which works out to roughly 652px of image.
+A figure is never confined to the body column's ~66ch measure, because a
+screenshot that narrow is too small to read. Figures span both columns below
+the record: one per row under 46rem, two abreast above it, which works out to
+a 456px image at the sheet's widest.
 
 Three plates per project. Adding a fourth means arguing it is stronger
 evidence than one already there, and dropping that one.
@@ -163,8 +163,11 @@ rather than a value from memory.
 
 ## Notes
 
-- Fonts are Newsreader and JetBrains Mono, self-hosted at build time by
+- Fonts are IBM Plex Sans and IBM Plex Mono, self-hosted at build time by
   `next/font`. There is no runtime request to Google and no layout shift.
+  Both need explicit weights — neither is a variable font here, so an omitted
+  weight silently ships 400 only and every 500/600 rule falls back to
+  synthetic bold.
 - The hero's live ephemeris table is currently unmounted. It shipped a
   placeholder engine, so it displayed positions that were not real. The
   component and its content keys are still in the repo; see the comment in

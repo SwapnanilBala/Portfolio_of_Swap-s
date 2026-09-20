@@ -1,9 +1,9 @@
 /* ==========================================================================
    Tokens
-   The palette is a warm beige field with a deep brass accent, paired with a
-   cyanotype dark theme in the block directly below. Every contrast ratio here
-   was computed against both --field and --field-inset, not assumed, and clears
-   WCAG AA for normal text.
+   A warm beige field with a deep brass accent, paired with a cyanotype dark
+   theme in the block directly below. Every contrast ratio here was computed
+   against both --field and --field-inset, not assumed, and clears WCAG AA for
+   normal text.
 
    Colour lives only in these two blocks. No rule further down the file holds a
    literal colour, which is the whole reason a second theme is ten lines rather
@@ -19,10 +19,8 @@
   --rule: #c8ba9e;
 
   /* The mat a capture is mounted on. Deliberately not --field-inset: that is
-     the plate's own ground, so the mat was invisible at rest and then appeared
-     on hover when the plate lifted to --field. Five figures growing an inner
-     rectangle at once is a state change nobody asked for. Darker than both
-     plate grounds, so it reads the same either way. */
+     the page's own ground, so the mat would be invisible against it. Darker
+     than the field, so a dark screenshot reads as mounted rather than dropped. */
   --mat: #d8cbb0;
 
   /* A veil over media, so a label stays legible on any frame beneath it. */
@@ -37,31 +35,20 @@
   --brass: #73550e; /*  5.5:1   4.9:1 */
   --brass-deep: #5e4508; /*  7.1:1   6.4:1 */
 
-  /* Families. The two variables are injected by next/font in layout.tsx. */
-  --serif: var(--font-newsreader), Georgia, "Times New Roman", serif;
+  /* Families. Both variables are injected by next/font in layout.tsx. */
+  --sans: var(--font-sans), system-ui, -apple-system, sans-serif;
   --mono: var(--font-mono), ui-monospace, "SF Mono", Menlo, monospace;
 
-  /* Measure. ~34rem keeps prose under roughly 75 characters. */
-  --measure: 34rem;
-  --gutter: 11rem;
-  /* Width of the right rail in the asymmetric layout. Sized so a screenshot in
-     it stays legible; below the 70rem breakpoint the rail does not exist. */
-  --rail: 30rem;
-  /* Width of a figure's marginal annotation in the asymmetric layout. Unchanged
-     from the max-width the captions already used, so widening the plate beside
-     them costs them nothing. */
-  --annotation: 20rem;
-  /* The hero portrait. 12.5rem is the widest the 400px source fills at 2x
-     without upscaling, so the plate is sized by the photograph rather than by
-     the space available beside it. Inside the 11rem gutter column it caps to
-     the column instead. */
-  --portrait: 12.5rem;
-  --column-gap: 2.75rem;
-  --shell: calc(var(--gutter) + var(--column-gap) + var(--measure));
-
-  /* Plate padding. Interactive section plates need real interior space, and it
-     has to scale or the 34rem measure gets squeezed on small screens. */
-  --plate-pad: clamp(1rem, 2.2vw, 1.75rem);
+  /* Sheet geometry. The dossier is one ruled sheet, not a stack of plates:
+     --index is the locator column carrying the record number, the period and
+     the spec table; everything else runs in the body column beside it. */
+  --sheet: 64rem;
+  --index: 118px;
+  --gap: 26px;
+  /* Prose stays near 70ch. Wider than the old 34rem measure because the body
+     column no longer competes with a figure rail for the same horizontal run. */
+  --measure: 66ch;
+  --portrait: 6.5rem;
 
   /* Spacing */
   --step-1: 0.5rem;
@@ -69,55 +56,46 @@
   --step-3: 1.5rem;
   --step-4: 2.5rem;
   --step-5: 4rem;
-  --step-6: 6rem;
 
   /* Type sizes */
-  --size-display: clamp(2rem, 1.4rem + 2.6vw, 3rem);
-  --size-title: 1.375rem;
-  --size-body: 1.0625rem;
-  --size-small: 0.9375rem;
-  --size-figure: 1.0625rem;
-  --size-label: 0.75rem;
+  --size-display: clamp(1.75rem, 1.3rem + 1.6vw, 2.125rem);
+  --size-title: 1.1875rem;
+  --size-body: 0.9375rem;
+  --size-small: 0.875rem;
+  --size-data: 0.78125rem;
+  --size-label: 0.6875rem;
 
-  --leading-prose: 1.65;
+  --leading-prose: 1.6;
 }
 
 /* ==========================================================================
    Dark pair -- cyanotype
-   The same page printed as a cyanotype: prussian blue ground, pale ink, the
+   The same sheet printed as a cyanotype: prussian blue ground, pale ink, the
    brass accent lifted to carry on a dark field. Only the ten colour tokens
    move.
 
    Ratios below were computed against --field and --field-inset *in this mode*,
    not inherited from the light pair.
-
-   A dark pair earns its place on this page specifically. All six project
-   captures are screenshots of dark UIs; on the beige field they read as slabs
-   dropped on paper, which is the problem --mat was invented to defuse. Here
-   they sit on a ground of their own tone and the mat does much less work.
    ========================================================================== */
 
 @media (prefers-color-scheme: dark) {
   :root {
-    /* Field */
     --field: #0e2233;
     --field-inset: #14293c;
     --rule: #2a4459;
 
-    /* Same invariant as the light pair: darker than both plate grounds, so a
-       mounted capture reads identically at rest and when the plate lifts. */
+    /* Same invariant as the light pair: darker than the field, so a mounted
+       capture reads identically in either mode. */
     --mat: #091a28;
 
     --field-veil: rgba(14, 34, 51, 0.92);
 
-    /* Ink. Ratios are against --field and --field-inset in that order. */
     --ink: #e9eff4; /* 14.0:1  12.8:1 */
     --ink-muted: #a4bacb; /*  8.1:1   7.4:1 */
     --ink-faint: #8fa8bb; /*  6.6:1   6.0:1 */
 
-    /* Accent. --brass-deep is the quieter variant here rather than the louder
-       one, exactly as it was in the navy theme this replaces: on a dark ground
-       "deeper" recedes. It carries rules, ticks and underlines, never body. */
+    /* --brass-deep is the quieter variant here rather than the louder one: on
+       a dark ground "deeper" recedes. It carries rules and underlines. */
     --brass: #d9a842; /*  7.4:1   6.8:1 */
     --brass-deep: #b4862c; /*  4.9:1   4.5:1 */
   }
@@ -144,7 +122,7 @@ html {
 body {
   background: var(--field);
   color: var(--ink);
-  font-family: var(--serif);
+  font-family: var(--sans);
   font-size: var(--size-body);
   line-height: var(--leading-prose);
   -webkit-font-smoothing: antialiased;
@@ -171,6 +149,11 @@ table {
   border-collapse: collapse;
 }
 
+a {
+  color: var(--brass-deep);
+  text-underline-offset: 2px;
+}
+
 /* ==========================================================================
    Focus. Every interactive element, no exceptions.
    ========================================================================== */
@@ -181,244 +164,55 @@ table {
 }
 
 /* ==========================================================================
-   Shell and the two-column entry grid
-   Left gutter: checkable figures, monospace. Right: prose, serif.
+   The sheet
+   One ruled document rather than a stack of plates. Records are separated by
+   hairlines, not by bordered panels, and nothing lifts on hover: a record is
+   a row in a reference document, not a control. The links inside it are the
+   interactive part and they keep their focus ring.
    ========================================================================== */
 
-/* The padding is added on top of the measure: box-sizing is border-box, so a
-   bare max-width would eat into the prose column and shorten the measure. */
 .shell {
-  max-width: calc(var(--shell) + 2 * var(--plate-pad) + 2 * var(--step-3));
+  max-width: var(--sheet);
   margin-inline: auto;
-  padding: var(--step-5) var(--step-3) var(--step-6);
+  padding: 40px 28px 72px;
+}
+
+.section {
+  margin-top: 44px;
 }
 
 /* ==========================================================================
-   Plates
-   Entries are bordered plates on the inset ground rather than hairline-
-   separated blocks, and they respond to pointer and keyboard.
-
-   This overrides two rules in CLAUDE.md, on request: the ban on cards, and the
-   motion budget's "no hover transitions on entries". The ban exists because
-   identical rounded cards with a soft grey shadow are a generated-design tell,
-   so the plate is built to be the other thing: square corners, a hairline
-   border that goes brass, a brass tab on the leading edge, and a one-step
-   tonal lift. No blur, no shadow, no scale. The cue is colour first, so it
-   still reads with motion disabled.
+   Masthead
+   Name and standing facts, closed by the heavy double rule that says the
+   header is over. The portrait is a small mounted plate, not a hero image.
    ========================================================================== */
 
-.entry,
-.ephemeris {
-  position: relative;
-  background: var(--field-inset);
-  border: 1px solid var(--rule);
-  padding: var(--plate-pad);
-}
-
-.entry {
-  display: grid;
-  grid-template-columns: var(--gutter) minmax(0, 1fr);
-  gap: var(--column-gap);
-  align-items: start;
-}
-
-/* The brass tab. Offset onto the border itself so it reads as an index marker
-   on the plate's edge rather than a rule drawn inside it. */
-.entry::before,
-.ephemeris::before {
-  content: "";
-  position: absolute;
-  inset-block: -1px;
-  left: -1px;
-  width: 2px;
-  background: var(--brass);
-  opacity: 0;
-}
-
-.entry:hover,
-.entry:focus-within,
-.ephemeris:hover,
-.ephemeris:focus-within {
-  border-color: var(--brass);
-  background: var(--field);
-}
-
-.entry:hover::before,
-.entry:focus-within::before,
-.ephemeris:hover::before,
-.ephemeris:focus-within::before {
-  opacity: 1;
-}
-
-/* Motion is additive. Everything above is already legible without it, so a
-   reduced-motion visitor loses the travel and keeps the feedback. */
-@media (prefers-reduced-motion: no-preference) {
-  .entry,
-  .ephemeris {
-    transition:
-      border-color 160ms ease,
-      background-color 160ms ease,
-      transform 160ms ease;
-  }
-
-  .entry::before,
-  .ephemeris::before {
-    transition: opacity 160ms ease;
-  }
-
-  .entry:hover,
-  .ephemeris:hover {
-    transform: translateY(-2px);
-  }
-}
-
-.entry + .entry {
-  margin-top: var(--step-3);
-}
-
-.section,
-.section + .section {
-  margin-top: var(--step-5);
-}
-
-.prose {
-  max-width: var(--measure);
-  min-width: 0;
-}
-
-.prose > * + * {
-  margin-top: var(--step-2);
-}
-
-/* ==========================================================================
-   The gutter. Figures only. Never an adjective.
-   ========================================================================== */
-
-.gutter {
-  font-family: var(--mono);
-  font-variant-numeric: tabular-nums;
-  font-size: var(--size-small);
-  line-height: 1.45;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.gutter > li + li {
-  margin-top: var(--step-2);
-}
-
-/* Holds the period line above the figures, both inside the gutter column. */
-.entry-gutter-col > .gutter {
-  margin-top: var(--step-2);
-}
-
-.fact-value {
-  display: block;
-  color: var(--brass);
-  font-size: var(--size-figure);
-  font-variant-numeric: tabular-nums;
-}
-
-.fact-label {
-  display: block;
-  color: var(--ink-faint);
-  font-size: var(--size-label);
-  line-height: 1.4;
-}
-
-/* A gutter fact still waiting on a real number. Reads as an admission. */
-.fact-value[data-todo="true"] {
-  color: var(--ink-faint);
-}
-
-/* ==========================================================================
-   Section headings
-   No tracked-out caps, no numbered sequence markers. A title and a count.
-   ========================================================================== */
-
-.section-heading {
-  padding-inline: var(--plate-pad);
-  display: grid;
-  grid-template-columns: var(--gutter) minmax(0, 1fr);
-  gap: var(--column-gap);
-  align-items: baseline;
-  margin-bottom: var(--step-4);
-}
-
-.section-heading h2 {
-  font-family: var(--serif);
-  font-size: var(--size-title);
-  font-weight: 500;
-  letter-spacing: -0.005em;
-}
-
-.section-count {
-  font-family: var(--mono);
-  font-variant-numeric: tabular-nums;
-  font-size: var(--size-label);
-  color: var(--ink-faint);
-}
-
-/* ==========================================================================
-   Hero
-   ========================================================================== */
-
-/* The hero takes the same two columns as every entry below it, so the portrait
-   lands on the figures column and flips sides with it: the gutter column below
-   74rem, the right rail above. Vertical rhythm stays with the children's own
-   margins, which is why the row gap is zero rather than --column-gap. */
+/* The masthead is closed by a heavy rule, drawn on .hero so it spans the
+   portrait as well as the text. Below 46rem the portrait simply leads, which
+   is why it is first in the DOM. */
 .hero {
-  padding-inline: var(--plate-pad);
-  padding-bottom: var(--step-4);
-  display: grid;
-  grid-template-columns: var(--gutter) minmax(0, 1fr);
-  column-gap: var(--column-gap);
-  row-gap: 0;
-  align-items: start;
-}
-
-.hero-body {
-  min-width: 0;
-}
-
-/* Mounted like a capture: the same hairline border and mat, square corners, no
-   shadow. It deliberately does not take the plate's hover treatment -- nothing
-   in it is interactive, and a lift on a static portrait is decoration.
-
-   The width caps at --portrait rather than filling its column, because the
-   source is 400px square and stretching it past that trades a sharp small
-   photograph for a soft large one. */
-.hero-portrait {
-  width: min(100%, var(--portrait));
-  border: 1px solid var(--rule);
-  background: var(--mat);
-  padding: var(--step-1);
-}
-
-.hero-portrait img {
-  width: 100%;
-  height: auto;
+  border-bottom: 2px solid var(--ink);
+  padding-bottom: 14px;
 }
 
 .hero-name {
-  font-family: var(--serif);
   font-size: var(--size-display);
-  font-weight: 400;
-  line-height: 1.1;
-  letter-spacing: -0.015em;
-  /* One colour. Accenting a single word of a headline is a generated-design tell. */
-  color: var(--ink);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
 }
 
+/* Two stacked lines of the same kind: what he is, then where he is and what
+   he is asking for. The second is the one a recruiter is scanning for. */
 .hero-seeking {
-  margin-top: var(--step-3);
-  max-width: var(--measure);
+  font-family: var(--mono);
+  font-size: var(--size-data);
+  line-height: 1.9;
   color: var(--ink-muted);
 }
 
 .hero-statement {
-  margin-top: var(--step-3);
+  margin-top: 22px;
   max-width: var(--measure);
 }
 
@@ -426,260 +220,291 @@ table {
   margin-top: var(--step-2);
 }
 
+.hero-statement p {
+  color: var(--ink-muted);
+}
+
+.hero-portrait {
+  width: var(--portrait);
+  border: 1px solid var(--rule);
+  background: var(--mat);
+  padding: 6px;
+}
+
 .hero-links {
-  margin-top: var(--step-3);
   display: flex;
   flex-wrap: wrap;
-  gap: var(--step-3);
+  gap: 8px 22px;
+  margin-top: 18px;
   font-family: var(--mono);
-  font-size: var(--size-small);
+  font-size: var(--size-data);
   list-style: none;
   padding: 0;
 }
 
 /* ==========================================================================
-   Live ephemeris
+   Section heads
+   A ruled band on the same two-column grid as the records below it, so the
+   label sits over the locator column and the title over the body column.
    ========================================================================== */
 
-.ephemeris {
-  margin-top: var(--step-4);
-  max-width: var(--measure);
-}
-
-.ephemeris-caption {
+.section-heading {
+  display: grid;
+  grid-template-columns: var(--index) minmax(0, 1fr);
+  gap: var(--gap);
+  align-items: baseline;
+  border-bottom: 1px solid var(--ink);
+  padding-bottom: 6px;
   font-family: var(--mono);
   font-size: var(--size-label);
-  color: var(--ink-muted);
-  margin-bottom: var(--step-2);
-}
-
-.ephemeris-table {
-  width: 100%;
-  font-family: var(--mono);
-  font-variant-numeric: tabular-nums;
-  font-size: var(--size-small);
-}
-
-.ephemeris-table caption {
-  text-align: left;
-  font-family: var(--mono);
-  font-size: var(--size-label);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   color: var(--ink-faint);
-  padding-bottom: var(--step-1);
 }
 
-.ephemeris-table th,
-.ephemeris-table td {
-  text-align: right;
-  padding: 0.3rem 0;
-  font-weight: 400;
-  font-variant-numeric: tabular-nums;
+.section-heading h2 {
+  font: inherit;
+  color: inherit;
 }
 
-.ephemeris-table th[scope="col"] {
-  color: var(--ink-faint);
-  font-size: var(--size-label);
-  border-bottom: 1px solid var(--rule);
-  padding-bottom: var(--step-1);
-}
-
-.ephemeris-table th[scope="row"] {
-  text-align: left;
-  color: var(--ink);
-}
-
-.ephemeris-table td {
-  color: var(--ink-muted);
-}
-
-.ephemeris-table .col-lon {
-  color: var(--brass);
-}
-
-.ephemeris-retro {
-  color: var(--brass);
-}
-
-.ephemeris-foot {
-  margin-top: var(--step-2);
-  padding-top: var(--step-2);
-  border-top: 1px solid var(--rule);
-  font-family: var(--mono);
-  font-size: var(--size-label);
-  color: var(--ink-muted);
-  font-variant-numeric: tabular-nums;
-}
-
-.ephemeris-elapsed {
-  color: var(--brass);
-}
-
-.ephemeris-note {
-  margin-top: var(--step-1);
-  font-family: var(--mono);
-  font-size: var(--size-label);
-  color: var(--ink-faint);
-  line-height: 1.5;
-}
-
-/* The loading state is the mechanism that makes deferred computation correct,
-   not decoration. It reserves the same box so nothing shifts when it resolves. */
-.ephemeris-loading {
-  font-family: var(--mono);
-  font-size: var(--size-small);
-  color: var(--ink-faint);
-  min-height: 8.5rem;
-  display: flex;
-  align-items: center;
+/* A verifiable count, not a sequence marker. */
+.section-count {
+  font: inherit;
 }
 
 /* ==========================================================================
-   Project and experience entries
+   Records
    ========================================================================== */
 
-/* The status badge sits beside the title but outside the <h3>, so the
-   heading's accessible name is the project name and nothing else. */
-.entry-head {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: var(--step-2);
+.entry {
+  display: grid;
+  grid-template-columns: var(--index) minmax(0, 1fr);
+  gap: var(--gap);
+  padding: 22px 0;
+  border-bottom: 1px solid var(--rule);
+  align-items: start;
 }
 
-.entry-title {
-  font-family: var(--serif);
-  font-size: var(--size-title);
-  font-weight: 500;
-  line-height: 1.25;
+.entry:last-child {
+  border-bottom: 0;
 }
 
-.entry-status {
-  font-family: var(--mono);
-  font-size: var(--size-label);
-  color: var(--brass);
-  border: 1px solid var(--brass-deep);
-  padding: 0.1rem 0.4rem;
+/* The locator column: record number, period, then the spec table. */
+.entry-gutter-col {
+  min-width: 0;
 }
 
 .entry-meta {
   font-family: var(--mono);
   font-size: var(--size-label);
+  line-height: 1.85;
   color: var(--ink-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.entry-ordinal {
+  display: block;
+  font-weight: 600;
+  font-size: var(--size-data);
+  color: var(--ink-muted);
   font-variant-numeric: tabular-nums;
 }
 
-.entry-summary {
-  color: var(--ink);
+/* ==========================================================================
+   The spec table
+   Label left, figure right, a dotted rule between rows. This is the change
+   that makes the numbers read as data rather than as a list: the eye runs the
+   right-hand edge and every figure is on it.
+   ========================================================================== */
+
+.gutter {
+  list-style: none;
+  padding: 0;
+  margin-top: var(--step-3);
+  max-width: var(--measure);
+  font-family: var(--mono);
+  font-size: var(--size-data);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0 40px;
 }
 
+.gutter > li {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  border-bottom: 1px dotted var(--rule);
+  padding: 5px 0;
+}
+
+/* The DOM order is value then label, which is the right reading order for a
+   screen reader. The visual order is the reverse, so the figures form a column
+   against the right edge. */
+.fact-label {
+  order: 1;
+  flex: 1;
+  min-width: 0;
+  color: var(--ink-faint);
+}
+
+.fact-value {
+  order: 2;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* An unfilled figure is marked, not hidden. */
+.fact-value[data-todo="true"] {
+  color: var(--brass-deep);
+  border-bottom: 1px solid var(--brass);
+  font-weight: 400;
+}
+
+/* ==========================================================================
+   Record body
+   ========================================================================== */
+
+.prose {
+  min-width: 0;
+}
+
+.entry-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.entry-title {
+  font-size: var(--size-title);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.entry-status {
+  font-family: var(--mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brass-deep);
+  border: 1px solid var(--brass);
+  padding: 1px 6px;
+}
+
+.entry-summary {
+  margin-top: var(--step-1);
+  max-width: var(--measure);
+  color: var(--ink-muted);
+}
+
+/* One decision per line. The em dash is the marker: a bullet would make this
+   a feature list, which is what it is deliberately not. */
 .detail-list {
   list-style: none;
   padding: 0;
   margin-top: var(--step-3);
+  max-width: var(--measure);
 }
 
 .detail-list > li {
-  color: var(--ink-muted);
-  padding-left: var(--step-3);
-  position: relative;
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  gap: 4px;
+  padding: 4px 0;
 }
 
-.detail-list > li + li {
-  margin-top: var(--step-2);
-}
-
-/* A hairline tick, not a bullet glyph. */
 .detail-list > li::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0.72em;
-  width: 0.6rem;
-  height: 1px;
-  background: var(--brass-deep);
+  content: "—";
+  font-family: var(--mono);
+  font-size: var(--size-data);
+  color: var(--ink-faint);
 }
 
 .stack {
-  margin-top: var(--step-3);
   display: flex;
   flex-wrap: wrap;
-  gap: var(--step-1) var(--step-2);
+  gap: 7px;
+  margin-top: var(--step-3);
   list-style: none;
   padding: 0;
   font-family: var(--mono);
   font-size: var(--size-label);
-  color: var(--ink-faint);
+  color: var(--ink-muted);
 }
 
-/* Separated by space and rule, never by middle dots. */
 .stack > li {
   border: 1px solid var(--rule);
-  padding: 0.1rem 0.4rem;
+  padding: 2px 7px;
 }
 
 .link-row {
-  margin-top: var(--step-3);
   display: flex;
   flex-wrap: wrap;
-  gap: var(--step-3);
+  gap: 18px;
+  margin-top: var(--step-3);
   list-style: none;
   padding: 0;
   font-family: var(--mono);
-  font-size: var(--size-small);
+  font-size: var(--size-data);
 }
 
 /* ==========================================================================
-   Links. Text says what happens. No appended arrows.
+   Figures
+   Numbered plates, referenced by the record they belong to. The number is a
+   citation, not decoration: it is what lets the caption be pointed at.
    ========================================================================== */
 
-a {
-  color: var(--brass);
-  text-decoration: underline;
-  text-underline-offset: 0.22em;
-  text-decoration-thickness: 1px;
-  text-decoration-color: var(--brass-deep);
-}
-
-a:hover {
-  text-decoration-color: var(--brass);
-}
-
-.prose a {
-  color: var(--ink);
-  text-decoration-color: var(--brass-deep);
-}
-
-/* ==========================================================================
-   Media. Poster-gated video.
-   ========================================================================== */
-
-figure {
-  margin: var(--step-4) 0 0;
-}
-
-/* Figures are their own grid area, so they never inherit the prose measure.
-   By default they span the whole plate; the wide layout below moves them into
-   the right rail instead. */
 .entry-figures {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  margin-top: var(--step-3);
   grid-column: 1 / -1;
   min-width: 0;
 }
 
-/* Screenshots of dark UIs would otherwise bleed to a hard edge and read as
-   black slabs dropped on the beige. A mat around the capture makes each one
-   read as a mounted plate instead. Scales with the viewport so the mat stays
-   proportional once a figure breaks out.
-
-   The mat has its own token rather than borrowing --field-inset. Sharing it
-   with the plate meant the mat was the same value as the ground it sat on, so
-   there was no visible mount until the plate lifted on hover and it abruptly
-   appeared. --mat is darker than both plate grounds and never changes. */
-.media-frame {
-  border: 1px solid var(--rule);
-  background: var(--mat);
-  padding: clamp(0.875rem, 2vw, 1.5rem);
+figure {
+  margin: 0;
+  min-width: 0;
 }
 
+/* A dark screenshot bleeding to a hard edge reads as a slab dropped on the
+   page. The mat makes it a mounted plate instead. */
+.media-frame {
+  border: 1px solid var(--ink);
+  background: var(--mat);
+}
+
+/* --ink-muted, not --ink-faint. The caption sits on --mat, which is darker
+   than either plate ground, and faint-on-mat measures 4.41:1 -- under AA for
+   normal text. The token contract covers --field and --field-inset; the mat is
+   a third ground and has to be checked separately. */
+figcaption {
+  font-family: var(--mono);
+  font-size: var(--size-label);
+  line-height: 1.55;
+  color: var(--ink-muted);
+  padding: 6px 8px;
+  border-top: 1px solid var(--rule);
+  text-wrap: pretty;
+}
+
+.figure-ref {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* Punctuation between the citation and the caption. Drawn here so neither the
+   component nor the content file has to carry a bare dash. */
+.figure-ref::after {
+  content: " — ";
+  font-weight: 400;
+  color: var(--ink-muted);
+}
+
+/* Poster-gated video. The <video> does not exist until this is clicked. */
 .poster-gate {
   display: block;
   position: relative;
@@ -695,8 +520,8 @@ figure {
 .poster-gate-label {
   position: absolute;
   left: 0;
-  bottom: 0;
   right: 0;
+  bottom: 0;
   display: flex;
   justify-content: space-between;
   gap: var(--step-2);
@@ -709,21 +534,8 @@ figure {
   font-variant-numeric: tabular-nums;
 }
 
-/* The annotation, not a label. At 74rem and up it leaves the underside of the
-   plate and sits in the margin to its left; see the wide block below. Mono was
-   right when this was one terse line and is wrong now that it is three or four
-   -- CLAUDE.md reserves the mono for numeric data and structural labels, so a
-   run of prose this long belongs in the serif. */
-figcaption {
-  margin-top: var(--step-1);
-  font-size: var(--size-small);
-  color: var(--ink-muted);
-  line-height: 1.6;
-  text-wrap: pretty;
-}
-
 /* ==========================================================================
-   Contact and colophon
+   Contact
    ========================================================================== */
 
 .contact-list {
@@ -731,42 +543,104 @@ figcaption {
   padding: 0;
   margin-top: var(--step-3);
   font-family: var(--mono);
-  font-size: var(--size-small);
+  font-size: var(--size-data);
 }
 
 .contact-list > li {
-  display: grid;
-  grid-template-columns: 5.5rem minmax(0, 1fr);
-  gap: var(--step-2);
-  padding: var(--step-1) 0;
-}
-
-.contact-list > li + li {
-  border-top: 1px solid var(--rule);
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  border-bottom: 1px dotted var(--rule);
+  padding: 5px 0;
 }
 
 .contact-key {
+  order: 1;
+  flex: 1;
   color: var(--ink-faint);
-  font-size: var(--size-label);
+}
+
+.contact-list > li > a {
+  order: 2;
 }
 
 .colophon {
   margin-top: var(--step-5);
-  padding-inline: var(--plate-pad);
   padding-top: var(--step-3);
   border-top: 1px solid var(--rule);
   font-family: var(--mono);
   font-size: var(--size-label);
+  line-height: 1.7;
   color: var(--ink-faint);
-  line-height: 1.6;
-  max-width: var(--measure);
+  max-width: 70ch;
+}
+
+/* ==========================================================================
+   Live ephemeris
+   Currently unmounted from the hero. Kept styled so restoring it stays the
+   one-line change described in components/Hero.tsx.
+   ========================================================================== */
+
+.ephemeris {
+  margin-top: var(--step-3);
+  border: 1px solid var(--rule);
+  background: var(--field-inset);
+  padding: var(--step-3);
+}
+
+.ephemeris-caption,
+.ephemeris-loading,
+.ephemeris-foot,
+.ephemeris-note {
+  font-family: var(--mono);
+  font-size: var(--size-label);
+  color: var(--ink-faint);
+}
+
+.ephemeris-caption {
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.ephemeris-table {
+  width: 100%;
+  margin-top: var(--step-2);
+  font-family: var(--mono);
+  font-size: var(--size-data);
+  font-variant-numeric: tabular-nums;
+}
+
+.ephemeris-table th,
+.ephemeris-table td {
+  text-align: left;
+  padding: 4px 10px 4px 0;
+  border-bottom: 1px dotted var(--rule);
+}
+
+.ephemeris-table th {
+  font-weight: 600;
+  color: var(--ink-faint);
+}
+
+.ephemeris-retro {
+  color: var(--brass-deep);
+}
+
+.ephemeris-elapsed {
+  color: var(--ink-muted);
+  font-weight: 600;
+}
+
+.ephemeris-foot,
+.ephemeris-note {
+  margin-top: var(--step-2);
 }
 
 /* ==========================================================================
    Motion budget
    One page-load reveal, staggered across three sections. That is all.
-   Outside the no-preference query nothing is hidden and nothing animates,
-   so reduced-motion users get the finished page immediately.
+   Outside the no-preference query nothing is hidden and nothing animates, so
+   reduced-motion visitors get the finished page immediately.
    ========================================================================== */
 
 @media (prefers-reduced-motion: no-preference) {
@@ -774,7 +648,6 @@ figcaption {
     animation: reveal 520ms cubic-bezier(0.2, 0.6, 0.2, 1) both;
   }
 
-  /* Three steps is the entire budget. There is no fourth. */
   .reveal[data-reveal="2"] {
     animation-delay: 90ms;
   }
@@ -804,175 +677,98 @@ figcaption {
 }
 
 /* ==========================================================================
-   Asymmetric layout
-   Above 70rem the page stops being one centred stack. Prose holds the left at
-   its measure, and the figures column plus the numeric gutter move into a
-   right rail, which is where the empty space used to be.
-
-   This moves the gutter off the left edge, which CLAUDE.md describes as the
-   recruiter's scan path. The figures stay adjacent to it, so the column of
-   checkable numbers is still a single vertical run -- it now runs down the
-   inside edge of the rail rather than the outside edge of the page.
-
-   Below 74rem nothing changes: the rail would be too narrow for a screenshot
-   to be legible, and an illegible figure is decoration. The rail is sized from
-   that constraint -- 30rem leaves a figure about 430px wide -- not from what
-   made the columns look balanced.
-
-   This block has to stay near the bottom of the file, after every base rule it
-   overrides. It used to sit directly under .prose, above the Hero and Section
-   heading sections, and every override in it that competed on equal specificity
-   silently lost to the later base rule. .section-heading was the visible
-   casualty: the flip described below never applied, so the count sat at the
-   11rem gutter while the entries beside it had already moved to a 34rem
-   measure. Adding a section that this block reaches into means adding it above
-   here, not moving this back up.
+   Responsive
+   Keep these blocks at the bottom. They override base rules at equal
+   specificity, so moving them up silently loses every one of them -- which is
+   exactly what happened to the old asymmetric block.
    ========================================================================== */
-@media (min-width: 74rem) {
+
+/* Two columns of spec rows and two figures abreast once there is room. */
+@media (min-width: 46rem) {
   .shell {
-    max-width: calc(
-      var(--measure) + var(--column-gap) + var(--rail) + 2 * var(--plate-pad) +
-        2 * var(--step-3)
-    );
+    padding: 48px 40px 80px;
   }
 
-  /* The hero flips with the entries. The portrait crosses to the rail, where
-     its left edge lines up with the gutter facts running down the page below
-     it, and the name reclaims the full measure. */
+  /* The grid sits on .hero, not .hero-body: the portrait is a sibling of the
+     text block, and the closing rule has to span both. */
   .hero {
-    grid-template-columns: var(--measure) minmax(0, 1fr);
-  }
-
-  .hero > .hero-body {
-    grid-column: 1;
-    grid-row: 1;
-  }
-
-  .hero > .hero-portrait {
-    grid-column: 2;
-    grid-row: 1;
-  }
-
-  .entry {
-    grid-template-columns: var(--measure) minmax(0, 1fr);
-  }
-
-  .entry > .prose {
-    grid-column: 1;
-    grid-row: 1;
-  }
-
-  .entry > .entry-gutter-col {
-    grid-column: 2;
-    grid-row: 1;
-  }
-
-  /* The series spans both columns. Each figure then sets a template of its own
-     rather than repeating the parent's: the plate takes the wide column and the
-     annotation a fixed --annotation margin beside it.
-
-     This is the amendment described in CLAUDE.md. Repeating the parent template
-     put the plate in the 30rem rail, which capped the image at 428px -- smaller
-     than the 716px the same plate gets in the middle band, so the evidence
-     shrank as the display grew. The plate now gets 654px and the dip is 9%
-     rather than 41%.
-
-     What it costs is the alignment argument: the rail no longer holds one
-     unbroken run of gutter facts and plates, because the plates have moved to
-     the prose's left edge and the rail carries the annotations instead. The
-     annotation column is a fixed width, so its left edge is straight down the
-     page, and the recruiter's scan path is still one column -- of captions and
-     figures rather than of figures alone. */
-  .entry > .entry-figures {
-    grid-column: 1 / -1;
-    grid-row: 2;
-  }
-
-  .entry-figures > figure {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) var(--annotation);
-    gap: var(--column-gap);
+    grid-template-columns: minmax(0, 1fr) var(--portrait);
+    gap: var(--gap);
     align-items: start;
   }
 
-  .entry-figures > figure > .media-frame {
+  .hero-portrait {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .hero-body {
     grid-column: 1;
     grid-row: 1;
   }
 
-  /* Sits in the margin beside the plate it describes rather than under it. The
-     column is exactly --annotation wide, so the block needs no max-width and no
-     auto margin to find its edge. Text stays ragged-right. */
-  .entry-figures > figure > figcaption {
-    grid-column: 2;
-    grid-row: 1;
-    margin-top: 0;
+  /* Two spec rows abreast: the table is scanned, not read, and halving its
+     height keeps the whole record in one eyeful. */
+  .gutter {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  /* The heading flips with the entries: title over the prose, count over the
-     rail, so both columns keep a consistent left edge down the page. */
-  .section-heading {
-    grid-template-columns: var(--measure) minmax(0, 1fr);
+  .entry-figures {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .section-heading > h2 {
-    grid-column: 1;
-    grid-row: 1;
-  }
-
-  .section-heading > .section-count {
-    grid-column: 2;
-    grid-row: 1;
+  /* A strip capture earns the full width; a portrait one does not. */
+  .entry-figures > figure[data-wide="true"] {
+    grid-column: 1 / -1;
   }
 }
 
-/* ==========================================================================
-   Responsive. At narrow widths the gutter moves above the prose and its
-   figures reflow into a horizontal row.
-   ========================================================================== */
+/* Below the two-column threshold the locator column stops being a column and
+   becomes a line above the record, so nothing is squeezed to unreadability. */
+@media (max-width: 45.99rem) {
+  :root {
+    --index: auto;
+    --gap: 12px;
+  }
 
-@media (max-width: 46rem) {
-  /* One column. The portrait is first in the DOM, so it stacks above the name
-     without needing to be reordered, and keeps its own width rather than
-     stretching to the viewport. */
-  .hero {
+  .section-heading,
+  .entry {
     grid-template-columns: minmax(0, 1fr);
-    row-gap: var(--step-3);
-  }
-
-  .entry,
-  .section-heading {
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--step-3);
-  }
-
-  .gutter {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--step-3);
-    padding-bottom: var(--step-1);
-  }
-
-  .gutter > li + li {
-    margin-top: 0;
-  }
-
-  .section-heading {
     gap: var(--step-1);
   }
-}
 
-@media (max-width: 26rem) {
-  .shell {
-    padding-inline: var(--step-3);
+  .entry-meta {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    border-bottom: 1px dotted var(--rule);
+    padding-bottom: 6px;
   }
 
-  .contact-list > li {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 0;
+  .entry-ordinal {
+    display: inline;
+  }
+
+  .hero-portrait {
+    margin-bottom: var(--step-3);
   }
 
   .gutter {
-    gap: var(--step-2) var(--step-3);
+    margin-bottom: var(--step-3);
+  }
+}
+
+/* The widest arrangement only widens the locator column and the sheet's
+   breathing room. The structure does not change again -- there is no third
+   layout to keep in sync. */
+@media (min-width: 74rem) {
+  :root {
+    --index: 132px;
+    --gap: 34px;
+  }
+
+  .shell {
+    padding: 56px 48px 88px;
   }
 }
