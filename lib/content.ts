@@ -92,7 +92,11 @@ export const content: SiteContent = {
       ],
       details: [
         "The ayanamsha model is IAU-2006 precession over astronomy-engine, calibrated against Swiss Ephemeris epochs. Six ayanamshas across six house systems, with Meeus true-node, retrograde and combustion handling.",
-        "Fifteen derived engines sit above that core: 23 divisional charts from D1 to D60, Vimshottari dashas, 51 yogas, Shadbala, Ashtakavarga, transits, Varshaphal, and Panchanga muhurta search.",
+        // Recast so the count is not sentence-initial. It previously read
+        // "Fifteen derived engines ... 23 divisional charts", spelling one
+        // number and not the next inside a single sentence, on a page whose
+        // argument is precision.
+        "Above that core sit 15 derived engines: 23 divisional charts from D1 to D60, Vimshottari dashas, 51 yogas, Shadbala, Ashtakavarga, transits, Varshaphal, and Panchanga muhurta search.",
         "Interpretation is rules-as-data. The DSL is Zod-validated over a closed 15-operator predicate union with build-time binding checks, so a malformed rule fails at build time.",
         "Rarity claims are measured, not asserted: a seeded Monte Carlo harness runs them over population-weighted birth sampling.",
         "Palm readings run GPT-4o Vision with per-line confidence normalised against MediaPipe hand landmarks, exported as a PDF report.",
