@@ -124,7 +124,7 @@ export const content: SiteContent = {
         {
           kind: "image",
           src: "/media/lagna-atelier.webp",
-          alt: "The Lagna Atelier chart builder: a four-step birth-details form beside a live sky preview panel.",
+          alt: "Dark two-panel screen. On the left a four-tab stepper with the name field active and a bright gradient button beneath it; on the right a dimmed circular chart preview labelled 0/6 details.",
           caption:
             "A four-step birth-details form, with the sky preview resolving beside it as each field is entered. There is no submit step: the chart is computed in the browser as the form fills.",
           width: 1542,
@@ -134,7 +134,7 @@ export const content: SiteContent = {
         {
           kind: "image",
           src: "/media/lagna-atelier-chart.webp",
-          alt: "The Lagna Atelier natal wheel, showing planetary glyphs across twelve houses around a Cancer lagna, beneath three summary cards.",
+          alt: "Three summary cards above a large circular chart on near-black, its rim ringed with zodiac glyphs and numbered sectors, the centre reading Cancer.",
           caption:
             "The computed wheel for a Cancer lagna, planetary glyphs placed across twelve houses. The three cards above it — first impression, the Mercury dasha running to April 2034, and the strongest planet — are selected from the chart's own matched findings.",
           width: 1528,
@@ -144,7 +144,7 @@ export const content: SiteContent = {
         {
           kind: "image",
           src: "/media/lagna-atelier-ashtakavarga.webp",
-          alt: "The Lagna Atelier Ashtakavarga panel, showing a 92.6%-of-average dial for the first house beside a twelve-house bindus bar chart.",
+          alt: "A circular gauge card beside a twelve-bar column chart crossed by a dashed average line, bars coloured by whether they clear it, over three summary rows and a bordered footnote.",
           caption:
             "Every house scored against the 28.1-bindu average rather than against a maximum, with the first house broken out at 92.6% of it. The footnote flags that these twelve total 367 against a 337 pool — a discrepancy reported rather than smoothed over.",
           width: 1571,
@@ -194,7 +194,7 @@ export const content: SiteContent = {
         {
           kind: "image",
           src: "/media/robust-health-onboarding.webp",
-          alt: "The Robust Health onboarding screen, offering a personalised plan or a quick start on an existing programme.",
+          alt: "A dark hero panel above a second panel offering two side-by-side cards, one tinted violet and one amber, with a line of small print beneath them.",
           caption:
             "Two ways in: a three-to-five minute questionnaire that generates a tailored first week, or a ready-made programme with optional body details for nutrition targets. Switching between them keeps whatever has already been entered.",
           width: 1041,
@@ -205,7 +205,7 @@ export const content: SiteContent = {
         {
           kind: "image",
           src: "/media/robust-health-dashboard.webp",
-          alt: "The Robust Health member dashboard, showing the next workout beside a five-session week and the active programme's day, calorie and sleep targets.",
+          alt: "A wide card headed Up Next with a prominent start button, a numbered five-row list beside it, and below them a programme card of three figure tiles next to an empty activity panel.",
           caption:
             "Everything from here sits behind sign-in, so this and the plate below it are captured from inside an account. The next session up front, the week's five workouts listed beside it, and the active Push/Pull/Legs programme with its day count, calorie and sleep targets.",
           width: 1054,
@@ -215,7 +215,7 @@ export const content: SiteContent = {
         {
           kind: "image",
           src: "/media/robust-health-workout.webp",
-          alt: "The Robust Health workout player, showing a dips exercise with four tappable sets, rest, RPE and tempo, above an embedded form video.",
+          alt: "A narrow single-column screen: a video thumbnail with a play button, then an exercise card reading four by six to ten, a row of four numbered circular buttons, three labelled chips, and paired back and next controls at the foot.",
           caption:
             "One exercise at a time — three of seven here — with a form video above it. Sets are tapped off individually, and rest, RPE and tempo are carried per exercise rather than set once for the session.",
           width: 728,
