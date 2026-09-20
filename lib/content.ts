@@ -262,11 +262,21 @@ export const content: SiteContent = {
       team: "Technology",
       period: "Nov 2024 — Jan 2025",
       location: "Kolkata, India",
-      gutter: [{ value: "3 mo", label: "duration" }],
+      // Was a single "3 mo / duration", which restated the period line sitting
+      // directly above it and spent the only gutter slot on something already
+      // on screen. These two are the checkable facts the role actually
+      // produced; both are visible TODOs until the real counts are to hand.
+      gutter: [
+        { value: "TODO", label: "datasets consolidated" },
+        { value: "TODO", label: "recurring reports built" },
+      ],
       details: [
         "Cleaned and consolidated the operational Excel datasets behind the internal dashboards: resolved missing values, recovered lost source files, and standardised records so weekly reporting could run off them.",
-        "Wrote SQL against the production database and built the recurring operational reports the project lead worked from.",
+        // Reordered: this was the closing line of the whole Experience section,
+        // which left a page aimed at AI engineering ending on field sales. It
+        // stays -- it is true and it shows range -- but it no longer lands last.
         "Went out on field customer acquisition, pitching the pay-to-own financing programme to e-rickshaw operators and the lithium-ion upgrade against the lead-acid batteries they were already running.",
+        "Wrote SQL against the production database and built the recurring operational reports the project lead worked from.",
       ],
     },
   ],
