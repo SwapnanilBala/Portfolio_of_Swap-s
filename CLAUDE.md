@@ -203,6 +203,34 @@ The animation lives inside `@media (prefers-reduced-motion: no-preference)`.
 Nothing is hidden outside that query, so reduced-motion visitors get the
 finished page immediately rather than a permanently invisible one.
 
+### The `photo-review` branch
+
+There is a second worktree at `../Portfolio-photo-review` on a `photo-review`
+branch, one commit ahead of the overhaul's base and never pushed. It conflicts
+with `main` in `CLAUDE.md` and `app/globals.css`. **Do not merge it as-is.**
+
+It predates the dossier and most of it targets things that no longer exist:
+
+- `--plate-hover`, and the whole analysis of the hover lift inverting on the
+  cyanotype. There are no plates and no hover lift now.
+- `--size-section` and `--size-figure`, both fixing tokens that had collapsed
+  onto a neighbour. The dossier's type scale separates those cases
+  structurally — section heads are mono uppercase at `--size-label`, entry
+  titles are sans at `--size-title` — so the tokens have no equivalent.
+- The dark `--mat: #3d6587`, correcting a dark capture bleeding into a dark
+  mat at 1.06:1 across the mount's margin. That measurement was right and the
+  fix was right *for that design*. It does not transfer: `.media-frame` has no
+  padding now, so no capture has a mat margin, and the capture is separated
+  from the page by the frame's own 1px `--ink` border at ~14:1.
+
+One part was worth taking and has been: `::selection`, which was genuinely
+unstyled in both designs.
+
+The branch is otherwise worth reading before touching the mat or the themes —
+its measurements are sound, and its central point stands: an invariant written
+as a direction ("darker than") rather than a relationship ("clear of") will
+invert when the ground does.
+
 ### Cascade order in `globals.css`
 
 The responsive blocks must stay at the bottom of the file, after every base

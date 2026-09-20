@@ -18,9 +18,18 @@
   --field-inset: #e3d8c2;
   --rule: #c8ba9e;
 
-  /* The mat a capture is mounted on. Deliberately not --field-inset: that is
-     the page's own ground, so the mat would be invisible against it. Darker
-     than the field, so a dark screenshot reads as mounted rather than dropped. */
+  /* The mat. Two jobs in the dossier, and they are not the same job:
+       a. the portrait's mount, where it IS a visible margin around a bright
+          photograph, and a darker ground does the separating;
+       b. the figcaption ground under a capture, where it is NOT a margin --
+          .media-frame has no padding and the capture is separated from the
+          page by the frame's own 1px --ink border at ~14:1.
+
+     This matters because the photo-review branch corrected --mat for the dark
+     pair on the grounds that a dark capture bled into a dark mat across the
+     margin, measured at 1.06:1. That failure does not exist here: no dark
+     capture has a mat margin any more. Do not port that fix in. If a capture
+     ever gets mat padding back, it returns. */
   --mat: #d8cbb0;
 
   /* A veil over media, so a label stays legible on any frame beneath it. */
@@ -161,6 +170,21 @@ a {
 :focus-visible {
   outline: 2px solid var(--brass);
   outline-offset: 3px;
+}
+
+/* ==========================================================================
+   Selection
+   Otherwise the browser's default blue, which belongs to neither pair. Built
+   from the two tokens rather than a literal, so it follows both themes and
+   keeps the "colour lives in the token blocks" rule intact.
+
+   Carried over from the photo-review branch, which is the only part of that
+   work the dossier still needs -- see the note on --mat below.
+   ========================================================================== */
+
+::selection {
+  background: var(--brass);
+  color: var(--field);
 }
 
 /* ==========================================================================
