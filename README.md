@@ -39,6 +39,11 @@ That is deliberate.
 **`app/globals.css` — every style rule.** Design tokens are custom properties at
 the top under `:root`. Change `--brass` there and the whole accent moves.
 
+**`lib/blur.ts` — generated blur placeholders**, keyed by media path. Build
+output rather than copy, which is why it is not in the content file. Adding a
+capture and referencing it from content will not compile until it has an entry
+here.
+
 The site ships two themes: the beige field in `:root`, and a cyanotype dark
 pair in the `@media (prefers-color-scheme: dark)` block directly below it. It
 follows the operating system — there is no toggle. Only the ten colour tokens
@@ -60,14 +65,20 @@ Search the repo with `git grep -n TODO` at any time.
 
 **`lib/content.ts`**
 
-- Lagna Atelier — repo URL. The live URL is set. Until an `href` is set a link
-  is filtered out, so nothing renders as a dead link.
-- Robust Health — repo URL. The summary, details and stack were filled in from
-  the Sep 2026 resume.
-- Co-op discovery pipeline — gutter figures, stack, repo URL. This project is
-  not on the resume, so none of it could be filled in from there.
+- Robust Health — repo URL. Nothing public matches: the account has
+  `Vibe_Robust_Health_Android` and `Vibe_Robust_Health_IOS_App`, which are the
+  mobile prototypes rather than the web app these screenshots come from. Until
+  an `href` is set the link is filtered out, so nothing renders as a dead link.
+- Expected graduation date, in `profile.availability`. Someone sizing the
+  Spring 2027 co-op wants to know what follows it.
+- P2G Mobility Tech — the two experience gutter figures, datasets consolidated
+  and recurring reports built. These render as visible `TODO` markers on the
+  page, which is the intended behaviour until the counts are to hand.
 - The palm-reading clip for Lagna Atelier. Its screenshot is in place, but the
   clip is still the one thing a link cannot substitute for.
+
+Lagna Atelier and the fake news classifier now carry both a live and a source
+link. The classifier's gutter figures come from `RESULTS.md` in its repo.
 
 **`public/`**
 
@@ -86,15 +97,33 @@ Search the repo with `git grep -n TODO` at any time.
 ## Adding media
 
 Screenshots live in `public/media/` as WebP and are declared in `lib/content.ts`
-with explicit `width` and `height`. On screens above 46rem a figure breaks out
-of the prose measure to the full content width, because a screenshot narrow
-enough to fit the measure is too small to read.
+with explicit `width` and `height`, plus a `blurDataURL` drawn from
+`lib/blur.ts`. All three are required by the type, so a plate cannot ship
+without reserving its space or without a placeholder.
 
-To refresh a screenshot, capture at 2x and downscale:
+A figure is never confined to the 34rem prose measure, because a screenshot
+that narrow is too small to read. Below 74rem it spans the full plate width;
+above it, the plate takes the wide column and its caption a 20rem margin
+alongside, which works out to roughly 652px of image.
+
+Three plates per project. Adding a fourth means arguing it is stronger
+evidence than one already there, and dropping that one.
+
+To add a screenshot, **crop to the app's own content column, not to the
+browser viewport**, and end the crop on a container boundary rather than
+through a card, a word, or under a sticky nav. A full-viewport capture spends
+most of its pixels on empty page ground, and at the rendered width that puts
+the UI text inside it near 5px. Then:
 
 ```bash
-node -e "require('sharp')('in.png').resize({width:1600}).webp({quality:82}).toFile('public/media/out.webp')"
+node -e "require('sharp')('in.png').extract({left:0,top:0,width:0,height:0}).webp({quality:82,effort:6}).toFile('public/media/out.webp')"
 ```
+
+Fill in the `extract` box from the crop you chose. Aim for 16:10; if the
+content will not take it without losing something, keep the content and pick a
+clean ratio of its own. Afterwards, regenerate the placeholder — a 12px-wide
+WebP at quality 45, base64'd into `lib/blur.ts` — and re-sync `width` and
+`height` in `lib/content.ts` to the new file.
 
 Video is poster-gated — the `<video>` element does not mount until a visitor
 clicks the poster, so clips cost nothing on page load. Put files in
