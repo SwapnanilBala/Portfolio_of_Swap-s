@@ -1,18 +1,15 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Fragment } from "react";
-import { DisplayTitle } from "@/components/DisplayTitle";
-import { ProjectCover } from "@/components/index/ProjectCover";
 import { MagneticLink } from "@/components/MagneticLink";
-import { PageTransition, SharedMedia } from "@/components/PageTransition";
+import { PageTransition } from "@/components/PageTransition";
 import { SiteFooter } from "@/components/SiteFooter";
-import { WarmOnIntent } from "@/components/WarmOnIntent";
+import { CaseNav } from "@/components/work/CaseNav";
 import { CaseSection } from "@/components/work/CaseSection";
 import { MediaPlate } from "@/components/work/MediaPlate";
 import { ProjectHero } from "@/components/work/ProjectHero";
 import { content } from "@/lib/content";
-import { displayLinesOf, hasCaseStudy, isResolvedLink } from "@/lib/types";
+import { hasCaseStudy, isResolvedLink } from "@/lib/types";
 
 const cases = content.projects.filter(hasCaseStudy);
 
@@ -39,7 +36,10 @@ export default async function CaseStudyPage({ params }: Params) {
   const project = cases[index];
   if (!project) notFound();
 
-  const next = cases[(index + 1) % cases.length];
+  // Both ways round the loop. With only two case studies both neighbours
+  // would be the same project, so it is offered once, as the next.
+  const next = cases.length > 1 ? cases[(index + 1) % cases.length] : undefined;
+  const previous = cases.length > 2 ? cases[(index - 1 + cases.length) % cases.length] : undefined;
   const links = project.links.filter(isResolvedLink);
   const { ui } = content;
 
@@ -84,34 +84,7 @@ export default async function CaseStudyPage({ params }: Params) {
           </ul>
         ) : null}
 
-        {next && next.slug !== project.slug ? (
-          <WarmOnIntent image={next.hero ?? next.cover}>
-            <Link
-              href={`/work/${next.slug}`}
-              transitionTypes={["page"]}
-              data-cursor="view"
-              className="group grid grid-cols-12 items-end gap-x-5 border-t border-paper-rule px-5 py-16 md:px-8 md:py-24"
-            >
-              <span className="meta col-span-12 text-paper-muted md:col-span-3">{ui.nextProject}</span>
-              <div className="col-span-12 mt-6 md:col-span-6 md:mt-0">
-                <DisplayTitle
-                  as="p"
-                  lines={displayLinesOf(next)}
-                  className="text-[min(11vw,11rem)] transition-transform duration-700 ease-out-expo group-hover:translate-x-3 reduced:transition-none"
-                />
-              </div>
-              <div className="col-span-12 mt-8 md:col-span-3 md:mt-0">
-                <SharedMedia slug={next.slug}>
-                  <div data-cursor-frame className="overflow-hidden">
-                    <div className="transition-transform duration-700 ease-out-expo group-hover:scale-[1.04] reduced:transition-none">
-                      <ProjectCover project={next} sizes="(min-width: 48rem) 23vw, 90vw" />
-                    </div>
-                  </div>
-                </SharedMedia>
-              </div>
-            </Link>
-          </WarmOnIntent>
-        ) : null}
+        <CaseNav previous={previous} next={next} copy={ui.caseNav} />
 
         <SiteFooter />
       </main>

@@ -6,7 +6,7 @@ import { RevealPlate } from "@/components/RevealPlate";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SplitTextReveal } from "@/components/SplitTextReveal";
 import { content } from "@/lib/content";
-import { blurFor } from "@/lib/media";
+import { blurFor, PORTRAIT_MAX_WIDTH } from "@/lib/media";
 
 export const metadata: Metadata = { title: content.ui.aboutSectionLabels.about };
 
@@ -41,6 +41,7 @@ export default function AboutPage() {
   const { about, profile, ui } = content;
   const labels = ui.aboutSectionLabels;
   const portrait = profile.portrait;
+  const portraitWidth = Math.min(PORTRAIT_MAX_WIDTH, portrait.width / 2);
 
   return (
     <PageTransition>
@@ -57,16 +58,15 @@ export default function AboutPage() {
 
         <Section id="about" label={labels.about}>
           <div className="grid gap-10 lg:grid-cols-[minmax(0,15rem)_1fr]">
-            {/* Shown at half its pixel width, so it stays sharp on a 2x screen;
-                a larger upload grows the slot with no change here. */}
+            {/* Sized by its display box, not by its source: no `sizes`, so
+                the srcset is that box at 1x and 2x (see PORTRAIT_MAX_WIDTH). */}
             <RevealPlate className="w-full">
-              <div style={{ maxWidth: `${portrait.width / 2}px` }}>
+              <div style={{ maxWidth: `${portraitWidth}px` }}>
                 <Image
                   src={portrait.src}
                   alt={portrait.alt}
-                  width={portrait.width}
-                  height={portrait.height}
-                  sizes={`${portrait.width / 2}px`}
+                  width={portraitWidth}
+                  height={Math.round((portraitWidth * portrait.height) / portrait.width)}
                   placeholder="blur"
                   blurDataURL={blurFor(portrait.src)}
                   className="h-auto w-full"

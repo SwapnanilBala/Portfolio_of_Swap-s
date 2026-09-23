@@ -160,10 +160,10 @@ export interface ArchivedProject extends ProjectBase {
   /** Present when the archive entry has its own page. */
   readonly caseStudy?: CaseStudy;
   /**
-   * Replaces the hero image on its case study when there is no honest
-   * screenshot to show -- the numbers the work actually produced.
+   * The picture for a project with no screen to capture, drawn from its own
+   * data: the Index cover and the case-study hero.
    */
-  readonly dataHero?: DataHero;
+  readonly dotField?: DotField;
 }
 
 export type Project = SelectedProject | ArchivedProject;
@@ -184,14 +184,24 @@ export function hasCaseStudy(project: Project): project is ProjectWithCase {
 }
 
 /**
- * A bar comparison drawn from real results, for a case study whose evidence is
- * a table of numbers rather than a screen.
+ * A dataset drawn as a field of dots, one dot for every `unit` rows, the
+ * groups laid down in order so each becomes a band. Every count is a real one;
+ * the picture is the data at a glance, not an illustration of it.
  */
-export interface DataHero {
-  readonly caption: string;
-  /** The metric being compared, e.g. "Macro F1". */
-  readonly metric: string;
-  readonly bars: readonly { readonly label: string; readonly value: number }[];
+export interface DotField {
+  /** Rows per dot. */
+  readonly unit: number;
+  /** Describes the whole picture for anyone who cannot see it. */
+  readonly alt: string;
+  readonly groups: readonly DotGroup[];
+}
+
+export interface DotGroup {
+  /** Legend text, e.g. "Fake". */
+  readonly label: string;
+  readonly count: number;
+  /** Solid bright, solid muted, or an outline for rows set aside. */
+  readonly tone: "strong" | "muted" | "hollow";
 }
 
 /* ------------------------------------------------------------------ about */
@@ -323,7 +333,18 @@ export interface UiCopy {
       readonly year: string;
     };
   };
-  readonly nextProject: string;
+  /** Previous and next at the foot of each case study. */
+  readonly caseNav: {
+    readonly label: string;
+    readonly previous: string;
+    readonly next: string;
+  };
+  /** The top-left way home, on every page but home. */
+  readonly homeLink: {
+    readonly label: string;
+    /** The initials inside the crop marks, as in the favicon. */
+    readonly monogram: string;
+  };
   readonly footer: {
     readonly headline: readonly string[];
     readonly localTime: string;

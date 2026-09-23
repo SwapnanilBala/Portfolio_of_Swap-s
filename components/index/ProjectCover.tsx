@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { DotField } from "@/components/DotField";
 import { blurFor, SCREENSHOT_QUALITY } from "@/lib/media";
 import type { Project } from "@/lib/types";
 
@@ -13,9 +14,10 @@ interface Props {
 }
 
 /**
- * A project's cover: its capture where there is an honest one to show, and
- * otherwise a typographic plate set from its own headline figure. The plate is
- * never invented imagery -- every number on it is one the project produced.
+ * A project's cover: its capture where there is an honest one to show, its
+ * data drawn as a dot field where there is no screen but a dataset, and
+ * otherwise a typographic plate set from its own headline figure. None of it is
+ * invented imagery -- every number shown is one the project produced.
  *
  * A capture is shown whole, at its own aspect ratio. Forcing it into the
  * slot's shape cut headlines mid-word, which reads as a mistake rather than a
@@ -41,6 +43,16 @@ export function ProjectCover({ project, sizes, aspect = "aspect-[4/3]", eager = 
           blurDataURL={blurFor(image.src)}
           className="block h-auto w-full"
         />
+      </div>
+    );
+  }
+
+  // A project with no screen to capture but a dataset to draw.
+  const field = project.selected ? undefined : project.dotField;
+  if (field) {
+    return (
+      <div className="overflow-hidden bg-ink">
+        <DotField field={field} shape="wide" className="block h-auto w-full" />
       </div>
     );
   }

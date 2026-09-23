@@ -64,10 +64,12 @@ loose ends found while scraping.
 
 **Waiting on you**
 
-- **Portrait.** A higher-resolution photo is coming. Put it in `public/media/`,
+- **Portrait.** A higher-resolution photo is coming. Drop the original in
+  `incoming/` (see *Adding media*), save the processed copy to `public/media/`,
   update `profile.portrait` (`src`, `width`, `height`) in `lib/content.ts`, then
-  run `node scripts/build-blur.mjs`. The About page sizes the slot from the
-  image, so nothing else changes.
+  run `node scripts/build-blur.mjs`. The About page shows it at up to 240px
+  (`PORTRAIT_MAX_WIDTH`), so 720px wide covers a 3x phone and 1200px is
+  plenty; nothing else changes.
 - **What you learned**, per project. The brief's Outcome sections are meant to
   cover it; nothing documents it yet, so Outcome states results only.
 - **The palm-reading clip** for Lagna Atelier: the one interaction a visitor
@@ -105,7 +107,17 @@ loose ends found while scraping.
 
 ## Adding media
 
-Stills live in `public/media/` as WebP. After adding or re-cropping one:
+Stills live in `public/media/` as WebP.
+
+**Originals go in `incoming/` first.** It is git-ignored, because photos and
+screenshots straight off a phone or camera carry metadata — GPS coordinates,
+device, time — and this repository is public. Nothing goes into
+`public/media/` until it has been re-encoded without it: `sharp` drops
+metadata unless asked to keep it, but call `.rotate()` first, or a photo that
+relied on its orientation tag lands sideways. Git keeps every version of a
+file forever, so commit the sized WebP, never the camera original.
+
+After adding or re-cropping one:
 
 ```bash
 node scripts/build-blur.mjs

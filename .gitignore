@@ -22,3 +22,7 @@ next-env.d.ts
 Thumbs.db
 desktop.ini
 *.log
+
+# Originals dropped in for processing (raw photos can carry GPS and device
+# metadata). Only the processed copies in public/media are committed.
+/incoming/

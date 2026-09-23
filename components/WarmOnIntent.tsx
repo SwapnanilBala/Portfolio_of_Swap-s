@@ -7,6 +7,7 @@ import type { ImageAsset } from "@/lib/types";
 interface Props {
   /** The destination case study's hero. */
   readonly image?: ImageAsset;
+  readonly className?: string;
   readonly children: ReactNode;
 }
 
@@ -15,10 +16,10 @@ interface Props {
  * for links rendered by server components. Takes the image alone, not the
  * project, so none of the case study's copy is serialised to the client.
  */
-export function WarmOnIntent({ image, children }: Props) {
+export function WarmOnIntent({ image, className, children }: Props) {
   const warm = () => warmCaseHero(image);
   return (
-    <div onPointerEnter={warm} onFocus={warm}>
+    <div className={className} onPointerEnter={warm} onFocus={warm}>
       {children}
     </div>
   );

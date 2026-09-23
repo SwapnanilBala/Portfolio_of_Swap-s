@@ -71,6 +71,14 @@ export const CASE_HERO = {
   sizes: `(min-width: 48rem) ${PLATE_SIZES.wide}, ${PLATE_SIZES.phone}`,
 } as const;
 
+/**
+ * The portrait's widest, in CSS pixels: the About page's 15rem column. The
+ * image is shown at this or at half its own pixel width, whichever is less,
+ * so a 2x screen always has an image pixel behind every screen pixel and a
+ * large upload is downsized rather than laid out at half its size.
+ */
+export const PORTRAIT_MAX_WIDTH = 240;
+
 /** "01", "02" -- the record number the rail and the index both cite. */
 export function recordNumber(index: number): string {
   return String(index + 1).padStart(2, "0");

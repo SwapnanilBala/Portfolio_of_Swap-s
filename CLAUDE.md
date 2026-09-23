@@ -60,15 +60,16 @@ app/about/page.tsx
 components/home/            ProjectSlider, SliderCanvas, ProjectThumbnailRail,
                             MobileProjects, HomeMasthead
 components/index/           IndexView (grid + list + preview), ProjectCover
-components/work/            ProjectHero, CaseSection, MediaPlate
+components/work/            ProjectHero, CaseSection, MediaPlate, CaseNav
 components/                 PageTransition + SharedMedia, SplitTextReveal,
                             RevealLines, RevealPlate, DisplayTitle,
                             MagneticLink, CharShift, CustomCursor, SiteNav,
-                            SiteFooter, LocalTime, SmoothScroll, WarmOnIntent
+                            HomeLink, SiteFooter, LocalTime, SmoothScroll,
+                            WarmOnIntent, DotField
 lib/content.ts              every word on the site
 lib/types.ts                the contract
 lib/blur.ts                 generated — run `node scripts/build-blur.mjs`
-lib/media.ts                hero brightness, plate and case-hero sizes, record numbers
+lib/media.ts                hero brightness, plate, case-hero and portrait sizes, record numbers
 lib/preload.ts              media-scoped preloads, warming a hero on intent
 lib/slider.ts               slider maths (step, presence) + DESKTOP_QUERY
 lib/motion.ts               easings, durations, media-query hooks
@@ -156,7 +157,9 @@ competes.
   No mono: it is the developer-portfolio tell the brief asks to avoid.
 - **The name** is medium size (`clamp(1.25rem, 1.55vw, 1.875rem)`) and appears
   only on the home page, where it is the h1 — per his instruction. Elsewhere
-  the footer's tiny © is the only mention.
+  the footer's tiny © is the only mention. The home link's "SB" is the
+  favicon's monogram, a mark rather than the name, and it is absent on the
+  one page the name is on.
 - **Separators are `/`**, not the brief's `·` — the brief itself uses `/` in the
   case-study STACK line, and middle-dot meta strings were a generated-design
   tell in the old forbidden list. One token to flip if he prefers `·`.
@@ -165,6 +168,22 @@ competes.
   nothing refers to is still decoration.
 - **No cards, no drop shadows, no glass, no gradient washes, no pills, no icon
   badges for technologies.** Technologies are text lists joined by em dashes.
+- **The way home is top left, on every page but home** (`HomeLink`, in the
+  layout, hidden on `/` where the name holds that corner). Crop marks around
+  the monogram — the cursor's mark, in the plates' 16:10 — opening a few
+  pixels on hover, then "Home" in the nav's type. `mix-blend-difference`
+  like the nav, so it reads on paper, on ink and over imagery, and it sits on
+  the nav's line (both centre at 42.5px from 48rem, checked). It comes
+  before the nav in the DOM, so it is first in tab order, as it is on screen.
+- **A case study ends on previous and next, as type** (`CaseNav`): two
+  halves, each one link edge to edge, the neighbour's display title with a
+  hairline arrow and its category and year. The loop wraps both ways. It
+  replaced a card that carried the next project's cover as a shared element;
+  opening it flew that small cover up into the next hero — often a different
+  image, crossfading while the box grew — and he reported it as a weird
+  preview. **Nothing at the foot of a case study is a shared element.** The
+  crop marks lock onto a half's words rather than the half, which runs to
+  the window's edge where marks set outside it were cut off.
 
 ## Motion
 
@@ -256,6 +275,20 @@ one-off values.
   that box into the list row.
 - Robust Health's cover is its dashboard, not its landing page: the Index shows
   the product, not its marketing photography.
+- **The fake news classifier has no screen, so its picture is its data**
+  (`DotField`): LIAR's 10,269 training claims at one dot per five, laid down
+  as fake, set aside, real — the class imbalance the project fought, in plain
+  sight. Every count is from its RESULTS.md, and the hero's legend states
+  them. It is the Index cover and the case-study hero. Two arrangements of
+  the same dots: `wide` (vertical bands, ~16:10) for the cover and the hero
+  on a wide screen, so that morph is one picture growing; `tall` (stacked
+  bands, portrait) for the hero on a phone, where the wide one filled less
+  than half the plate.
+- **Each line of dots is one stroke**: a round-capped dash per cell. Drawn
+  as 2,054 arcs it was ~100 KB of markup, sent twice (HTML and the RSC
+  payload); as strokes it is under 2 KB. A ring is a dot with its middle
+  stroked in ink, so the field assumes the ink ground both of its plates
+  have. The dash is 0.01 long, not 0, which not every renderer paints.
 
 ## Page transitions
 
@@ -301,9 +334,9 @@ purpose), their WebGL textures — decoded from an image carrying the same
 `srcset` and `sizes`, never a hand-built URL, because the browser's choice
 between neighbouring candidates is its own — and the page's preload. One
 download serves all three, and the hero decodes synchronously so it is in the
-first frame, the one the transition captures. Index covers and the
-next-project card are different images, so they warm the hero on hover and
-focus (`warmCaseHero`, `WarmOnIntent`). Phones need none of it: their slide and
+first frame, the one the transition captures. Index covers are different
+images, and the case nav has none, so both warm the hero on hover and focus
+(`warmCaseHero`, `WarmOnIntent`). Phones need none of it: their slide and
 their hero already ask for the same candidate.
 
 ## Performance

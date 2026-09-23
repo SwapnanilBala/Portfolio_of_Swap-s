@@ -1,5 +1,6 @@
 import { getImageProps } from "next/image";
 import { DisplayTitle } from "@/components/DisplayTitle";
+import { DotField, DotSwatch } from "@/components/DotField";
 import { SharedMedia } from "@/components/PageTransition";
 import { RevealLines } from "@/components/RevealLines";
 import {
@@ -13,7 +14,7 @@ import {
 import { preloadFor } from "@/lib/preload";
 import {
   displayLinesOf,
-  type DataHero,
+  type DotField as DotFieldData,
   type ImageAsset,
   type ProjectWithCase,
   type UiCopy,
@@ -27,32 +28,28 @@ interface Props {
 const { wide: WIDE, narrow: NARROW, sizes: SIZES } = CASE_HERO;
 
 /**
- * Bars on a zero-to-one scale, so a 0.033 gap looks like the 0.033 it is. A
- * scale starting at the lowest score would have made the winner look twice
- * the baseline.
+ * The picture for a project with no screen to show: its data as a field of
+ * dots, framed like every other hero, under a legend of the real counts. The
+ * legend has its own row, so no arrangement of the field can run under it.
  */
-function DataHeroChart({ hero }: { readonly hero: DataHero }) {
+function FieldPlate({ field }: { readonly field: DotFieldData }) {
   return (
-    <figure className="pt-[10vh]">
-      <p className="meta text-ink-muted">{hero.metric}</p>
-      <ul className="mt-6 grid gap-5">
-        {hero.bars.map((bar) => (
-          <li
-            key={bar.label}
-            className="grid grid-cols-[minmax(0,11rem)_1fr_3.5rem] items-center gap-x-5 md:grid-cols-[16rem_1fr_4rem]"
-          >
-            <span className="meta">{bar.label}</span>
-            <span className="h-2 bg-ink-rule">
-              <span className="block h-full bg-paper" style={{ width: `${bar.value * 100}%` }} />
+    <div className="absolute inset-0 flex flex-col gap-4">
+      <ul className="meta flex flex-wrap justify-end gap-x-5 gap-y-1 text-ink-muted">
+        {field.groups.map((group) => (
+          <li key={group.label} className="flex items-center gap-2 tabular-nums">
+            <DotSwatch tone={group.tone} />
+            <span>
+              {group.label} {group.count.toLocaleString("en-US")}
             </span>
-            <span className="meta text-right tabular-nums">{bar.value.toFixed(3)}</span>
           </li>
         ))}
       </ul>
-      <figcaption className="mt-6 max-w-[48ch] text-[0.8125rem] leading-snug text-ink-muted">
-        {hero.caption}
-      </figcaption>
-    </figure>
+      <div className="relative min-h-0 flex-1">
+        <DotField field={field} shape="wide" className="absolute inset-0 hidden size-full md:block" />
+        <DotField field={field} shape="tall" className="absolute inset-0 size-full md:hidden" />
+      </div>
+    </div>
   );
 }
 
@@ -112,7 +109,7 @@ function HeroPicture({ wide, narrow }: { readonly wide: ImageAsset; readonly nar
  */
 export function ProjectHero({ project, meta }: Props) {
   const image = project.hero ?? project.cover;
-  const dataHero = project.selected ? undefined : project.dataHero;
+  const field = project.selected ? undefined : project.dotField;
 
   return (
     <section className="relative flex h-svh min-h-[36rem] flex-col overflow-hidden bg-ink px-5 pb-7 pt-[4.75rem] text-paper md:px-8 md:pb-9">
@@ -122,13 +119,19 @@ export function ProjectHero({ project, meta }: Props) {
             <HeroPicture wide={image} narrow={project.heroMobile ?? image} />
           </div>
         </SharedMedia>
+      ) : field ? (
+        <SharedMedia slug={project.slug}>
+          <div className="relative min-h-0 flex-1 overflow-hidden bg-ink">
+            <FieldPlate field={field} />
+          </div>
+        </SharedMedia>
       ) : (
-        <div className="min-h-0 flex-1">{dataHero ? <DataHeroChart hero={dataHero} /> : null}</div>
+        <div className="min-h-0 flex-1" />
       )}
 
       {/* The title's cap line just crosses the plate's lower edge. Any deeper
           and the capture's own buttons show between the letters. */}
-      <RevealLines className={`relative ${image ? "-mt-3 md:-mt-5" : ""}`}>
+      <RevealLines className={`relative ${image || field ? "-mt-3 md:-mt-5" : ""}`}>
         <DisplayTitle as="h1" lines={displayLinesOf(project)} className="text-[min(13vh,12.5vw)]" />
         <dl
           data-reveal-meta

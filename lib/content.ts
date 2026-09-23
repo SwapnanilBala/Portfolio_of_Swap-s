@@ -404,13 +404,16 @@ export const content: SiteContent = {
         },
       ],
       selected: false,
-      dataHero: {
-        caption: "Macro F1 on the validation split, from the repository's RESULTS.md.",
-        metric: "Macro F1",
-        bars: [
-          { label: "DistilBERT", value: 0.558 },
-          { label: "TF-IDF + logistic regression", value: 0.525 },
-          { label: "RoBERTa", value: 0.372 },
+      // LIAR's training split as RESULTS.md reports it: 10,269 rows, collapsed
+      // to 6,620 by dropping barely-true and half-true (so 3,649 set aside),
+      // leaving 4,121 FAKE and 2,499 REAL. Laid down in truthfulness order.
+      dotField: {
+        unit: 5,
+        alt: "LIAR's 10,269 training claims as a field of dots, one for every five, in order of truthfulness: a bright band of 4,121 fake claims, a hollow band of 3,649 from the ambiguous middle that were set aside, and a grey band of 2,499 real claims.",
+        groups: [
+          { label: "Fake", count: 4121, tone: "strong" },
+          { label: "Set aside", count: 3649, tone: "hollow" },
+          { label: "Real", count: 2499, tone: "muted" },
         ],
       },
       caseStudy: {
@@ -666,7 +669,8 @@ export const content: SiteContent = {
       toggle: "Layout",
       columns: { name: "Project", category: "Category", year: "Year" },
     },
-    nextProject: "Next project",
+    caseNav: { label: "More case studies", previous: "Previous project", next: "Next project" },
+    homeLink: { label: "Home", monogram: "SB" },
     footer: {
       headline: ["Let's build", "something."],
       localTime: "Local time",
