@@ -16,6 +16,36 @@ export function blurFor(src: BlurredMedia): string {
 export const HERO_BRIGHTNESS = 0.82;
 
 /**
+ * Encode quality for every screenshot the optimizer serves: heroes, plates,
+ * covers. Interface text is fine detail on flat colour, which is exactly what
+ * lossy compression smears -- at Next's default 75 the re-encode rings around
+ * small type (43.5 dB against the source, 49 dB at 90). Allowed by
+ * `images.qualities` in next.config.mjs; anything asking for a screenshot's
+ * URL (preloads, textures) must pass the same value or it names a different
+ * file.
+ */
+export const SCREENSHOT_QUALITY = 90;
+
+/**
+ * Phone captures stay at Next's default. At three device pixels to the CSS
+ * pixel the ringing is below what the eye resolves, and the first phone plate
+ * is the phone's largest paint: at 90 it grows from 60 to 103 KB.
+ */
+export const PHONE_QUALITY = 75;
+
+/**
+ * A transparent pixel, as the `<img>` fallback inside every art-directed
+ * `<picture>` (and as the source a hidden layout resolves to). React builds a
+ * picture's `<img>` and sets its attributes before the element is inside the
+ * picture, so for a moment it cannot see the `<source>`s and starts fetching
+ * its own `src`/`srcset`: on a phone, navigating to a case study downloaded the
+ * desktop hero it never showed. With every real image in a `<source>` and this
+ * as the `<img>`'s own, that moment costs nothing.
+ */
+export const TRANSPARENT_PIXEL =
+  "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+
+/**
  * `sizes` for plates that run the width of the page less its margins: the
  * case-study hero on wide screens, and every plate on a phone.
  */

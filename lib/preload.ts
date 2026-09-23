@@ -1,6 +1,6 @@
 import { getImageProps } from "next/image";
 import { preload } from "react-dom";
-import { CASE_HERO } from "@/lib/media";
+import { CASE_HERO, SCREENSHOT_QUALITY } from "@/lib/media";
 import type { ImageAsset } from "@/lib/types";
 
 /**
@@ -16,13 +16,19 @@ import type { ImageAsset } from "@/lib/types";
  * Works in server components (the link goes into the document head) and in
  * client event handlers (React inserts it on the spot).
  */
-export function preloadFor(image: ImageAsset, sizes: string, media: string): void {
+export function preloadFor(
+  image: ImageAsset,
+  sizes: string,
+  media: string,
+  quality: number = SCREENSHOT_QUALITY,
+): void {
   const { props } = getImageProps({
     src: image.src,
     alt: "",
     width: image.width,
     height: image.height,
     sizes,
+    quality,
   });
   if (!props.srcSet) return;
   preload(props.src, {

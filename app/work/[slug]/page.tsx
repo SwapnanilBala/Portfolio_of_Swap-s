@@ -104,7 +104,7 @@ export default async function CaseStudyPage({ params }: Params) {
                 <SharedMedia slug={next.slug}>
                   <div className="overflow-hidden">
                     <div className="transition-transform duration-700 ease-out-expo group-hover:scale-[1.04] reduced:transition-none">
-                      <ProjectCover project={next} sizes="(min-width: 48rem) 22vw, 90vw" />
+                      <ProjectCover project={next} sizes="(min-width: 48rem) 23vw, 90vw" />
                     </div>
                   </div>
                 </SharedMedia>

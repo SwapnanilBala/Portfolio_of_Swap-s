@@ -73,6 +73,44 @@
    ========================================================================== */
 
 @layer base {
+  /* The screen's pixel density, in steps, so a screenshot can be sized to have
+     an image pixel behind every screen pixel (MediaPlate). Browser zoom moves
+     it too, which is right: zoomed in, a plate needs more pixels. Ascending,
+     so the densest matching query wins on source order. */
+  :root {
+    --dpr: 1;
+  }
+
+  @media (min-resolution: 1.25dppx) {
+    :root {
+      --dpr: 1.25;
+    }
+  }
+
+  @media (min-resolution: 1.5dppx) {
+    :root {
+      --dpr: 1.5;
+    }
+  }
+
+  @media (min-resolution: 1.75dppx) {
+    :root {
+      --dpr: 1.75;
+    }
+  }
+
+  @media (min-resolution: 2dppx) {
+    :root {
+      --dpr: 2;
+    }
+  }
+
+  @media (min-resolution: 3dppx) {
+    :root {
+      --dpr: 3;
+    }
+  }
+
   html {
     background-color: var(--color-ink);
     color: var(--color-paper);

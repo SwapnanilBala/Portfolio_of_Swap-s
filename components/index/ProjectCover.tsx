@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { blurFor } from "@/lib/media";
+import { blurFor, SCREENSHOT_QUALITY } from "@/lib/media";
 import type { Project } from "@/lib/types";
 
 interface Props {
@@ -34,6 +34,7 @@ export function ProjectCover({ project, sizes, aspect = "aspect-[4/3]", eager = 
           width={image.width}
           height={image.height}
           sizes={sizes}
+          quality={SCREENSHOT_QUALITY}
           loading={eager ? "eager" : "lazy"}
           fetchPriority={eager ? "high" : undefined}
           placeholder="blur"

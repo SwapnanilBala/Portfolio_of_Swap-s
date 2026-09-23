@@ -16,7 +16,7 @@ import { DisplayTitle } from "@/components/DisplayTitle";
 import { SharedMedia } from "@/components/PageTransition";
 import { ProjectThumbnailRail } from "@/components/home/ProjectThumbnailRail";
 import { gsap, useGSAP } from "@/lib/gsap";
-import { blurFor, CASE_HERO, HERO_BRIGHTNESS, recordNumber } from "@/lib/media";
+import { blurFor, CASE_HERO, HERO_BRIGHTNESS, recordNumber, SCREENSHOT_QUALITY } from "@/lib/media";
 import { warmCaseHero } from "@/lib/preload";
 import {
   DURATION,
@@ -474,6 +474,7 @@ export function ProjectSlider({ projects, copy }: Props) {
                 fill
                 fetchPriority={i === 0 ? "high" : undefined}
                 sizes={CASE_HERO.sizes}
+                quality={SCREENSHOT_QUALITY}
                 placeholder="blur"
                 blurDataURL={blurFor(project.hero.src)}
                 draggable={false}

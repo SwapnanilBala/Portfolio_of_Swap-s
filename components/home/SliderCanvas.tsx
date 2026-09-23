@@ -3,8 +3,8 @@
 import { getImageProps } from "next/image";
 import { useEffect, useRef, type RefObject } from "react";
 import {
+  CanvasTexture,
   LinearFilter,
-  LinearMipmapLinearFilter,
   LinearSRGBColorSpace,
   Mesh,
   NoColorSpace,
@@ -12,13 +12,13 @@ import {
   PlaneGeometry,
   Scene,
   ShaderMaterial,
-  Texture,
   Vector2,
   Vector3,
   WebGLRenderer,
+  type Texture,
 } from "three";
 import { gsap } from "@/lib/gsap";
-import { CASE_HERO, HERO_BRIGHTNESS } from "@/lib/media";
+import { CASE_HERO, HERO_BRIGHTNESS, SCREENSHOT_QUALITY } from "@/lib/media";
 import {
   clamp,
   presenceAt,
@@ -58,6 +58,16 @@ interface SlideUniforms {
   uPresence: { value: number };
   uGround: { value: Vector3 };
   uReady: { value: number };
+}
+
+interface Slide {
+  readonly uniforms: SlideUniforms;
+  readonly material: ShaderMaterial;
+  readonly mesh: Mesh;
+  /** The decoded capture, kept so the texture can be repainted at a new size. */
+  image: HTMLImageElement | null;
+  /** The size the current texture was painted at, "wxh". */
+  painted: string;
 }
 
 /** The page's ink, #111111, as the shader's raw sRGB values. */
@@ -179,7 +189,7 @@ export function SliderCanvas({ sources, motion, frameRef, initialIndex, onReady,
     // Rows to bow along; columns stay straight.
     const geometry = new PlaneGeometry(1, 1, 1, 24);
 
-    const slides = sources.map((source) => {
+    const slides: Slide[] = sources.map((source) => {
       const uniforms: SlideUniforms = {
         uTexture: { value: null },
         uPlane: { value: new Vector2(1, 1) },
@@ -199,7 +209,7 @@ export function SliderCanvas({ sources, motion, frameRef, initialIndex, onReady,
       });
       const mesh = new Mesh(geometry, material);
       scene.add(mesh);
-      return { uniforms, material, mesh };
+      return { uniforms, material, mesh, image: null, painted: "" };
     });
 
     let width = 1;
@@ -212,6 +222,8 @@ export function SliderCanvas({ sources, motion, frameRef, initialIndex, onReady,
     let frameHeight = 1;
     let step = 1;
     let dirty = true;
+    // Set once textures can be painted; resize() calls it on every change.
+    let repaint = () => {};
     const resize = () => {
       width = Math.max(host.clientWidth, 1);
       height = Math.max(host.clientHeight, 1);
@@ -233,26 +245,59 @@ export function SliderCanvas({ sources, motion, frameRef, initialIndex, onReady,
         slide.uniforms.uPlane.value.set(frameWidth, frameHeight);
       }
       dirty = true;
+      repaint();
     };
     resize();
     const observer = new ResizeObserver(resize);
     observer.observe(host);
 
     // Each texture's candidate is chosen by an image carrying the DOM plate's
-    // own srcset and sizes, so the browser picks the same one for both: one
-    // download serves the DOM plate, this texture and the case-study hero the
-    // plate opens into (see CASE_HERO). A hand-built URL cannot promise that
-    // -- the browser's choice between neighbouring widths is its own.
+    // own srcset, sizes and quality, so the browser picks the same file for
+    // both: one download serves the DOM plate, this texture and the
+    // case-study hero the plate opens into (see CASE_HERO). A hand-built URL
+    // cannot promise that -- the browser's choice between neighbouring widths
+    // is its own. The texture is then painted from a second, plain image of
+    // that URL (a memory-cache hit): an srcset image reports a
+    // density-corrected size, which once left every plate black.
     //
-    // The texture itself is made from a second, plain image of that same URL
-    // (a memory-cache hit, not a second download). An srcset image reports a
-    // density-corrected size -- a 2560px capture chosen for a 3840w slot
-    // calls itself 917px wide -- and three.js allocates the texture from that
-    // figure, so the real bitmap would not fit and the plate drew black.
-    //
-    // Mipmapped, because the candidate is sized for the wider hero and is
-    // drawn here smaller than it was fetched.
+    // Painted, not uploaded as is: the capture is resampled by the browser to
+    // the plate's size in device pixels and sampled one texel to one pixel.
+    // Uploading the full capture and letting the GPU minify it through
+    // mipmaps drew the plate measurably softer than the same image in the DOM
+    // beneath it. Repainted when the frame changes size, once resizing stops.
     let cancelled = false;
+    let repaintTimer = 0;
+    const paint = (slide: Slide) => {
+      const image = slide.image;
+      if (!image || cancelled) return;
+      const ratio = renderer.getPixelRatio();
+      const scale = Math.max(frameWidth / image.naturalWidth, frameHeight / image.naturalHeight) * ratio;
+      const w = Math.max(1, Math.round(image.naturalWidth * scale));
+      const h = Math.max(1, Math.round(image.naturalHeight * scale));
+      const size = `${w}x${h}`;
+      if (slide.painted === size) return;
+      const canvas = document.createElement("canvas");
+      canvas.width = w;
+      canvas.height = h;
+      const context = canvas.getContext("2d");
+      if (!context) return;
+      context.imageSmoothingEnabled = true;
+      context.imageSmoothingQuality = "high";
+      context.drawImage(image, 0, 0, w, h);
+      const texture = new CanvasTexture(canvas);
+      texture.colorSpace = NoColorSpace;
+      texture.minFilter = LinearFilter;
+      texture.magFilter = LinearFilter;
+      texture.generateMipmaps = false;
+      slide.uniforms.uTexture.value?.dispose();
+      slide.uniforms.uTexture.value = texture;
+      slide.painted = size;
+      dirty = true;
+    };
+    repaint = () => {
+      window.clearTimeout(repaintTimer);
+      repaintTimer = window.setTimeout(() => slides.forEach(paint), 150);
+    };
     slides.forEach((slide, i) => {
       const source = sources[i];
       if (!source) return;
@@ -262,6 +307,7 @@ export function SliderCanvas({ sources, motion, frameRef, initialIndex, onReady,
         width: source.width,
         height: source.height,
         sizes: CASE_HERO.sizes,
+        quality: SCREENSHOT_QUALITY,
       });
       const chooser = new Image();
       chooser.sizes = CASE_HERO.sizes;
@@ -271,15 +317,8 @@ export function SliderCanvas({ sources, motion, frameRef, initialIndex, onReady,
         if (cancelled) return;
         const image = new Image();
         image.onload = () => {
-          if (cancelled) return;
-          const texture = new Texture(image);
-          texture.colorSpace = NoColorSpace;
-          texture.minFilter = LinearMipmapLinearFilter;
-          texture.magFilter = LinearFilter;
-          texture.generateMipmaps = true;
-          texture.needsUpdate = true;
-          slide.uniforms.uTexture.value = texture;
-          dirty = true;
+          slide.image = image;
+          paint(slide);
         };
         image.src = chooser.currentSrc;
       };
@@ -336,6 +375,7 @@ export function SliderCanvas({ sources, motion, frameRef, initialIndex, onReady,
 
     return () => {
       cancelled = true;
+      window.clearTimeout(repaintTimer);
       gsap.ticker.remove(render);
       observer.disconnect();
       renderer.domElement.removeEventListener("webglcontextlost", onContextLost);

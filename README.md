@@ -73,6 +73,12 @@ loose ends found while scraping.
 - **The palm-reading clip** for Lagna Atelier: the one interaction a visitor
   will never try on a stranger's site. The poster-gated video player from the
   previous design is at commit `17e793e` (`components/ProjectMedia.tsx`).
+- **2x recaptures of the six in-product screenshots** — Lagna Atelier's
+  signed-in landing, chart and ashtakavarga; Robust Health's onboarding,
+  dashboard and workout. They are 1x captures, so on a 125% or Retina screen
+  they render smaller to stay sharp (see *Adding media*). Take each screen at
+  the same framing with your display at 200%, or in the browser's device mode
+  at a device pixel ratio of 2, and replace the file under the same name.
 
 **Found while scraping — worth fixing at the source**
 
@@ -110,14 +116,19 @@ That regenerates `lib/blur.ts` and prints every file's intrinsic size — the
 from content until the script has run over it; the compiler enforces that.
 
 - **Capture at 2x and crop to the content**, not the browser viewport. A
-  screenshot is never shown wider than it was captured, so a narrow capture
-  sits at its native width rather than being upscaled.
+  screenshot is never shown with fewer image pixels than the screen pixels it
+  covers: a plate is capped at its width divided by the screen's pixel density.
+  A 1x capture therefore renders half as wide on a Retina screen as a 2x one
+  would. Don't resize a capture down before saving it, for the same reason.
 - **Every project in the slider needs two heroes.** `hero` is a 16:10 desktop
-  capture — the live site at 1440×900 and 2x, resized to 2560×1600. `heroMobile`
-  is the same screen on a phone — 390×844 at 3x, so 1170×2532. Both are shown
-  framed and anchored to their top edge, so keep the product's own header in the
-  capture. Both are toned by `HERO_BRIGHTNESS` in `lib/media.ts`, the same value
-  the slider's shader uses.
+  capture — the live site at 1440×900 and 2x, kept at its full 2880×1800.
+  `heroMobile` is the same screen on a phone — 390×844 at 3x, so 1170×2532.
+  Both are shown framed and anchored to their top edge, so keep the product's
+  own header in the capture. Both are toned by `HERO_BRIGHTNESS` in
+  `lib/media.ts`, the same value the slider's shader uses.
+- **Save WebP at quality 90.** Screenshots are served at quality 90 too
+  (`SCREENSHOT_QUALITY`); interface text is exactly what heavier compression
+  smears.
 - A desktop capture from a live site, with headless Edge and no extra tools:
 
 ```bash

@@ -1,39 +1,43 @@
 import Image from "next/image";
 import { RevealPlate } from "@/components/RevealPlate";
-import { blurFor } from "@/lib/media";
+import { blurFor, SCREENSHOT_QUALITY } from "@/lib/media";
 import type { ImageMedia } from "@/lib/types";
 
 interface Props {
   readonly media: ImageMedia;
 }
 
-// Wide enough to run the full measure of the page without being upscaled.
-const FULL_BLEED_MIN_WIDTH = 1400;
-
 /**
  * A very large screenshot between sections: no device mockup, no frame beyond
- * its own edge. Never shown wider than it was captured -- an upscaled
- * screenshot is a soft screenshot -- so narrower captures sit right-aligned
- * at their native width, which also breaks the column rhythm on purpose.
+ * its own edge.
+ *
+ * Never shown with fewer image pixels than screen pixels. The cap is the
+ * capture's width divided by the screen's pixel density (`--dpr`, set from
+ * resolution queries in globals.css): a 1041px capture runs 1041px wide on a
+ * 1x screen, 833px at 125% scaling and 520px on a 2x one, and is sharp on all
+ * three. Capping at the capture's width in CSS pixels alone -- the old rule --
+ * still stretched it 1.25x at 125% and 2x on a Retina screen, which is where
+ * the plates went soft. A plate narrower than the page sits against the right
+ * edge, which breaks the column rhythm on purpose.
  */
 export function MediaPlate({ media }: Props) {
-  const fullBleed = media.width >= FULL_BLEED_MIN_WIDTH;
   return (
     <figure className="px-5 py-10 md:px-8 md:py-16">
-      <RevealPlate className={fullBleed ? "" : "md:ml-auto"}>
-        <div style={fullBleed ? undefined : { maxWidth: `${media.width}px` }}>
+      <div className="md:ml-auto" style={{ maxWidth: `calc(${media.width}px / var(--dpr))` }}>
+        <RevealPlate>
           <Image
             src={media.src}
             alt={media.alt}
             width={media.width}
             height={media.height}
-            sizes={fullBleed ? "(min-width: 48rem) 95vw, 100vw" : `(min-width: 48rem) ${media.width}px, 100vw`}
+            sizes={`(min-width: 48rem) ${media.width}px, 100vw`}
+            quality={SCREENSHOT_QUALITY}
             placeholder="blur"
             blurDataURL={blurFor(media.src)}
             className="h-auto w-full"
           />
-        </div>
-      </RevealPlate>
+        </RevealPlate>
+      </div>
       {media.caption ? (
         <figcaption className="mt-4 grid md:grid-cols-12">
           <span className="text-[0.8125rem] leading-snug text-paper-muted md:col-span-5 md:col-start-8">

@@ -77,8 +77,8 @@ export const content: SiteContent = {
       selected: true,
       hero: {
         src: "/media/lagna-atelier-hero.webp",
-        width: 2560,
-        height: 1600,
+        width: 2880,
+        height: 1800,
         alt: "Lagna Atelier's landing screen: “Create your Vedic birth chart” in gold capitals on a dark starfield, above a four-step birth-details form and a live sky panel waiting for input.",
       },
       heroMobile: {
@@ -207,8 +207,8 @@ export const content: SiteContent = {
       selected: true,
       hero: {
         src: "/media/robust-health-hero.webp",
-        width: 2560,
-        height: 1600,
+        width: 2880,
+        height: 1800,
         alt: "Robust Health's landing page: the headline “Structured programming, refined every week” beside three gym photographs, above a row of usage counters.",
       },
       heroMobile: {
@@ -327,8 +327,8 @@ export const content: SiteContent = {
       selected: true,
       hero: {
         src: "/media/kb-clinic-hero.webp",
-        width: 2560,
-        height: 1600,
+        width: 2880,
+        height: 1800,
         alt: "The clinic's booking page: the practice name above scheduling and dashboard buttons, a doctor-availability card, and a city-and-chamber picker that starts a booking.",
       },
       heroMobile: {

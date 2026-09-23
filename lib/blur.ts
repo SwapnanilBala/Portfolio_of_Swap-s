@@ -31,7 +31,7 @@ export const BLUR_PLACEHOLDERS: Readonly<Record<BlurredMedia, string>> = {
   "/media/kb-clinic-hero.webp":
     "data:image/webp;base64,UklGRjgAAABXRUJQVlA4ICwAAADQAQCdASoMAAgAAwBSJZwAAxf83caAAAD+9dMH+xXaUXohcOssLL11QEAAAA==",
   "/media/kb-clinic-mobile.webp":
-    "data:image/webp;base64,UklGRlwAAABXRUJQVlA4IFAAAACQAwCdASoMABoAPt1cpkyopSOiMAgBEBuJZwAAV/qoJ/d/A1YAAP7vTCKaVD7NschRc7VQezrV/58YX8+jidCmhfuTk+peI5FakuyLABQAAA==",
+    "data:image/webp;base64,UklGRlwAAABXRUJQVlA4IFAAAACQAwCdASoMABoAPt1cp0yopSOiMAgBEBuJZwAAV/qoJ/d/A1YAAP7vTCKaVD7NtNgxMDMPfNuMnxot8ZTvOJ0KaF+5OT6l4jkVqS7IsAFAAA==",
   "/media/lagna-atelier-ashtakavarga.webp":
     "data:image/webp;base64,UklGRj4AAABXRUJQVlA4IDIAAADQAQCdASoMAAgAAwBSJaQAAuR/FqNpAAD+8OF0iuBawxpsClinuBSxH4yXAJWJFw8AAA==",
   "/media/lagna-atelier-chart.webp":
@@ -45,9 +45,9 @@ export const BLUR_PLACEHOLDERS: Readonly<Record<BlurredMedia, string>> = {
   "/media/robust-health-dashboard.webp":
     "data:image/webp;base64,UklGRjQAAABXRUJQVlA4ICgAAABwAQCdASoMAAcAAwBSJZQC06FAAAD+9S2Lznqchw8usXK+n7/U2gAA",
   "/media/robust-health-hero.webp":
-    "data:image/webp;base64,UklGRlIAAABXRUJQVlA4IEYAAADQAQCdASoMAAgAAwBSJYwAAlpBv/smwAD+9F19RmG3v6oZHe4SL3ktxxzX1iNN2dU5LndKSo4N6tRG/FHpLY7Pgg9iAAAA",
+    "data:image/webp;base64,UklGRlIAAABXRUJQVlA4IEYAAADQAQCdASoMAAgAAwBSJYwAAlpBv/rUAAD+9F19RmG3v6oZHe4SL3ktxxzX1iNN2dU5LndKSo4N6tRG/FHpLZpX8EHsQAAA",
   "/media/robust-health-mobile.webp":
-    "data:image/webp;base64,UklGRqAAAABXRUJQVlA4IJQAAAAQBACdASoMABoAPt0+s1SooiWjmAEQG4lAFcONI+ckFTavobbcXt/kAAD++SVken9zEqC2il8ucCPJqlOXfimp1C/msIGEMyl3BI8kKkL116w8bhBUFP3t8yRPQooqICbtSWyMPqyppuqX3q80s1tg9kp9fmDz3GhLODei7LzikTn1s4qTirHl0/vNtOfewucO4AAA",
+    "data:image/webp;base64,UklGRp4AAABXRUJQVlA4IJIAAADwAwCdASoMABoAPt0+s1SooiWjmAEQG4lAFcONJzqyqNzVv/T3AZAAAP75JWR6fIbCEq4a14435p4ln7NYQSxWYDuZem33s9gqW2lqfHRP33zW0VE+QHyS2+zu/KbJ4T6SSoosHyPMY4PJrOTJDSM7MnuoAb4jzgCUinSSqOR54Q/mNcpsZVxwcNVuE1ekcgvgAA==",
   "/media/robust-health-onboarding.webp":
     "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACwAQCdASoMAAgAAwBSJZwAAu18yXxgAP7zMLTNq3F9adzD7nYjfusD2I1JNHAA",
   "/media/robust-health-workout.webp":

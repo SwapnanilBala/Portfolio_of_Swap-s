@@ -3,7 +3,7 @@ import { MobileProjects } from "@/components/home/MobileProjects";
 import { ProjectSlider } from "@/components/home/ProjectSlider";
 import { PageTransition } from "@/components/PageTransition";
 import { content } from "@/lib/content";
-import { CASE_HERO, PLATE_SIZES } from "@/lib/media";
+import { CASE_HERO, PHONE_QUALITY, PLATE_SIZES } from "@/lib/media";
 import { preloadFor } from "@/lib/preload";
 import { DESKTOP_QUERY } from "@/lib/slider";
 import { isSelected } from "@/lib/types";
@@ -22,7 +22,7 @@ export default function Home() {
   const first = projects[0];
   if (first) {
     preloadFor(first.hero, CASE_HERO.sizes, DESKTOP_QUERY);
-    preloadFor(first.heroMobile, PLATE_SIZES.phone, "(max-width: 47.99rem) and (orientation: portrait)");
+    preloadFor(first.heroMobile, PLATE_SIZES.phone, "(max-width: 47.99rem) and (orientation: portrait)", PHONE_QUALITY);
   }
 
   return (

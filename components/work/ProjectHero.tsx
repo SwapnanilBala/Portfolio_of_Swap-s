@@ -2,7 +2,14 @@ import { getImageProps } from "next/image";
 import { DisplayTitle } from "@/components/DisplayTitle";
 import { SharedMedia } from "@/components/PageTransition";
 import { RevealLines } from "@/components/RevealLines";
-import { blurFor, CASE_HERO, HERO_BRIGHTNESS } from "@/lib/media";
+import {
+  blurFor,
+  CASE_HERO,
+  HERO_BRIGHTNESS,
+  PHONE_QUALITY,
+  SCREENSHOT_QUALITY,
+  TRANSPARENT_PIXEL,
+} from "@/lib/media";
 import { preloadFor } from "@/lib/preload";
 import {
   displayLinesOf,
@@ -56,16 +63,24 @@ function DataHeroChart({ hero }: { readonly hero: DataHero }) {
  */
 function HeroPicture({ wide, narrow }: { readonly wide: ImageAsset; readonly narrow: ImageAsset }) {
   preloadFor(wide, SIZES, WIDE);
-  preloadFor(narrow, SIZES, NARROW);
+  preloadFor(narrow, SIZES, NARROW, PHONE_QUALITY);
   const {
     props: { srcSet: narrowSet },
-  } = getImageProps({ src: narrow.src, alt: "", width: narrow.width, height: narrow.height, sizes: SIZES });
+  } = getImageProps({
+    src: narrow.src,
+    alt: "",
+    width: narrow.width,
+    height: narrow.height,
+    sizes: SIZES,
+    quality: PHONE_QUALITY,
+  });
   const { props: img } = getImageProps({
     src: wide.src,
     alt: wide.alt,
     width: wide.width,
     height: wide.height,
     sizes: SIZES,
+    quality: SCREENSHOT_QUALITY,
     loading: "eager",
     fetchPriority: "high",
     // Arriving from a plate, the image is already downloaded; a synchronous
@@ -76,10 +91,14 @@ function HeroPicture({ wide, narrow }: { readonly wide: ImageAsset; readonly nar
     blurDataURL: blurFor(wide.src),
     style: { objectFit: "cover", objectPosition: "top", filter: `brightness(${HERO_BRIGHTNESS})` },
   });
+  // Both captures are <source>s; the <img>'s own is a transparent pixel (see
+  // TRANSPARENT_PIXEL), so a client-side render never starts the wrong one.
+  const { srcSet: wideSet, ...fallback } = img;
   return (
     <picture>
       <source media={NARROW} srcSet={narrowSet} sizes={SIZES} />
-      <img {...img} alt={wide.alt} className="absolute inset-0 size-full" />
+      <source media={WIDE} srcSet={wideSet} sizes={SIZES} />
+      <img {...fallback} src={TRANSPARENT_PIXEL} sizes={undefined} alt={wide.alt} className="absolute inset-0 size-full" />
     </picture>
   );
 }

@@ -7,7 +7,15 @@ import { useEffect, useRef, useState } from "react";
 import { DisplayTitle } from "@/components/DisplayTitle";
 import { SharedMedia } from "@/components/PageTransition";
 import { HomeMasthead } from "@/components/home/HomeMasthead";
-import { blurFor, HERO_BRIGHTNESS, PLATE_SIZES, recordNumber } from "@/lib/media";
+import {
+  blurFor,
+  HERO_BRIGHTNESS,
+  PHONE_QUALITY,
+  PLATE_SIZES,
+  recordNumber,
+  SCREENSHOT_QUALITY,
+  TRANSPARENT_PIXEL,
+} from "@/lib/media";
 import { useHydrated, useMediaQuery } from "@/lib/motion";
 import { DESKTOP_QUERY } from "@/lib/slider";
 import { displayLinesOf, type Profile, type SelectedProject, type UiCopy } from "@/lib/types";
@@ -18,9 +26,6 @@ interface Props {
   readonly profile: Profile;
 }
 
-/** A transparent pixel: what the first plate's picture resolves to on desktops. */
-const NOTHING = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
-
 /**
  * The phone capture on a portrait screen, the desktop capture on a landscape
  * one -- a portrait plate cut from a landscape capture keeps only a sliver of
@@ -30,7 +35,8 @@ const NOTHING = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAA
  * render waited on hydration for 2.6s on a throttled phone. Eager would make
  * desktops, where this layout is hidden, download it too -- so on the desktop
  * query the picture resolves to a transparent pixel instead. The other plates
- * stay lazy, which a hidden layout never triggers.
+ * stay lazy, which a hidden layout never triggers. Every capture is a
+ * <source> and the <img>'s own is the pixel too (see TRANSPARENT_PIXEL).
  */
 function PhonePlate({ project, first }: { readonly project: SelectedProject; readonly first: boolean }) {
   const sizes = PLATE_SIZES.phone;
@@ -42,6 +48,7 @@ function PhonePlate({ project, first }: { readonly project: SelectedProject; rea
     width: project.hero.width,
     height: project.hero.height,
     sizes,
+    quality: SCREENSHOT_QUALITY,
   });
   const { props: portrait } = getImageProps({
     src: project.heroMobile.src,
@@ -49,6 +56,7 @@ function PhonePlate({ project, first }: { readonly project: SelectedProject; rea
     width: project.heroMobile.width,
     height: project.heroMobile.height,
     sizes,
+    quality: PHONE_QUALITY,
     loading: first ? "eager" : "lazy",
     fetchPriority: first ? "high" : undefined,
     placeholder: "blur",
@@ -59,11 +67,20 @@ function PhonePlate({ project, first }: { readonly project: SelectedProject; rea
       filter: `brightness(${HERO_BRIGHTNESS})`,
     },
   });
+  const { srcSet: portraitSet, ...fallback } = portrait;
   return (
     <picture>
-      {first ? <source media={DESKTOP_QUERY} srcSet={NOTHING} /> : null}
+      {first ? <source media={DESKTOP_QUERY} srcSet={TRANSPARENT_PIXEL} /> : null}
       <source media="(orientation: landscape)" srcSet={landscape} sizes={sizes} />
-      <img {...portrait} alt={project.heroMobile.alt} draggable={false} className="absolute inset-0 size-full" />
+      <source srcSet={portraitSet} sizes={sizes} />
+      <img
+        {...fallback}
+        src={TRANSPARENT_PIXEL}
+        sizes={undefined}
+        alt={project.heroMobile.alt}
+        draggable={false}
+        className="absolute inset-0 size-full"
+      />
     </picture>
   );
 }

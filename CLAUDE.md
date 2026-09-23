@@ -211,6 +211,11 @@ one-off values.
   renderer does not re-encode colour and textures are not decoded, so a plate at
   rest is exactly the CSS-filtered image — which is what keeps the handover to a
   case study from flashing.
+- **Textures are painted, not uploaded.** Each capture is resampled by the
+  browser to the plate's size in device pixels and sampled one texel to one
+  pixel, repainted when the frame's size settles. Uploading the full capture and
+  letting mipmaps minify it drew the plate about 9% softer than the DOM image
+  beneath it (edge strength, measured at 2x); painted, the gap is about 2%.
 - **The distortion is original, not the reference site's.** The brief's
   reference (G. Colombel, 2024) is a rotating film-reel cylinder; this is flat
   framed plates whose leading edge bows forward with speed while the trailing
@@ -305,16 +310,37 @@ portfolio refutes its own copy.
   per page, ~155 KB of it the React canary and Next runtime.
 - Every image carries intrinsic `width` and `height`, and goes through
   `next/image` (or `getImageProps` where a `<picture>` needs art direction).
-  Screenshots are never shown wider than they were captured: `MediaPlate`
-  right-aligns narrow ones at native width instead of upscaling.
+- **A screenshot never has fewer image pixels than the screen pixels it
+  covers.** `MediaPlate` caps each plate at its width divided by the screen's
+  density (`--dpr`, stepped from resolution queries in `globals.css`), and
+  right-aligns what that leaves narrower than the page. The earlier rule —
+  never wider than captured, in CSS pixels — still stretched a 1x capture 1.25x
+  at 125% scaling and 2x on Retina, which is where the plates went soft. The six
+  in-product plates are 1x captures (1600px-wide viewport shots, cropped), so on
+  dense screens they now render smaller; 2x recaptures restore their size.
+  Heroes are the 2x captures at full size (2880×1800), which covers the widest
+  hero plate up to 2x.
+- **Screenshots are served at quality 90** (`SCREENSHOT_QUALITY`, allowed by
+  `images.qualities` in `next.config.mjs`). At Next's default 75 the re-encode
+  rings around small interface text. Anything that builds a screenshot's URL —
+  preloads, textures — must pass the same quality, or it names a different file
+  and the one-download handover to the case-study hero breaks. Next 16 rejects
+  any quality not listed; a rejected request is a blank image. Phone captures
+  stay at 75 (`PHONE_QUALITY`): at three device pixels to the CSS pixel the
+  ringing is below what the eye resolves, and the first phone plate is the
+  phone's largest paint (103 KB at 90, 60 KB at 75).
+- **In an art-directed `<picture>`, every real image is a `<source>` and the
+  `<img>`'s own is a transparent pixel** (`TRANSPARENT_PIXEL`). React sets a
+  picture's `<img>` attributes before the element is inside the picture, so on
+  a client-side render the `<img>` briefly cannot see its `<source>`s and starts
+  its own `srcset`. On a phone that downloaded the desktop hero on every
+  navigation to a case study.
 - **Both sliders are server-rendered, so no home image is eager.** Each
   slider's first plate is preloaded under its own media query (`preloadFor`).
   `next/image`'s `preload` cannot take a query and would fetch the desktop
   plate on phones and the phone plate on desktops. (`priority` is deprecated in
   Next 16 anyway.) The case-study hero is a `<picture>` — desktop capture from
   48rem, phone capture below — and each source is preloaded under its own query.
-- Next 16 accepts only **quality 75** unless `images.qualities` is configured;
-  a rejected request is a blank image. Leave `quality` unset.
 - The canvas redraws only while something moves, fades or is hovered.
 
 ## Accessibility floor
