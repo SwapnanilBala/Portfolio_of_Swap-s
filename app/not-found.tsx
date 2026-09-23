@@ -15,7 +15,7 @@ export default function NotFound() {
         <div className="mt-8 flex flex-wrap items-baseline justify-between gap-4 border-t border-paper-rule pt-4">
           <p className="max-w-[36ch] text-paper-muted">{notFound.body}</p>
           <Link
-            href="/index"
+            href="/work"
             transitionTypes={["page"]}
             className="meta underline underline-offset-4"
           >

@@ -3,7 +3,8 @@ import { Fragment } from "react";
 interface Props {
   readonly lines: readonly string[];
   readonly className?: string;
-  readonly as?: "h1" | "h2";
+  /** `p` where the title labels a link rather than heading a section. */
+  readonly as?: "h1" | "h2" | "p";
 }
 
 /**

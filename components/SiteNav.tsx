@@ -5,9 +5,11 @@ import { usePathname } from "next/navigation";
 import { CharShift } from "@/components/CharShift";
 import type { NavKey } from "@/lib/types";
 
+// The Index lives at /work, not /index: Next has historically normalised a
+// request for /index to /, and case studies nest under it at /work/[slug].
 const ITEMS: readonly { readonly key: NavKey; readonly href: string }[] = [
   { key: "selected", href: "/" },
-  { key: "index", href: "/index" },
+  { key: "index", href: "/work" },
   { key: "about", href: "/about" },
 ];
 

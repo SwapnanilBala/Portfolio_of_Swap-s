@@ -53,23 +53,17 @@ export interface ImageAsset {
   readonly alt: string;
 }
 
+/**
+ * A still between case-study sections. There is no video variant: nothing on
+ * the site has a clip yet, and the poster-gated player went with the dossier
+ * design (it is at 17e793e, components/ProjectMedia.tsx). When the palm-reading
+ * clip arrives, bring the player back and reintroduce a `kind: "video"` member
+ * with a required poster -- a poster-less video downloads bytes on page load.
+ */
 export interface ImageMedia extends ImageAsset {
   readonly kind: "image";
   readonly caption?: string;
 }
-
-/**
- * `poster`, `caption` and `durationSeconds` are required: a poster-less video
- * downloads bytes on page load, so that state is impossible to express.
- */
-export interface VideoMedia extends ImageAsset {
-  readonly kind: "video";
-  readonly poster: BlurredMedia;
-  readonly caption: string;
-  readonly durationSeconds: number;
-}
-
-export type Media = ImageMedia | VideoMedia;
 
 /* ---------------------------------------------------------------- figures */
 
@@ -100,7 +94,7 @@ export interface CaseSection {
   /** Optional decisions, one per line. Not a feature list. */
   readonly points?: readonly string[];
   /** A large plate rendered after this section. */
-  readonly plate?: Media;
+  readonly plate?: ImageMedia;
 }
 
 export interface CaseStudy {
