@@ -4,7 +4,14 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 import { DisplayTitle } from "@/components/DisplayTitle";
 import { SharedMedia } from "@/components/PageTransition";
 import { ProjectThumbnailRail } from "@/components/home/ProjectThumbnailRail";
@@ -68,8 +75,12 @@ export function ProjectSlider({ projects, copy }: Props) {
   const isDesktop = useMediaQuery(DESKTOP_QUERY);
   const reduced = useReducedMotion();
   const webgl = useSyncExternalStore(noopSubscribe, detectWebGL, () => false);
-  const useCanvas = isDesktop && !reduced && webgl;
+  const [canvasLost, setCanvasLost] = useState(false);
+  const useCanvas = isDesktop && !reduced && webgl && !canvasLost;
   const count = projects.length;
+  // Stable across renders: the canvas rebuilds its whole scene when this
+  // reference changes, and the slider re-renders on every plate change.
+  const sources = useMemo(() => projects.map((project) => project.hero), [projects]);
 
   const regionRef = useRef<HTMLElement>(null);
   const plateRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -403,10 +414,11 @@ export function ProjectSlider({ projects, copy }: Props) {
           className={`absolute inset-0 transition-opacity duration-700 ${canvasReady ? "opacity-100" : "opacity-0"}`}
         >
           <SliderCanvas
-            sources={projects.map((project) => project.hero)}
+            sources={sources}
             motion={motion}
             initialIndex={0}
             onReady={() => setCanvasReady(true)}
+            onLost={() => setCanvasLost(true)}
           />
         </div>
       ) : null}
