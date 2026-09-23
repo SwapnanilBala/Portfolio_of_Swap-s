@@ -657,7 +657,7 @@ export const content: SiteContent = {
       open: "Open the case study",
       hint: "Drag, scroll or use the arrow keys; Enter opens the case study",
     },
-    cursor: { drag: "Drag", view: "View" },
+    cursor: { drag: "Drag", view: "View", open: "Open", dragLeft: "← Drag", dragRight: "Drag →" },
     index: {
       heading: "Index",
       description: "Selected software projects and experiments",

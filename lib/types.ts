@@ -305,6 +305,11 @@ export interface UiCopy {
   readonly cursor: {
     readonly drag: string;
     readonly view: string;
+    /** Over the plate on stage, which a click opens. */
+    readonly open: string;
+    /** While dragging, by direction. */
+    readonly dragLeft: string;
+    readonly dragRight: string;
   };
   readonly index: {
     readonly heading: string;

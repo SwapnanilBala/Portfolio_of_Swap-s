@@ -183,9 +183,16 @@ one-off values.
   [data-reveal]`), and a 2.5s CSS failsafe makes it visible regardless, so a
   script error can never leave a heading invisible. `.split-piece` padding
   stops SplitText masks shaving descenders at display line heights.
-- **The custom cursor replaces the native one only over regions declaring a
-  gesture** (`data-cursor="drag" | "view"`). Everyone keeps their system cursor
-  everywhere else.
+- **The custom cursor is crop marks**, and replaces the native one only over
+  regions declaring a gesture (`data-cursor="drag" | "view" | "open"`).
+  Four hairline corners bound a small 16:10 box — the plates' proportion —
+  under a meta label. Over anything marked `data-cursor-frame` (the plate on
+  stage, Index covers) they lock onto its edges and say what a click does;
+  while dragging they spread with speed and the label points the way. A link
+  or button inside a gesture region keeps the system pointer and the marks
+  step aside. Everyone keeps their system cursor everywhere else. This
+  replaced a filled circle — the only round element on the site, and the
+  stock agency-portfolio cursor.
 
 ## The home slider
 

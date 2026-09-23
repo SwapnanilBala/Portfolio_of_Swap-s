@@ -265,7 +265,7 @@ export function IndexView({ projects, copy }: Props) {
             return (
               <li key={project.slug} className={slot?.place}>
                 <ProjectLink project={project} className="group block" cursor="view">
-                  <div data-grid-media className="overflow-hidden">
+                  <div data-grid-media data-cursor-frame className="overflow-hidden">
                     <SharedMedia slug={project.slug} enabled={hasCaseStudy(project)}>
                       <div className="transition-transform duration-700 ease-out-expo group-hover:scale-[1.04] reduced:transition-none reduced:group-hover:scale-100">
                         <ProjectCover

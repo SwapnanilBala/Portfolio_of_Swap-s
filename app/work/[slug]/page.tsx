@@ -102,7 +102,7 @@ export default async function CaseStudyPage({ params }: Params) {
               </div>
               <div className="col-span-12 mt-8 md:col-span-3 md:mt-0">
                 <SharedMedia slug={next.slug}>
-                  <div className="overflow-hidden">
+                  <div data-cursor-frame className="overflow-hidden">
                     <div className="transition-transform duration-700 ease-out-expo group-hover:scale-[1.04] reduced:transition-none">
                       <ProjectCover project={next} sizes="(min-width: 48rem) 23vw, 90vw" />
                     </div>

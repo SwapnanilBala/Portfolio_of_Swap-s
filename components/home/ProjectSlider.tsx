@@ -458,6 +458,9 @@ export function ProjectSlider({ projects, copy }: Props) {
           aria-roledescription="slide"
           aria-label={project.name}
           aria-hidden={i !== active}
+          // The plate on stage opens on a click; the cursor's marks lock onto it.
+          data-cursor="open"
+          data-cursor-frame
           className="absolute left-[calc(50%-min(49.6vh,38vw))] top-[7.25rem] aspect-[16/10] w-[min(99.2vh,76vw)] overflow-hidden bg-ink will-change-transform"
           // Until the loop's first tick only the first plate is on stage.
           style={i === 0 ? undefined : { visibility: "hidden" }}

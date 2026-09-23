@@ -225,6 +225,13 @@ html.has-cursor [data-cursor] {
   cursor: none;
 }
 
+/* A link or button inside a gesture region is not the gesture: the rail's
+   thumbnails and "Open the case study" keep the system pointer, and the crop
+   marks step aside for them. */
+html.has-cursor [data-cursor] :is(a, button) {
+  cursor: pointer;
+}
+
 /* ==========================================================================
    Page transitions
    1. shared project media morphs toward the viewport (.morph)
