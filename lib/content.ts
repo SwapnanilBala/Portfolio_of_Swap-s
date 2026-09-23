@@ -36,6 +36,7 @@ export const content: SiteContent = {
     {
       slug: "lagna-atelier",
       name: "Lagna Atelier",
+      displayLines: ["Lagna", "Atelier"],
       category: "Astrology engine",
       // First commit 2026-03-15. The old site said "2025—", which no repo backs.
       year: "2026—",
@@ -162,6 +163,7 @@ export const content: SiteContent = {
     {
       slug: "robust-health",
       name: "Robust Health",
+      displayLines: ["Robust", "Health"],
       category: "Fitness platform",
       // First commit 2026-03-02. The old site said "2025", which no repo backs.
       year: "2026",
@@ -281,6 +283,7 @@ export const content: SiteContent = {
     {
       slug: "kb-patient-booking",
       name: "KB Patient Booking",
+      displayLines: ["KB Patient", "Booking"],
       category: "Clinic booking system",
       // First commit 2026-03-02; last push 2026-05-23.
       year: "2026",
@@ -345,6 +348,7 @@ export const content: SiteContent = {
     {
       slug: "fake-news-classifier",
       name: "Fake news classifier",
+      displayLines: ["Fake news", "classifier"],
       category: "Applied NLP",
       // Supplied directly. The repository was uploaded later, in July 2026.
       year: "Fall 2025",

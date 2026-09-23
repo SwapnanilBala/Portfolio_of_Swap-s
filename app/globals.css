@@ -39,6 +39,12 @@
   }
 }
 
+/* `desktop:` is the horizontal WebGL slider's condition: wide enough, and a
+   precise pointer that can hover. It must match DESKTOP_QUERY in lib/slider.ts
+   character for character -- CSS picks which slider is shown, JavaScript picks
+   which one is wired up, and the two must never disagree. */
+@custom-variant desktop (@media (min-width: 48rem) and (hover: hover) and (pointer: fine));
+
 /* Enormous display type and tiny metadata are the whole typographic system. */
 @utility display {
   font-weight: 650;

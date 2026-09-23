@@ -27,6 +27,14 @@ export function PageTransition({ children }: Props) {
 interface SharedProps {
   readonly slug: string;
   readonly children: ReactNode;
+  /**
+   * Whether this instance carries the name. Two rendered elements sharing a
+   * view-transition name cancel the whole transition, so where a project's
+   * image appears more than once -- a slide per breakpoint, say -- only the
+   * one actually on screen is named. Toggling the name rather than the
+   * wrapper keeps the image mounted.
+   */
+  readonly enabled?: boolean;
 }
 
 /**
@@ -35,9 +43,13 @@ interface SharedProps {
  * hero. `default="none"` keeps it out of unrelated transitions, and the
  * explicit `share` is what keeps the pair morphing once it has that.
  */
-export function SharedMedia({ slug, children }: SharedProps) {
+export function SharedMedia({ slug, children, enabled = true }: SharedProps) {
   return (
-    <ViewTransition name={`project-${slug}`} share="morph" default="none">
+    <ViewTransition
+      name={enabled ? `project-${slug}` : undefined}
+      share="morph"
+      default="none"
+    >
       {children}
     </ViewTransition>
   );

@@ -112,6 +112,13 @@ export interface CaseStudy {
 interface ProjectBase {
   readonly slug: string;
   readonly name: string;
+  /**
+   * Where the display title breaks when it is set enormous. Designed rather
+   * than left to wrapping, which splits a three-word name three ways at some
+   * widths and pushes the title past its share of the viewport. Defaults to
+   * the name on one line.
+   */
+  readonly displayLines?: readonly string[];
   /** Shown after the index number: "01 / Astrology engine". */
   readonly category: string;
   /** Display form, e.g. "2026—" or "Fall 2025". */
@@ -163,6 +170,10 @@ export type Project = SelectedProject | ArchivedProject;
 
 export function isSelected(project: Project): project is SelectedProject {
   return project.selected;
+}
+
+export function displayLinesOf(project: Project): readonly string[] {
+  return project.displayLines ?? [project.name];
 }
 
 /** A project with a page of its own at /work/[slug]. */
