@@ -52,6 +52,13 @@ export function SplitTextReveal({
         type: by,
         mask: by,
         autoSplit: true,
+        // Spans, not divs: these often live inside a <p>.
+        tag: "span",
+        // Room below the baseline inside each mask, so a comma's tail is not
+        // shaved off at display line heights (see .split-piece in globals.css).
+        linesClass: "split-piece",
+        wordsClass: "split-piece",
+        charsClass: "split-piece",
         onSplit(self) {
           el.dataset.revealed = "";
           const targets = by === "chars" ? self.chars : by === "words" ? self.words : self.lines;

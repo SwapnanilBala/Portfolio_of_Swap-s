@@ -7,371 +7,248 @@ why rather than doing it quietly.
 
 ## What this is
 
-A personal portfolio for Swapnanil Bala, M.S. Data Science at Northeastern's
-Khoury College, targeting a Spring 2027 co-op in full-stack, AI engineering, or
-AI product engineering.
+A personal portfolio for Swapnanil Bala — AI engineer, M.S. Data Science at
+Northeastern's Khoury College (Sep 2025 – Dec 2027), looking for a Spring 2027
+co-op.
 
-The site is itself a work sample. It is read by people deciding whether its
-author can build things, which means the implementation is part of the content.
-A sloppy portfolio is a negative work sample no matter what the copy says.
+The site is itself a work sample, read by people deciding whether its author
+can build things. The implementation is part of the content: a sloppy
+portfolio is a negative work sample no matter what the copy says.
 
-Two readers, and the page serves both without asking either to pick a mode:
+## History, so nothing gets "restored" by accident
 
-- A recruiter, 40–90 seconds, does not read paragraphs, scanning for evidence
-  and contact details. Their path is the right-hand edge of the spec tables,
-  where every figure on the page is aligned into one column.
-- An engineer who arrives later and reads exactly one project closely. Their
-  path is the prose and the detail list above each spec table.
+The site has had three designs. Each replaced the last on request.
 
-Both paths work because the figures are a table rather than a paragraph: the
-recruiter reads down the figure edge without reading a sentence, and the
-engineer reads the prose without stepping over numbers.
+1. **Ephemeris** — an astronomical almanac: beige and brass, Newsreader,
+   bordered plates with a hover lift, an asymmetric right rail.
+2. **Dossier** — a technical spec sheet: one ruled sheet, IBM Plex, numbered
+   records, spec tables, no plates, no hover. Last at `17e793e` on `main`.
+3. **Editorial** (current) — built to a detailed brief for a cinematic,
+   motion-led portfolio: a WebGL project slider, an Index archive, case
+   studies, an oversized footer and global page transitions.
 
-## Stack — non-negotiable
+Do not reintroduce anything from the first two because an older note or commit
+describes it. In particular the dossier's stack rules ("no Tailwind, no
+animation library, plain CSS only") are reversed, deliberately.
 
-- Next.js App Router, React, TypeScript in strict mode.
-- Plain CSS in a single `app/globals.css`. Tokens as custom properties in
-  `:root`.
-- **No** Tailwind, CSS-in-JS, styled-components, UI component library,
-  animation library, CMS, or state management library.
-- `next/font` for typefaces, self-hosted at build time. No runtime request to
-  Google, no layout shift.
-- Zero `any`. Zero `@ts-ignore`. Zero `as` used to silence the compiler. If a
-  type fights you, the model is wrong — fix the type, not the call site.
+## Stack
 
-Note on the last rule: setting a CSS custom property via an inline `style` prop
-requires an `as` cast in React's types. That is why the reveal stagger is driven
-by `data-reveal` attributes with delays in the stylesheet, not inline styles.
+- Next.js 16 App Router, React 19, TypeScript in strict mode (with
+  `noUncheckedIndexedAccess`).
+- **Tailwind CSS v4**, configured in `app/globals.css` (`@theme`,
+  `@custom-variant`, `@utility`) — there is no `tailwind.config`.
+- **GSAP 3.15** with ScrollTrigger, SplitText and Flip, registered once in
+  `lib/gsap.ts`. Import GSAP from there, never from `"gsap"` directly, so no
+  component can use an unregistered plugin.
+- **Lenis** for smooth scrolling, driven by GSAP's ticker.
+- **three.js**, plain, for the home slider only. Not React Three Fiber: three
+  plates need no reconciler, and R3F's own `react-reconciler` has to agree with
+  the canary React the App Router runs — a coupling not worth carrying.
+- Inter Tight via `next/font`, variable, self-hosted at build time.
+- Zero `any`, zero `@ts-ignore`, zero `as` used to silence the compiler. The
+  `ViewTransition` canary API is typed through `types/react-canary.d.ts`, not
+  a cast.
 
 ## Architecture
 
 ```
-app/layout.tsx        fonts, metadata
-app/page.tsx          composition only, no copy
-app/globals.css       tokens + every style rule
-components/           presentational, typed props
-lib/types.ts          the contract
-lib/content.ts        every word on the site
-public/media/         posters, clips and the portrait
-public/resume.pdf
+app/layout.tsx              fonts, metadata, nav, cursor, smooth scroll
+app/page.tsx                Selected — the slider, one viewport
+app/work/page.tsx           Index — the archive
+app/work/[slug]/page.tsx    case studies (static params; unknown slug = 404)
+app/about/page.tsx
+components/home/            ProjectSlider, SliderCanvas, ProjectThumbnailRail,
+                            MobileProjects, HomeMasthead
+components/index/           IndexView (grid + list + preview), ProjectCover
+components/work/            ProjectHero, CaseSection, MediaPlate
+components/                 PageTransition + SharedMedia, SplitTextReveal,
+                            RevealLines, RevealPlate, DisplayTitle,
+                            MagneticLink, CharShift, CustomCursor, SiteNav,
+                            SiteFooter, LocalTime, SmoothScroll
+lib/content.ts              every word on the site
+lib/types.ts                the contract
+lib/blur.ts                 generated — run `node scripts/build-blur.mjs`
+lib/media.ts                hero brightness/zoom, optimizer URLs, record numbers
+lib/slider.ts               slider maths + DESKTOP_QUERY
+lib/motion.ts               easings, durations, media-query hooks
 ```
 
-**All copy lives in `lib/content.ts`.** If you are about to write a sentence of
-English inside a `.tsx` file, stop and put it in the content file. Components
-take typed props and render. This exists so prose can be rewritten without
-reading JSX, and so copy changes review as a clean diff of English.
+**The Index lives at `/work`, not `/index`.** Next has historically normalised
+a request for `/index` to `/`, and a static build cannot prove the runtime
+router will not. `/work` also gives the right hierarchy: case studies nest at
+`/work/[slug]`. The nav label is still "Index".
 
-Metadata in `layout.tsx` is derived from `content.profile`, not written inline,
-for the same reason.
+**All copy lives in `lib/content.ts`.** If you are about to write English in a
+`.tsx` file, put it in the content file. Title line breaks are content too
+(`displayLines`), so a three-word name cannot wrap three ways and overrun its
+share of the viewport.
 
-**All types live in `lib/types.ts`.** The domain is modelled so the compiler
-catches incomplete content before a recruiter does:
+**The contract makes rules structural.** A `SelectedProject` cannot exist
+without a hero and a case study. An image `src` is typed as a key of the
+generated placeholder map, so a capture cannot be referenced until
+`scripts/build-blur.mjs` has been run over it; the placeholder is looked up
+from `src` rather than stored beside it. Links store a `role`, labels resolve
+through `content.ui.linkLabels`, and a link with no `href` is filtered out, never
+rendered dead.
 
-- `Media` is a discriminated union on `kind`. The video variant requires
-  `poster`, `caption` and `durationSeconds`. A poster-less video downloads bytes
-  on page load, so that state is made impossible to express rather than merely
-  discouraged.
-- Links store `role`, not a label string. Labels resolve through
-  `LINK_LABELS: Readonly<Record<LinkRole, string>>`, so vocabulary stays
-  consistent and adding a role fails to compile until it is labelled.
-- `STATUS_LABELS` is keyed by `Exclude<ProjectStatus, "shipped">`. A shipped
-  project renders no badge because saying "shipped" is noise, and the exclusion
-  makes that a fact about the type rather than a rule to remember.
-- Everything is `readonly`. Sorting therefore copies: `[...projects].sort(...)`,
-  never in-place mutation.
-- Projects order by `flagship`, not chronology.
+## Content — do not invent
+
+Every claim is traceable: the September 21 2026 resume, the project READMEs,
+GitHub code search and commit history, and the live sites. Where a source was
+wrong or stale, the correction is noted beside the claim in `content.ts`.
+Known corrections, so they are not "fixed" back from an older source:
+
+- **Lagna Atelier computes charts on the server**, in API routes
+  (`app/api/chart/route.ts` imports `chart-service`). The resume's "computes
+  full Vedic charts client-side" is wrong. Its Neon schema does persist saved
+  charts, so the README's "accounts and sessions, nothing else yet" is stale.
+- **Palm reading runs on Claude vision** (Anthropic in 18 files, `claude-opus`
+  in 11). The README's `OPENAI_API_KEY` line is stale.
+- **Robust Health runs entirely on Supabase**, so NeonDB is not in its stack,
+  and its server uses the service-role client with authorisation in
+  application code — so "Row-Level Security" is not claimed.
+- **Dates come from first commits.** Lagna Atelier and Robust Health start in
+  March 2026. The old sites' "2025" was never backed by a repository.
+- The Robust Health landing page shows marketing counters ("84% satisfaction").
+  They are not repeated as portfolio figures: nobody can check them.
+
+A fact that is not to hand is left out and listed as a TODO in the README —
+never written plausibly. Fabricated detail is the one failure a portfolio
+cannot recover from in an interview.
 
 ## Design direction
 
-The organising metaphor is a **dossier** — a technical spec sheet. This
-replaced the ephemeris-page metaphor on request, in a full visual overhaul
-chosen from four mocked directions. The subject matter still drives it: the
-flagship is a hand-written calculation engine, and the claim the whole page
-makes is that its figures are checkable. A spec sheet is the form that argues
-for itself.
+Swiss/editorial publication meets cinematic showcase. Typography carries it:
+enormous display type against tiny editorial metadata, nothing in between that
+competes.
 
-Do not restore the almanac reading of this — the plates, the right rail, the
-asymmetric two-arrangement layout, Newsreader. Those were deliberate and are
-now deliberately gone.
+- **Palette** — paper `#F3F2ED`, ink `#111111`, per the brief. No accent: active
+  and focus states use weight, opacity and `currentColor`. Home is dark; Index,
+  case studies and About are light, with a dark hero or footer where the brief
+  asks. The dossier's OS-driven dark theme is gone — each page has its own
+  ground by design. Colour lives only in the `@theme` block.
+- **Contrast is computed, not assumed** — ink on paper 16.85:1, `paper-muted`
+  on paper 5.80:1, `ink-muted` on ink 6.61:1. White over imagery is checked by
+  sampling the image under the text; `HERO_BRIGHTNESS` is the lever.
+- **Type** — Inter Tight throughout. `display` utility: 650 weight, −0.05em
+  tracking, 0.84 line height, uppercase. `meta` utility: 11px, 500, uppercase.
+  No mono: it is the developer-portfolio tell the brief asks to avoid.
+- **The name** is medium size (`clamp(1.25rem, 1.55vw, 1.875rem)`) and appears
+  only on the home page, where it is the h1 — per his instruction. Elsewhere
+  the footer's tiny © is the only mention.
+- **Separators are `/`**, not the brief's `·` — the brief itself uses `/` in the
+  case-study STACK line, and middle-dot meta strings were a generated-design
+  tell in the old forbidden list. One token to flip if he prefers `·`.
+- **Numbers are references.** `01 / Category` in the slider is cited by the
+  thumbnail rail's counter and the Index's record numbers; a number on a block
+  nothing refers to is still decoration.
+- **No cards, no drop shadows, no glass, no gradient washes, no pills, no icon
+  badges for technologies.** Technologies are text lists joined by em dashes.
 
-- **One ruled sheet, not a stack of plates.** Records are separated by
-  hairlines. Nothing is a bordered panel, nothing lifts on hover, nothing has a
-  shadow. A record is a row in a reference document, not a control; the links
-  inside it are the interactive part and they keep the focus ring.
+## Motion
 
-  **This reverses two earlier amendments.** Entries used to be plates with a
-  hover transition, a brass edge tab and a 2px rise, added because the page was
-  judged too static. The dossier has no plates to lift, and a hover effect on a
-  non-interactive row is decoration. If the page reads as too static again, the
-  answer is not to re-add the lift.
+Large motion for navigation, small motion for feedback. `lib/motion.ts` holds
+the whole vocabulary (`EASE`, `DURATION`, `META_LAG`); reach for it, not for
+one-off values.
 
-- **Two columns, one threshold.** A locator column and a body column, on the
-  same grid from the section heads down through every record. The locator
-  carries the record number and the period; the body carries everything else.
-  Below 46rem the locator stops being a column and becomes a line above the
-  record. Above 74rem only the column width and the sheet padding change.
+- **Reduced motion is a full path, not a fallback.** Everything positional is
+  removed: no inertia, no distortion, no Flip, no line reveals, page
+  transitions become a 150ms crossfade, Lenis is off, the custom cursor is off.
+  `?motion=reduce` forces the same path (the head script copies it onto
+  `<html data-motion>`), because the preview browser cannot emulate the media
+  query. Use the `reduced:` Tailwind variant, which honours both — not
+  `motion-reduce:`, which only knows the media query.
+- **Revealed text starts hidden only once JS has run** (`html.js
+  [data-reveal]`), and a 2.5s CSS failsafe makes it visible regardless, so a
+  script error can never leave a heading invisible. `.split-piece` padding
+  stops SplitText masks shaving descenders at display line heights.
+- **The custom cursor replaces the native one only over regions declaring a
+  gesture** (`data-cursor="drag" | "view"`). Everyone keeps their system cursor
+  everywhere else.
 
-  There is no third arrangement. The old layout had two that had to be kept in
-  sync and a documented bug from exactly that; this has one structure and two
-  widths of it.
+## The home slider
 
-- **The spec table is the point.** Gutter facts render as label-left,
-  figure-right, dotted rule between rows, two abreast above 46rem. The figures
-  land on a common right edge, so the eye runs that edge and reads the numbers
-  as data rather than as a list. It lives in the **body** column — at the
-  locator column's 132px a label like "lines of TypeScript" wraps and the
-  figure loses the edge it is supposed to line up on.
+- **One physics loop** on `gsap.ticker` in `ProjectSlider` owns the state —
+  target, current (following with inertia), velocity — and shares it by
+  reference (`SliderMotion`) with `SliderCanvas`, which only draws, on the same
+  tick. A wheel gesture moves at most one plate, so a trackpad's momentum tail
+  cannot skip past everything.
+- **The DOM plates are always rendered and always in position.** They are the
+  no-WebGL and reduced-motion path, the LCP frame, and the element a page
+  transition morphs from.
+- **`HERO_BRIGHTNESS` and `HERO_ZOOM` are shared by the shader and the DOM
+  image.** The renderer does not re-encode colour and textures are not decoded,
+  so a plate is exactly the CSS-filtered image — which is what keeps the
+  handover to a case study from flashing. Change them together or not at all.
+- **The distortion is original, not the reference site's.** The brief's
+  reference (G. Colombel, 2024) is a rotating film-reel cylinder; this is flat
+  plates with UV-space distortion: rows bow toward travel, a long-exposure
+  smear, a faint leading-edge channel split, parallax. Keep it that way.
+- **`sources` passed to the canvas must be referentially stable.** A new array
+  rebuilds the whole scene; it is memoised in the slider for that reason.
+- Touch and narrow screens get `MobileProjects`: native vertical scroll-snap,
+  no WebGL. CSS (`desktop:` variant) decides which slider shows and JS
+  (`DESKTOP_QUERY`) decides which is wired up — keep the two queries identical.
 
-  The DOM order is value then label, which is the correct reading order for a
-  screen reader; the visual order is reversed in CSS. Do not "fix" the markup
-  to match the visual order.
+## Page transitions
 
-- **The gutter is for numbers a stranger could independently verify** — dates,
-  line counts, test counts, measured deltas. **Never put an adjective in the
-  gutter.** Its entire authority comes from containing no claims about quality.
-  An unmeasured figure renders as a marked `TODO`, not as an omission.
+React `<ViewTransition>`, native in Next 16's App Router (see
+`node_modules/next/dist/docs/01-app/02-guides/view-transitions.md`).
 
-- **Records and figures are numbered, and that is a reversal.** The forbidden
-  list still bans decorative `01 / 02 / 03` sequence markers, and this is the
-  documented exception rather than a loophole: the record locator and the
-  figure citation are one system. "Fig 2.1" is findable from record 02 without
-  counting, which is the entire reason a caption can be pointed at in
-  conversation. The number is a reference, not a rank. A bare `01` on a block
-  with nothing citing it is still banned.
+1. Shared project media morphs toward the viewport (`SharedMedia`, class
+   `.morph`).
+2. Outgoing typography clips away (`.page`, old).
+3. The root ground crossfades (`html:has(main[data-tone])` flips it).
+4. Incoming typography reveals (`.page`, new), then GSAP line reveals.
 
-- **Figures span both columns, below the record.** A plate confined to either
-  column is too small to be evidence. Two abreast above 46rem; a capture wider
-  than 2.2:1 takes the full width via `data-wide`.
+Every step ends inside 600–1000ms. `PageTransition` goes in each `page.tsx`, not
+the layout — layouts persist, so enter and exit never fire there. Internal
+links pass `transitionTypes={["page"]}`; untyped navigations (browser back and
+forward) swap instantly.
 
-- **Palette is unchanged by the overhaul.** Warm beige field (`#ede4d3`), deep
-  brass accent (`#73550e`), dark warm-brown text, paired with the cyanotype
-  dark theme (`#0e2233` field, brass lifted to `#d9a842`) under
-  `@media (prefers-color-scheme: dark)`. It follows the OS; there is no toggle
-  and one was not asked for.
-
-  Colour lives only in the two token blocks at the top of `globals.css`. No
-  rule below them holds a literal colour — that is why a second theme is ten
-  lines rather than an audit. Two invariants hold across both: `--mat` is
-  darker than the field so a mounted capture reads the same either way, and
-  `--field-veil` is its own theme's `--field` at 92% so a poster label stays
-  legible.
-
-- **Type.** IBM Plex Sans for prose, IBM Plex Mono for every figure, label,
-  citation and structural mark. They are siblings on one skeleton, so the spec
-  tables and the prose belong to the same system and the digits align.
-
-  This replaced Newsreader and JetBrains Mono. Newsreader is a reading face
-  built for continuous prose and its warmth works against a page whose argument
-  is that the numbers are checkable. `font-variant-numeric: tabular-nums` on
-  every column of figures; proportional numerals make a numeric column ragged
-  and the design rests on that column being straight.
-
-  Both faces need explicit weights in `next/font` — neither is variable here,
-  so an omitted weight silently yields 400 only and every 500/600 rule falls
-  back to synthetic bold.
-
-- **Measure.** Prose constrained to ~66ch. Wider than the old 34rem because the
-  body column no longer competes with a figure rail for the same run.
-
-### Forbidden
-
-These are the current tells of generated design. Do not produce any of them,
-even if asked to make the page "more impressive":
-
-- Tracked-out ALL-CAPS eyebrow labels above headings (small mono labels *in*
-  the locator column and section heads are structural, not eyebrows)
-- Meta strings joined with middle dots (`A · B · C`)
-- Arrows appended to link or button text
-- Identical rounded cards with the same soft grey shadow under each
-- Gradient washes used as decoration
-- Numbered `01 / 02 / 03` markers used as decoration. The record locators and
-  figure citations are the documented exception above, because something cites
-  them; a number on a block nothing references is still banned
-- A cream background with high-contrast serif and terracotta accent (the field
-  is beige, but the accent is brass — the banned thing is that specific trio,
-  not a light background)
-- Near-black with a single acid-green or vermilion accent
-- Accenting one word of a headline in a different colour or weight
-- Tinted near-black (`#0b0b0b`, `#111`) standing in for black
-
-### Motion budget
-
-One page-load reveal, staggered across at most three sections. No
-scroll-triggered fade-ins. No hover transitions — see the plate reversal above.
-
-The animation lives inside `@media (prefers-reduced-motion: no-preference)`.
-Nothing is hidden outside that query, so reduced-motion visitors get the
-finished page immediately rather than a permanently invisible one.
-
-### The `photo-review` branch
-
-There is a second worktree at `../Portfolio-photo-review` on a `photo-review`
-branch, one commit ahead of the overhaul's base and never pushed. It conflicts
-with `main` in `CLAUDE.md` and `app/globals.css`. **Do not merge it as-is.**
-
-It predates the dossier and most of it targets things that no longer exist:
-
-- `--plate-hover`, and the whole analysis of the hover lift inverting on the
-  cyanotype. There are no plates and no hover lift now.
-- `--size-section` and `--size-figure`, both fixing tokens that had collapsed
-  onto a neighbour. The dossier's type scale separates those cases
-  structurally — section heads are mono uppercase at `--size-label`, entry
-  titles are sans at `--size-title` — so the tokens have no equivalent.
-- The dark `--mat: #3d6587`, correcting a dark capture bleeding into a dark
-  mat at 1.06:1 across the mount's margin. That measurement was right and the
-  fix was right *for that design*. It does not transfer: `.media-frame` has no
-  padding now, so no capture has a mat margin, and the capture is separated
-  from the page by the frame's own 1px `--ink` border at ~14:1.
-
-One part was worth taking and has been: `::selection`, which was genuinely
-unstyled in both designs.
-
-The branch is otherwise worth reading before touching the mat or the themes —
-its measurements are sound, and its central point stands: an invariant written
-as a direction ("darker than") rather than a relationship ("clear of") will
-invert when the ground does.
-
-### Cascade order in `globals.css`
-
-The responsive blocks must stay at the bottom of the file, after every base
-rule they override. They win on source order at equal specificity, so moving
-them up silently loses every one of them. That is not hypothetical: the old
-asymmetric block sat mid-file for a while and `.section-heading` never
-actually applied.
+**Two rendered elements with one view-transition name cancel the whole
+transition.** `SharedMedia` takes `enabled` for exactly this: only the slide on
+screen, only the visible breakpoint's slider, only the list preview or the grid
+tile — never both.
 
 ## Performance
 
-This is self-consistency, not preference. The site claims a 50% / 67% page-load
-improvement on one of its own projects. A slow portfolio refutes its own copy.
+The site claims a 50% / 67% load-time cut on one of its own projects. A slow
+portfolio refutes its own copy.
 
-- Video is **poster-gated**: the poster is a `<button>`, and the `<video>`
-  element mounts only after a click. `preload="none"`, `muted`, `loop`,
-  `playsInline`. Without `playsInline`, iOS hijacks playback into fullscreen.
-- WebM/VP9 preferred. Each clip under ~2 MB and under 15 seconds.
-- Every image and video carries explicit `width` and `height`. Omitting them
-  causes reflow on load and a Cumulative Layout Shift penalty.
-- Images go through `next/image`.
-- **Only *record* what cannot be linked.** A video of a clickable site is a
-  worse version of the click. The one clip worth its bandwidth is the
-  palm-reading flow, because no visitor will upload a photo of their hand to a
-  stranger's portfolio, so that interaction is otherwise invisible.
-- **Static screenshots are a deliberate exception, added on request.** Lagna
-  Atelier and Robust Health each carry three WebP plates from inside the
-  product, 260 KB across all six. They earn their place differently from video:
-  a skimming reader gets something to look at without a click, and the cost is a
-  lazy-loaded image rather than a media element. Do not remove them as a
-  "correction" to the rule above.
-- **Three plates per project, not five.** Ten figures put 3,590px of screenshot
-  on a page read in 40–90 seconds. Adding a fourth means arguing that it is
-  stronger evidence than one already there, and dropping that one.
-- **Crop to the content, not to the viewport.** A capture is cropped to the
-  app's own content column and ends on a container boundary — never mid-word,
-  mid-card, or under a sticky nav that overlaps what is behind it. A 1600px
-  browser-viewport shot rendered at 456px puts its UI text near 5px, which
-  turns evidence into texture. Drop app chrome that carries no evidence; it is
-  also where the blur redactions live. Aim for 16:10, and if the content will
-  not take it without loss, keep the content and pick a clean ratio of its own
-  (the workout plate is exactly 2:3 for this reason).
-- **Figures are never inside the prose measure.** A screenshot squeezed into
-  the body column's ~66ch is illegible, which turns evidence into decoration.
-  They are a grid area of their own (`.entry-figures`) spanning both columns
-  below the record, not a child of `.prose`: one per row below 46rem, two
-  abreast above it. If you add a figure, check it at 360px, 900px and 1280px,
-  and re-measure `FIGURE_SIZES` in `components/ProjectMedia.tsx` if the slot
-  changed. It is currently 29rem / 90vw against a measured 456px maximum —
-  under-declaring is the worse direction, because it serves an image the
-  browser then upscales.
-- **The portrait is `priority`, not lazy.** It is above the fold and the likely
-  LCP element; deferring it trades a measurable delay for bytes fetched a
-  moment later anyway. It is also the only image on the site rendered without
-  `sizes`. That is deliberate: a px-only `sizes` string makes `next/image` emit
-  the full fifteen-candidate ladder up to 3840w, and for a 400px source most of
-  those resolve to the same file. Passing the display box instead yields a
-  short srcset. Height is derived from the asset's own ratio, so a non-square
-  replacement still reserves the right space.
-
-  It is 104px wide (`--portrait`, and `PORTRAIT_WIDTH` in `components/Hero.tsx`
-  — change both together). Down from 200px with the overhaul: the dossier is
-  dense, and a portrait twice that size becomes the loudest thing in a masthead
-  whose job is to state three facts. The 400px source covers 2x comfortably.
-- A link whose `href` is unset must not render as a dead link. Filter it out.
-
-## The hero demo
-
-**Currently unmounted.** It shipped a placeholder engine, which meant the hero
-led with a table of positions that were not real and a caption admitting it. An
-unfinished demo above the fold is a worse first impression than no demo, and the
-Lagna Atelier screenshot immediately below already shows the real product. The
-component, its content keys and its styles all remain; restoring it is the one
-line described in `components/Hero.tsx`. Everything below still governs it, and
-should be re-read before it goes back in.
-
-`components/LiveEphemeris.tsx` demonstrates rather than claims. On load it
-computes sidereal positions in the visitor's browser and reports the measured
-elapsed milliseconds beneath a real `<table>`.
-
-Rules that are easy to break by accident:
-
-- The calculation runs inside `useEffect` with a `null` initial state, never
-  during render. Calling `new Date()` during render makes server and client
-  disagree and produces an intermittent, confusing hydration mismatch. Running
-  client-only is also the point — the claim is that no server is involved, so
-  the architecture should enforce it.
-- `performance.now()` brackets **the calculation only** — not the render, not
-  the state update. The number displayed must be true, because converting a
-  claim into an observation is the entire value of the component.
-- Real `<table>` markup with `<th scope="row">`. Tabular data gets tabular
-  markup.
-- The loading state is not decoration. It is the mechanism that makes the
-  deferred computation correct.
-- Keep it swappable: replacing it with a static hero is one line in `Hero.tsx`.
-
-It currently ships a **placeholder engine**, clearly marked in the source and in
-the table caption. Swap-in instructions are in the comment banner at the top of
-the file. When the real engine lands, remove the `PLACEHOLDER` caption text and
-update `hero.ephemerisNote` in `lib/content.ts`, which currently tells the
-reader the positions are not real.
+- three.js arrives by dynamic import on the desktop home page only (131 KB
+  gzipped, after first paint), and appears in no page's initial scripts —
+  check the built HTML if that ever changes. Initial JS is about 245 KB gzipped
+  per page, ~155 KB of it the React canary and Next runtime.
+- Every image carries intrinsic `width` and `height`, and goes through
+  `next/image`. Screenshots are never shown wider than they were captured:
+  `MediaPlate` right-aligns narrow ones at native width instead of upscaling.
+- Hand-built optimizer URLs (`optimizedUrl`) must use Next's default widths
+  and **quality 75** — Next 16 rejects any other quality unless
+  `images.qualities` is configured, and a rejected texture is a black slide.
+- The canvas redraws only while something moves, fades or is hovered.
 
 ## Accessibility floor
 
-- Visible keyboard focus on every interactive element: `:focus-visible`, brass
-  outline, 3px offset.
-- Semantic elements: `<table>` for tabular data, `<button>` for the poster gate,
-  headings in document order, `<figure>`/`<figcaption>` for media.
-- Colour contrast verified by computation, not assumed, **in both themes**.
-  Every foreground token clears WCAG AA for normal text against `--field`,
-  `--field-inset` **and `--mat`** of its own theme — the dark pair's ratios are
-  computed against the cyanotype grounds, never inherited from the beige ones.
-  Last audited live after the overhaul: 116 text-bearing elements in each
-  theme, zero failures; worst case 5.00:1 light, 4.93:1 dark.
+- Visible focus on every interactive element (`:focus-visible`, 2px
+  `currentColor` outline). Never `outline-none` without a replacement.
+- The slider is a labelled carousel with a polite live region ("Project 2 of
+  3: …"), arrow keys, Home/End, Enter, and real buttons in the rail. The canvas
+  is `aria-hidden`; the DOM is the source of truth.
+- Split and per-letter text is announced once, whole (`CharShift` keeps a
+  visually hidden copy; `DisplayTitle` separates lines with real spaces).
+- Semantic headings in document order; one h1 per rendered page.
+- Responsive from 360px with no horizontal overflow.
 
-  `--mat` was added to that contract by a real failure. Figcaptions sit on the
-  mat, which is darker than either plate ground, and `--ink-faint` on `--mat`
-  measures 4.41:1 — under AA. Captions use `--ink-muted`. Any new text placed
-  on the mat has to be checked against the mat, not against the field.
-- Responsive to 360px: the locator column becomes a line above each record and
-  the figures go one per row. Verified at 360px with no horizontal overflow.
+## Working in this repo
 
-## Copy standard
-
-Every sentence must fail this test: **could it appear unchanged on someone
-else's portfolio?** If yes, rewrite it. "Built a scalable full-stack application
-using modern technologies" fails. "Cut mobile load time by two thirds via
-route-level code splitting" passes.
-
-Sentence case throughout. Active voice. No filler. No selling — describe what
-something is and what was hard about it. Link text says what happens: "open the
-live site", never "Learn more".
-
-## Do not invent
-
-Leave a clearly marked `TODO` anywhere a fact is missing. Never write plausible
-filler for URLs, metrics, dates, job accomplishments, or project descriptions.
-Fabricated detail on a portfolio is the one failure mode that cannot be
-recovered in an interview. A visible `TODO` is strictly better than a
-confident-sounding invention.
-
-Outstanding `TODO`s are listed in the README.
+- **Previews run from the main checkout.** The browser preview tool always
+  spawns `.claude/launch.json` from the original project root, whatever
+  worktree a session is in. Branch previews on Vercel sit behind Vercel
+  Authentication. Plan verification accordingly.
+- `photo-review` predates both the dossier and this design. Do not merge it.
+- `agentRules: false` in `next.config.mjs` stops Next writing an agent block
+  into this file. Keep it.
 
 ## Checks before committing
 

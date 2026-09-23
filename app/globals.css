@@ -137,6 +137,15 @@ html.js [data-reveal]:not([data-revealed]) {
   }
 }
 
+/* SplitText masks clip at the line box, and display type is set at 0.84 line
+   height, so glyphs that dip below the baseline would lose their tails. The
+   padding gives them room inside the mask; the negative margin gives the
+   space back so the text does not move. */
+.split-piece {
+  padding-bottom: 0.1em;
+  margin-bottom: -0.1em;
+}
+
 /* ==========================================================================
    Lenis
    ========================================================================== */
@@ -179,6 +188,7 @@ html.has-cursor [data-cursor] {
    ========================================================================== */
 
 @media (prefers-reduced-motion: no-preference) {
+  /* Every step finishes inside the brief's 600-1000ms. */
   ::view-transition-old(root) {
     animation: 500ms var(--ease-in-out-quart) both vt-fade-out;
   }
@@ -188,11 +198,11 @@ html.has-cursor [data-cursor] {
   }
 
   ::view-transition-old(.page) {
-    animation: 550ms var(--ease-in-out-quart) both vt-clip-out;
+    animation: 500ms var(--ease-in-out-quart) both vt-clip-out;
   }
 
   ::view-transition-new(.page) {
-    animation: 850ms var(--ease-out-expo) 320ms both vt-clip-in;
+    animation: 700ms var(--ease-out-expo) 260ms both vt-clip-in;
   }
 
   ::view-transition-group(.morph) {

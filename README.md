@@ -1,7 +1,8 @@
 # Swapnanil Bala — portfolio
 
-Personal portfolio site. Next.js App Router, React, TypeScript in strict mode,
-and plain CSS. No Tailwind, no component library, no CMS, no analytics.
+A cinematic, editorial portfolio: a WebGL project slider, an Index archive,
+case studies and an About page, joined by page transitions. Next.js App Router,
+React, TypeScript in strict mode, Tailwind CSS v4, GSAP, Lenis and three.js.
 
 ## Run it
 
@@ -15,126 +16,114 @@ npm run dev
 
 Then open http://localhost:3000.
 
-Other scripts:
+| Command                     | What it does                                         |
+| --------------------------- | ---------------------------------------------------- |
+| `npm run dev`               | Dev server with hot reload                           |
+| `npm run build`             | Production build — run this before pushing           |
+| `npm run start`             | Serve the production build locally                   |
+| `npm run typecheck`         | `tsc --noEmit`, no build output                      |
+| `node scripts/build-blur.mjs` | Regenerate image placeholders after adding media   |
 
-| Command             | What it does                                  |
-| ------------------- | --------------------------------------------- |
-| `npm run dev`       | Dev server with hot reload                     |
-| `npm run build`     | Production build — run this before pushing     |
-| `npm run start`     | Serve the production build locally             |
-| `npm run typecheck` | `tsc --noEmit`, no build output                |
+Add `?motion=reduce` to any URL to see the reduced-motion version of the site
+without changing your system settings.
 
 ## Where to edit things
 
-Almost everything you will want to change is in one of two files.
+**`lib/content.ts` — every word on the site.** Projects, case studies, the
+About page, the footer, every label. Copy never lives in a `.tsx` file.
+Comments beside a claim say where it came from, and what an older source got
+wrong, so check them before "correcting" anything.
 
-**`lib/content.ts` — every word on the site.** Copy never lives in a `.tsx`
-file. Change a sentence here and nothing else needs touching. This includes the
-page metadata, which is derived from `content.profile`.
+**`lib/types.ts` — the shape content must satisfy.** Add a field and the
+compiler points at every place that needs it. A project in the home slider
+cannot compile without a hero image and a case study.
 
-**`lib/types.ts` — the shape that content must satisfy.** If you add a field or
-a link role, the compiler will point at every place that now needs updating.
-That is deliberate.
+**`app/globals.css` — tokens and the few rules Tailwind cannot express.** The
+palette, the `display` and `meta` type styles, the `reduced:` and `desktop:`
+variants, the page-transition choreography and the reduced-motion overrides.
 
-**`app/globals.css` — every style rule.** Design tokens are custom properties at
-the top under `:root`. Change `--brass` there and the whole accent moves.
+Read `CLAUDE.md` before changing the design. It records the decisions, the
+reversals from the two earlier designs, and why each constraint exists.
 
-**`lib/blur.ts` — generated blur placeholders**, keyed by media path. Build
-output rather than copy, which is why it is not in the content file. Adding a
-capture and referencing it from content will not compile until it has an entry
-here.
+## Pages
 
-The site ships two themes: the beige field in `:root`, and a cyanotype dark
-pair in the `@media (prefers-color-scheme: dark)` block directly below it. It
-follows the operating system — there is no toggle. Only the ten colour tokens
-differ between them; no rule further down the file holds a literal colour, which
-is what keeps a second theme to ten lines. If you add one, add it as a token in
-both blocks or the themes drift.
+| Route          | What it is                                                         |
+| -------------- | ------------------------------------------------------------------ |
+| `/`            | Selected work — the slider. Drag, scroll, arrow keys or thumbnails |
+| `/work`        | The Index — grid or list, animated between                         |
+| `/work/[slug]` | Case studies, for the projects that have one                       |
+| `/about`       | About, experience, education, technologies, current work           |
 
-Components in `components/` take typed props and render. They should not contain
-English prose.
-
-Read `CLAUDE.md` before making design changes — it records why the page looks
-the way it does, and lists the patterns that are deliberately avoided.
+The Index is at `/work`, not `/index`, because Next.js has historically treated
+a request for `/index` as `/`.
 
 ## Outstanding TODOs
 
-The site ships with visible `TODO` markers wherever a fact was not available.
-They are intentional: a `TODO` a reader can see is better than invented filler.
-Search the repo with `git grep -n TODO` at any time.
+Nothing on the site is filler. These are the facts not yet to hand, and the
+loose ends found while scraping.
 
-**`lib/content.ts`**
+**Waiting on you**
 
-- Robust Health — repo URL. Nothing public matches: the account has
-  `Vibe_Robust_Health_Android` and `Vibe_Robust_Health_IOS_App`, which are the
-  mobile prototypes rather than the web app these screenshots come from. Until
-  an `href` is set the link is filtered out, so nothing renders as a dead link.
-- Expected graduation date, in `profile.availability`. Someone sizing the
-  Spring 2027 co-op wants to know what follows it.
-- P2G Mobility Tech — the two experience gutter figures, datasets consolidated
-  and recurring reports built. These render as visible `TODO` markers on the
-  page, which is the intended behaviour until the counts are to hand.
-- The palm-reading clip for Lagna Atelier. Its screenshot is in place, but the
-  clip is still the one thing a link cannot substitute for.
+- **Portrait.** A higher-resolution photo is coming. Put it in `public/media/`,
+  update `profile.portrait` (`src`, `width`, `height`) in `lib/content.ts`, then
+  run `node scripts/build-blur.mjs`. The About page sizes the slot from the
+  image, so nothing else changes.
+- **What you learned**, per project. The brief's Outcome sections are meant to
+  cover it; nothing documents it yet, so Outcome states results only.
+- **The palm-reading clip** for Lagna Atelier: the one interaction a visitor
+  will never try on a stranger's site. The poster-gated video player from the
+  previous design is at commit `17e793e` (`components/ProjectMedia.tsx`).
 
-Lagna Atelier and the fake news classifier now carry both a live and a source
-link. The classifier's gutter figures come from `RESULTS.md` in its repo.
+**Found while scraping — worth fixing at the source**
 
-**`public/`**
+- **KB Patient Booking admin login.** The private repo's README documents a
+  default admin username and password for a panel holding patient names, ages
+  and contact details. Confirm the deployed password has been changed to a
+  strong, unique one — this site now links to the app — and take the defaults
+  out of that README. (They are deliberately not repeated here: this repository
+  is public.)
+- `drkbalaortho.com` no longer resolves, though the clinic README says the app
+  is live there. The portfolio links the Vercel URL instead.
+- Your resume says Lagna Atelier "computes full Vedic charts client-side". The
+  code computes them in server API routes. It also claims Robust Health uses
+  Supabase Row-Level Security, but that app's own README says the server uses
+  the service-role client, with authorisation in application code. Either could
+  come up in an interview.
+- The Lagna Atelier README is stale: it still names `OPENAI_API_KEY` for palm
+  reading, and says Neon holds "accounts and sessions, and nothing else yet".
 
-- `resume.pdf` is the Sep 2026 resume with the phone number redacted and the
-  personal email replaced by the Northeastern one, because this repo is public.
-  The redaction removes the glyphs from the content stream rather than drawing
-  over them, so the old values are not recoverable by selecting or extracting
-  text. If you drop in a newer resume, give it the same treatment.
+**Snapshots that drift**
 
-**`components/LiveEphemeris.tsx`**
-
-- Ships a clearly marked placeholder engine, and is unmounted from the hero
-  until a real one exists. Swap-in instructions are in the comment banner at
-  the top of the file; the restore is described in `components/Hero.tsx`.
+- Commit counts (719 on Lagna Atelier) and test counts are as of September 23
+  2026. Refresh them in `lib/content.ts` when they move meaningfully.
 
 ## Adding media
 
-Screenshots live in `public/media/` as WebP and are declared in `lib/content.ts`
-with explicit `width` and `height`, plus a `blurDataURL` drawn from
-`lib/blur.ts`. All three are required by the type, so a plate cannot ship
-without reserving its space or without a placeholder.
-
-A figure is never confined to the body column's ~66ch measure, because a
-screenshot that narrow is too small to read. Figures span both columns below
-the record: one per row under 46rem, two abreast above it, which works out to
-a 456px image at the sheet's widest.
-
-Three plates per project. Adding a fourth means arguing it is stronger
-evidence than one already there, and dropping that one.
-
-To add a screenshot, **crop to the app's own content column, not to the
-browser viewport**, and end the crop on a container boundary rather than
-through a card, a word, or under a sticky nav. A full-viewport capture spends
-most of its pixels on empty page ground, and at the rendered width that puts
-the UI text inside it near 5px. Then:
+Stills live in `public/media/` as WebP. After adding or re-cropping one:
 
 ```bash
-node -e "require('sharp')('in.png').extract({left:0,top:0,width:0,height:0}).webp({quality:82,effort:6}).toFile('public/media/out.webp')"
+node scripts/build-blur.mjs
 ```
 
-Fill in the `extract` box from the crop you chose. Aim for 16:10; if the
-content will not take it without losing something, keep the content and pick a
-clean ratio of its own. Afterwards, regenerate the placeholder — a 12px-wide
-WebP at quality 45, base64'd into `lib/blur.ts` — and re-sync `width` and
-`height` in `lib/content.ts` to the new file.
+That regenerates `lib/blur.ts` and prints every file's intrinsic size — the
+`width` and `height` to put in `lib/content.ts`. An image cannot be referenced
+from content until the script has run over it; the compiler enforces that.
 
-Video is poster-gated — the `<video>` element does not mount until a visitor
-clicks the poster, so clips cost nothing on page load. Put files in
-`public/media/` and describe them in `lib/content.ts`.
+- **Capture at 2x and crop to the content**, not the browser viewport. A
+  screenshot is never shown wider than it was captured, so a narrow capture
+  sits at its native width rather than being upscaled.
+- **Heroes** are 2560×1600. They are darkened by `HERO_BRIGHTNESS` in
+  `lib/media.ts`, the same value the slider's shader uses — change them together.
+- To refresh a hero from a live site, headless Edge works without extra tools:
 
-Keep clips WebM/VP9, under ~2 MB, under 15 seconds. `width`, `height`,
-`poster`, `caption` and `durationSeconds` are all required by the type — a
-poster-less video will not compile.
+```bash
+"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" --headless=new --hide-scrollbars --window-size=1440,900 --force-device-scale-factor=2 --virtual-time-budget=10000 --screenshot=hero.png https://example.com
+```
 
-Only record what cannot be linked. A video of a site you can click is a worse
-version of the click.
+- The resume in `public/resume.pdf` is a scrubbed copy: the phone number and
+  personal email are removed from the text, the content streams and the
+  `mailto:` link, because this repository is public. Give any replacement the
+  same treatment.
 
 ## Deploy to Vercel
 
@@ -163,14 +152,10 @@ rather than a value from memory.
 
 ## Notes
 
-- Fonts are IBM Plex Sans and IBM Plex Mono, self-hosted at build time by
-  `next/font`. There is no runtime request to Google and no layout shift.
-  Both need explicit weights — neither is a variable font here, so an omitted
-  weight silently ships 400 only and every 500/600 rule falls back to
-  synthetic bold.
-- The hero's live ephemeris table is currently unmounted. It shipped a
-  placeholder engine, so it displayed positions that were not real. The
-  component and its content keys are still in the repo; see the comment in
-  `components/Hero.tsx` for the one-line restore.
+- Inter Tight is a variable font, self-hosted at build time by `next/font`, so
+  every weight the styles use is a real face — no synthetic bold, and no
+  runtime request to Google.
+- three.js loads only on the desktop home page, after first paint. Touch
+  devices and every other page never download it.
 - Line endings are normalised to LF by `.gitattributes`, which overrides
   `core.autocrlf` on Windows checkouts.

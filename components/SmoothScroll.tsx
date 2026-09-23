@@ -33,10 +33,18 @@ export function SmoothScroll() {
   }, [reduced]);
 
   // A new route starts at the top, and every trigger is re-measured against
-  // the page that is actually there now.
+  // the page that is actually there now -- again once web fonts have landed,
+  // since a font swap re-wraps text and moves everything below it.
   useEffect(() => {
     lenisRef.current?.scrollTo(0, { immediate: true, force: true });
     ScrollTrigger.refresh();
+    let live = true;
+    void document.fonts.ready.then(() => {
+      if (live) ScrollTrigger.refresh();
+    });
+    return () => {
+      live = false;
+    };
   }, [pathname]);
 
   return null;

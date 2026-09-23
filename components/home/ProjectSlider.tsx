@@ -367,7 +367,7 @@ export function ProjectSlider({ projects, copy }: Props) {
       tabIndex={0}
       data-cursor="drag"
       data-lenis-prevent
-      className="absolute inset-0 hidden touch-none select-none overflow-hidden bg-ink outline-none desktop:block"
+      className="absolute inset-0 hidden touch-none select-none overflow-hidden bg-ink focus-visible:outline-2 focus-visible:-outline-offset-[12px] focus-visible:outline-paper desktop:block"
     >
       <p id="slider-hint" className="sr-only">
         {copy.hint}

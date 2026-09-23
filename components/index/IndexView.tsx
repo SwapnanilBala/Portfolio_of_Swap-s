@@ -142,6 +142,11 @@ export function IndexView({ projects, copy }: Props) {
     const state = pendingFlip.current;
     if (!state) return;
     pendingFlip.current = null;
+    // Flip only calls onComplete when it animated something; this makes sure
+    // the toggle can never stay locked if it had nothing to move.
+    const unlock = window.setTimeout(() => {
+      busy.current = false;
+    }, 1400);
     const arriving =
       rootRef.current?.querySelectorAll<HTMLElement>(
         layout === "grid" ? "[data-grid-media]" : "[data-list-extra]",
@@ -162,6 +167,7 @@ export function IndexView({ projects, copy }: Props) {
       { autoAlpha: 0, scale: layout === "grid" ? 0.96 : 1 },
       { autoAlpha: 1, scale: 1, duration: DURATION.meta, ease: EASE.out, stagger: 0.04, delay: 0.55 },
     );
+    return () => window.clearTimeout(unlock);
   }, [layout]);
 
   // The preview trails the pointer in list view.
