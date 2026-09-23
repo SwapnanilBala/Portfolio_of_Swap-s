@@ -17,7 +17,14 @@ import { SharedMedia } from "@/components/PageTransition";
 import { ProjectThumbnailRail } from "@/components/home/ProjectThumbnailRail";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { blurFor, HERO_BRIGHTNESS, HERO_ZOOM, recordNumber } from "@/lib/media";
-import { DURATION, EASE, META_LAG, useMediaQuery, useReducedMotion } from "@/lib/motion";
+import {
+  DURATION,
+  EASE,
+  META_LAG,
+  useHydrated,
+  useMediaQuery,
+  useReducedMotion,
+} from "@/lib/motion";
 import {
   clamp,
   DESKTOP_QUERY,
@@ -73,6 +80,10 @@ const SETTLE_MS = 160;
 export function ProjectSlider({ projects, copy }: Props) {
   const router = useRouter();
   const isDesktop = useMediaQuery(DESKTOP_QUERY);
+  // The shared view-transition name waits for the real media query. During
+  // hydration isDesktop reads as false, so the mobile plate would claim the
+  // name, and the commit that corrects it would briefly name both.
+  const hydrated = useHydrated();
   const reduced = useReducedMotion();
   const webgl = useSyncExternalStore(noopSubscribe, detectWebGL, () => false);
   const [canvasLost, setCanvasLost] = useState(false);
@@ -389,7 +400,7 @@ export function ProjectSlider({ projects, copy }: Props) {
           className="absolute inset-0 overflow-hidden will-change-transform"
           style={{ transform: `translate3d(${slideOffset(i, 0, count) * SLIDE_SPACING * 100}%, 0, 0)` }}
         >
-          <SharedMedia slug={project.slug} enabled={isDesktop && i === active}>
+          <SharedMedia slug={project.slug} enabled={hydrated && isDesktop && i === active}>
             <div className="absolute inset-0 overflow-hidden">
               <Image
                 src={project.hero.src}

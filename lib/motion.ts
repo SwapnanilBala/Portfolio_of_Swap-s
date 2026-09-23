@@ -66,6 +66,19 @@ export function useReducedMotion(): boolean {
   return query || forced;
 }
 
+/**
+ * False during server render and hydration, true from the first client
+ * render after. Anything that depends on a media query's real value -- not
+ * its server fallback -- should wait for it.
+ */
+export function useHydrated(): boolean {
+  return useSyncExternalStore(
+    noopSubscribe,
+    () => true,
+    () => false,
+  );
+}
+
 /** A mouse or trackpad: hover exists and the pointer is precise. */
 export function useFinePointer(): boolean {
   return useMediaQuery("(hover: hover) and (pointer: fine)");

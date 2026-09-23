@@ -1,6 +1,9 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { PageTransition } from "@/components/PageTransition";
 import { content } from "@/lib/content";
+
+export const metadata: Metadata = { title: content.ui.notFound.heading };
 
 export default function NotFound() {
   const { notFound } = content.ui;

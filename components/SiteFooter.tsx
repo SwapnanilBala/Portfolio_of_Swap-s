@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { LocalTime } from "@/components/LocalTime";
 import { MagneticLink } from "@/components/MagneticLink";
 import { content } from "@/lib/content";
@@ -13,11 +14,14 @@ export function SiteFooter() {
 
   return (
     <footer className="flex min-h-[92svh] flex-col justify-between bg-ink px-5 pb-6 pt-24 text-paper md:px-8">
+      {/* A real space between the block lines keeps the accessible name
+          "Let's build something." rather than "Let's buildsomething." */}
       <h2 className="display text-[14.2vw]">
-        {ui.footer.headline.map((line) => (
-          <span key={line} className="block">
-            {line}
-          </span>
+        {ui.footer.headline.map((line, i) => (
+          <Fragment key={line}>
+            {i > 0 ? " " : null}
+            <span className="block">{line}</span>
+          </Fragment>
         ))}
       </h2>
 

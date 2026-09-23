@@ -7,7 +7,7 @@ import { DisplayTitle } from "@/components/DisplayTitle";
 import { SharedMedia } from "@/components/PageTransition";
 import { HomeMasthead } from "@/components/home/HomeMasthead";
 import { blurFor, HERO_BRIGHTNESS, recordNumber } from "@/lib/media";
-import { useMediaQuery } from "@/lib/motion";
+import { useHydrated, useMediaQuery } from "@/lib/motion";
 import { DESKTOP_QUERY } from "@/lib/slider";
 import { displayLinesOf, type Profile, type SelectedProject, type UiCopy } from "@/lib/types";
 
@@ -25,6 +25,9 @@ interface Props {
  */
 export function MobileProjects({ projects, copy, profile }: Props) {
   const isDesktop = useMediaQuery(DESKTOP_QUERY);
+  // See ProjectSlider: no plate claims the shared name until the device is
+  // known, or hydration would briefly name both breakpoints' plates.
+  const hydrated = useHydrated();
   const scrollerRef = useRef<HTMLDivElement>(null);
   const plateRefs = useRef<(HTMLElement | null)[]>([]);
   const [active, setActive] = useState(0);
@@ -65,7 +68,7 @@ export function MobileProjects({ projects, copy, profile }: Props) {
             aria-label={project.name}
             className="relative flex h-svh snap-start flex-col justify-end overflow-hidden"
           >
-            <SharedMedia slug={project.slug} enabled={!isDesktop && i === active}>
+            <SharedMedia slug={project.slug} enabled={hydrated && !isDesktop && i === active}>
               <div className="absolute inset-0 overflow-hidden">
                 <Image
                   src={project.hero.src}
