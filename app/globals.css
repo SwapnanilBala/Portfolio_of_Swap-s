@@ -1,798 +1,274 @@
+@import "tailwindcss";
+
 /* ==========================================================================
    Tokens
-   A warm beige field with a deep brass accent, paired with a cyanotype dark
-   theme in the block directly below. Every contrast ratio here was computed
-   against both --field and --field-inset, not assumed, and clears WCAG AA for
-   normal text.
+   Two grounds and two inks, per the brief. Every text pairing was computed,
+   not assumed: ink on paper 16.85:1, paper-muted on paper 5.80:1, ink-muted on
+   ink 6.61:1. Both muted values clear AA at the 11px metadata size.
 
-   Colour lives only in these two blocks. No rule further down the file holds a
-   literal colour, which is the whole reason a second theme is ten lines rather
-   than an audit -- keep it that way.
+   Colour lives only here. No rule below holds a literal colour.
    ========================================================================== */
 
-:root {
-  color-scheme: light dark;
+@theme {
+  --color-paper: #f3f2ed;
+  --color-ink: #111111;
+  --color-paper-muted: #5f5e59;
+  --color-ink-muted: #9a9993;
+  --color-paper-rule: #cfcec8;
+  --color-ink-rule: #333331;
 
-  /* Field */
-  --field: #ede4d3;
-  --field-inset: #e3d8c2;
-  --rule: #c8ba9e;
+  --font-sans: var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif;
 
-  /* The mat. Two jobs in the dossier, and they are not the same job:
-       a. the portrait's mount, where it IS a visible margin around a bright
-          photograph, and a darker ground does the separating;
-       b. the figcaption ground under a capture, where it is NOT a margin --
-          .media-frame has no padding and the capture is separated from the
-          page by the frame's own 1px --ink border at ~14:1.
+  --text-meta: 0.6875rem;
+  --text-meta--line-height: 1.35;
 
-     This matters because the photo-review branch corrected --mat for the dark
-     pair on the grounds that a dark capture bled into a dark mat across the
-     margin, measured at 1.06:1. That failure does not exist here: no dark
-     capture has a mat margin any more. Do not port that fix in. If a capture
-     ever gets mat padding back, it returns. */
-  --mat: #d8cbb0;
+  --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+}
 
-  /* A veil over media, so a label stays legible on any frame beneath it. */
-  --field-veil: rgba(237, 228, 211, 0.92);
+/* `reduced:` applies under the reduced-motion media query or the
+   `?motion=reduce` override, so one variant covers both. Prefer it to
+   Tailwind's built-in `motion-reduce:`, which only knows the media query. */
+@custom-variant reduced {
+  @media (prefers-reduced-motion: reduce) {
+    @slot;
+  }
 
-  /* Ink. Ratios are against --field and --field-inset in that order. */
-  --ink: #2b2114; /* 12.5:1  11.2:1 */
-  --ink-muted: #5a4f3c; /*  6.4:1   5.7:1 */
-  --ink-faint: #635740; /*  5.6:1   5.0:1 */
+  html[data-motion="reduce"] & {
+    @slot;
+  }
+}
 
-  /* Accent */
-  --brass: #73550e; /*  5.5:1   4.9:1 */
-  --brass-deep: #5e4508; /*  7.1:1   6.4:1 */
+/* Enormous display type and tiny metadata are the whole typographic system. */
+@utility display {
+  font-weight: 650;
+  letter-spacing: -0.05em;
+  line-height: 0.84;
+  text-transform: uppercase;
+}
 
-  /* Families. Both variables are injected by next/font in layout.tsx. */
-  --sans: var(--font-sans), system-ui, -apple-system, sans-serif;
-  --mono: var(--font-mono), ui-monospace, "SF Mono", Menlo, monospace;
-
-  /* Sheet geometry. The dossier is one ruled sheet, not a stack of plates:
-     --index is the locator column carrying the record number, the period and
-     the spec table; everything else runs in the body column beside it. */
-  --sheet: 64rem;
-  --index: 118px;
-  --gap: 26px;
-  /* Prose stays near 70ch. Wider than the old 34rem measure because the body
-     column no longer competes with a figure rail for the same horizontal run. */
-  --measure: 66ch;
-  --portrait: 6.5rem;
-
-  /* Spacing */
-  --step-1: 0.5rem;
-  --step-2: 0.875rem;
-  --step-3: 1.5rem;
-  --step-4: 2.5rem;
-  --step-5: 4rem;
-
-  /* Type sizes */
-  --size-display: clamp(1.75rem, 1.3rem + 1.6vw, 2.125rem);
-  --size-title: 1.1875rem;
-  --size-body: 0.9375rem;
-  --size-small: 0.875rem;
-  --size-data: 0.78125rem;
-  --size-label: 0.6875rem;
-
-  --leading-prose: 1.6;
+@utility meta {
+  font-size: var(--text-meta);
+  line-height: var(--text-meta--line-height);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
 }
 
 /* ==========================================================================
-   Dark pair -- cyanotype
-   The same sheet printed as a cyanotype: prussian blue ground, pale ink, the
-   brass accent lifted to carry on a dark field. Only the ten colour tokens
-   move.
-
-   Ratios below were computed against --field and --field-inset *in this mode*,
-   not inherited from the light pair.
+   Base
    ========================================================================== */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --field: #0e2233;
-    --field-inset: #14293c;
-    --rule: #2a4459;
+@layer base {
+  html {
+    background-color: var(--color-ink);
+    color: var(--color-paper);
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
 
-    /* Same invariant as the light pair: darker than the field, so a mounted
-       capture reads identically in either mode. */
-    --mat: #091a28;
+  /* Light pages flip the root, so a route change crossfades the ground itself
+     rather than cutting from dark to light. */
+  html:has(main[data-tone="light"]) {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+  }
 
-    --field-veil: rgba(14, 34, 51, 0.92);
+  body {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: clip;
+  }
 
-    --ink: #e9eff4; /* 14.0:1  12.8:1 */
-    --ink-muted: #a4bacb; /*  8.1:1   7.4:1 */
-    --ink-faint: #8fa8bb; /*  6.6:1   6.0:1 */
+  :focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 3px;
+  }
 
-    /* --brass-deep is the quieter variant here rather than the louder one: on
-       a dark ground "deeper" recedes. It carries rules and underlines. */
-    --brass: #d9a842; /*  7.4:1   6.8:1 */
-    --brass-deep: #b4862c; /*  4.9:1   4.5:1 */
+  ::selection {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+  }
+
+  html:has(main[data-tone="light"]) ::selection {
+    background-color: var(--color-ink);
+    color: var(--color-paper);
+  }
+}
+
+.skip-link {
+  position: fixed;
+  left: 1rem;
+  top: 1rem;
+  z-index: 100;
+  padding: 0.5rem 0.75rem;
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  translate: 0 -200%;
+}
+
+.skip-link:focus-visible {
+  translate: 0 0;
+}
+
+/* ==========================================================================
+   Reveals
+   Text split and revealed by GSAP starts hidden -- but only once JavaScript
+   has announced itself, so without JS the page is simply visible. The
+   failsafe makes it visible after 2.5s regardless, so a script error can
+   never leave a heading permanently invisible.
+   ========================================================================== */
+
+html.js [data-reveal]:not([data-revealed]) {
+  visibility: hidden;
+  animation: reveal-failsafe 0s linear 2.5s forwards;
+}
+
+@keyframes reveal-failsafe {
+  to {
+    visibility: visible;
   }
 }
 
 /* ==========================================================================
-   Reset
+   Lenis
    ========================================================================== */
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-* {
-  margin: 0;
-}
-
-html {
-  -webkit-text-size-adjust: 100%;
-}
-
-body {
-  background: var(--field);
-  color: var(--ink);
-  font-family: var(--sans);
-  font-size: var(--size-body);
-  line-height: var(--leading-prose);
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-}
-
-img,
-video {
-  display: block;
-  max-width: 100%;
+html.lenis,
+html.lenis body {
   height: auto;
 }
 
-button {
-  font: inherit;
-  color: inherit;
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
 }
 
-table {
-  border-collapse: collapse;
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
 }
 
-a {
-  color: var(--brass-deep);
-  text-underline-offset: 2px;
+.lenis.lenis-stopped {
+  overflow: hidden;
 }
 
 /* ==========================================================================
-   Focus. Every interactive element, no exceptions.
+   Custom cursor
+   The native cursor stays everywhere except over regions that declare a
+   gesture -- drag on the slider, view on the index -- where the labelled
+   cursor replaces it. Anyone relying on their system cursor keeps it for
+   everything else.
    ========================================================================== */
 
-:focus-visible {
-  outline: 2px solid var(--brass);
-  outline-offset: 3px;
+html.has-cursor [data-cursor] {
+  cursor: none;
 }
 
 /* ==========================================================================
-   Selection
-   Otherwise the browser's default blue, which belongs to neither pair. Built
-   from the two tokens rather than a literal, so it follows both themes and
-   keeps the "colour lives in the token blocks" rule intact.
-
-   Carried over from the photo-review branch, which is the only part of that
-   work the dossier still needs -- see the note on --mat below.
-   ========================================================================== */
-
-::selection {
-  background: var(--brass);
-  color: var(--field);
-}
-
-/* ==========================================================================
-   The sheet
-   One ruled document rather than a stack of plates. Records are separated by
-   hairlines, not by bordered panels, and nothing lifts on hover: a record is
-   a row in a reference document, not a control. The links inside it are the
-   interactive part and they keep their focus ring.
-   ========================================================================== */
-
-.shell {
-  max-width: var(--sheet);
-  margin-inline: auto;
-  padding: 40px 28px 72px;
-}
-
-.section {
-  margin-top: 44px;
-}
-
-/* ==========================================================================
-   Masthead
-   Name and standing facts, closed by the heavy double rule that says the
-   header is over. The portrait is a small mounted plate, not a hero image.
-   ========================================================================== */
-
-/* The masthead is closed by a heavy rule, drawn on .hero so it spans the
-   portrait as well as the text. Below 46rem the portrait simply leads, which
-   is why it is first in the DOM. */
-.hero {
-  border-bottom: 2px solid var(--ink);
-  padding-bottom: 14px;
-}
-
-.hero-name {
-  font-size: var(--size-display);
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  line-height: 1.15;
-}
-
-/* Two stacked lines of the same kind: what he is, then where he is and what
-   he is asking for. The second is the one a recruiter is scanning for. */
-.hero-seeking {
-  font-family: var(--mono);
-  font-size: var(--size-data);
-  line-height: 1.9;
-  color: var(--ink-muted);
-}
-
-.hero-statement {
-  margin-top: 22px;
-  max-width: var(--measure);
-}
-
-.hero-statement > p + p {
-  margin-top: var(--step-2);
-}
-
-.hero-statement p {
-  color: var(--ink-muted);
-}
-
-.hero-portrait {
-  width: var(--portrait);
-  border: 1px solid var(--rule);
-  background: var(--mat);
-  padding: 6px;
-}
-
-.hero-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 22px;
-  margin-top: 18px;
-  font-family: var(--mono);
-  font-size: var(--size-data);
-  list-style: none;
-  padding: 0;
-}
-
-/* ==========================================================================
-   Section heads
-   A ruled band on the same two-column grid as the records below it, so the
-   label sits over the locator column and the title over the body column.
-   ========================================================================== */
-
-.section-heading {
-  display: grid;
-  grid-template-columns: var(--index) minmax(0, 1fr);
-  gap: var(--gap);
-  align-items: baseline;
-  border-bottom: 1px solid var(--ink);
-  padding-bottom: 6px;
-  font-family: var(--mono);
-  font-size: var(--size-label);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--ink-faint);
-}
-
-.section-heading h2 {
-  font: inherit;
-  color: inherit;
-}
-
-/* A verifiable count, not a sequence marker. */
-.section-count {
-  font: inherit;
-}
-
-/* ==========================================================================
-   Records
-   ========================================================================== */
-
-.entry {
-  display: grid;
-  grid-template-columns: var(--index) minmax(0, 1fr);
-  gap: var(--gap);
-  padding: 22px 0;
-  border-bottom: 1px solid var(--rule);
-  align-items: start;
-}
-
-.entry:last-child {
-  border-bottom: 0;
-}
-
-/* The locator column: record number, period, then the spec table. */
-.entry-gutter-col {
-  min-width: 0;
-}
-
-.entry-meta {
-  font-family: var(--mono);
-  font-size: var(--size-label);
-  line-height: 1.85;
-  color: var(--ink-faint);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
-
-.entry-ordinal {
-  display: block;
-  font-weight: 600;
-  font-size: var(--size-data);
-  color: var(--ink-muted);
-  font-variant-numeric: tabular-nums;
-}
-
-/* ==========================================================================
-   The spec table
-   Label left, figure right, a dotted rule between rows. This is the change
-   that makes the numbers read as data rather than as a list: the eye runs the
-   right-hand edge and every figure is on it.
-   ========================================================================== */
-
-.gutter {
-  list-style: none;
-  padding: 0;
-  margin-top: var(--step-3);
-  max-width: var(--measure);
-  font-family: var(--mono);
-  font-size: var(--size-data);
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 0 40px;
-}
-
-.gutter > li {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-  border-bottom: 1px dotted var(--rule);
-  padding: 5px 0;
-}
-
-/* The DOM order is value then label, which is the right reading order for a
-   screen reader. The visual order is the reverse, so the figures form a column
-   against the right edge. */
-.fact-label {
-  order: 1;
-  flex: 1;
-  min-width: 0;
-  color: var(--ink-faint);
-}
-
-.fact-value {
-  order: 2;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-}
-
-/* An unfilled figure is marked, not hidden. */
-.fact-value[data-todo="true"] {
-  color: var(--brass-deep);
-  border-bottom: 1px solid var(--brass);
-  font-weight: 400;
-}
-
-/* ==========================================================================
-   Record body
-   ========================================================================== */
-
-.prose {
-  min-width: 0;
-}
-
-.entry-head {
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.entry-title {
-  font-size: var(--size-title);
-  font-weight: 600;
-  letter-spacing: -0.01em;
-}
-
-.entry-status {
-  font-family: var(--mono);
-  font-size: var(--size-label);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--brass-deep);
-  border: 1px solid var(--brass);
-  padding: 1px 6px;
-}
-
-.entry-summary {
-  margin-top: var(--step-1);
-  max-width: var(--measure);
-  color: var(--ink-muted);
-}
-
-/* One decision per line. The em dash is the marker: a bullet would make this
-   a feature list, which is what it is deliberately not. */
-.detail-list {
-  list-style: none;
-  padding: 0;
-  margin-top: var(--step-3);
-  max-width: var(--measure);
-}
-
-.detail-list > li {
-  display: grid;
-  grid-template-columns: 18px minmax(0, 1fr);
-  gap: 4px;
-  padding: 4px 0;
-}
-
-.detail-list > li::before {
-  content: "—";
-  font-family: var(--mono);
-  font-size: var(--size-data);
-  color: var(--ink-faint);
-}
-
-.stack {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
-  margin-top: var(--step-3);
-  list-style: none;
-  padding: 0;
-  font-family: var(--mono);
-  font-size: var(--size-label);
-  color: var(--ink-muted);
-}
-
-.stack > li {
-  border: 1px solid var(--rule);
-  padding: 2px 7px;
-}
-
-.link-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 18px;
-  margin-top: var(--step-3);
-  list-style: none;
-  padding: 0;
-  font-family: var(--mono);
-  font-size: var(--size-data);
-}
-
-/* ==========================================================================
-   Figures
-   Numbered plates, referenced by the record they belong to. The number is a
-   citation, not decoration: it is what lets the caption be pointed at.
-   ========================================================================== */
-
-.entry-figures {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 12px;
-  margin-top: var(--step-3);
-  grid-column: 1 / -1;
-  min-width: 0;
-}
-
-figure {
-  margin: 0;
-  min-width: 0;
-}
-
-/* A dark screenshot bleeding to a hard edge reads as a slab dropped on the
-   page. The mat makes it a mounted plate instead. */
-.media-frame {
-  border: 1px solid var(--ink);
-  background: var(--mat);
-}
-
-/* --ink-muted, not --ink-faint. The caption sits on --mat, which is darker
-   than either plate ground, and faint-on-mat measures 4.41:1 -- under AA for
-   normal text. The token contract covers --field and --field-inset; the mat is
-   a third ground and has to be checked separately. */
-figcaption {
-  font-family: var(--mono);
-  font-size: var(--size-label);
-  line-height: 1.55;
-  color: var(--ink-muted);
-  padding: 6px 8px;
-  border-top: 1px solid var(--rule);
-  text-wrap: pretty;
-}
-
-.figure-ref {
-  color: var(--ink);
-  font-weight: 600;
-}
-
-/* Punctuation between the citation and the caption. Drawn here so neither the
-   component nor the content file has to carry a bare dash. */
-.figure-ref::after {
-  content: " — ";
-  font-weight: 400;
-  color: var(--ink-muted);
-}
-
-/* Poster-gated video. The <video> does not exist until this is clicked. */
-.poster-gate {
-  display: block;
-  position: relative;
-  width: 100%;
-  text-align: left;
-}
-
-.poster-gate img {
-  width: 100%;
-  height: auto;
-}
-
-.poster-gate-label {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  justify-content: space-between;
-  gap: var(--step-2);
-  padding: var(--step-2);
-  background: var(--field-veil);
-  border-top: 1px solid var(--rule);
-  font-family: var(--mono);
-  font-size: var(--size-label);
-  color: var(--ink);
-  font-variant-numeric: tabular-nums;
-}
-
-/* ==========================================================================
-   Contact
-   ========================================================================== */
-
-.contact-list {
-  list-style: none;
-  padding: 0;
-  margin-top: var(--step-3);
-  font-family: var(--mono);
-  font-size: var(--size-data);
-}
-
-.contact-list > li {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-  border-bottom: 1px dotted var(--rule);
-  padding: 5px 0;
-}
-
-.contact-key {
-  order: 1;
-  flex: 1;
-  color: var(--ink-faint);
-}
-
-.contact-list > li > a {
-  order: 2;
-}
-
-.colophon {
-  margin-top: var(--step-5);
-  padding-top: var(--step-3);
-  border-top: 1px solid var(--rule);
-  font-family: var(--mono);
-  font-size: var(--size-label);
-  line-height: 1.7;
-  color: var(--ink-faint);
-  max-width: 70ch;
-}
-
-/* ==========================================================================
-   Live ephemeris
-   Currently unmounted from the hero. Kept styled so restoring it stays the
-   one-line change described in components/Hero.tsx.
-   ========================================================================== */
-
-.ephemeris {
-  margin-top: var(--step-3);
-  border: 1px solid var(--rule);
-  background: var(--field-inset);
-  padding: var(--step-3);
-}
-
-.ephemeris-caption,
-.ephemeris-loading,
-.ephemeris-foot,
-.ephemeris-note {
-  font-family: var(--mono);
-  font-size: var(--size-label);
-  color: var(--ink-faint);
-}
-
-.ephemeris-caption {
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.ephemeris-table {
-  width: 100%;
-  margin-top: var(--step-2);
-  font-family: var(--mono);
-  font-size: var(--size-data);
-  font-variant-numeric: tabular-nums;
-}
-
-.ephemeris-table th,
-.ephemeris-table td {
-  text-align: left;
-  padding: 4px 10px 4px 0;
-  border-bottom: 1px dotted var(--rule);
-}
-
-.ephemeris-table th {
-  font-weight: 600;
-  color: var(--ink-faint);
-}
-
-.ephemeris-retro {
-  color: var(--brass-deep);
-}
-
-.ephemeris-elapsed {
-  color: var(--ink-muted);
-  font-weight: 600;
-}
-
-.ephemeris-foot,
-.ephemeris-note {
-  margin-top: var(--step-2);
-}
-
-/* ==========================================================================
-   Motion budget
-   One page-load reveal, staggered across three sections. That is all.
-   Outside the no-preference query nothing is hidden and nothing animates, so
-   reduced-motion visitors get the finished page immediately.
+   Page transitions
+   1. shared project media morphs toward the viewport (.morph)
+   2. outgoing typography clips away (.page, old)
+   3. the root ground crossfades (root)
+   4. incoming typography reveals (.page, new)
    ========================================================================== */
 
 @media (prefers-reduced-motion: no-preference) {
-  .reveal {
-    animation: reveal 520ms cubic-bezier(0.2, 0.6, 0.2, 1) both;
+  ::view-transition-old(root) {
+    animation: 500ms var(--ease-in-out-quart) both vt-fade-out;
   }
 
-  .reveal[data-reveal="2"] {
-    animation-delay: 90ms;
+  ::view-transition-new(root) {
+    animation: 700ms var(--ease-in-out-quart) 200ms both vt-fade-in;
   }
 
-  .reveal[data-reveal="3"] {
-    animation-delay: 180ms;
+  ::view-transition-old(.page) {
+    animation: 550ms var(--ease-in-out-quart) both vt-clip-out;
   }
 
-  @keyframes reveal {
-    from {
-      opacity: 0;
-      transform: translateY(8px);
-    }
-    to {
-      opacity: 1;
-      transform: none;
-    }
+  ::view-transition-new(.page) {
+    animation: 850ms var(--ease-out-expo) 320ms both vt-clip-in;
+  }
+
+  ::view-transition-group(.morph) {
+    animation-duration: 900ms;
+    animation-timing-function: var(--ease-in-out-quart);
   }
 }
 
-/* The reveal holds its opening frame until the animation advances. A printed
-   page never advances it, so the animation is dropped entirely for print. */
-@media print {
-  .reveal {
-    animation: none;
+/* A card and a hero rarely share an aspect ratio; cover keeps the image from
+   stretching while the box between them interpolates. */
+::view-transition-old(.morph),
+::view-transition-new(.morph) {
+  height: 100%;
+  object-fit: cover;
+}
+
+@keyframes vt-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes vt-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes vt-clip-out {
+  to {
+    clip-path: inset(0 0 100% 0);
+    translate: 0 -4vh;
+  }
+}
+
+@keyframes vt-clip-in {
+  from {
+    clip-path: inset(100% 0 0 0);
+    translate: 0 6vh;
   }
 }
 
 /* ==========================================================================
-   Responsive
-   Keep these blocks at the bottom. They override base rules at equal
-   specificity, so moving them up silently loses every one of them -- which is
-   exactly what happened to the old asymmetric block.
+   Reduced motion
+   Kept at the bottom so it wins on source order. Everything positional is
+   removed; what remains is a short crossfade, so a navigation still reads as
+   a change rather than a cut. `html[data-motion="reduce"]` mirrors the media
+   query for browsers that cannot emulate it (see lib/motion.ts).
    ========================================================================== */
 
-/* Two columns of spec rows and two figures abreast once there is room. */
-@media (min-width: 46rem) {
-  .shell {
-    padding: 48px 40px 80px;
+@media (prefers-reduced-motion: reduce) {
+  html.js [data-reveal] {
+    visibility: visible !important;
+    animation: none !important;
   }
 
-  /* The grid sits on .hero, not .hero-body: the portrait is a sibling of the
-     text block, and the closing rule has to span both. */
-  .hero {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) var(--portrait);
-    gap: var(--gap);
-    align-items: start;
+  ::view-transition-group(*) {
+    animation: none !important;
   }
 
-  .hero-portrait {
-    grid-column: 2;
-    grid-row: 1;
+  ::view-transition-old(*) {
+    animation: 150ms linear both vt-fade-out !important;
   }
 
-  .hero-body {
-    grid-column: 1;
-    grid-row: 1;
-  }
-
-  /* Two spec rows abreast: the table is scanned, not read, and halving its
-     height keeps the whole record in one eyeful. */
-  .gutter {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .entry-figures {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  /* A strip capture earns the full width; a portrait one does not. */
-  .entry-figures > figure[data-wide="true"] {
-    grid-column: 1 / -1;
+  ::view-transition-new(*) {
+    animation: 150ms linear both vt-fade-in !important;
   }
 }
 
-/* Below the two-column threshold the locator column stops being a column and
-   becomes a line above the record, so nothing is squeezed to unreadability. */
-@media (max-width: 45.99rem) {
-  :root {
-    --index: auto;
-    --gap: 12px;
-  }
-
-  .section-heading,
-  .entry {
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--step-1);
-  }
-
-  .entry-meta {
-    display: flex;
-    align-items: baseline;
-    gap: 12px;
-    border-bottom: 1px dotted var(--rule);
-    padding-bottom: 6px;
-  }
-
-  .entry-ordinal {
-    display: inline;
-  }
-
-  .hero-portrait {
-    margin-bottom: var(--step-3);
-  }
-
-  .gutter {
-    margin-bottom: var(--step-3);
-  }
+html[data-motion="reduce"] [data-reveal] {
+  visibility: visible !important;
+  animation: none !important;
 }
 
-/* The widest arrangement only widens the locator column and the sheet's
-   breathing room. The structure does not change again -- there is no third
-   layout to keep in sync. */
-@media (min-width: 74rem) {
-  :root {
-    --index: 132px;
-    --gap: 34px;
-  }
+html[data-motion="reduce"]::view-transition-group(*) {
+  animation: none !important;
+}
 
-  .shell {
-    padding: 56px 48px 88px;
-  }
+html[data-motion="reduce"]::view-transition-old(*) {
+  animation: 150ms linear both vt-fade-out !important;
+}
+
+html[data-motion="reduce"]::view-transition-new(*) {
+  animation: 150ms linear both vt-fade-in !important;
 }
