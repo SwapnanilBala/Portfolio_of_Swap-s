@@ -52,6 +52,12 @@ export function SplitTextReveal({
         type: by,
         mask: by,
         autoSplit: true,
+        // SplitText's default labels the element and hides its pieces. A
+        // heading can carry that label; a <p> cannot -- aria-label is
+        // prohibited there, and a reader that ignores it would find every
+        // piece hidden and read nothing. Elsewhere the pieces stay exposed:
+        // they are the same text, in order, wrapped in spans.
+        aria: as === "h1" || as === "h2" || as === "h3" ? "auto" : "none",
         // Spans, not divs: these often live inside a <p>.
         tag: "span",
         // Room below the baseline inside each mask, so a comma's tail is not
@@ -75,7 +81,7 @@ export function SplitTextReveal({
       });
       return () => split.revert();
     },
-    { dependencies: [reduced, by, delay, stagger, when], scope: ref },
+    { dependencies: [reduced, as, by, delay, stagger, when], scope: ref },
   );
 
   return createElement(as, { ref, className, "data-reveal": "" }, children);

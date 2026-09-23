@@ -6,6 +6,7 @@ import { SharedMedia } from "@/components/PageTransition";
 import { ProjectCover } from "@/components/index/ProjectCover";
 import { Flip, gsap, useGSAP } from "@/lib/gsap";
 import { recordNumber } from "@/lib/media";
+import { warmCaseHero } from "@/lib/preload";
 import { DURATION, EASE, useFinePointer, useReducedMotion } from "@/lib/motion";
 import { hasCaseStudy, isResolvedLink, type Project, type UiCopy } from "@/lib/types";
 
@@ -16,19 +17,53 @@ interface Props {
   readonly copy: UiCopy["index"];
 }
 
+interface GridSlot {
+  /** Column start, span and vertical offset at each breakpoint. */
+  readonly place: string;
+  /** Shape of a typographic plate here; captures keep their own ratio. */
+  readonly aspect: string;
+  /** The slot's rendered width, for next/image. */
+  readonly sizes: string;
+}
+
 /**
- * The loose asymmetric grid. Complete class strings, not assembled ones, so
- * Tailwind can see every class it has to generate. Each slot sets a column,
- * a span and a vertical offset; together they place two projects to a row at
- * different heights, which is where the negative space comes from.
+ * The loose asymmetric grid: three projects to a row from 64rem, two from
+ * 48rem, one below, each at its own width and height so no two rows repeat.
+ * Complete class strings, not assembled ones, so Tailwind can see every class
+ * it has to generate. Offsets are in vw: the grid is sized by width, and vh
+ * offsets ballooned on a tall window until a row held one project.
  */
-const GRID_SLOTS: readonly { readonly place: string; readonly aspect: string }[] = [
-  { place: "md:col-start-1 md:col-span-5", aspect: "aspect-[4/3]" },
-  { place: "md:col-start-8 md:col-span-4 md:mt-[18vh]", aspect: "aspect-[4/5]" },
-  { place: "md:col-start-2 md:col-span-4 md:mt-[8vh]", aspect: "aspect-square" },
-  { place: "md:col-start-7 md:col-span-6 md:mt-[24vh]", aspect: "aspect-[16/10]" },
-  { place: "md:col-start-1 md:col-span-4 md:mt-[6vh]", aspect: "aspect-[4/3]" },
-  { place: "md:col-start-7 md:col-span-3 md:mt-[14vh]", aspect: "aspect-[3/4]" },
+const GRID_SLOTS: readonly GridSlot[] = [
+  {
+    place: "col-span-12 md:col-span-7 md:col-start-1 lg:col-span-5 lg:col-start-1",
+    aspect: "aspect-[4/3]",
+    sizes: "(min-width: 64rem) 39vw, (min-width: 48rem) 54vw, 90vw",
+  },
+  {
+    place: "col-span-10 col-start-3 md:col-span-4 md:col-start-9 md:mt-[14vw] lg:col-span-3 lg:col-start-7 lg:mt-[9vw]",
+    aspect: "aspect-[4/5]",
+    sizes: "(min-width: 64rem) 26vw, (min-width: 48rem) 32vw, 75vw",
+  },
+  {
+    place: "col-span-12 md:col-span-5 md:col-start-2 md:mt-[5vw] lg:col-span-3 lg:col-start-10 lg:mt-[3vw]",
+    aspect: "aspect-[4/3]",
+    sizes: "(min-width: 64rem) 26vw, (min-width: 48rem) 40vw, 90vw",
+  },
+  {
+    place: "col-span-8 md:col-span-4 md:col-start-8 md:mt-[12vw] lg:col-span-3 lg:col-start-2 lg:mt-[7vw]",
+    aspect: "aspect-[4/5]",
+    sizes: "(min-width: 64rem) 26vw, (min-width: 48rem) 32vw, 60vw",
+  },
+  {
+    place: "col-span-10 col-start-3 md:col-span-5 md:col-start-1 md:mt-[4vw] lg:col-span-4 lg:col-start-6 lg:mt-[2vw]",
+    aspect: "aspect-[4/3]",
+    sizes: "(min-width: 64rem) 32vw, (min-width: 48rem) 40vw, 75vw",
+  },
+  {
+    place: "col-span-7 md:col-span-3 md:col-start-8 md:mt-[9vw] lg:col-span-2 lg:col-start-11 lg:mt-[11vw]",
+    aspect: "aspect-[3/4]",
+    sizes: "(min-width: 64rem) 19vw, (min-width: 48rem) 24vw, 52vw",
+  },
 ];
 
 function slotFor(index: number) {
@@ -58,12 +93,19 @@ function ProjectLink({
   const destination = destinationOf(project);
   if (!destination) return <div className={className}>{children}</div>;
   if (destination.internal) {
+    // The case study's hero is wider than this cover: fetch it on intent so
+    // the page transition lands on the capture, not its placeholder.
+    const warm = () => warmCaseHero(project.hero ?? project.cover);
     return (
       <Link
         href={destination.href}
         transitionTypes={["page"]}
         className={className}
-        onPointerEnter={onPointerEnter}
+        onPointerEnter={() => {
+          warm();
+          onPointerEnter?.();
+        }}
+        onFocus={warm}
         data-cursor={cursor}
       >
         {children}
@@ -129,9 +171,9 @@ export function IndexView({ projects, copy }: Props) {
     gsap.to(leaving, {
       autoAlpha: 0,
       scale: layout === "grid" ? 0.96 : 1,
-      duration: 0.35,
+      duration: DURATION.micro,
       ease: EASE.inOut,
-      stagger: 0.03,
+      stagger: 0.02,
       onComplete: commit,
     });
   };
@@ -152,12 +194,14 @@ export function IndexView({ projects, copy }: Props) {
         layout === "grid" ? "[data-grid-media]" : "[data-list-extra]",
       ) ?? [];
     gsap.set(arriving, { autoAlpha: 0 });
+    // About 1.4s end to end, the fade out included: large motion, but a
+    // layout toggle should not outlast a page transition by much.
     Flip.from(state, {
       targets: names(),
-      duration: 0.9,
+      duration: DURATION.layout,
       ease: EASE.inOut,
       scale: true,
-      stagger: 0.03,
+      stagger: 0.02,
       onComplete: () => {
         busy.current = false;
       },
@@ -165,7 +209,7 @@ export function IndexView({ projects, copy }: Props) {
     gsap.fromTo(
       arriving,
       { autoAlpha: 0, scale: layout === "grid" ? 0.96 : 1 },
-      { autoAlpha: 1, scale: 1, duration: DURATION.meta, ease: EASE.out, stagger: 0.04, delay: 0.55 },
+      { autoAlpha: 1, scale: 1, duration: DURATION.meta, ease: EASE.out, stagger: 0.03, delay: 0.4 },
     );
     return () => window.clearTimeout(unlock);
   }, [layout]);
@@ -201,8 +245,10 @@ export function IndexView({ projects, copy }: Props) {
               type="button"
               aria-pressed={layout === option}
               onClick={() => switchTo(option)}
-              className={`py-1 transition-opacity duration-300 ${
-                layout === option ? "underline decoration-1 underline-offset-4" : "opacity-50 hover:opacity-100"
+              // Dimmed by colour, not opacity: ink at half opacity on paper is
+              // 3.4:1, under AA for text this size; paper-muted is 5.8:1.
+              className={`py-1 transition-colors duration-300 ${
+                layout === option ? "underline decoration-1 underline-offset-4" : "text-paper-muted hover:text-ink"
               }`}
             >
               {option === "grid" ? copy.grid : copy.list}
@@ -213,7 +259,7 @@ export function IndexView({ projects, copy }: Props) {
       </div>
 
       {layout === "grid" ? (
-        <ol className="grid grid-cols-1 gap-x-5 gap-y-16 px-5 pb-32 pt-12 md:grid-cols-12 md:gap-y-0 md:px-8">
+        <ol className="grid grid-cols-12 gap-x-5 gap-y-14 px-5 pb-32 pt-12 md:gap-y-[4vw] md:px-8">
           {projects.map((project, i) => {
             const slot = slotFor(i);
             return (
@@ -224,20 +270,23 @@ export function IndexView({ projects, copy }: Props) {
                       <div className="transition-transform duration-700 ease-out-expo group-hover:scale-[1.04] reduced:transition-none reduced:group-hover:scale-100">
                         <ProjectCover
                           project={project}
-                          sizes="(min-width: 48rem) 42vw, 90vw"
-                          className={slot?.aspect}
+                          sizes={slot?.sizes ?? "90vw"}
+                          aspect={slot?.aspect}
+                          eager={i === 0}
                         />
                       </div>
                     </SharedMedia>
                   </div>
-                  <div className="meta mt-3 flex items-baseline justify-between gap-4 transition-transform duration-500 ease-out-expo group-hover:translate-x-1.5 reduced:transition-none">
-                    <span className="flex items-baseline gap-2">
-                      <span className="tabular-nums text-paper-muted">{recordNumber(i)}</span>
-                      <span data-flip-id={project.slug} className="inline-block origin-left">
-                        {project.name}
-                      </span>
+                  {/* Stacked, not name-left and type-right: in a narrow slot the
+                      two sides wrapped into each other. The name hugs its text
+                      (justify-self-start), because Flip scales that box into
+                      the list row's name. */}
+                  <div className="meta mt-3 grid grid-cols-[auto_1fr] items-baseline gap-x-2 gap-y-1 transition-transform duration-500 ease-out-expo group-hover:translate-x-1.5 reduced:transition-none">
+                    <span className="tabular-nums text-paper-muted">{recordNumber(i)}</span>
+                    <span data-flip-id={project.slug} className="inline-block origin-left justify-self-start">
+                      {project.name}
                     </span>
-                    <span className="text-paper-muted">
+                    <span className="col-start-2 text-paper-muted">
                       {project.type} / {project.year}
                     </span>
                   </div>
@@ -258,16 +307,18 @@ export function IndexView({ projects, copy }: Props) {
                 <span data-list-extra className="meta col-span-2 tabular-nums text-paper-muted md:col-span-1">
                   {recordNumber(i)}
                 </span>
+                {/* Seven columns at 4vw hold the longest name, "Meta Database
+                    Engineer", on one line at desktop widths. */}
                 <span
                   data-flip-id={project.slug}
-                  className="col-span-10 inline-block origin-left text-[clamp(1.75rem,5vw,5.25rem)] font-semibold uppercase leading-[0.9] tracking-[-0.04em] transition-transform duration-500 ease-out-expo group-hover:translate-x-2 reduced:transition-none md:col-span-6"
+                  className="col-span-10 inline-block origin-left text-[clamp(1.75rem,4vw,4.5rem)] font-semibold uppercase leading-[0.9] tracking-[-0.04em] transition-transform duration-500 ease-out-expo group-hover:translate-x-2 reduced:transition-none md:col-span-7"
                 >
                   {project.name}
                 </span>
                 <span data-list-extra className="meta col-span-8 col-start-3 mt-3 md:col-span-3 md:col-start-auto md:mt-0">
                   {project.category}
                 </span>
-                <span data-list-extra className="meta col-span-2 mt-3 text-right tabular-nums md:mt-0">
+                <span data-list-extra className="meta col-span-2 mt-3 text-right tabular-nums md:col-span-1 md:mt-0">
                   {project.year}
                 </span>
               </ProjectLink>
@@ -290,7 +341,7 @@ export function IndexView({ projects, copy }: Props) {
             {hoveredProject ? (
               <SharedMedia slug={hoveredProject.slug} enabled={hasCaseStudy(hoveredProject)}>
                 <div>
-                  <ProjectCover project={hoveredProject} sizes="22vw" className="aspect-[4/3]" />
+                  <ProjectCover project={hoveredProject} sizes="22vw" />
                 </div>
               </SharedMedia>
             ) : null}

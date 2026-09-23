@@ -140,10 +140,15 @@ interface ProjectBase {
  * A project in the home slider. The hero and the case study are required, not
  * optional: the slider cannot render a slide without a texture, and every
  * slide opens a case study.
+ *
+ * `hero` is a 16:10 desktop capture and `heroMobile` a phone capture of the
+ * same screen. A portrait plate cut from a landscape capture keeps only a
+ * sliver of the middle, so the phone gets the product's own phone layout.
  */
 export interface SelectedProject extends ProjectBase {
   readonly selected: true;
   readonly hero: ImageAsset;
+  readonly heroMobile: ImageAsset;
   readonly caseStudy: CaseStudy;
 }
 
@@ -151,6 +156,7 @@ export interface SelectedProject extends ProjectBase {
 export interface ArchivedProject extends ProjectBase {
   readonly selected: false;
   readonly hero?: ImageAsset;
+  readonly heroMobile?: ImageAsset;
   /** Present when the archive entry has its own page. */
   readonly caseStudy?: CaseStudy;
   /**

@@ -1,12 +1,13 @@
 "use client";
 
-import Image from "next/image";
+import { getImageProps } from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { DisplayTitle } from "@/components/DisplayTitle";
 import { SharedMedia } from "@/components/PageTransition";
 import { HomeMasthead } from "@/components/home/HomeMasthead";
-import { blurFor, HERO_BRIGHTNESS, recordNumber } from "@/lib/media";
+import { blurFor, HERO_BRIGHTNESS, PLATE_SIZES, recordNumber } from "@/lib/media";
 import { useHydrated, useMediaQuery } from "@/lib/motion";
 import { DESKTOP_QUERY } from "@/lib/slider";
 import { displayLinesOf, type Profile, type SelectedProject, type UiCopy } from "@/lib/types";
@@ -17,19 +18,70 @@ interface Props {
   readonly profile: Profile;
 }
 
+/** A transparent pixel: what the first plate's picture resolves to on desktops. */
+const NOTHING = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+
 /**
- * The home page for touch and narrow screens: full-height plates on native
- * vertical scroll-snap. The browser's own touch physics beat anything
- * simulated, and nothing here loads WebGL. The masthead rides in the first
- * plate and scrolls away with it; a counter tracks the plate on screen.
+ * The phone capture on a portrait screen, the desktop capture on a landscape
+ * one -- a portrait plate cut from a landscape capture keeps only a sliver of
+ * its middle, and the reverse keeps only the top of the phone layout.
+ *
+ * The first plate is the phone's largest paint, so it loads eagerly: lazy, its
+ * render waited on hydration for 2.6s on a throttled phone. Eager would make
+ * desktops, where this layout is hidden, download it too -- so on the desktop
+ * query the picture resolves to a transparent pixel instead. The other plates
+ * stay lazy, which a hidden layout never triggers.
+ */
+function PhonePlate({ project, first }: { readonly project: SelectedProject; readonly first: boolean }) {
+  const sizes = PLATE_SIZES.phone;
+  const {
+    props: { srcSet: landscape },
+  } = getImageProps({
+    src: project.hero.src,
+    alt: "",
+    width: project.hero.width,
+    height: project.hero.height,
+    sizes,
+  });
+  const { props: portrait } = getImageProps({
+    src: project.heroMobile.src,
+    alt: project.heroMobile.alt,
+    width: project.heroMobile.width,
+    height: project.heroMobile.height,
+    sizes,
+    loading: first ? "eager" : "lazy",
+    fetchPriority: first ? "high" : undefined,
+    placeholder: "blur",
+    blurDataURL: blurFor(project.heroMobile.src),
+    style: {
+      objectFit: "cover",
+      objectPosition: "top",
+      filter: `brightness(${HERO_BRIGHTNESS})`,
+    },
+  });
+  return (
+    <picture>
+      {first ? <source media={DESKTOP_QUERY} srcSet={NOTHING} /> : null}
+      <source media="(orientation: landscape)" srcSet={landscape} sizes={sizes} />
+      <img {...portrait} alt={project.heroMobile.alt} draggable={false} className="absolute inset-0 size-full" />
+    </picture>
+  );
+}
+
+/**
+ * The home page for touch and narrow screens: one framed plate per screen on
+ * native vertical scroll-snap. The browser's own touch physics beat anything
+ * simulated, and nothing here loads WebGL. The masthead opens the first
+ * screen and scrolls away with it; a counter tracks the screen in view.
  */
 export function MobileProjects({ projects, copy, profile }: Props) {
+  const router = useRouter();
   const isDesktop = useMediaQuery(DESKTOP_QUERY);
   // See ProjectSlider: no plate claims the shared name until the device is
   // known, or hydration would briefly name both breakpoints' plates.
   const hydrated = useHydrated();
   const scrollerRef = useRef<HTMLDivElement>(null);
-  const plateRefs = useRef<(HTMLElement | null)[]>([]);
+  const screenRefs = useRef<(HTMLElement | null)[]>([]);
   const [active, setActive] = useState(0);
 
   useEffect(() => {
@@ -45,7 +97,7 @@ export function MobileProjects({ projects, copy, profile }: Props) {
       },
       { root, threshold: 0.6 },
     );
-    for (const plate of plateRefs.current) if (plate) observer.observe(plate);
+    for (const screen of screenRefs.current) if (screen) observer.observe(screen);
     return () => observer.disconnect();
   }, [isDesktop]);
 
@@ -61,45 +113,39 @@ export function MobileProjects({ projects, copy, profile }: Props) {
         {projects.map((project, i) => (
           <section
             key={project.slug}
-            ref={(plate) => {
-              plateRefs.current[i] = plate;
+            ref={(screen) => {
+              screenRefs.current[i] = screen;
             }}
             data-index={i}
             aria-label={project.name}
-            className="relative flex h-svh snap-start flex-col justify-end overflow-hidden"
+            className="relative flex h-svh snap-start flex-col overflow-hidden pb-10"
           >
+            {i === 0 ? <HomeMasthead profile={profile} className="shrink-0 px-5 pt-16" /> : null}
+
             <SharedMedia slug={project.slug} enabled={hydrated && !isDesktop && i === active}>
-              <div className="absolute inset-0 overflow-hidden">
-                <Image
-                  src={project.hero.src}
-                  alt={project.hero.alt}
-                  fill
-                  priority={i === 0}
-                  sizes="100vw"
-                  placeholder="blur"
-                  blurDataURL={blurFor(project.hero.src)}
-                  className="object-cover"
-                  style={{ filter: `brightness(${HERO_BRIGHTNESS})` }}
-                />
+              {/* A tap on the plate opens the project too. The title below is
+                  the link keyboards and screen readers use, so the plate is
+                  not a second one. */}
+              <div
+                onClick={() => router.push(`/work/${project.slug}`, { transitionTypes: ["page"] })}
+                className={`relative mx-5 min-h-0 flex-1 overflow-hidden bg-ink ${i === 0 ? "mt-6" : "mt-16"}`}
+              >
+                <PhonePlate project={project} first={i === 0} />
               </div>
             </SharedMedia>
 
-            {i === 0 ? <HomeMasthead profile={profile} className="absolute inset-x-0 top-0 pt-14" /> : null}
-
-            <div className="relative px-5 pb-12">
-              <p className="meta tabular-nums text-paper">
-                {recordNumber(i)} / {project.category}
-              </p>
-              <Link
-                href={`/work/${project.slug}`}
-                transitionTypes={["page"]}
-                className="mt-4 block text-paper"
-              >
+            <div className="relative -mt-7 px-5">
+              <Link href={`/work/${project.slug}`} transitionTypes={["page"]} className="block text-paper">
                 <DisplayTitle lines={displayLinesOf(project)} className="text-[15vw]" />
               </Link>
-              <div className="meta mt-6 flex flex-wrap gap-x-6 gap-y-1 text-paper">
-                <span className="tabular-nums">{project.year}</span>
-                <span>{project.stack.slice(0, 3).join(" / ")}</span>
+              <div className="meta mt-4 grid gap-y-1 text-paper">
+                <p className="flex gap-x-6 tabular-nums">
+                  <span>
+                    {recordNumber(i)} / {project.category}
+                  </span>
+                  <span>{project.year}</span>
+                </p>
+                <p className="pr-16">{project.stack.slice(0, 3).join(" / ")}</p>
               </div>
             </div>
           </section>
@@ -108,7 +154,7 @@ export function MobileProjects({ projects, copy, profile }: Props) {
 
       <p
         aria-hidden="true"
-        className="meta pointer-events-none fixed bottom-12 right-5 z-10 text-right tabular-nums text-paper"
+        className="meta pointer-events-none fixed bottom-10 right-5 z-10 text-right tabular-nums text-paper"
       >
         {recordNumber(active)} <span className="text-ink-muted">/ {recordNumber(projects.length - 1)}</span>
       </p>

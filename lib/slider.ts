@@ -19,8 +19,31 @@ export interface SliderMotion {
   hover: number;
 }
 
-/** Spacing between slides as a fraction of the viewport width. */
-export const SLIDE_SPACING = 1.04;
+/** The gap between two travelling plates, as a fraction of a plate's width. */
+const PLATE_GAP = 0.06;
+
+/**
+ * Distance between neighbouring plates, in CSS pixels. One plate is on stage
+ * and its neighbours wait just past the edges of the window, whatever the
+ * window's shape -- so the step is derived from the stage and plate widths,
+ * never fixed. The DOM plates and the WebGL plates both move by it.
+ */
+export function slideStep(stageWidth: number, plateWidth: number): number {
+  return (stageWidth + plateWidth) / 2 + plateWidth * PLATE_GAP;
+}
+
+/** How lit a plate is when it is not on stage. */
+const PRESENCE_FLOOR = 0.42;
+
+/**
+ * 1 on stage, falling to PRESENCE_FLOOR a slide away: plates dim as they
+ * leave and light as they arrive. Applied as the DOM plate's opacity over the
+ * ink ground, and as the same mix toward ink in the shader, so the two layers
+ * agree at every offset.
+ */
+export function presenceAt(offset: number): number {
+  return 1 - (1 - PRESENCE_FLOOR) * Math.min(Math.abs(offset), 1);
+}
 
 export function wrapIndex(value: number, count: number): number {
   return ((value % count) + count) % count;

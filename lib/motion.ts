@@ -16,6 +16,8 @@ export const DURATION = {
   micro: 0.3,
   /** Metadata following a title. */
   meta: 0.6,
+  /** A layout rearranging in place: the Index's grid and list. */
+  layout: 0.8,
   /** Titles and line reveals. */
   title: 1.1,
 } as const;
@@ -23,12 +25,52 @@ export const DURATION = {
 /** Metadata trails the title by this much, per the brief's 50-100ms. */
 export const META_LAG = 0.08;
 
-function subscribeTo(query: string) {
-  return (onChange: () => void) => {
-    const list = window.matchMedia(query);
-    list.addEventListener("change", onChange);
-    return () => list.removeEventListener("change", onChange);
+type Subscribe = (onChange: () => void) => () => void;
+
+interface QueryStore {
+  readonly list: MediaQueryList;
+  readonly listeners: Set<() => void>;
+}
+
+const queryStores = new Map<string, QueryStore>();
+const subscribers = new Map<string, Subscribe>();
+
+/**
+ * One MediaQueryList per query, with one change listener that notifies every
+ * subscriber inside the same callback, so React re-renders every consumer of a
+ * query in a single commit. With a list per consumer, each list's change event
+ * is its own callback and React commits between them -- which is how both
+ * sliders' first plates came to hold the same view-transition name for a frame
+ * whenever the window crossed the desktop breakpoint. Client only.
+ */
+function storeFor(query: string): QueryStore {
+  const existing = queryStores.get(query);
+  if (existing) return existing;
+  const store: QueryStore = { list: window.matchMedia(query), listeners: new Set() };
+  store.list.addEventListener("change", () => {
+    for (const listener of store.listeners) listener();
+  });
+  queryStores.set(query, store);
+  return store;
+}
+
+/**
+ * The same subscribe function for a query on every render: a new one each
+ * time makes React unsubscribe and resubscribe on every render. Creating it
+ * touches nothing on the window, so it is safe during server render.
+ */
+function subscribeTo(query: string): Subscribe {
+  const existing = subscribers.get(query);
+  if (existing) return existing;
+  const subscribe: Subscribe = (onChange) => {
+    const { listeners } = storeFor(query);
+    listeners.add(onChange);
+    return () => {
+      listeners.delete(onChange);
+    };
   };
+  subscribers.set(query, subscribe);
+  return subscribe;
 }
 
 /**
@@ -39,7 +81,7 @@ function subscribeTo(query: string) {
 export function useMediaQuery(query: string, fallback = false): boolean {
   return useSyncExternalStore(
     subscribeTo(query),
-    () => window.matchMedia(query).matches,
+    () => storeFor(query).list.matches,
     () => fallback,
   );
 }

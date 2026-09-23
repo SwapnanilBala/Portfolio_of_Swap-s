@@ -36,7 +36,7 @@ wrong, so check them before "correcting" anything.
 
 **`lib/types.ts` — the shape content must satisfy.** Add a field and the
 compiler points at every place that needs it. A project in the home slider
-cannot compile without a hero image and a case study.
+cannot compile without a desktop hero, a phone hero and a case study.
 
 **`app/globals.css` — tokens and the few rules Tailwind cannot express.** The
 palette, the `display` and `meta` type styles, the `reduced:` and `desktop:`
@@ -112,13 +112,22 @@ from content until the script has run over it; the compiler enforces that.
 - **Capture at 2x and crop to the content**, not the browser viewport. A
   screenshot is never shown wider than it was captured, so a narrow capture
   sits at its native width rather than being upscaled.
-- **Heroes** are 2560×1600. They are darkened by `HERO_BRIGHTNESS` in
-  `lib/media.ts`, the same value the slider's shader uses — change them together.
-- To refresh a hero from a live site, headless Edge works without extra tools:
+- **Every project in the slider needs two heroes.** `hero` is a 16:10 desktop
+  capture — the live site at 1440×900 and 2x, resized to 2560×1600. `heroMobile`
+  is the same screen on a phone — 390×844 at 3x, so 1170×2532. Both are shown
+  framed and anchored to their top edge, so keep the product's own header in the
+  capture. Both are toned by `HERO_BRIGHTNESS` in `lib/media.ts`, the same value
+  the slider's shader uses.
+- A desktop capture from a live site, with headless Edge and no extra tools:
 
 ```bash
 "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" --headless=new --hide-scrollbars --window-size=1440,900 --force-device-scale-factor=2 --virtual-time-budget=10000 --screenshot=hero.png https://example.com
 ```
+
+- The phone capture cannot be taken that way: `--screenshot` will not go
+  narrower than about 500px and does not emulate a phone. Use the DevTools
+  protocol's device emulation (`Emulation.setDeviceMetricsOverride` with
+  `mobile: true` and a device scale factor of 3), or your browser's device mode.
 
 - The resume in `public/resume.pdf` is a scrubbed copy: the phone number and
   personal email are removed from the text, the content streams and the

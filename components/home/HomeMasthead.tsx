@@ -2,6 +2,7 @@ import type { Profile } from "@/lib/types";
 
 interface Props {
   readonly profile: Profile;
+  /** Placement and padding belong to the call site: absolute on desktop, in flow on phones. */
   readonly className?: string;
 }
 
@@ -13,9 +14,7 @@ interface Props {
  */
 export function HomeMasthead({ profile, className = "" }: Props) {
   return (
-    <header
-      className={`pointer-events-none grid grid-cols-12 gap-x-5 px-5 pt-5 text-paper md:px-8 md:pt-7 ${className}`}
-    >
+    <header className={`pointer-events-none grid grid-cols-12 gap-x-5 text-paper ${className}`}>
       <div className="col-span-10 md:col-span-4">
         <h1 className="text-[clamp(1.25rem,1.55vw,1.875rem)] font-semibold uppercase leading-[0.95] tracking-[-0.025em]">
           {profile.name}
@@ -24,7 +23,7 @@ export function HomeMasthead({ profile, className = "" }: Props) {
           {profile.role} / {profile.affiliation}
         </p>
       </div>
-      <p className="col-span-12 mt-5 max-w-[38ch] text-[0.8125rem] leading-[1.45] md:col-span-4 md:col-start-5 md:mt-0">
+      <p className="col-span-12 mt-5 max-w-[50ch] text-[0.8125rem] leading-[1.45] md:col-span-5 md:col-start-5 md:mt-0">
         {profile.intro}
       </p>
     </header>

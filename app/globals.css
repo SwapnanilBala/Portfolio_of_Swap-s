@@ -19,7 +19,10 @@
 
   --font-sans: var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif;
 
+  /* Metadata is 11px from 48rem and 12px below it: a phone is read at arm's
+     length, and 12px is where Lighthouse's legibility check starts counting. */
   --text-meta: 0.6875rem;
+  --text-meta-phone: 0.75rem;
   --text-meta--line-height: 1.35;
 
   --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
@@ -54,11 +57,15 @@
 }
 
 @utility meta {
-  font-size: var(--text-meta);
+  font-size: var(--text-meta-phone);
   line-height: var(--text-meta--line-height);
   font-weight: 500;
   letter-spacing: 0.02em;
   text-transform: uppercase;
+
+  @media (width >= 48rem) {
+    font-size: var(--text-meta);
+  }
 }
 
 /* ==========================================================================
@@ -73,8 +80,11 @@
     text-rendering: optimizeLegibility;
   }
 
-  /* Light pages flip the root, so a route change crossfades the ground itself
-     rather than cutting from dark to light. */
+  /* A page's tone is the ground it opens on, and the root takes it: that is
+     the ground a page transition crossfades through and the overscroll shows.
+     Case studies open on a dark hero, so they are dark even though their body
+     is paper -- marked light, the root flashed paper mid-transition between
+     the dark home page and the dark hero. */
   html:has(main[data-tone="light"]) {
     background-color: var(--color-paper);
     color: var(--color-ink);
@@ -92,13 +102,11 @@
     outline-offset: 3px;
   }
 
+  /* One highlight for both grounds: pages mix paper and ink, so a selection
+     keyed to the page's tone went paper-on-paper in a dark-toned page's light
+     body. Paper on paper-muted clears AA (5.9:1) and differs from both grounds. */
   ::selection {
-    background-color: var(--color-paper);
-    color: var(--color-ink);
-  }
-
-  html:has(main[data-tone="light"]) ::selection {
-    background-color: var(--color-ink);
+    background-color: var(--color-paper-muted);
     color: var(--color-paper);
   }
 }
@@ -212,11 +220,22 @@ html.has-cursor [data-cursor] {
 }
 
 /* A card and a hero rarely share an aspect ratio; cover keeps the image from
-   stretching while the box between them interpolates. */
+   stretching while the box between them interpolates. Anchored to the top,
+   like every plate, so a capture keeps its header in place while its frame
+   changes shape instead of sliding under it. */
 ::view-transition-old(.morph),
 ::view-transition-new(.morph) {
   height: 100%;
   object-fit: cover;
+  object-position: top;
+}
+
+/* Above the pages. A name that exists only on the new page -- the entering
+   page's own boundary -- is layered after every name the old page had, so
+   without this the incoming page covered the morph as soon as its clip
+   opened, and the media vanished halfway through expanding. */
+::view-transition-group(.morph) {
+  z-index: 1;
 }
 
 @keyframes vt-fade-out {

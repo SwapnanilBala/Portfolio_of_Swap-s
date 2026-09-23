@@ -5,31 +5,41 @@ export function blurFor(src: BlurredMedia): string {
 }
 
 /**
- * How bright a hero is allowed to be under white display type. One value,
- * applied as a CSS filter to the DOM image and as a uniform in the slider's
- * shader, so the WebGL frame and the image it hands over to during a page
- * transition are the same brightness and the morph does not flash.
+ * How bright a hero plate is. Heroes are framed captures on the ink ground,
+ * not full-bleed backgrounds -- a landing page carries its own headline, and
+ * under the slider's title that read as two sites stacked -- so the title only
+ * crosses a plate's lower edge and the plate can stay close to true colour.
+ * One value, applied as a CSS filter to the DOM image and as a uniform in the
+ * slider's shader, so the WebGL frame and the image it hands over to during a
+ * page transition are the same brightness and the morph does not flash.
  */
-export const HERO_BRIGHTNESS = 0.58;
+export const HERO_BRIGHTNESS = 0.82;
 
 /**
- * Heroes are shown slightly zoomed. It gives the shader's parallax room to
- * travel without sampling past the image edge, and it is applied to the DOM
- * image too so the two stay registered.
+ * `sizes` for plates that run the width of the page less its margins: the
+ * case-study hero on wide screens, and every plate on a phone.
  */
-export const HERO_ZOOM = 1.14;
+export const PLATE_SIZES = {
+  phone: "calc(100vw - 2.5rem)",
+  wide: "calc(100vw - 4rem)",
+} as const;
 
-// Next's default device sizes. The optimizer rejects any other width, and
-// since Next 16 it accepts only quality 75 unless configured otherwise.
-const OPTIMIZER_WIDTHS = [640, 750, 828, 1080, 1200, 1920, 2048, 3840] as const;
-const OPTIMIZER_QUALITY = 75;
-
-/** An optimizer URL for a still, sized to the display it will fill. */
-export function optimizedUrl(src: string, cssWidth: number, pixelRatio: number): string {
-  const needed = Math.min(cssWidth * pixelRatio, 3840);
-  const width = OPTIMIZER_WIDTHS.find((w) => w >= needed) ?? 3840;
-  return `/_next/image?url=${encodeURIComponent(src)}&w=${width}&q=${OPTIMIZER_QUALITY}`;
-}
+/**
+ * The case-study hero's `<picture>`: the desktop capture from 48rem, the phone
+ * capture below it.
+ *
+ * Everything that leads to a case study asks for its hero with these same
+ * `sizes` -- the home slider's plates (narrower than this on screen, on
+ * purpose), their WebGL textures, and every preload. The browser then picks
+ * one candidate for all of them, so the image the page transition lands on is
+ * already downloaded and decoded instead of arriving a moment after the morph
+ * has finished on its placeholder.
+ */
+export const CASE_HERO = {
+  wide: "(min-width: 48rem)",
+  narrow: "(max-width: 47.99rem)",
+  sizes: `(min-width: 48rem) ${PLATE_SIZES.wide}, ${PLATE_SIZES.phone}`,
+} as const;
 
 /** "01", "02" -- the record number the rail and the index both cite. */
 export function recordNumber(index: number): string {

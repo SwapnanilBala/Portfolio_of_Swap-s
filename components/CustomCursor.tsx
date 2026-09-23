@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "@/lib/gsap";
 import { DURATION, useFinePointer, useReducedMotion } from "@/lib/motion";
@@ -26,7 +27,15 @@ export function CustomCursor({ labels }: Props) {
   const fine = useFinePointer();
   const reduced = useReducedMotion();
   const ref = useRef<HTMLDivElement>(null);
-  const [gesture, setGesture] = useState<Gesture | null>(null);
+  const pathname = usePathname();
+  // A gesture belongs to the page it was read on. After a navigation the
+  // element under a still pointer is gone, so the old label must not linger
+  // until the pointer next moves.
+  const [reading, setReading] = useState<{ readonly gesture: Gesture | null; readonly path: string }>({
+    gesture: null,
+    path: "",
+  });
+  const gesture = reading.path === pathname ? reading.gesture : null;
   const active = fine && !reduced;
 
   useEffect(() => {
@@ -40,9 +49,12 @@ export function CustomCursor({ labels }: Props) {
       xTo(event.clientX);
       yTo(event.clientY);
       const next = gestureAt(event.target);
-      setGesture((previous) => (previous === next ? previous : next));
+      const path = window.location.pathname;
+      setReading((previous) =>
+        previous.gesture === next && previous.path === path ? previous : { gesture: next, path },
+      );
     };
-    const onLeave = () => setGesture(null);
+    const onLeave = () => setReading({ gesture: null, path: window.location.pathname });
     window.addEventListener("pointermove", onMove, { passive: true });
     document.addEventListener("pointerleave", onLeave);
     return () => {

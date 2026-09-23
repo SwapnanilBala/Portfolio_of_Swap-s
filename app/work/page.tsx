@@ -28,7 +28,14 @@ export default function IndexPage() {
               {range}
             </span>
           </div>
-          <SplitTextReveal as="h1" by="chars" stagger={0.035} className="display -ml-[0.04em] text-[30vw]">
+          {/* Fitted to the measure: "INDEX" sets 2.62 times its font size
+              wide in this face, so the size is the content width over that. */}
+          <SplitTextReveal
+            as="h1"
+            by="chars"
+            stagger={0.035}
+            className="display -ml-[0.04em] text-[calc((100vw-2.5rem)/2.66)] md:text-[calc((100vw-4rem)/2.66)]"
+          >
             {ui.index.heading}
           </SplitTextReveal>
         </header>

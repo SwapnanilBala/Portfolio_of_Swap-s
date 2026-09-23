@@ -14,12 +14,15 @@
  */
 export type BlurredMedia =
   | "/media/kb-clinic-hero.webp"
+  | "/media/kb-clinic-mobile.webp"
   | "/media/lagna-atelier-ashtakavarga.webp"
   | "/media/lagna-atelier-chart.webp"
   | "/media/lagna-atelier-hero.webp"
+  | "/media/lagna-atelier-mobile.webp"
   | "/media/lagna-atelier.webp"
   | "/media/robust-health-dashboard.webp"
   | "/media/robust-health-hero.webp"
+  | "/media/robust-health-mobile.webp"
   | "/media/robust-health-onboarding.webp"
   | "/media/robust-health-workout.webp"
   | "/media/swapnanil-bala.webp";
@@ -27,18 +30,24 @@ export type BlurredMedia =
 export const BLUR_PLACEHOLDERS: Readonly<Record<BlurredMedia, string>> = {
   "/media/kb-clinic-hero.webp":
     "data:image/webp;base64,UklGRjgAAABXRUJQVlA4ICwAAADQAQCdASoMAAgAAwBSJZwAAxf83caAAAD+9dMH+xXaUXohcOssLL11QEAAAA==",
+  "/media/kb-clinic-mobile.webp":
+    "data:image/webp;base64,UklGRlwAAABXRUJQVlA4IFAAAACQAwCdASoMABoAPt1cpkyopSOiMAgBEBuJZwAAV/qoJ/d/A1YAAP7vTCKaVD7NschRc7VQezrV/58YX8+jidCmhfuTk+peI5FakuyLABQAAA==",
   "/media/lagna-atelier-ashtakavarga.webp":
     "data:image/webp;base64,UklGRj4AAABXRUJQVlA4IDIAAADQAQCdASoMAAgAAwBSJaQAAuR/FqNpAAD+8OF0iuBawxpsClinuBSxH4yXAJWJFw8AAA==",
   "/media/lagna-atelier-chart.webp":
     "data:image/webp;base64,UklGRjIAAABXRUJQVlA4ICYAAACwAQCdASoMAAgAAwBSJZwAAudLYxsAAP70fo/mT8gceI2RrDyAAA==",
   "/media/lagna-atelier-hero.webp":
     "data:image/webp;base64,UklGRjAAAABXRUJQVlA4ICQAAABwAQCdASoMAAgAAwBSJZQC7AFAAAD+86lKAaphCMCZ81W4AAA=",
+  "/media/lagna-atelier-mobile.webp":
+    "data:image/webp;base64,UklGRloAAABXRUJQVlA4IE4AAABwAwCdASoMABoAPt1cp0yopSOiMAgBEBuJZwDLLCzfQu78ahAA/vAJEHwPuBLA7csuW3nR1vSzbXahGOd5nUDyLzfOoQxZn+gQhWmCgAA=",
   "/media/lagna-atelier.webp":
     "data:image/webp;base64,UklGRj4AAABXRUJQVlA4IDIAAAAQAgCdASoMAAgAAwBSJZwC7AERHovDoU0AAP73go+bPcexAqwN0AKIwd248lEtFnboAA==",
   "/media/robust-health-dashboard.webp":
     "data:image/webp;base64,UklGRjQAAABXRUJQVlA4ICgAAABwAQCdASoMAAcAAwBSJZQC06FAAAD+9S2Lznqchw8usXK+n7/U2gAA",
   "/media/robust-health-hero.webp":
     "data:image/webp;base64,UklGRlIAAABXRUJQVlA4IEYAAADQAQCdASoMAAgAAwBSJYwAAlpBv/smwAD+9F19RmG3v6oZHe4SL3ktxxzX1iNN2dU5LndKSo4N6tRG/FHpLY7Pgg9iAAAA",
+  "/media/robust-health-mobile.webp":
+    "data:image/webp;base64,UklGRqAAAABXRUJQVlA4IJQAAAAQBACdASoMABoAPt0+s1SooiWjmAEQG4lAFcONI+ckFTavobbcXt/kAAD++SVken9zEqC2il8ucCPJqlOXfimp1C/msIGEMyl3BI8kKkL116w8bhBUFP3t8yRPQooqICbtSWyMPqyppuqX3q80s1tg9kp9fmDz3GhLODei7LzikTn1s4qTirHl0/vNtOfewucO4AAA",
   "/media/robust-health-onboarding.webp":
     "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACwAQCdASoMAAgAAwBSJZwAAu18yXxgAP7zMLTNq3F9adzD7nYjfusD2I1JNHAA",
   "/media/robust-health-workout.webp":

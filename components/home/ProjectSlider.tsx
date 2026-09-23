@@ -16,7 +16,8 @@ import { DisplayTitle } from "@/components/DisplayTitle";
 import { SharedMedia } from "@/components/PageTransition";
 import { ProjectThumbnailRail } from "@/components/home/ProjectThumbnailRail";
 import { gsap, useGSAP } from "@/lib/gsap";
-import { blurFor, HERO_BRIGHTNESS, HERO_ZOOM, recordNumber } from "@/lib/media";
+import { blurFor, CASE_HERO, HERO_BRIGHTNESS, recordNumber } from "@/lib/media";
+import { warmCaseHero } from "@/lib/preload";
 import {
   DURATION,
   EASE,
@@ -28,8 +29,9 @@ import {
 import {
   clamp,
   DESKTOP_QUERY,
-  SLIDE_SPACING,
+  presenceAt,
   slideOffset,
+  slideStep,
   wrapIndex,
   type SliderMotion,
 } from "@/lib/slider";
@@ -67,15 +69,22 @@ const FOLLOW = 0.085;
 const SETTLE_MS = 160;
 
 /**
- * The desktop home page: a looping horizontal run of full-bleed project
- * plates, driven by drag, wheel, arrow keys and the thumbnail rail.
+ * The desktop home page: a looping horizontal run of framed project plates,
+ * one on stage at a time, driven by drag, wheel, arrow keys and the thumbnail
+ * rail. The title crosses the lower edge of the plate on stage.
+ *
+ * The plates are framed rather than full-bleed on purpose. Every capture is a
+ * landing page with its own headline; filling the viewport with one put two
+ * headlines on top of each other. In a frame, the product's typography is part
+ * of the picture.
  *
  * One physics loop on GSAP's ticker owns the state -- a target position, a
  * current position that follows it with inertia, and the velocity between
  * them -- and shares it by reference with the WebGL layer, which only draws.
  * The DOM plates underneath are the no-WebGL and reduced-motion path, the
  * largest-contentful-paint frame, and the element a page transition morphs
- * from, so they are always rendered and always in position.
+ * from, so they are always rendered and always in position. Their layout box
+ * is also the geometry the WebGL plates copy: CSS sizes the frame once.
  */
 export function ProjectSlider({ projects, copy }: Props) {
   const router = useRouter();
@@ -95,6 +104,9 @@ export function ProjectSlider({ projects, copy }: Props) {
 
   const regionRef = useRef<HTMLElement>(null);
   const plateRefs = useRef<(HTMLDivElement | null)[]>([]);
+  // Every plate shares one layout box; the first one is measured for it.
+  const frameRef = useRef<HTMLDivElement>(null);
+  const stepRef = useRef(0);
   const titleRefs = useRef<(HTMLDivElement | null)[]>([]);
   const motion = useRef<SliderMotion>({ current: 0, velocity: 0, hover: 0 });
   const target = useRef(0);
@@ -127,6 +139,28 @@ export function ProjectSlider({ projects, copy }: Props) {
     if (project) router.push(`/work/${project.slug}`, { transitionTypes: ["page"] });
   }, [projects, router]);
 
+  /** Fetch the case-study hero behind a plate once a visit looks likely. */
+  const warm = useCallback((index: number) => warmCaseHero(projects[index]?.hero), [projects]);
+
+  // Keyboard visitors never hover: warm the plate they settle on instead.
+  useEffect(() => {
+    if (isDesktop && document.activeElement === regionRef.current) warm(active);
+  }, [active, isDesktop, warm]);
+
+  // The distance between plates follows the window.
+  useEffect(() => {
+    const region = regionRef.current;
+    if (!isDesktop || !region) return;
+    const measure = () => {
+      const frame = frameRef.current;
+      if (frame) stepRef.current = slideStep(region.clientWidth, frame.offsetWidth);
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(region);
+    return () => observer.disconnect();
+  }, [isDesktop]);
+
   // The physics loop.
   useEffect(() => {
     if (!isDesktop) return;
@@ -144,10 +178,12 @@ export function ProjectSlider({ projects, copy }: Props) {
       }
       state.velocity = state.current - previous;
 
+      const distance = stepRef.current;
       plateRefs.current.forEach((plate, i) => {
         if (!plate) return;
         const offset = slideOffset(i, state.current, count);
-        plate.style.transform = `translate3d(${offset * SLIDE_SPACING * 100}%, 0, 0)`;
+        plate.style.transform = `translate3d(${offset * distance}px, 0, 0)`;
+        plate.style.opacity = String(presenceAt(offset));
         plate.style.visibility = Math.abs(offset) < 1.25 ? "visible" : "hidden";
       });
 
@@ -188,6 +224,26 @@ export function ProjectSlider({ projects, copy }: Props) {
     let speed = 0;
     let travel = 0;
     let downAt = 0;
+    let hovering = false;
+
+    /** Whether the pointer is over the plate on stage -- the one a click opens. */
+    const overStage = (event: PointerEvent) => {
+      const rect = plateRefs.current[activeRef.current]?.getBoundingClientRect();
+      return (
+        rect !== undefined &&
+        event.clientX >= rect.left &&
+        event.clientX <= rect.right &&
+        event.clientY >= rect.top &&
+        event.clientY <= rect.bottom
+      );
+    };
+
+    const setHover = (next: boolean) => {
+      if (next === hovering) return;
+      hovering = next;
+      if (next) warm(activeRef.current);
+      gsap.to(motion.current, { hover: next ? 1 : 0, duration: 0.6, ease: EASE.out });
+    };
 
     const onDown = (event: PointerEvent) => {
       if (event.button !== 0 || !event.isPrimary) return;
@@ -204,7 +260,10 @@ export function ProjectSlider({ projects, copy }: Props) {
     };
 
     const onMove = (event: PointerEvent) => {
-      if (!dragging.current || event.pointerId !== pointerId) return;
+      if (!dragging.current || event.pointerId !== pointerId) {
+        setHover(overStage(event));
+        return;
+      }
       const dx = event.clientX - startX;
       travel = Math.max(travel, Math.abs(dx));
       target.current = startTarget - (dx / window.innerWidth) * 1.1;
@@ -219,17 +278,17 @@ export function ProjectSlider({ projects, copy }: Props) {
       if (!dragging.current || event.pointerId !== pointerId) return;
       dragging.current = false;
       if (region.hasPointerCapture(pointerId)) region.releasePointerCapture(pointerId);
-      // A press that barely moved is a click: open what is on screen.
+      // A press that barely moved is a click. On the plate on stage it opens
+      // the project; on the ink around it, it does nothing.
       if (travel < 6 && event.timeStamp - downAt < 350) {
-        openActive();
+        if (overStage(event)) openActive();
         return;
       }
       target.current = Math.round(target.current + clamp(-speed * 0.35, -1, 1));
       lastInput.current = performance.now();
     };
 
-    const onEnter = () => gsap.to(motion.current, { hover: 1, duration: 0.6, ease: EASE.out });
-    const onLeave = () => gsap.to(motion.current, { hover: 0, duration: 0.6, ease: EASE.out });
+    const onLeave = () => setHover(false);
 
     const onKey = (event: KeyboardEvent) => {
       if (event.altKey || event.ctrlKey || event.metaKey) return;
@@ -270,7 +329,6 @@ export function ProjectSlider({ projects, copy }: Props) {
     region.addEventListener("pointermove", onMove);
     region.addEventListener("pointerup", onUp);
     region.addEventListener("pointercancel", onUp);
-    region.addEventListener("pointerenter", onEnter);
     region.addEventListener("pointerleave", onLeave);
     window.addEventListener("keydown", onKey);
     return () => {
@@ -279,11 +337,10 @@ export function ProjectSlider({ projects, copy }: Props) {
       region.removeEventListener("pointermove", onMove);
       region.removeEventListener("pointerup", onUp);
       region.removeEventListener("pointercancel", onUp);
-      region.removeEventListener("pointerenter", onEnter);
       region.removeEventListener("pointerleave", onLeave);
       window.removeEventListener("keydown", onKey);
     };
-  }, [isDesktop, count, goTo, step, openActive]);
+  }, [isDesktop, count, goTo, step, openActive, warm]);
 
   // First reveal: the opening title rises into place once, on arrival.
   useGSAP(
@@ -376,6 +433,9 @@ export function ProjectSlider({ projects, copy }: Props) {
       aria-label={copy.region}
       aria-describedby="slider-hint"
       tabIndex={0}
+      onFocus={(event) => {
+        if (event.target === event.currentTarget) warm(activeRef.current);
+      }}
       data-cursor="drag"
       data-lenis-prevent
       className="absolute inset-0 hidden touch-none select-none overflow-hidden bg-ink focus-visible:outline-2 focus-visible:-outline-offset-[12px] focus-visible:outline-paper desktop:block"
@@ -392,27 +452,33 @@ export function ProjectSlider({ projects, copy }: Props) {
           key={project.slug}
           ref={(plate) => {
             plateRefs.current[i] = plate;
+            if (i === 0) frameRef.current = plate;
           }}
           role="group"
           aria-roledescription="slide"
           aria-label={project.name}
           aria-hidden={i !== active}
-          className="absolute inset-0 overflow-hidden will-change-transform"
-          style={{ transform: `translate3d(${slideOffset(i, 0, count) * SLIDE_SPACING * 100}%, 0, 0)` }}
+          className="absolute left-[calc(50%-min(49.6vh,38vw))] top-[7.25rem] aspect-[16/10] w-[min(99.2vh,76vw)] overflow-hidden bg-ink will-change-transform"
+          // Until the loop's first tick only the first plate is on stage.
+          style={i === 0 ? undefined : { visibility: "hidden" }}
         >
           <SharedMedia slug={project.slug} enabled={hydrated && isDesktop && i === active}>
             <div className="absolute inset-0 overflow-hidden">
+              {/* Lazy, so the hidden phone layout never fetches it; the page
+                  preloads the first plate under the desktop query instead.
+                  Sized as the case-study hero, not as this plate: see
+                  CASE_HERO. */}
               <Image
                 src={project.hero.src}
                 alt={project.hero.alt}
                 fill
-                priority={i === 0}
-                sizes="100vw"
+                fetchPriority={i === 0 ? "high" : undefined}
+                sizes={CASE_HERO.sizes}
                 placeholder="blur"
                 blurDataURL={blurFor(project.hero.src)}
                 draggable={false}
-                className="object-cover"
-                style={{ filter: `brightness(${HERO_BRIGHTNESS})`, scale: String(HERO_ZOOM) }}
+                className="object-cover object-top"
+                style={{ filter: `brightness(${HERO_BRIGHTNESS})` }}
               />
             </div>
           </SharedMedia>
@@ -422,11 +488,12 @@ export function ProjectSlider({ projects, copy }: Props) {
       {useCanvas ? (
         <div
           aria-hidden="true"
-          className={`absolute inset-0 transition-opacity duration-700 ${canvasReady ? "opacity-100" : "opacity-0"}`}
+          className={`pointer-events-none absolute inset-0 transition-opacity duration-700 ${canvasReady ? "opacity-100" : "opacity-0"}`}
         >
           <SliderCanvas
             sources={sources}
             motion={motion}
+            frameRef={frameRef}
             initialIndex={0}
             onReady={() => setCanvasReady(true)}
             onLost={() => setCanvasLost(true)}
@@ -434,7 +501,7 @@ export function ProjectSlider({ projects, copy }: Props) {
         </div>
       ) : null}
 
-      <div className="pointer-events-none absolute inset-x-5 bottom-[8vh] md:inset-x-8">
+      <div className="pointer-events-none absolute inset-x-5 bottom-[6vh] md:inset-x-8">
         {projects.map((project, i) => (
           <div
             key={project.slug}
@@ -447,11 +514,11 @@ export function ProjectSlider({ projects, copy }: Props) {
           >
             <DisplayTitle
               lines={displayLinesOf(project)}
-              className="text-[min(15.5vh,12.5vw)] text-paper"
+              className="text-[min(12vh,9.5vw)] text-paper"
             />
             <div
               data-title-meta
-              className="meta mt-7 grid max-w-[64rem] grid-cols-[minmax(12rem,auto)_6rem_1fr_auto] items-baseline gap-x-10 text-paper"
+              className="meta mt-5 grid max-w-[64rem] grid-cols-[minmax(12rem,auto)_6rem_1fr_auto] items-baseline gap-x-10 text-paper"
             >
               <span className="tabular-nums">
                 {recordNumber(i)} / {project.category}
@@ -462,6 +529,8 @@ export function ProjectSlider({ projects, copy }: Props) {
                 href={`/work/${project.slug}`}
                 transitionTypes={["page"]}
                 tabIndex={i === active ? 0 : -1}
+                onFocus={() => warm(i)}
+                onPointerEnter={() => warm(i)}
                 className="pointer-events-auto underline decoration-1 underline-offset-4"
               >
                 {copy.open}

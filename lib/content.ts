@@ -81,6 +81,12 @@ export const content: SiteContent = {
         height: 1600,
         alt: "Lagna Atelier's landing screen: “Create your Vedic birth chart” in gold capitals on a dark starfield, above a four-step birth-details form and a live sky panel waiting for input.",
       },
+      heroMobile: {
+        src: "/media/lagna-atelier-mobile.webp",
+        width: 1170,
+        height: 2532,
+        alt: "Lagna Atelier on a phone: “Create your Vedic birth chart” in gold capitals, then the first step of the birth-details form asking for a name, and a continue button.",
+      },
       cover: {
         src: "/media/lagna-atelier-chart.webp",
         width: 1528,
@@ -205,6 +211,20 @@ export const content: SiteContent = {
         height: 1600,
         alt: "Robust Health's landing page: the headline “Structured programming, refined every week” beside three gym photographs, above a row of usage counters.",
       },
+      heroMobile: {
+        src: "/media/robust-health-mobile.webp",
+        width: 1170,
+        height: 2532,
+        alt: "Robust Health on a phone: the headline “Structured programming, refined every week”, sign-up and trainer-login buttons, three gym photographs and a row of usage counters.",
+      },
+      // The dashboard, not the landing page: the Index shows the product
+      // rather than its marketing photography.
+      cover: {
+        src: "/media/robust-health-dashboard.webp",
+        width: 1054,
+        height: 631,
+        alt: "A wide card headed Up Next with a prominent start button, a numbered five-row list beside it, and below them a programme card of three figure tiles next to an empty activity panel.",
+      },
       caseStudy: {
         sections: [
           {
@@ -310,6 +330,12 @@ export const content: SiteContent = {
         width: 2560,
         height: 1600,
         alt: "The clinic's booking page: the practice name above scheduling and dashboard buttons, a doctor-availability card, and a city-and-chamber picker that starts a booking.",
+      },
+      heroMobile: {
+        src: "/media/kb-clinic-mobile.webp",
+        width: 1170,
+        height: 2532,
+        alt: "The clinic's booking page on a phone: the practice name, booking and available-dates buttons, and the top of a doctor-availability card.",
       },
       caseStudy: {
         sections: [
@@ -629,7 +655,7 @@ export const content: SiteContent = {
       rail: "Choose a project",
       thumbnail: "Show {name}",
       open: "Open the case study",
-      hint: "Drag, scroll or use the arrow keys",
+      hint: "Drag, scroll or use the arrow keys; Enter opens the case study",
     },
     cursor: { drag: "Drag", view: "View" },
     index: {

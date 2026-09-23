@@ -1,8 +1,10 @@
 "use client";
 
+import { getImageProps } from "next/image";
 import { useEffect, useRef, type RefObject } from "react";
 import {
   LinearFilter,
+  LinearMipmapLinearFilter,
   LinearSRGBColorSpace,
   Mesh,
   NoColorSpace,
@@ -10,17 +12,18 @@ import {
   PlaneGeometry,
   Scene,
   ShaderMaterial,
-  TextureLoader,
+  Texture,
   Vector2,
+  Vector3,
   WebGLRenderer,
-  type Texture,
 } from "three";
 import { gsap } from "@/lib/gsap";
-import { HERO_BRIGHTNESS, HERO_ZOOM, optimizedUrl } from "@/lib/media";
+import { CASE_HERO, HERO_BRIGHTNESS } from "@/lib/media";
 import {
   clamp,
-  SLIDE_SPACING,
+  presenceAt,
   slideOffset,
+  slideStep,
   wrapIndex,
   type SliderMotion,
 } from "@/lib/slider";
@@ -35,6 +38,8 @@ interface Props {
   /** Must be referentially stable: a new array rebuilds the whole scene. */
   readonly sources: readonly SlideSource[];
   readonly motion: RefObject<SliderMotion>;
+  /** A DOM plate. Its layout box is the frame every WebGL plate is drawn in. */
+  readonly frameRef: RefObject<HTMLElement | null>;
   /** The slide on screen at mount; the canvas reports ready once it is. */
   readonly initialIndex: number;
   readonly onReady: () => void;
@@ -47,65 +52,64 @@ interface SlideUniforms {
   uTexture: { value: Texture | null };
   uPlane: { value: Vector2 };
   uImage: { value: Vector2 };
-  uOffset: { value: number };
   uVelocity: { value: number };
   uHover: { value: number };
   uBrightness: { value: number };
-  uZoom: { value: number };
+  uPresence: { value: number };
+  uGround: { value: Vector3 };
   uReady: { value: number };
 }
 
+/** The page's ink, #111111, as the shader's raw sRGB values. */
+const GROUND = 17 / 255;
+
+// The plate's leading edge bows forward, furthest across the middle row, and
+// the trailing edge holds -- film pulled through a gate. The plate only ever
+// grows, so the DOM plate registered beneath it can never show at an edge.
 const VERTEX = /* glsl */ `
+  uniform float uVelocity;
   varying vec2 vUv;
   void main() {
     vUv = uv;
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    vec3 p = position;
+    float row = p.y * 2.0;
+    float leading = step(p.x * uVelocity, 0.0);
+    p.x -= uVelocity * 0.06 * (1.0 - row * row) * leading;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
   }
 `;
 
-// All distortion is in UV space, so each plate stays full-bleed and nothing
-// behind it can show through the bend.
 const FRAGMENT = /* glsl */ `
   uniform sampler2D uTexture;
   uniform vec2 uPlane;
   uniform vec2 uImage;
-  uniform float uOffset;
   uniform float uVelocity;
   uniform float uHover;
   uniform float uBrightness;
-  uniform float uZoom;
+  uniform float uPresence;
+  uniform vec3 uGround;
   uniform float uReady;
   varying vec2 vUv;
 
-  // object-fit: cover, in UV space.
+  // object-fit: cover with object-position: top, in UV space (v = 1 is the
+  // top edge), matching the DOM plate's object-cover object-top.
   vec2 cover(vec2 uv) {
     float planeRatio = uPlane.x / uPlane.y;
     float imageRatio = uImage.x / uImage.y;
     vec2 scale = planeRatio > imageRatio
       ? vec2(1.0, imageRatio / planeRatio)
       : vec2(planeRatio / imageRatio, 1.0);
-    return (uv - 0.5) * scale + 0.5;
+    return vec2((uv.x - 0.5) * scale.x + 0.5, 1.0 - (1.0 - uv.y) * scale.y);
   }
 
   void main() {
-    vec2 uv = vUv;
     float v = uVelocity;
 
-    // Rows bow toward the direction of travel, most across the middle.
-    float row = uv.y * 2.0 - 1.0;
-    uv.x -= v * 0.045 * (1.0 - row * row);
+    // A slight push in while moving or hovered, inside the frame.
+    float zoom = 1.0 + abs(v) * 0.03 + uHover * 0.02;
+    vec2 st = cover((vUv - 0.5) / zoom + 0.5);
 
-    // A slight push in while moving or hovered. The base zoom leaves the
-    // parallax room to travel without sampling past the image's edge.
-    float zoom = uZoom + abs(v) * 0.05 + uHover * 0.025;
-    uv = (uv - 0.5) / zoom + 0.5;
-
-    // Parallax: the image drifts against its own plate.
-    uv.x += uOffset * 0.1;
-
-    vec2 st = cover(uv);
-
-    // Long exposure: the frame smears along its path, like a star trail.
+    // Long exposure: the capture smears back along its path.
     vec3 color = vec3(0.0);
     vec2 trail = vec2(v * 0.03, 0.0);
     for (int i = 0; i < 8; i++) {
@@ -118,7 +122,10 @@ const FRAGMENT = /* glsl */ `
     color.r = mix(color.r, texture2D(uTexture, st + split).r, 0.5);
     color.b = mix(color.b, texture2D(uTexture, st - split).b, 0.5);
 
-    gl_FragColor = vec4(color * uBrightness * uReady, uReady);
+    // Dimmed toward the ground as the plate leaves the stage: the same mix the
+    // DOM plate's opacity makes over the ink.
+    vec3 lit = mix(uGround, color * uBrightness, uPresence);
+    gl_FragColor = vec4(lit * uReady, uReady);
   }
 `;
 
@@ -128,16 +135,21 @@ const FRAGMENT = /* glsl */ `
  * physics live in ProjectSlider, which shares its state by reference; this
  * reads it on the same GSAP tick, after the slider has updated it.
  *
+ * The plates copy the DOM plates' geometry rather than restating it: the frame
+ * is measured from `frameRef`, and plates step apart by the same `slideStep`,
+ * so CSS remains the one place the layout is defined.
+ *
  * Plain three.js rather than a React renderer: three plates do not need a
  * reconciler, and a second React reconciler is one more thing that has to
  * agree with the canary React the App Router runs.
  *
  * The renderer does not re-encode colour and textures are not decoded, so a
- * plate is the image darkened by exactly HERO_BRIGHTNESS -- the same value the
- * DOM plate's CSS filter applies, which is what keeps the page-transition
- * handover from flashing. When nothing is moving, nothing is redrawn.
+ * plate at rest is the image darkened by exactly HERO_BRIGHTNESS -- the same
+ * value the DOM plate's CSS filter applies, which is what keeps the
+ * page-transition handover from flashing. When nothing is moving, nothing is
+ * redrawn.
  */
-export function SliderCanvas({ sources, motion, initialIndex, onReady, onLost }: Props) {
+export function SliderCanvas({ sources, motion, frameRef, initialIndex, onReady, onLost }: Props) {
   const hostRef = useRef<HTMLDivElement>(null);
   // Callbacks change identity on every parent render; the scene must not, so
   // it reads them through refs kept current after each render.
@@ -164,18 +176,19 @@ export function SliderCanvas({ sources, motion, initialIndex, onReady, onLost }:
     const scene = new Scene();
     const camera = new OrthographicCamera(-1, 1, 1, -1, 0.1, 100);
     camera.position.z = 10;
-    const geometry = new PlaneGeometry(1, 1);
+    // Rows to bow along; columns stay straight.
+    const geometry = new PlaneGeometry(1, 1, 1, 24);
 
     const slides = sources.map((source) => {
       const uniforms: SlideUniforms = {
         uTexture: { value: null },
         uPlane: { value: new Vector2(1, 1) },
         uImage: { value: new Vector2(source.width, source.height) },
-        uOffset: { value: 0 },
         uVelocity: { value: 0 },
         uHover: { value: 0 },
         uBrightness: { value: HERO_BRIGHTNESS },
-        uZoom: { value: HERO_ZOOM },
+        uPresence: { value: 1 },
+        uGround: { value: new Vector3(GROUND, GROUND, GROUND) },
         uReady: { value: 0 },
       };
       const material = new ShaderMaterial({
@@ -191,6 +204,13 @@ export function SliderCanvas({ sources, motion, initialIndex, onReady, onLost }:
 
     let width = 1;
     let height = 1;
+    // The frame, in camera space: its centre and size, and the step between
+    // neighbouring plates.
+    let frameX = 0;
+    let frameY = 0;
+    let frameWidth = 1;
+    let frameHeight = 1;
+    let step = 1;
     let dirty = true;
     const resize = () => {
       width = Math.max(host.clientWidth, 1);
@@ -201,9 +221,16 @@ export function SliderCanvas({ sources, motion, initialIndex, onReady, onLost }:
       camera.top = height / 2;
       camera.bottom = -height / 2;
       camera.updateProjectionMatrix();
+
+      const frame = frameRef.current;
+      frameWidth = Math.max(frame?.offsetWidth ?? width, 1);
+      frameHeight = Math.max(frame?.offsetHeight ?? height, 1);
+      frameX = (frame?.offsetLeft ?? 0) + frameWidth / 2 - width / 2;
+      frameY = height / 2 - ((frame?.offsetTop ?? 0) + frameHeight / 2);
+      step = slideStep(width, frameWidth);
       for (const slide of slides) {
-        slide.mesh.scale.set(width, height, 1);
-        slide.uniforms.uPlane.value.set(width, height);
+        slide.mesh.scale.set(frameWidth, frameHeight, 1);
+        slide.uniforms.uPlane.value.set(frameWidth, frameHeight);
       }
       dirty = true;
     };
@@ -211,25 +238,51 @@ export function SliderCanvas({ sources, motion, initialIndex, onReady, onLost }:
     const observer = new ResizeObserver(resize);
     observer.observe(host);
 
-    // Textures are sized to the display once, at mount; refetching on every
-    // resize would download the same images for a few pixels' difference.
+    // Each texture's candidate is chosen by an image carrying the DOM plate's
+    // own srcset and sizes, so the browser picks the same one for both: one
+    // download serves the DOM plate, this texture and the case-study hero the
+    // plate opens into (see CASE_HERO). A hand-built URL cannot promise that
+    // -- the browser's choice between neighbouring widths is its own.
+    //
+    // The texture itself is made from a second, plain image of that same URL
+    // (a memory-cache hit, not a second download). An srcset image reports a
+    // density-corrected size -- a 2560px capture chosen for a 3840w slot
+    // calls itself 917px wide -- and three.js allocates the texture from that
+    // figure, so the real bitmap would not fit and the plate drew black.
+    //
+    // Mipmapped, because the candidate is sized for the wider hero and is
+    // drawn here smaller than it was fetched.
     let cancelled = false;
-    const loader = new TextureLoader();
     slides.forEach((slide, i) => {
       const source = sources[i];
       if (!source) return;
-      loader.load(optimizedUrl(source.src, width, renderer.getPixelRatio()), (texture) => {
-        if (cancelled) {
-          texture.dispose();
-          return;
-        }
-        texture.colorSpace = NoColorSpace;
-        texture.minFilter = LinearFilter;
-        texture.magFilter = LinearFilter;
-        texture.generateMipmaps = false;
-        slide.uniforms.uTexture.value = texture;
-        dirty = true;
+      const { props } = getImageProps({
+        src: source.src,
+        alt: "",
+        width: source.width,
+        height: source.height,
+        sizes: CASE_HERO.sizes,
       });
+      const chooser = new Image();
+      chooser.sizes = CASE_HERO.sizes;
+      if (props.srcSet) chooser.srcset = props.srcSet;
+      chooser.src = props.src;
+      chooser.onload = () => {
+        if (cancelled) return;
+        const image = new Image();
+        image.onload = () => {
+          if (cancelled) return;
+          const texture = new Texture(image);
+          texture.colorSpace = NoColorSpace;
+          texture.minFilter = LinearMipmapLinearFilter;
+          texture.magFilter = LinearFilter;
+          texture.generateMipmaps = true;
+          texture.needsUpdate = true;
+          slide.uniforms.uTexture.value = texture;
+          dirty = true;
+        };
+        image.src = chooser.currentSrc;
+      };
     });
 
     let smoothedVelocity = 0;
@@ -244,12 +297,12 @@ export function SliderCanvas({ sources, motion, initialIndex, onReady, onLost }:
       let fading = false;
       slides.forEach((slide, i) => {
         const offset = slideOffset(i, state.current, count);
-        slide.mesh.position.x = offset * width * SLIDE_SPACING;
+        slide.mesh.position.set(frameX + offset * step, frameY, 0);
         slide.mesh.visible = Math.abs(offset) < 1.25;
         const u = slide.uniforms;
-        u.uOffset.value = offset;
         u.uVelocity.value = smoothedVelocity;
         u.uHover.value = state.hover;
+        u.uPresence.value = presenceAt(offset);
         if (u.uTexture.value && u.uReady.value < 0.999) {
           u.uReady.value += (1 - u.uReady.value) * 0.12;
           fading = true;
@@ -294,7 +347,7 @@ export function SliderCanvas({ sources, motion, initialIndex, onReady, onLost }:
       renderer.dispose();
       renderer.domElement.remove();
     };
-  }, [sources, motion, initialIndex]);
+  }, [sources, motion, frameRef, initialIndex]);
 
   return (
     <div

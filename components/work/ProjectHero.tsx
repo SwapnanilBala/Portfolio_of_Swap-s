@@ -1,14 +1,23 @@
-import Image from "next/image";
+import { getImageProps } from "next/image";
 import { DisplayTitle } from "@/components/DisplayTitle";
 import { SharedMedia } from "@/components/PageTransition";
 import { RevealLines } from "@/components/RevealLines";
-import { blurFor, HERO_BRIGHTNESS } from "@/lib/media";
-import { displayLinesOf, type DataHero, type ProjectWithCase, type UiCopy } from "@/lib/types";
+import { blurFor, CASE_HERO, HERO_BRIGHTNESS } from "@/lib/media";
+import { preloadFor } from "@/lib/preload";
+import {
+  displayLinesOf,
+  type DataHero,
+  type ImageAsset,
+  type ProjectWithCase,
+  type UiCopy,
+} from "@/lib/types";
 
 interface Props {
   readonly project: ProjectWithCase;
   readonly meta: UiCopy["caseMeta"];
 }
+
+const { wide: WIDE, narrow: NARROW, sizes: SIZES } = CASE_HERO;
 
 /**
  * Bars on a zero-to-one scale, so a 0.033 gap looks like the 0.033 it is. A
@@ -17,7 +26,7 @@ interface Props {
  */
 function DataHeroChart({ hero }: { readonly hero: DataHero }) {
   return (
-    <figure className="absolute inset-x-5 top-[18vh] md:inset-x-8">
+    <figure className="pt-[10vh]">
       <p className="meta text-ink-muted">{hero.metric}</p>
       <ul className="mt-6 grid gap-5">
         {hero.bars.map((bar) => (
@@ -41,38 +50,67 @@ function DataHeroChart({ hero }: { readonly hero: DataHero }) {
 }
 
 /**
- * One enormous visual filling the first viewport, the title over it, and the
- * ROLE / YEAR / STACK / TYPE row under the title. The image is the far end of
- * the shared-element morph from the slider plate or the index card.
+ * The desktop capture on wide screens, the phone capture on narrow ones. Only
+ * the source the browser picks is fetched, and each is preloaded under its own
+ * query, so neither device downloads the other's image.
+ */
+function HeroPicture({ wide, narrow }: { readonly wide: ImageAsset; readonly narrow: ImageAsset }) {
+  preloadFor(wide, SIZES, WIDE);
+  preloadFor(narrow, SIZES, NARROW);
+  const {
+    props: { srcSet: narrowSet },
+  } = getImageProps({ src: narrow.src, alt: "", width: narrow.width, height: narrow.height, sizes: SIZES });
+  const { props: img } = getImageProps({
+    src: wide.src,
+    alt: wide.alt,
+    width: wide.width,
+    height: wide.height,
+    sizes: SIZES,
+    loading: "eager",
+    fetchPriority: "high",
+    // Arriving from a plate, the image is already downloaded; a synchronous
+    // decode puts it in the first frame, which is the frame the page
+    // transition snapshots. Asynchronous, the morph lands on the placeholder.
+    decoding: "sync",
+    placeholder: "blur",
+    blurDataURL: blurFor(wide.src),
+    style: { objectFit: "cover", objectPosition: "top", filter: `brightness(${HERO_BRIGHTNESS})` },
+  });
+  return (
+    <picture>
+      <source media={NARROW} srcSet={narrowSet} sizes={SIZES} />
+      <img {...img} alt={wide.alt} className="absolute inset-0 size-full" />
+    </picture>
+  );
+}
+
+/**
+ * The first viewport: a framed plate under the navigation, the title crossing
+ * its lower edge, and the ROLE / YEAR / STACK / TYPE row under the title. The
+ * plate is the far end of the shared-element morph from the slider or the
+ * index, and it is wider than either, so arriving reads as the media opening
+ * out.
  */
 export function ProjectHero({ project, meta }: Props) {
   const image = project.hero ?? project.cover;
   const dataHero = project.selected ? undefined : project.dataHero;
 
   return (
-    <section className="relative h-svh min-h-[36rem] overflow-hidden bg-ink text-paper">
-      <SharedMedia slug={project.slug}>
-        <div className="absolute inset-0 overflow-hidden bg-ink">
-          {image ? (
-            <Image
-              src={image.src}
-              alt={image.alt}
-              fill
-              priority
-              sizes="100vw"
-              placeholder="blur"
-              blurDataURL={blurFor(image.src)}
-              className="object-cover"
-              style={{ filter: `brightness(${HERO_BRIGHTNESS})` }}
-            />
-          ) : null}
-        </div>
-      </SharedMedia>
+    <section className="relative flex h-svh min-h-[36rem] flex-col overflow-hidden bg-ink px-5 pb-7 pt-[4.75rem] text-paper md:px-8 md:pb-9">
+      {image ? (
+        <SharedMedia slug={project.slug}>
+          <div className="relative min-h-0 flex-1 overflow-hidden bg-ink">
+            <HeroPicture wide={image} narrow={project.heroMobile ?? image} />
+          </div>
+        </SharedMedia>
+      ) : (
+        <div className="min-h-0 flex-1">{dataHero ? <DataHeroChart hero={dataHero} /> : null}</div>
+      )}
 
-      {!image && dataHero ? <DataHeroChart hero={dataHero} /> : null}
-
-      <RevealLines className="absolute inset-x-5 bottom-7 md:inset-x-8 md:bottom-9">
-        <DisplayTitle as="h1" lines={displayLinesOf(project)} className="text-[min(17vh,12.5vw)]" />
+      {/* The title's cap line just crosses the plate's lower edge. Any deeper
+          and the capture's own buttons show between the letters. */}
+      <RevealLines className={`relative ${image ? "-mt-3 md:-mt-5" : ""}`}>
+        <DisplayTitle as="h1" lines={displayLinesOf(project)} className="text-[min(13vh,12.5vw)]" />
         <dl
           data-reveal-meta
           className="meta mt-8 grid grid-cols-2 gap-x-8 gap-y-4 border-t border-ink-rule pt-4 md:grid-cols-12"

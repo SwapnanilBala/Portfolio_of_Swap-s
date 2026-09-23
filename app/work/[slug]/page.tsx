@@ -7,6 +7,7 @@ import { ProjectCover } from "@/components/index/ProjectCover";
 import { MagneticLink } from "@/components/MagneticLink";
 import { PageTransition, SharedMedia } from "@/components/PageTransition";
 import { SiteFooter } from "@/components/SiteFooter";
+import { WarmOnIntent } from "@/components/WarmOnIntent";
 import { CaseSection } from "@/components/work/CaseSection";
 import { MediaPlate } from "@/components/work/MediaPlate";
 import { ProjectHero } from "@/components/work/ProjectHero";
@@ -44,7 +45,7 @@ export default async function CaseStudyPage({ params }: Params) {
 
   return (
     <PageTransition>
-      <main id="main" data-tone="light" className="bg-paper text-ink">
+      <main id="main" data-tone="dark" className="bg-paper text-ink">
         <ProjectHero project={project} meta={ui.caseMeta} />
 
         {project.figures.length > 0 ? (
@@ -84,32 +85,32 @@ export default async function CaseStudyPage({ params }: Params) {
         ) : null}
 
         {next && next.slug !== project.slug ? (
-          <Link
-            href={`/work/${next.slug}`}
-            transitionTypes={["page"]}
-            data-cursor="view"
-            className="group grid grid-cols-12 items-end gap-x-5 border-t border-paper-rule px-5 py-16 md:px-8 md:py-24"
-          >
-            <span className="meta col-span-12 text-paper-muted md:col-span-3">{ui.nextProject}</span>
-            <div className="col-span-12 mt-6 md:col-span-6 md:mt-0">
-              <DisplayTitle
-                as="p"
-                lines={displayLinesOf(next)}
-                className="text-[min(11vw,11rem)] transition-transform duration-700 ease-out-expo group-hover:translate-x-3 reduced:transition-none"
-              />
-            </div>
-            <div className="col-span-12 mt-8 md:col-span-3 md:mt-0">
-              <SharedMedia slug={next.slug}>
-                <div className="overflow-hidden">
-                  <ProjectCover
-                    project={next}
-                    sizes="(min-width: 48rem) 22vw, 90vw"
-                    className="aspect-[4/3] transition-transform duration-700 ease-out-expo group-hover:scale-[1.04] reduced:transition-none"
-                  />
-                </div>
-              </SharedMedia>
-            </div>
-          </Link>
+          <WarmOnIntent image={next.hero ?? next.cover}>
+            <Link
+              href={`/work/${next.slug}`}
+              transitionTypes={["page"]}
+              data-cursor="view"
+              className="group grid grid-cols-12 items-end gap-x-5 border-t border-paper-rule px-5 py-16 md:px-8 md:py-24"
+            >
+              <span className="meta col-span-12 text-paper-muted md:col-span-3">{ui.nextProject}</span>
+              <div className="col-span-12 mt-6 md:col-span-6 md:mt-0">
+                <DisplayTitle
+                  as="p"
+                  lines={displayLinesOf(next)}
+                  className="text-[min(11vw,11rem)] transition-transform duration-700 ease-out-expo group-hover:translate-x-3 reduced:transition-none"
+                />
+              </div>
+              <div className="col-span-12 mt-8 md:col-span-3 md:mt-0">
+                <SharedMedia slug={next.slug}>
+                  <div className="overflow-hidden">
+                    <div className="transition-transform duration-700 ease-out-expo group-hover:scale-[1.04] reduced:transition-none">
+                      <ProjectCover project={next} sizes="(min-width: 48rem) 22vw, 90vw" />
+                    </div>
+                  </div>
+                </SharedMedia>
+              </div>
+            </Link>
+          </WarmOnIntent>
         ) : null}
 
         <SiteFooter />

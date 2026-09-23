@@ -64,12 +64,13 @@ components/work/            ProjectHero, CaseSection, MediaPlate
 components/                 PageTransition + SharedMedia, SplitTextReveal,
                             RevealLines, RevealPlate, DisplayTitle,
                             MagneticLink, CharShift, CustomCursor, SiteNav,
-                            SiteFooter, LocalTime, SmoothScroll
+                            SiteFooter, LocalTime, SmoothScroll, WarmOnIntent
 lib/content.ts              every word on the site
 lib/types.ts                the contract
 lib/blur.ts                 generated — run `node scripts/build-blur.mjs`
-lib/media.ts                hero brightness/zoom, optimizer URLs, record numbers
-lib/slider.ts               slider maths + DESKTOP_QUERY
+lib/media.ts                hero brightness, plate and case-hero sizes, record numbers
+lib/preload.ts              media-scoped preloads, warming a hero on intent
+lib/slider.ts               slider maths (step, presence) + DESKTOP_QUERY
 lib/motion.ts               easings, durations, media-query hooks
 ```
 
@@ -123,13 +124,33 @@ enormous display type against tiny editorial metadata, nothing in between that
 competes.
 
 - **Palette** — paper `#F3F2ED`, ink `#111111`, per the brief. No accent: active
-  and focus states use weight, opacity and `currentColor`. Home is dark; Index,
-  case studies and About are light, with a dark hero or footer where the brief
-  asks. The dossier's OS-driven dark theme is gone — each page has its own
-  ground by design. Colour lives only in the `@theme` block.
+  and focus states use weight, opacity and `currentColor`. The dossier's
+  OS-driven dark theme is gone — each page has its own ground by design.
+  Colour lives only in the `@theme` block.
+- **A page's tone is the ground it opens on** (`data-tone` on `<main>`), and
+  the root takes it — which is the ground a page transition crossfades through.
+  Home and case studies are dark (a case study's body is paper, but it opens on
+  an ink hero and closes on the ink footer); the Index and About are light.
+  Marking case studies light made the root flash paper mid-transition between
+  two dark screens. Text selection is one highlight for both grounds (paper on
+  `paper-muted`, 5.9:1), because a tone-keyed one went paper-on-paper inside a
+  dark-toned page's light body.
 - **Contrast is computed, not assumed** — ink on paper 16.85:1, `paper-muted`
-  on paper 5.80:1, `ink-muted` on ink 6.61:1. White over imagery is checked by
-  sampling the image under the text; `HERO_BRIGHTNESS` is the lever.
+  on paper 5.80:1, `ink-muted` on ink 6.61:1. Text over imagery is checked
+  against the pixels under each text box (the brightest 2% for light text), not
+  against the image's average; `HERO_BRIGHTNESS` is the lever.
+- **Heroes are framed plates, not full-bleed backgrounds.** This reverses the
+  first build of this design, which filled the viewport with each capture at
+  0.58 brightness and 1.14 zoom. Every capture is a landing page with its own
+  headline, so the slider's title sat on top of the product's ("Create your
+  Vedic birth chart", "Structured programming…") and read as two sites stacked;
+  the zoom also cut each product's nav bar at the viewport edge. Now a capture
+  is shown whole, anchored to its top so its header stays intact, and the title
+  only crosses the plate's lower edge. Dimming and scrims were tried first and
+  did not work: a legible headline competes at any brightness that keeps the
+  capture worth showing. Full-bleed only comes back with imagery that carries
+  no headline of its own — an in-product view such as the chart wheel — and
+  those sit behind forms and logins, so they have to come from him.
 - **Type** — Inter Tight throughout. `display` utility: 650 weight, −0.05em
   tracking, 0.84 line height, uppercase. `meta` utility: 11px, 500, uppercase.
   No mono: it is the developer-portfolio tell the brief asks to avoid.
@@ -173,22 +194,56 @@ one-off values.
   reference (`SliderMotion`) with `SliderCanvas`, which only draws, on the same
   tick. A wheel gesture moves at most one plate, so a trackpad's momentum tail
   cannot skip past everything.
+- **One plate on stage.** The frame is 16:10, `min(99.2vh, 76vw)` wide, under
+  the masthead. Neighbours rest just past the window's edges: the step between
+  plates is derived from the stage and plate widths (`slideStep`), never fixed,
+  so no window shape shows a sliver of the next project. Plates dim as they
+  leave the stage and light as they arrive (`presenceAt`) — DOM opacity over
+  the ink, and the same mix toward ink in the shader. A click opens a project
+  only on the plate on stage; the ink around it does nothing.
+- **CSS defines the frame once.** The WebGL plates measure a DOM plate's
+  layout box (`frameRef`) and step by the same `slideStep`; nothing restates
+  the geometry in JavaScript.
 - **The DOM plates are always rendered and always in position.** They are the
   no-WebGL and reduced-motion path, the LCP frame, and the element a page
   transition morphs from.
-- **`HERO_BRIGHTNESS` and `HERO_ZOOM` are shared by the shader and the DOM
-  image.** The renderer does not re-encode colour and textures are not decoded,
-  so a plate is exactly the CSS-filtered image — which is what keeps the
-  handover to a case study from flashing. Change them together or not at all.
+- **`HERO_BRIGHTNESS` is shared by the shader and the DOM image.** The
+  renderer does not re-encode colour and textures are not decoded, so a plate at
+  rest is exactly the CSS-filtered image — which is what keeps the handover to a
+  case study from flashing.
 - **The distortion is original, not the reference site's.** The brief's
   reference (G. Colombel, 2024) is a rotating film-reel cylinder; this is flat
-  plates with UV-space distortion: rows bow toward travel, a long-exposure
-  smear, a faint leading-edge channel split, parallax. Keep it that way.
+  framed plates whose leading edge bows forward with speed while the trailing
+  edge holds, a long-exposure smear, a faint leading-edge channel split and a
+  slight push-in. The bow only ever grows a plate: shrinking one would expose
+  the DOM plate registered beneath it. There is no parallax — it needed a zoom
+  that cropped the capture at the frame. Keep it that way.
 - **`sources` passed to the canvas must be referentially stable.** A new array
   rebuilds the whole scene; it is memoised in the slider for that reason.
-- Touch and narrow screens get `MobileProjects`: native vertical scroll-snap,
-  no WebGL. CSS (`desktop:` variant) decides which slider shows and JS
-  (`DESKTOP_QUERY`) decides which is wired up — keep the two queries identical.
+- Touch and narrow screens get `MobileProjects`: one framed plate per screen on
+  native vertical scroll-snap, no WebGL. A portrait screen shows the project's
+  phone capture (`heroMobile`), a landscape one its desktop capture. CSS
+  (`desktop:` variant) decides which slider shows and JS (`DESKTOP_QUERY`)
+  decides which is wired up — keep the two queries identical.
+- **`useMediaQuery` shares one `MediaQueryList` per query**, notifying every
+  subscriber from one listener, so all consumers of a query re-render in one
+  commit. With a list per consumer, React committed between their change events
+  and both sliders held the same shared name for a frame.
+
+## The Index
+
+- **Three projects to a row from 64rem, two from 48rem, one below**, each slot
+  at its own column, span and offset (`GRID_SLOTS`). Offsets are in `vw`: the
+  grid is sized by width, and `vh` offsets on a tall window left one project to
+  a row.
+- **A capture keeps its own aspect ratio.** Forcing covers into slot shapes cut
+  headlines mid-word. Only the typographic plates take the slot's shape, and
+  their figures are sized in container units so a narrow slot cannot overflow.
+- Captions stack (name, then type and year): side by side they wrapped into
+  each other in narrow slots. The name's box hugs its text, because Flip scales
+  that box into the list row.
+- Robust Health's cover is its dashboard, not its landing page: the Index shows
+  the product, not its marketing photography.
 
 ## Page transitions
 
@@ -211,6 +266,34 @@ transition.** `SharedMedia` takes `enabled` for exactly this: only the slide on
 screen, only the visible breakpoint's slider, only the list preview or the grid
 tile — never both.
 
+**React's development build warns about duplicates that are not there.** It
+records a named `<ViewTransition>` when it mounts or updates, but forgets it
+only on unmount, reading the name the boundary has *then*. A plate whose name
+was switched off keeps a stale entry, so the next page's tile for the same
+project logs "two <ViewTransition name=…>" — and so does crossing the desktop
+breakpoint live. The map exists only in development; production has no trace of
+it. Fresh loads at either size log nothing. Chase a duplicate only if it
+appears on a fresh load.
+
+**The morph stays above the pages** (`z-index: 1` on its group). A name only
+the new page has — the entering page's own boundary — is layered after every
+name the old page had, so without it the incoming page covered the morph as soon
+as its clip opened.
+
+**The morph lands on a loaded image.** The transition snapshots the new page
+as soon as it renders, and the hero is wider than anything that leads to it, so
+by default it wants a larger image than the one on screen and the morph ended on
+its blur placeholder. Instead, everything that leads to a case study asks for
+its hero with `CASE_HERO.sizes`: the home plates (larger than they display, on
+purpose), their WebGL textures — decoded from an image carrying the same
+`srcset` and `sizes`, never a hand-built URL, because the browser's choice
+between neighbouring candidates is its own — and the page's preload. One
+download serves all three, and the hero decodes synchronously so it is in the
+first frame, the one the transition captures. Index covers and the
+next-project card are different images, so they warm the hero on hover and
+focus (`warmCaseHero`, `WarmOnIntent`). Phones need none of it: their slide and
+their hero already ask for the same candidate.
+
 ## Performance
 
 The site claims a 50% / 67% load-time cut on one of its own projects. A slow
@@ -221,11 +304,17 @@ portfolio refutes its own copy.
   check the built HTML if that ever changes. Initial JS is about 245 KB gzipped
   per page, ~155 KB of it the React canary and Next runtime.
 - Every image carries intrinsic `width` and `height`, and goes through
-  `next/image`. Screenshots are never shown wider than they were captured:
-  `MediaPlate` right-aligns narrow ones at native width instead of upscaling.
-- Hand-built optimizer URLs (`optimizedUrl`) must use Next's default widths
-  and **quality 75** — Next 16 rejects any other quality unless
-  `images.qualities` is configured, and a rejected texture is a black slide.
+  `next/image` (or `getImageProps` where a `<picture>` needs art direction).
+  Screenshots are never shown wider than they were captured: `MediaPlate`
+  right-aligns narrow ones at native width instead of upscaling.
+- **Both sliders are server-rendered, so no home image is eager.** Each
+  slider's first plate is preloaded under its own media query (`preloadFor`).
+  `next/image`'s `preload` cannot take a query and would fetch the desktop
+  plate on phones and the phone plate on desktops. (`priority` is deprecated in
+  Next 16 anyway.) The case-study hero is a `<picture>` — desktop capture from
+  48rem, phone capture below — and each source is preloaded under its own query.
+- Next 16 accepts only **quality 75** unless `images.qualities` is configured;
+  a rejected request is a blank image. Leave `quality` unset.
 - The canvas redraws only while something moves, fades or is hovered.
 
 ## Accessibility floor
@@ -246,6 +335,16 @@ portfolio refutes its own copy.
   spawns `.claude/launch.json` from the original project root, whatever
   worktree a session is in. Branch previews on Vercel sit behind Vercel
   Authentication. Plan verification accordingly.
+- **The preview pane stops painting while its window is hidden**, and
+  headless Edge's `--screenshot` misleads in two ways: it enforces a minimum
+  window width of about 500px (a `--window-size=375,812` capture is a clipped
+  500px layout), and a tall `--window-size` inflates every `vh` unit. For
+  phone sizes, touch, reduced motion, input and transition frames, drive Edge
+  over the DevTools protocol (`Emulation.setDeviceMetricsOverride` with
+  `mobile`, `setTouchEmulationEnabled`, `setEmulatedMedia`, `Input.*`,
+  `Animation.setPlaybackRate` to slow a transition down) at a real viewport.
+- The Next.js dev badge sits over the bottom-left corner in development; a
+  contrast failure there is the badge, not the page. Audit a production build.
 - `photo-review` predates both the dossier and this design. Do not merge it.
 - `agentRules: false` in `next.config.mjs` stops Next writing an agent block
   into this file. Keep it.
