@@ -151,7 +151,9 @@ from content until the script has run over it; the compiler enforces that.
   Both are shown framed and anchored to their top edge, so keep the product's
   own header in the capture. Both are toned by `HERO_BRIGHTNESS` in
   `lib/media.ts`, the same value the slider's shader uses.
-- **Save WebP at quality 90.** Screenshots are served at quality 90 too
+- **Save WebP at quality 90.** Visitors are sent AVIF where their browser
+  takes it: the optimiser converts on request, so the files stay WebP.
+  Screenshots are served at quality 90 too
   (`SCREENSHOT_QUALITY`); interface text is exactly what heavier compression
   smears.
 - A desktop capture from a live site, with headless Edge and no extra tools:

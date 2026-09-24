@@ -462,6 +462,26 @@ portfolio refutes its own copy.
   stay at 75 (`PHONE_QUALITY`): at three device pixels to the CSS pixel the
   ringing is below what the eye resolves, and the first phone plate is the
   phone's largest paint (103 KB at 90, 60 KB at 75).
+- **Images are served as AVIF, WebP where a browser cannot take it**
+  (`images.formats`). The files in `public/media` stay WebP; the optimiser
+  negotiates the format from the `Accept` header on the same URL, so
+  preloads and the slider's textures are untouched. Measured on this site's
+  own captures: 25–31% smaller for the phone plates, 35–48% for the
+  screenshots and heroes. Next maps quality to AVIF at ×5/8 (90 → 56) and
+  keeps full-resolution colour, so there is no chroma smear on coloured
+  interface text. The screenshots measure 42–45 dB PSNR against their
+  source (WebP q90: 45–51) and 1–2% less edge contrast; at 3x
+  magnification the text is indistinguishable. Recheck with an enlarged
+  side-by-side before raising compression further.
+- **The stylesheet is inlined** (`experimental.inlineCss`): one render-
+  blocking request fewer for a first-time visitor, who is most of this
+  site's audience. Next writes the CSS twice into the HTML (the style tag
+  and the RSC payload); brotli, which Vercel serves, compresses the second
+  copy away, leaving about +5–6 KB per page against a separate 7.8 KB
+  stylesheet. **Measure it compressed with brotli, not locally:** `next
+  start` sends gzip, whose 32 KB window cannot reach the first copy of a
+  42 KB stylesheet, so a local Lighthouse run shows the page 26 KB heavier
+  and the saving cancelled.
 - **In an art-directed `<picture>`, every real image is a `<source>` and the
   `<img>`'s own is a transparent pixel** (`TRANSPARENT_PIXEL`). React sets a
   picture's `<img>` attributes before the element is inside the picture, so on

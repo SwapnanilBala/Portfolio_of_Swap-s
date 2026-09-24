@@ -19,6 +19,21 @@ const nextConfig = {
     // Screenshots ask for 90 (SCREENSHOT_QUALITY in lib/media.ts): at 75 the
     // optimizer's re-encode rings around small interface text.
     qualities: [75, 90],
+    // AVIF first, WebP for browsers that cannot take it. Negotiated from the
+    // request's Accept header on the same URL, so nothing that builds an
+    // image URL -- preloads, the slider's textures -- changes. Next scales
+    // the quality to match WebP's look and keeps full-resolution colour, so
+    // small coloured interface text is not smeared by chroma subsampling.
+    formats: ["image/avif", "image/webp"],
+  },
+  experimental: {
+    // The stylesheet arrives inside the HTML rather than as a request the
+    // page must wait for: one round trip less before first paint, which is
+    // most of what a first-time visitor on a phone pays for. It is ~8 KB
+    // compressed (Tailwind generates only what is used), and a portfolio's
+    // visitors are mostly first-time, so the lost stylesheet cache costs
+    // little. Production builds only.
+    inlineCss: true,
   },
   // Two trees, one set of URLs. A phone is served the phone tree (app/m):
   // the same design without GSAP, Lenis, the cursor or three.js. These are
