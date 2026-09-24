@@ -561,6 +561,14 @@ export const content: SiteContent = {
         "Nine courses on relational design, advanced MySQL and data warehousing, closing with a capstone that built and queried a production-style schema end to end.",
       figures: [{ value: "9", label: "courses" }],
       links: [
+        // Coursera's record of the certificate. Its PDF (api/certificate.v1/
+        // pdf/GKQ88KX0EUB6) reads: completed the Professional Certificate
+        // Meta Database Engineer, 9 courses, Jan 23 2025 (checked 2026-09-24).
+        // First, so the Index tile opens it.
+        {
+          role: "certificate",
+          href: "https://www.coursera.org/account/accomplishments/specialization/certificate/GKQ88KX0EUB6",
+        },
         {
           role: "source",
           href: "https://github.com/SwapnanilBala/Little_Lemon_Data_base_Plus_Auto_Prescription_App",
@@ -699,7 +707,7 @@ export const content: SiteContent = {
   ui: {
     nav: { selected: "Selected", index: "Index", about: "About" },
     skipLink: "Skip to content",
-    linkLabels: { live: "Open the live site", source: "Read the source" },
+    linkLabels: { live: "Open the live site", source: "Read the source", certificate: "View the certificate" },
     contactLabels: {
       email: "Email",
       github: "GitHub",
@@ -737,6 +745,7 @@ export const content: SiteContent = {
       list: "List",
       toggle: "Layout",
       columns: { name: "Project", category: "Category", year: "Year" },
+      destinations: { live: "Live site", source: "Repository", certificate: "Certificate" },
     },
     caseNav: { label: "More case studies", previous: "Previous project", next: "Next project" },
     homeLink: { label: "Home", monogram: "SB" },

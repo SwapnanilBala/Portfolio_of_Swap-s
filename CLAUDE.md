@@ -278,6 +278,13 @@ one-off values.
   that box into the list row.
 - Robust Health's cover is its dashboard, not its landing page: the Index shows
   the product, not its marketing photography.
+- **An entry without a case study lists where it leads** under the tile, one
+  small section per link — Meta Database Engineer's certificate and its
+  repository side by side — in both layouts. The tile still opens the first
+  link, so order `links` by what the entry is: the certificate before the
+  code. The row sits outside the tile's link, which cannot contain another.
+  Its labels are `ui.index.destinations`, a word or two per role: the
+  narrowest slot is about 13rem, and the case pages' sentences wrapped there.
 - **The fake news classifier has no screen, so its picture is its data**
   (`DotField`): LIAR's 10,269 training claims at one dot per five, laid down
   as fake, set aside, real — the class imbalance the project fought, in plain

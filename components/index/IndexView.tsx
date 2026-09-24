@@ -8,7 +8,7 @@ import { Flip, gsap, useGSAP } from "@/lib/gsap";
 import { recordNumber } from "@/lib/media";
 import { warmCaseHero } from "@/lib/preload";
 import { DURATION, EASE, useFinePointer, useReducedMotion } from "@/lib/motion";
-import { hasCaseStudy, isResolvedLink, type Project, type UiCopy } from "@/lib/types";
+import { hasCaseStudy, isResolvedLink, type LinkRole, type Project, type UiCopy } from "@/lib/types";
 
 type Layout = "grid" | "list";
 
@@ -70,7 +70,7 @@ function slotFor(index: number) {
   return GRID_SLOTS[index % GRID_SLOTS.length] ?? GRID_SLOTS[0];
 }
 
-/** Where a project opens: its case study, or its source when it has none. */
+/** Where a project opens: its case study, or its first link when it has none. */
 function destinationOf(project: Project): { href: string; internal: boolean } | null {
   if (hasCaseStudy(project)) return { href: `/work/${project.slug}`, internal: true };
   const link = project.links.find(isResolvedLink);
@@ -123,6 +123,47 @@ function ProjectLink({
     >
       {children}
     </a>
+  );
+}
+
+/**
+ * A project without a case study says where it leads: one small section per
+ * link -- the certificate, the repository -- side by side under the tile, so a
+ * second destination is not hidden behind the first. Outside the tile's own
+ * link, which cannot contain another. The accessible name adds the project, so
+ * links read out of context are not a run of "Repository".
+ */
+function DestinationLinks({
+  project,
+  labels,
+  className = "",
+  ...rest
+}: {
+  readonly project: Project;
+  readonly labels: Readonly<Record<LinkRole, string>>;
+  readonly className?: string;
+  readonly "data-grid-media"?: boolean;
+  readonly "data-list-extra"?: boolean;
+}) {
+  if (hasCaseStudy(project)) return null;
+  const links = project.links.filter(isResolvedLink);
+  if (links.length === 0) return null;
+  return (
+    <ul className={`meta grid auto-cols-fr grid-flow-col divide-x divide-paper-rule ${className}`} {...rest}>
+      {links.map((link) => (
+        <li key={link.role} className="px-3 first:pl-0 last:pr-0">
+          <a
+            href={link.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`${labels[link.role]}, ${project.name}`}
+            className="inline-block py-1 underline decoration-1 underline-offset-4 transition-colors duration-300 hover:text-paper-muted"
+          >
+            {labels[link.role]}
+          </a>
+        </li>
+      ))}
+    </ul>
   );
 }
 
@@ -291,6 +332,12 @@ export function IndexView({ projects, copy }: Props) {
                     </span>
                   </div>
                 </ProjectLink>
+                <DestinationLinks
+                  project={project}
+                  labels={copy.destinations}
+                  data-grid-media
+                  className="mt-3 border-t border-paper-rule pt-2"
+                />
               </li>
             );
           })}
@@ -322,6 +369,15 @@ export function IndexView({ projects, copy }: Props) {
                   {project.year}
                 </span>
               </ProjectLink>
+              {hasCaseStudy(project) ? null : (
+                <div data-list-extra className="-mt-2 grid grid-cols-12 gap-x-5 pb-5 md:-mt-3 md:pb-6">
+                  <DestinationLinks
+                    project={project}
+                    labels={copy.destinations}
+                    className="col-span-10 col-start-3 md:col-span-7 md:col-start-2"
+                  />
+                </div>
+              )}
             </li>
           ))}
         </ol>

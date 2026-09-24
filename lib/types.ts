@@ -19,7 +19,7 @@ import type { BlurredMedia } from "@/lib/blur";
  * projects. Labels live in `content.ui.linkLabels`, keyed by this union, so
  * adding a role fails to compile until it has a label.
  */
-export type LinkRole = "live" | "source";
+export type LinkRole = "live" | "source" | "certificate";
 
 export interface ProjectLink {
   readonly role: LinkRole;
@@ -354,6 +354,11 @@ export interface UiCopy {
       readonly category: string;
       readonly year: string;
     };
+    /**
+     * A destination's name under a tile with no case study, where the
+     * narrowest slot is about 13rem: one or two words, not a sentence.
+     */
+    readonly destinations: Readonly<Record<LinkRole, string>>;
   };
   /** Previous and next at the foot of each case study. */
   readonly caseNav: {
