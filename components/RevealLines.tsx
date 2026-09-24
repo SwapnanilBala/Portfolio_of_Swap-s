@@ -1,21 +1,16 @@
 "use client";
 
-import { useRef, type ReactNode } from "react";
+import { useRef } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
+import type { LinesRevealProps } from "@/lib/kit";
 import { DURATION, EASE, META_LAG, useReducedMotion } from "@/lib/motion";
-
-interface Props {
-  readonly children: ReactNode;
-  readonly className?: string;
-  readonly delay?: number;
-}
 
 /**
  * Raises every `[data-line]` inside it out of its mask on arrival, then fades
  * in `[data-reveal-meta]` a beat behind -- the title-then-metadata cadence the
  * home page uses, for any enormous title built with DisplayTitle.
  */
-export function RevealLines({ children, className, delay = 0.35 }: Props) {
+export function RevealLines({ children, className, delay = 0.35 }: LinesRevealProps) {
   const ref = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
 

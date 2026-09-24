@@ -42,6 +42,13 @@ cannot compile without a desktop hero, a phone hero and a case study.
 palette, the `display` and `meta` type styles, the `reduced:` and `desktop:`
 variants, the page-transition choreography and the reduced-motion overrides.
 
+**Two component trees, one design.** Phones are served `app/m`, desktops
+`app/(desktop)`, at the same URLs (a user-agent rewrite in `next.config.mjs`).
+Both render the same views from `components/`; they differ in the motion kit
+they pass (`components/kits/`): GSAP on desktop, CSS on phones. Change a
+view once and both trees change. Test phones with a phone user agent — a
+narrow desktop window is still the desktop tree.
+
 Read `CLAUDE.md` before changing the design. It records the decisions, the
 reversals from the two earlier designs, and why each constraint exists.
 

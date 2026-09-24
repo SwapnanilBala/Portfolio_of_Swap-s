@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { CharShift } from "@/components/CharShift";
+import { canonicalPath } from "@/lib/links";
 import type { UiCopy } from "@/lib/types";
 
 interface Props {
@@ -27,7 +28,9 @@ const CORNERS = [
  * the light pages and as paper on the dark ones and over imagery.
  */
 export function HomeLink({ copy }: Props) {
-  const pathname = usePathname();
+  // Canonical, so the phone tree's /m prefix does not reach the render: the
+  // server and the browser must agree on whether this is the home page.
+  const pathname = canonicalPath(usePathname());
   if (pathname === "/") return null;
 
   return (

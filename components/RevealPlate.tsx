@@ -1,13 +1,9 @@
 "use client";
 
-import { useRef, type ReactNode } from "react";
+import { useRef } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
+import type { PlateRevealProps } from "@/lib/kit";
 import { EASE, useReducedMotion } from "@/lib/motion";
-
-interface Props {
-  readonly children: ReactNode;
-  readonly className?: string;
-}
 
 /**
  * A large plate that uncovers from the bottom as it scrolls into view, the
@@ -15,7 +11,7 @@ interface Props {
  * plate that re-hides when scrolled back past is decoration, not a reveal.
  * Never hidden under reduced motion or without JavaScript.
  */
-export function RevealPlate({ children, className = "" }: Props) {
+export function RevealPlate({ children, className = "" }: PlateRevealProps) {
   const ref = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
 

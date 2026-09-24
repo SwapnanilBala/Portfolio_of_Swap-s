@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { CharShift } from "@/components/CharShift";
+import { canonicalPath } from "@/lib/links";
 import type { NavKey } from "@/lib/types";
 
 // The Index lives at /work, not /index: Next has historically normalised a
@@ -24,7 +25,9 @@ interface Props {
  * every ground without knowing which it is on.
  */
 export function SiteNav({ labels }: Props) {
-  const pathname = usePathname();
+  // Canonical: see canonicalPath. The phone tree renders at /m/... but is
+  // served, and read by the browser, at the site's own paths.
+  const pathname = canonicalPath(usePathname());
 
   return (
     <nav

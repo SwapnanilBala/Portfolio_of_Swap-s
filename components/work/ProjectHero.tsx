@@ -2,7 +2,7 @@ import { getImageProps } from "next/image";
 import { DisplayTitle } from "@/components/DisplayTitle";
 import { DotField, DotSwatch } from "@/components/DotField";
 import { SharedMedia } from "@/components/PageTransition";
-import { RevealLines } from "@/components/RevealLines";
+import type { MotionKit } from "@/lib/kit";
 import {
   blurFor,
   CASE_HERO,
@@ -23,6 +23,7 @@ import {
 interface Props {
   readonly project: ProjectWithCase;
   readonly meta: UiCopy["caseMeta"];
+  readonly kit: MotionKit;
 }
 
 const { wide: WIDE, narrow: NARROW, sizes: SIZES } = CASE_HERO;
@@ -107,7 +108,8 @@ function HeroPicture({ wide, narrow }: { readonly wide: ImageAsset; readonly nar
  * index, and it is wider than either, so arriving reads as the media opening
  * out.
  */
-export function ProjectHero({ project, meta }: Props) {
+export function ProjectHero({ project, meta, kit }: Props) {
+  const { Lines } = kit;
   const image = project.hero ?? project.cover;
   const field = project.selected ? undefined : project.dotField;
 
@@ -131,7 +133,7 @@ export function ProjectHero({ project, meta }: Props) {
 
       {/* The title's cap line just crosses the plate's lower edge. Any deeper
           and the capture's own buttons show between the letters. */}
-      <RevealLines className={`relative ${image || field ? "-mt-3 md:-mt-5" : ""}`}>
+      <Lines className={`relative ${image || field ? "-mt-3 md:-mt-5" : ""}`}>
         <DisplayTitle as="h1" lines={displayLinesOf(project)} className="text-[min(13vh,12.5vw)]" />
         <dl
           data-reveal-meta
@@ -154,7 +156,7 @@ export function ProjectHero({ project, meta }: Props) {
             <dd className="mt-1">{project.type}</dd>
           </div>
         </dl>
-      </RevealLines>
+      </Lines>
     </section>
   );
 }

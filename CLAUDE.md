@@ -52,16 +52,22 @@ animation library, plain CSS only") are reversed, deliberately.
 ## Architecture
 
 ```
-app/layout.tsx              fonts, metadata, nav, cursor, smooth scroll
-app/page.tsx                Selected — the slider, one viewport
-app/work/page.tsx           Index — the archive
-app/work/[slug]/page.tsx    case studies (static params; unknown slug = 404)
-app/about/page.tsx
+app/layout.tsx              the shared shell: fonts, metadata, nav, home link
+app/(desktop)/layout.tsx    desktop tree: smooth scroll, cursor
+app/(desktop)/page.tsx      Selected — the WebGL slider, one viewport
+app/(desktop)/work/...      Index, and case studies (static params; unknown slug = 404)
+app/(desktop)/about/
+app/m/layout.tsx            phone tree: PhoneReveals
+app/m/...                   the same four pages for phones, served at the same URLs
 components/home/            ProjectSlider, SliderCanvas, ProjectThumbnailRail,
                             MobileProjects, HomeMasthead
-components/index/           IndexView (grid + list + preview), ProjectCover
-components/work/            ProjectHero, CaseSection, MediaPlate, MediaPair,
-                            CaseNav
+components/index/           IndexPage, IndexView (Flip + preview), parts
+                            (grid, list, toggle, links), ProjectCover
+components/work/            CaseStudy, ProjectHero, CaseSection, MediaPlate,
+                            MediaPair, CaseNav
+components/about/           About
+components/kits/            desktopKit (GSAP), phoneKit (CSS)
+components/phone/           PhoneReveals, PhoneIndexView
 components/                 PageTransition + SharedMedia, SplitTextReveal,
                             RevealLines, RevealPlate, DisplayTitle,
                             MagneticLink, CharShift, CustomCursor, SiteNav,
@@ -74,6 +80,8 @@ lib/media.ts                hero brightness, plate, case-hero and portrait sizes
 lib/preload.ts              media-scoped preloads, warming a hero on intent
 lib/slider.ts               slider maths (step, presence) + DESKTOP_QUERY
 lib/motion.ts               easings, durations, media-query hooks
+lib/kit.ts                  the motion kit's contract
+lib/links.ts                internal/external links, canonicalPath
 ```
 
 **The Index lives at `/work`, not `/index`.** Next has historically normalised
@@ -93,6 +101,49 @@ generated placeholder map, so a capture cannot be referenced until
 from `src` rather than stored beside it. Links store a `role`, labels resolve
 through `content.ui.linkLabels`, and a link with no `href` is filtered out, never
 rendered dead.
+
+## Two trees, one design
+
+Phones get their own component tree, on request: the same design, without
+the desktop's motion code. It cut every phone page's initial JavaScript from
+~245 KB gzipped to ~180 KB and halved main-thread work on Lighthouse's
+throttled phone (0.5–0.7s from 1.0–1.4s), Speed Index 0.8–0.9s from
+1.2–1.5s.
+
+- **Routing is a rewrite, not a Proxy.** `next.config.mjs` rewrites the four
+  page routes to `app/m/...` when the user agent is a phone (`beforeFiles`,
+  `has` on `user-agent`). Vercel evaluates those rules at the edge, so every
+  page stays a static file on the CDN; a Proxy (Next 16's middleware) runs
+  as a function on every request and would have cost more time than the
+  tree saves. Page loads, client navigations and prefetches all carry the
+  user agent, so a phone never mixes the trees. `/m` is never an address:
+  direct visits redirect to the real path. iPads send a desktop user agent
+  and get the desktop tree, which is responsive — as is every narrow
+  desktop window, which still gets `MobileProjects` from the desktop home.
+- **One set of views, two kits.** Pages under `app/(desktop)` and `app/m` are
+  a few lines each: they render the same views (`CaseStudy`, `About`,
+  `IndexPage`, `SiteFooter`, `ProjectHero`, `CaseSection`, `MediaPlate`,
+  `MediaPair`) and pass a `MotionKit` (`lib/kit.ts`) — `desktopKit` is
+  SplitText, RevealLines, RevealPlate and MagneticLink on GSAP; `phoneKit`
+  renders the same elements marked `data-m-reveal`. **A view never imports
+  a kit**, or GSAP comes back into the phone bundles; the build's
+  per-page chunks are the check. The Index's grid, list and toggle live in
+  `components/index/parts.tsx` and both Index views render them, so the
+  markup cannot drift; only Flip and the pointer preview are desktop-only.
+- **Phone reveals are CSS** ("Phone reveals" in `globals.css`): the same
+  rise, line reveal and uncovering, with the desktop kit's timings.
+  `PhoneReveals`, the tree's only motion script, marks elements
+  `data-inview` once as they come into view. Hidden only under `html.js`,
+  from before first paint, so nothing flashes; a 2.5s failsafe applies
+  until it starts (`html.m-observing`), and it marks what is on screen
+  before switching the failsafe off if it starts late. Text rises as a
+  block rather than line by line: SplitText is most of GSAP's weight.
+- **Read the pathname through `canonicalPath`.** A phone page is
+  prerendered at `/m/...` and read by the browser at its real path, so a
+  component rendering from `usePathname()` directly hydrates with a
+  mismatch (see the bundled usePathname docs). `SiteNav` and `HomeLink` do.
+- **Test phones with a phone user agent.** Screen size alone is served the
+  desktop tree. The CDP driver sets one whenever it emulates `mobile`.
 
 ## Content — do not invent
 
@@ -255,7 +306,10 @@ one-off values.
 - **`sources` passed to the canvas must be referentially stable.** A new array
   rebuilds the whole scene; it is memoised in the slider for that reason.
 - Touch and narrow screens get `MobileProjects`: one framed plate per screen on
-  native vertical scroll-snap, no WebGL. A portrait screen shows the project's
+  native vertical scroll-snap, no WebGL — alone in the phone tree, beside the
+  WebGL slider in the desktop tree for narrow windows. Its first plate is
+  eager and high priority, the rest low: within lazy-load distance, they
+  downloaded alongside the first and shared its bandwidth. A portrait screen shows the project's
   phone capture (`heroMobile`), a landscape one its desktop capture. CSS
   (`desktop:` variant) decides which slider shows and JS (`DESKTOP_QUERY`)
   decides which is wired up — keep the two queries identical.
@@ -384,7 +438,8 @@ portfolio refutes its own copy.
 - three.js arrives by dynamic import on the desktop home page only (131 KB
   gzipped, after first paint), and appears in no page's initial scripts —
   check the built HTML if that ever changes. Initial JS is about 245 KB gzipped
-  per page, ~155 KB of it the React canary and Next runtime.
+  per desktop page, ~155 KB of it the React canary and Next runtime, and about
+  180 KB per phone page, which carries no GSAP (see *Two trees, one design*).
 - Every image carries intrinsic `width` and `height`, and goes through
   `next/image` (or `getImageProps` where a `<picture>` needs art direction).
 - **A screenshot never has fewer image pixels than the screen pixels it

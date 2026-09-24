@@ -1,10 +1,11 @@
 import Image from "next/image";
-import { RevealPlate } from "@/components/RevealPlate";
+import type { MotionKit } from "@/lib/kit";
 import { blurFor, PLATE_FRAME, SCREENSHOT_QUALITY } from "@/lib/media";
 import type { ImageMedia } from "@/lib/types";
 
 interface Props {
   readonly media: ImageMedia;
+  readonly kit: MotionKit;
 }
 
 /**
@@ -20,11 +21,12 @@ interface Props {
  * the plates went soft. A plate narrower than the page sits against the right
  * edge, which breaks the column rhythm on purpose.
  */
-export function MediaPlate({ media }: Props) {
+export function MediaPlate({ media, kit }: Props) {
+  const { Plate } = kit;
   return (
     <figure className="px-5 py-10 md:px-8 md:py-16">
       <div className="md:ml-auto" style={{ maxWidth: `calc(${media.width}px / var(--dpr))` }}>
-        <RevealPlate className={PLATE_FRAME}>
+        <Plate className={PLATE_FRAME}>
           <Image
             src={media.src}
             alt={media.alt}
@@ -36,7 +38,7 @@ export function MediaPlate({ media }: Props) {
             blurDataURL={blurFor(media.src)}
             className="h-auto w-full"
           />
-        </RevealPlate>
+        </Plate>
       </div>
       {media.caption ? (
         <figcaption className="mt-4 grid md:grid-cols-12">

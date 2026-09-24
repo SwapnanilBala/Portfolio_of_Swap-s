@@ -1,9 +1,10 @@
-import { SplitTextReveal } from "@/components/SplitTextReveal";
+import type { MotionKit } from "@/lib/kit";
 import type { CaseSection as CaseSectionContent } from "@/lib/types";
 
 interface Props {
   readonly section: CaseSectionContent;
   readonly label: string;
+  readonly kit: MotionKit;
 }
 
 /**
@@ -11,7 +12,8 @@ interface Props {
  * limit of three text columns, reached only on wide screens. Lines rise into
  * place as the section scrolls in.
  */
-export function CaseSection({ section, label }: Props) {
+export function CaseSection({ section, label, kit }: Props) {
+  const { Text } = kit;
   return (
     <section
       aria-labelledby={`section-${section.id}`}
@@ -22,7 +24,7 @@ export function CaseSection({ section, label }: Props) {
       </h2>
       <div className="col-span-12 mt-6 grid gap-x-10 gap-y-6 md:col-span-8 md:col-start-5 md:mt-0 lg:grid-cols-2">
         {section.body.map((paragraph) => (
-          <SplitTextReveal
+          <Text
             key={paragraph}
             as="p"
             when="view"
@@ -30,7 +32,7 @@ export function CaseSection({ section, label }: Props) {
             className="max-w-[62ch] text-[1.0625rem] leading-[1.55] md:text-lg"
           >
             {paragraph}
-          </SplitTextReveal>
+          </Text>
         ))}
         {section.points ? (
           <ul className="grid gap-4 border-t border-paper-rule pt-6 lg:col-span-2">

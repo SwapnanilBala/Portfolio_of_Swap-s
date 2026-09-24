@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Fragment } from "react";
-import { MagneticLink } from "@/components/MagneticLink";
 import { PageTransition } from "@/components/PageTransition";
 import { SiteFooter } from "@/components/SiteFooter";
 import { CaseNav } from "@/components/work/CaseNav";
@@ -10,29 +9,32 @@ import { MediaPair } from "@/components/work/MediaPair";
 import { MediaPlate } from "@/components/work/MediaPlate";
 import { ProjectHero } from "@/components/work/ProjectHero";
 import { content } from "@/lib/content";
+import type { MotionKit } from "@/lib/kit";
 import { hasCaseStudy, isResolvedLink } from "@/lib/types";
 
 const cases = content.projects.filter(hasCaseStudy);
 
-// Every case study is known at build time; anything else is a 404.
-export const dynamicParams = false;
-
-export function generateStaticParams() {
+/** Every case study, for both trees' `generateStaticParams`. */
+export function caseStudyParams() {
   return cases.map((project) => ({ slug: project.slug }));
 }
 
-interface Params {
-  readonly params: Promise<{ readonly slug: string }>;
-}
-
-export async function generateMetadata({ params }: Params): Promise<Metadata> {
-  const { slug } = await params;
+export function caseStudyMetadata(slug: string): Metadata {
   const project = cases.find((candidate) => candidate.slug === slug);
   return project ? { title: project.name, description: project.summary } : {};
 }
 
-export default async function CaseStudyPage({ params }: Params) {
-  const { slug } = await params;
+interface Props {
+  readonly slug: string;
+  readonly kit: MotionKit;
+}
+
+/**
+ * A case study, whole: the hero, the figures, each section with what follows
+ * it, the links, previous and next, the footer. One view for both trees; the
+ * kit decides how it moves.
+ */
+export function CaseStudy({ slug, kit }: Props) {
   const index = cases.findIndex((candidate) => candidate.slug === slug);
   const project = cases[index];
   if (!project) notFound();
@@ -43,11 +45,12 @@ export default async function CaseStudyPage({ params }: Params) {
   const previous = cases.length > 2 ? cases[(index - 1 + cases.length) % cases.length] : undefined;
   const links = project.links.filter(isResolvedLink);
   const { ui } = content;
+  const { Link: ProjectLink } = kit;
 
   return (
     <PageTransition>
       <main id="main" data-tone="dark" className="bg-paper text-ink">
-        <ProjectHero project={project} meta={ui.caseMeta} />
+        <ProjectHero project={project} meta={ui.caseMeta} kit={kit} />
 
         {project.figures.length > 0 ? (
           <dl className="grid grid-cols-2 px-5 md:grid-cols-3 md:px-8 lg:grid-cols-6">
@@ -65,9 +68,9 @@ export default async function CaseStudyPage({ params }: Params) {
 
         {project.caseStudy.sections.map((section) => (
           <Fragment key={section.id}>
-            <CaseSection section={section} label={ui.caseSectionLabels[section.id]} />
-            {section.media?.kind === "pair" ? <MediaPair media={section.media} /> : null}
-            {section.media?.kind === "image" ? <MediaPlate media={section.media} /> : null}
+            <CaseSection section={section} label={ui.caseSectionLabels[section.id]} kit={kit} />
+            {section.media?.kind === "pair" ? <MediaPair media={section.media} kit={kit} /> : null}
+            {section.media?.kind === "image" ? <MediaPlate media={section.media} kit={kit} /> : null}
           </Fragment>
         ))}
 
@@ -75,12 +78,12 @@ export default async function CaseStudyPage({ params }: Params) {
           <ul className="flex flex-wrap gap-x-10 gap-y-3 border-t border-paper-rule px-5 py-10 md:px-8">
             {links.map((link) => (
               <li key={link.role}>
-                <MagneticLink
+                <ProjectLink
                   href={link.href}
                   className="meta inline-block py-1 underline decoration-1 underline-offset-4"
                 >
                   {ui.linkLabels[link.role]}
-                </MagneticLink>
+                </ProjectLink>
               </li>
             ))}
           </ul>
@@ -88,7 +91,7 @@ export default async function CaseStudyPage({ params }: Params) {
 
         <CaseNav previous={previous} next={next} copy={ui.caseNav} />
 
-        <SiteFooter />
+        <SiteFooter kit={kit} />
       </main>
     </PageTransition>
   );

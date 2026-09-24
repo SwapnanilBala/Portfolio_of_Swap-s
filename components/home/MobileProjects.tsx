@@ -58,7 +58,9 @@ function PhonePlate({ project, first }: { readonly project: SelectedProject; rea
     sizes,
     quality: PHONE_QUALITY,
     loading: first ? "eager" : "lazy",
-    fetchPriority: first ? "high" : undefined,
+    // The others would otherwise download alongside the first -- they sit
+    // within the browser's lazy-load distance -- and share its bandwidth.
+    fetchPriority: first ? "high" : "low",
     placeholder: "blur",
     blurDataURL: blurFor(project.heroMobile.src),
     style: {

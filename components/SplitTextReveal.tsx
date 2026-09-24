@@ -1,22 +1,10 @@
 "use client";
 
-import { createElement, useRef, type ReactNode } from "react";
+import { createElement, useRef } from "react";
 import { gsap, SplitText, useGSAP } from "@/lib/gsap";
+import type { TextRevealProps } from "@/lib/kit";
 import { DURATION, EASE, useReducedMotion } from "@/lib/motion";
 
-type Tag = "h1" | "h2" | "h3" | "p" | "div" | "span";
-
-interface Props {
-  readonly as?: Tag;
-  readonly children: ReactNode;
-  readonly className?: string;
-  /** Split granularity. Lines for prose and titles, chars for short labels. */
-  readonly by?: "lines" | "words" | "chars";
-  readonly delay?: number;
-  readonly stagger?: number;
-  /** Reveal on mount, or when the element scrolls into view. */
-  readonly when?: "mount" | "view";
-}
 
 /**
  * Text revealed through clipping masks: each line (or word, or letter) rises
@@ -36,7 +24,7 @@ export function SplitTextReveal({
   delay = 0,
   stagger = 0.08,
   when = "mount",
-}: Props) {
+}: TextRevealProps) {
   const ref = useRef<HTMLElement>(null);
   const reduced = useReducedMotion();
 

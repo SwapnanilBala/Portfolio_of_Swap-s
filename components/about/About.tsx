@@ -2,13 +2,12 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import type { ReactNode } from "react";
 import { PageTransition } from "@/components/PageTransition";
-import { RevealPlate } from "@/components/RevealPlate";
 import { SiteFooter } from "@/components/SiteFooter";
-import { SplitTextReveal } from "@/components/SplitTextReveal";
 import { content } from "@/lib/content";
+import type { MotionKit } from "@/lib/kit";
 import { blurFor, PORTRAIT_MAX_WIDTH } from "@/lib/media";
 
-export const metadata: Metadata = { title: content.ui.aboutSectionLabels.about };
+export const aboutMetadata: Metadata = { title: content.ui.aboutSectionLabels.about };
 
 function Section({
   id,
@@ -35,9 +34,11 @@ function Section({
 /**
  * The oversized statement, then the person, then the record. Technologies are
  * plain text lists joined by em dashes -- not a wall of coloured logos, which
- * say only that a logo exists.
+ * say only that a logo exists. One view for both trees; the kit decides how
+ * it moves.
  */
-export default function AboutPage() {
+export function About({ kit }: { readonly kit: MotionKit }) {
+  const { Text, Plate } = kit;
   const { about, profile, ui } = content;
   const labels = ui.aboutSectionLabels;
   const portrait = profile.portrait;
@@ -47,20 +48,20 @@ export default function AboutPage() {
     <PageTransition>
       <main id="main" data-tone="light" className="min-h-svh bg-paper text-ink">
         <header className="px-5 pb-20 pt-28 md:px-8 md:pb-28 md:pt-36">
-          <SplitTextReveal
+          <Text
             as="h1"
             stagger={0.08}
             className="display max-w-[16ch] text-[clamp(3.25rem,8.6vw,10rem)]"
           >
             {about.statement.join(" ")}
-          </SplitTextReveal>
+          </Text>
         </header>
 
         <Section id="about" label={labels.about}>
           <div className="grid gap-10 lg:grid-cols-[minmax(0,15rem)_1fr]">
             {/* Sized by its display box, not by its source: no `sizes`, so
                 the srcset is that box at 1x and 2x (see PORTRAIT_MAX_WIDTH). */}
-            <RevealPlate className="w-full">
+            <Plate className="w-full">
               <div style={{ maxWidth: `${portraitWidth}px` }}>
                 <Image
                   src={portrait.src}
@@ -72,10 +73,10 @@ export default function AboutPage() {
                   className="h-auto w-full"
                 />
               </div>
-            </RevealPlate>
+            </Plate>
             <div className="grid max-w-[60ch] gap-5">
               {about.intro.map((paragraph) => (
-                <SplitTextReveal
+                <Text
                   key={paragraph}
                   as="p"
                   when="view"
@@ -83,7 +84,7 @@ export default function AboutPage() {
                   className="text-lg leading-[1.55] md:text-xl"
                 >
                   {paragraph}
-                </SplitTextReveal>
+                </Text>
               ))}
             </div>
           </div>
@@ -171,7 +172,7 @@ export default function AboutPage() {
           </ul>
         </Section>
 
-        <SiteFooter />
+        <SiteFooter kit={kit} />
       </main>
     </PageTransition>
   );

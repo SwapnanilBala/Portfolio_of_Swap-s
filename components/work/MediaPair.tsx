@@ -1,10 +1,11 @@
 import Image from "next/image";
-import { RevealPlate } from "@/components/RevealPlate";
+import type { MotionKit } from "@/lib/kit";
 import { blurFor, PLATE_FRAME, SCREENSHOT_QUALITY } from "@/lib/media";
 import type { MediaPair as MediaPairContent, PairedImage } from "@/lib/types";
 
 interface Props {
   readonly media: MediaPairContent;
+  readonly kit: MotionKit;
 }
 
 /** The space between the two captures, in px: Tailwind's `gap-5`. */
@@ -29,7 +30,8 @@ const ratio = (image: PairedImage) => image.width / image.height;
  * edge as a lone plate does: on a 2x screen the gap between them was wider
  * than either capture, and the words no longer read as belonging to them.
  */
-export function MediaPair({ media }: Props) {
+export function MediaPair({ media, kit }: Props) {
+  const { Plate } = kit;
   const [first, second] = media.images;
   const band = `calc(${GAP}px + ${(ratio(first) + ratio(second)) * Math.min(first.height, second.height)}px / var(--dpr))`;
 
@@ -51,7 +53,7 @@ export function MediaPair({ media }: Props) {
               style={{ flexGrow: ratio(image), "--cap": `calc(${image.width}px / var(--dpr))` }}
             >
               <div className="max-w-(--cap) md:max-w-none">
-                <RevealPlate className={PLATE_FRAME}>
+                <Plate className={PLATE_FRAME}>
                   <Image
                     src={image.src}
                     alt={image.alt}
@@ -63,7 +65,7 @@ export function MediaPair({ media }: Props) {
                     blurDataURL={blurFor(image.src)}
                     className="h-auto w-full"
                   />
-                </RevealPlate>
+                </Plate>
               </div>
               <figcaption className="meta mt-3 text-paper-muted">{image.label}</figcaption>
             </figure>

@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
 import { Inter_Tight } from "next/font/google";
 import type { ReactNode } from "react";
-import { CustomCursor } from "@/components/CustomCursor";
 import { HomeLink } from "@/components/HomeLink";
 import { SiteNav } from "@/components/SiteNav";
-import { SmoothScroll } from "@/components/SmoothScroll";
 import { content } from "@/lib/content";
 import "./globals.css";
 
@@ -51,8 +49,6 @@ export default function RootLayout({ children }: { readonly children: ReactNode 
         <a href="#main" className="skip-link">
           {ui.skipLink}
         </a>
-        <SmoothScroll />
-        <CustomCursor labels={ui.cursor} />
         {/* Before the nav: it sits top left, so it comes first in tab order. */}
         <HomeLink copy={ui.homeLink} />
         <SiteNav labels={ui.nav} />

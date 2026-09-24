@@ -1,14 +1,15 @@
 import { Fragment } from "react";
 import { LocalTime } from "@/components/LocalTime";
-import { MagneticLink } from "@/components/MagneticLink";
 import { content } from "@/lib/content";
+import type { MotionKit } from "@/lib/kit";
 
 /**
  * The oversized close on every page but the home page, which is one viewport
  * with nowhere below it to put one. Always dark: on the light pages it lands
  * as a hard change of ground, which is the point of ending on it.
  */
-export function SiteFooter() {
+export function SiteFooter({ kit }: { readonly kit: MotionKit }) {
+  const { Link: ContactLink } = kit;
   const { ui, contact, profile } = content;
   const year = new Date().getFullYear();
 
@@ -29,13 +30,13 @@ export function SiteFooter() {
         <ul className="flex flex-wrap gap-x-8 gap-y-3 md:col-span-7">
           {contact.map((route) => (
             <li key={route.key}>
-              <MagneticLink
+              <ContactLink
                 href={route.href}
                 ariaLabel={`${ui.contactLabels[route.key]}: ${route.detail}`}
                 className="inline-block py-1 text-[0.9375rem] font-medium uppercase tracking-[0.01em] underline-offset-4 hover:underline"
               >
                 {ui.contactLabels[route.key]}
-              </MagneticLink>
+              </ContactLink>
             </li>
           ))}
         </ul>

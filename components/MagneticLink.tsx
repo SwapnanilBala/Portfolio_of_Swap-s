@@ -1,23 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { useRef, type ReactNode } from "react";
+import { useRef } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
+import type { KitLinkProps } from "@/lib/kit";
+import { isExternal, isInternalRoute } from "@/lib/links";
 import { useFinePointer, useReducedMotion } from "@/lib/motion";
 
-interface Props {
-  readonly href: string;
-  readonly children: ReactNode;
-  readonly className?: string;
-  readonly ariaLabel?: string;
+interface Props extends KitLinkProps {
   /** How far the link travels toward the pointer, as a fraction of offset. */
   readonly strength?: number;
-}
-
-function isInternalRoute(href: string): boolean {
-  // Files under /public are served, not routed: a client-side navigation to
-  // /resume.pdf would fail, so only extensionless paths go through <Link>.
-  return href.startsWith("/") && !/\.[a-z0-9]+$/i.test(href);
 }
 
 /**
@@ -70,7 +62,7 @@ export function MagneticLink({ href, children, className, ariaLabel, strength = 
     );
   }
 
-  const external = /^https?:/.test(href);
+  const external = isExternal(href);
   return (
     <a
       ref={ref}
