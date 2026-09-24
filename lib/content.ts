@@ -88,10 +88,10 @@ export const content: SiteContent = {
         alt: "Lagna Atelier on a phone: “Create your Vedic birth chart” in gold capitals, then the first step of the birth-details form asking for a name, and a continue button.",
       },
       cover: {
-        src: "/media/lagna-atelier-chart.webp",
-        width: 1528,
-        height: 1052,
-        alt: "A large circular chart on near-black, its rim ringed with zodiac glyphs and numbered sectors, the centre reading Cancer.",
+        src: "/media/lagna-atelier-cover.webp",
+        width: 1674,
+        height: 962,
+        alt: "A circular chart on a starfield, its rim ringed with zodiac glyphs and numbered houses, the centre reading Cancer, beside a week-long line chart of daily energy that peaks on Thursday above four forecast cards.",
       },
       caseStudy: {
         sections: [
@@ -101,17 +101,17 @@ export const content: SiteContent = {
               "Lagna Atelier builds a Vedic natal chart from four details — name, birth date, birth time and birthplace — and reads it. The chart is the full working set: lagna, houses and planetary positions, then 23 divisional charts from D1 to D60, Vimshottari dasha timelines and 51 yoga detections on top.",
               "It is live at lagnaatelier.site in six languages.",
             ],
-            plate: {
+            // The hero is the form that goes in; this is the reading that
+            // comes back. The three takeaways are the same selection from
+            // matched findings the old chart capture showed above its wheel.
+            media: {
               kind: "image",
-              src: "/media/lagna-atelier.webp",
-              width: 1542,
-              height: 964,
-              alt: "Dark two-panel screen. On the left a four-tab stepper with the name field active and a bright gradient button beneath it; on the right a dimmed circular chart preview labelled 0/6 details.",
-              // Was "the chart is computed in the browser as the form fills".
-              // The code computes charts in server API routes
-              // (app/api/chart/route.ts), so the caption says what is visible.
+              src: "/media/lagna-atelier-reading.webp",
+              width: 2392,
+              height: 1077,
+              alt: "A reading's overview tab: the reader's name set large in gold capitals over the words deterministic chart, a one-line chart core, copy-link and download buttons, and a Cancer rising medallion with sun, moon and period beneath it; below, today's sky as nine planets in a row, and three takeaway cards.",
               caption:
-                "A four-step birth-details form, with a live sky preview that builds as each field is entered.",
+                "What comes back is a reading, not a table: the chart core in one line, the sky as it stands today, and three takeaways — the highest signal, the dasha running now, the strongest planet — selected from the chart's own matched findings.",
             },
           },
           {
@@ -120,6 +120,15 @@ export const content: SiteContent = {
               "Vedic astrology is not one system. The ayanamsha — the offset between the tropical and sidereal zodiacs — has competing definitions, so do house systems, and each choice moves the chart. Lagna Atelier supports six ayanamshas across six house systems, so a reader can pick a tradition and see what changes.",
               "Yogas, the named planetary combinations, come with claims about how rare they are. Here that rarity is measured rather than asserted.",
             ],
+            media: {
+              kind: "image",
+              src: "/media/lagna-atelier-settings.webp",
+              width: 1451,
+              height: 669,
+              alt: "Chart settings on a dark page, headed Choose how your chart is calculated: six ayanamshas listed down the left — Lahiri, marked recommended, Raman, Krishnamurti, Fagan-Bradley selected, Pushyapaksha and Yukteshwar — beside a panel of six house-system chips with Placidus selected, and a See my chart button.",
+              caption:
+                "The choice made in one screen: six ayanamshas, Lahiri recommended, and six house systems, with a note on what the pair decides — where each sign begins, and where the house lines fall.",
+            },
           },
           {
             id: "approach",
@@ -127,15 +136,6 @@ export const content: SiteContent = {
               "Interpretation is rules-as-data. Each yoga is defined in a Zod-validated DSL over a closed union of 15 predicate operators, with binding checks at build time, so a malformed rule fails the build instead of producing a wrong reading.",
               "A seeded Monte Carlo harness runs every rule over population-weighted simulated births and measures how often it actually fires.",
             ],
-            plate: {
-              kind: "image",
-              src: "/media/lagna-atelier-chart.webp",
-              width: 1528,
-              height: 1052,
-              alt: "Three summary cards above a large circular chart on near-black, its rim ringed with zodiac glyphs and numbered sectors, the centre reading Cancer.",
-              caption:
-                "The computed wheel for a Cancer lagna, planetary glyphs placed across twelve houses. The three cards above it — first impression, the Mercury dasha running to April 2034, and the strongest planet — are selected from the chart's own matched findings.",
-            },
           },
           {
             id: "engineering",
@@ -145,14 +145,26 @@ export const content: SiteContent = {
               // claude-opus in 11. The README's OPENAI_API_KEY line is stale.
               "Chart guidance and palm reading run on Claude vision, with MediaPipe hand landmarks normalising per-line confidence, behind rate-limited edge functions and LLM budget counters. Delivery leans on service workers, web workers and LRU/TTL caching, and 561 tests cover it.",
             ],
-            plate: {
-              kind: "image",
-              src: "/media/lagna-atelier-ashtakavarga.webp",
-              width: 1571,
-              height: 982,
-              alt: "A circular gauge card beside a twelve-bar column chart crossed by a dashed average line, bars coloured by whether they clear it, over three summary rows and a bordered footnote.",
-              caption:
-                "Every house scored against the 28.1-bindu average rather than a maximum, with the first house broken out at 92.6% of it. The footnote flags that the twelve total 367 against a 337 pool — a discrepancy reported rather than smoothed over.",
+            media: {
+              kind: "pair",
+              title: "The chart, and its houses",
+              body: "The wheel places each planet in its house for a Cancer lagna and leads with the three signals worth carrying into a reading. Ashtakavarga then splits a fixed pool of 337 bindus across the twelve houses and reads each against the 28.1 average rather than a maximum. When the houses add up to 367, the page shows the 108.9% instead of hiding it.",
+              images: [
+                {
+                  src: "/media/lagna-atelier-wheel.webp",
+                  width: 696,
+                  height: 962,
+                  label: "The wheel",
+                  alt: "A circular Rasi chart on a starfield, zodiac glyphs around the rim and houses numbered one to twelve, the centre reading Cancer lagna; beneath it a Chart at a glance card: Cancer rising, strongest support Moon, dominant tone Earth, most active area house 3, Sagittarius.",
+                },
+                {
+                  src: "/media/lagna-atelier-houses.webp",
+                  width: 649,
+                  height: 1072,
+                  label: "Ashtakavarga",
+                  alt: "A House Support panel: a ring gauge reading 92.6% of average for the first house, 26 of 337 bindus, and below it twelve bars, one per house, from 23 to 36 bindus against a dashed 28.1 line, with 7 of 12 houses above average.",
+                },
+              ],
             },
           },
           {
@@ -217,13 +229,14 @@ export const content: SiteContent = {
         height: 2532,
         alt: "Robust Health on a phone: the headline “Structured programming, refined every week”, sign-up and trainer-login buttons, three gym photographs and a row of usage counters.",
       },
-      // The dashboard, not the landing page: the Index shows the product
-      // rather than its marketing photography.
+      // A dashboard, not the landing page: the Index shows the product
+      // rather than its marketing photography. Cropped below the app's
+      // header, which carries the signed-in account's email address.
       cover: {
-        src: "/media/robust-health-dashboard.webp",
-        width: 1054,
-        height: 631,
-        alt: "A wide card headed Up Next with a prominent start button, a numbered five-row list beside it, and below them a programme card of three figure tiles next to an empty activity panel.",
+        src: "/media/robust-health-progress.webp",
+        width: 1360,
+        height: 1020,
+        alt: "Robust Health's progress dashboard, open on Plan Evolution: a timeline of three weekly plans with their dates, calories and training days, beside a table comparing week one with week two line by line.",
       },
       caseStudy: {
         sections: [
@@ -233,12 +246,12 @@ export const content: SiteContent = {
               "Robust Health turns a member's profile into a weekly plan — training, nutrition and recovery — and gives trainers a portal of their own to author plans, assign them and follow each client's adherence.",
               "It is live at app.robusthealth.in in English, Spanish and Portuguese.",
             ],
-            plate: {
+            media: {
               kind: "image",
-              src: "/media/robust-health-onboarding.webp",
-              width: 1041,
-              height: 701,
-              alt: "A dark hero panel above a second panel offering two side-by-side cards, one tinted violet and one amber, with a line of small print beneath them.",
+              src: "/media/robust-health-start.webp",
+              width: 1639,
+              height: 1105,
+              alt: "Robust Health's onboarding over a blurred gym photograph: the headline Build a plan that fits your real life, then a panel asking How would you like to get started? with two cards — Personalised plan, recommended, about three to five minutes, and Quick start, to browse programmes.",
               caption:
                 "Two ways in: a three-to-five minute questionnaire that generates a tailored first week, or a ready-made programme with optional body details for nutrition targets. Switching between them keeps whatever has already been entered.",
             },
@@ -248,6 +261,27 @@ export const content: SiteContent = {
             body: [
               "A programme written once drifts away from the person following it. The product's own promise is a system that adapts to real adherence and recovery signals, so each week's plan is revised against what the member actually logged the week before, not against what was prescribed.",
             ],
+            media: {
+              kind: "pair",
+              title: "What it asks, and what changed",
+              body: "The intake asks for a goal, the days a member can train and the constraints around them: equipment, diet, an injury. Week two is then laid against week one, line by line. Here the macros held, the split moved to an imported programme, and a sixth training day was added.",
+              images: [
+                {
+                  src: "/media/robust-health-intake.webp",
+                  width: 568,
+                  height: 442,
+                  label: "The intake",
+                  alt: "An intake card: Build strength selected from three goals, three training days selected from two to five, and three constraint chips — Full gym, No dairy, Left shoulder.",
+                },
+                {
+                  src: "/media/robust-health-weeks.webp",
+                  width: 792,
+                  height: 668,
+                  label: "Week one against week two",
+                  alt: "A table of week one against week two: calories, protein, carbs and fat unchanged at 2851 kcal, 155 g, 416 g and 63 g; the training split changed from Push, Pull, Legs to an imported programme; days per week up from five to six; the sleep target unchanged at seven hours.",
+                },
+              ],
+            },
           },
           {
             id: "approach",
@@ -259,14 +293,14 @@ export const content: SiteContent = {
               "Trainers author and assign their own plans, and track each client's adherence over an adjustable window.",
               "A powerlifting module logs RPE, calculates the working weight for the next set, and flags clients who stop logging.",
             ],
-            plate: {
+            media: {
               kind: "image",
-              src: "/media/robust-health-dashboard.webp",
-              width: 1054,
-              height: 631,
-              alt: "A wide card headed Up Next with a prominent start button, a numbered five-row list beside it, and below them a programme card of three figure tiles next to an empty activity panel.",
+              src: "/media/robust-health-member.webp",
+              width: 1612,
+              height: 690,
+              alt: "Robust Health's member dashboard greeting Good morning, Gogol above two wide cards: an RPE-autoregulated powerlifting block with an Open your block button, and a standalone one-day plan with an Access your plan button.",
               caption:
-                "Captured from inside an account: the next session up front, the week's five workouts listed beside it, and the active Push/Pull/Legs programme with its day count, calorie and sleep targets.",
+                "Inside a member's account: the powerlifting block, where the RPE of every set is logged as it is lifted and the next load is recalculated from it, and a standalone one-day plan saved beside it.",
             },
           },
           {
@@ -280,14 +314,17 @@ export const content: SiteContent = {
               "Members, trainers and admins each get their own portal and their own signed session, and the more a session can reach, the sooner it expires. Requests pass a nonce-based content security policy, per-IP rate limiting on Upstash Redis with an in-memory fallback, and double-submit CSRF checks, and authorisation is checked per route.",
               "Sign-in runs through Supabase with OAuth for Google, GitHub and Discord, plus one-time email codes sent through Resend. Web push carries reminders.",
             ],
-            plate: {
+            // Cropped below the client's email, age, height, weight and body
+            // fat, and the signed-in trainer's name: personal details rather
+            // than evidence, and the trainer's name is someone else's.
+            media: {
               kind: "image",
-              src: "/media/robust-health-workout.webp",
-              width: 728,
-              height: 1091,
-              alt: "A narrow single-column screen: a video thumbnail with a play button, then an exercise card reading four by six to ten, a row of four numbered circular buttons, three labelled chips, and paired back and next controls at the foot.",
+              src: "/media/robust-health-trainer.webp",
+              width: 1730,
+              height: 775,
+              alt: "Nutrition targets as four rings — 2851 kcal, 155 g protein, 416 g carbs, 63 g fat — above a notes panel of six points on surplus, carb timing, protein distribution and micronutrients, and a workout plan of six day chips, D1 Legs mainly to D6 Arms, from an imported programme.",
               caption:
-                "One exercise at a time — three of seven here — with a form video above it. Sets are tapped off individually, and rest, RPE and tempo are carried per exercise rather than set once for the session.",
+                "The trainer's side of one client's active plan: calorie and macro targets, the reasoning behind them in notes, and a six-day programme imported from a file.",
             },
           },
           {
@@ -356,12 +393,44 @@ export const content: SiteContent = {
             body: [
               "Three surfaces over one set of records. Patients book and review their history and prescriptions; the doctor's dashboard lists a chosen day's appointments with each patient's details; the admin panel holds every patient and booking, with a CSV export for backup.",
             ],
+            // Public, signed-out pages only. The form is cropped to its fields:
+            // the account panel beside it states the password format.
+            media: {
+              kind: "pair",
+              title: "The patient's form, the doctor's day",
+              body: "A patient books in one form: a phone number, which becomes the account, an optional email, name, age and sex, and weight and height in whichever units they think in. The doctor signs in to a workspace built around the day: the pending queue, availability, and prescriptions to upload.",
+              images: [
+                {
+                  src: "/media/kb-clinic-booking.webp",
+                  width: 832,
+                  height: 1015,
+                  label: "Booking",
+                  alt: "The booking form's fields on a warm grey ground: phone number with a +91 prefix, optional email, full name, age and sex, and optional weight and height, each with a switch to pounds or to feet and inches.",
+                },
+                {
+                  src: "/media/kb-clinic-doctor.webp",
+                  width: 966,
+                  height: 653,
+                  label: "The doctor's day",
+                  alt: "A Daily Schedule card: review today's queue, move appointments forward and jump into patient details, over three rows — Pending Appointments, Availability Manager, Upload Prescription.",
+                },
+              ],
+            },
           },
           {
             id: "engineering",
             body: [
               "A Node server over Supabase Postgres, with a confirmation email sent as each appointment is made. Accounts are keyed to the patient's phone number, so a returning patient signs in with the number they booked with.",
             ],
+            media: {
+              kind: "image",
+              src: "/media/kb-clinic-admin.webp",
+              width: 1714,
+              height: 555,
+              alt: "The admin panel's header: Admin Panel set in a serif, Central view for patient records and booking operations, three tags — patient records, booking operations, data exports — an overview card listing the same three, and a link bar back to booking and on to the doctor dashboard.",
+              caption:
+                "The third surface: patient records, booking operations and data exports behind one sign-in, a link away from the booking page and the doctor's dashboard.",
+            },
           },
           {
             id: "outcome",

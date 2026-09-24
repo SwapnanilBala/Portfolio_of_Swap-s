@@ -72,6 +72,15 @@ export const CASE_HERO = {
 } as const;
 
 /**
+ * A hairline over a capture's edge, drawn inside it so it changes no size a
+ * plate's sharpness depends on. Light captures -- the clinic's beige pages --
+ * otherwise run into the paper ground with no edge at all, and read as part
+ * of this page; on a dark capture the line all but vanishes into its border.
+ */
+export const PLATE_FRAME =
+  "relative after:pointer-events-none after:absolute after:inset-0 after:border after:border-ink/15";
+
+/**
  * The portrait's widest, in CSS pixels: the About page's 15rem column. The
  * image is shown at this or at half its own pixel width, whichever is less,
  * so a 2x screen always has an image pixel behind every screen pixel and a

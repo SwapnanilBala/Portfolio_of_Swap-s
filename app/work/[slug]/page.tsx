@@ -6,6 +6,7 @@ import { PageTransition } from "@/components/PageTransition";
 import { SiteFooter } from "@/components/SiteFooter";
 import { CaseNav } from "@/components/work/CaseNav";
 import { CaseSection } from "@/components/work/CaseSection";
+import { MediaPair } from "@/components/work/MediaPair";
 import { MediaPlate } from "@/components/work/MediaPlate";
 import { ProjectHero } from "@/components/work/ProjectHero";
 import { content } from "@/lib/content";
@@ -65,7 +66,8 @@ export default async function CaseStudyPage({ params }: Params) {
         {project.caseStudy.sections.map((section) => (
           <Fragment key={section.id}>
             <CaseSection section={section} label={ui.caseSectionLabels[section.id]} />
-            {section.plate ? <MediaPlate media={section.plate} /> : null}
+            {section.media?.kind === "pair" ? <MediaPair media={section.media} /> : null}
+            {section.media?.kind === "image" ? <MediaPlate media={section.media} /> : null}
           </Fragment>
         ))}
 

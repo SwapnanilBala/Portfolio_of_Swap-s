@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { RevealPlate } from "@/components/RevealPlate";
-import { blurFor, SCREENSHOT_QUALITY } from "@/lib/media";
+import { blurFor, PLATE_FRAME, SCREENSHOT_QUALITY } from "@/lib/media";
 import type { ImageMedia } from "@/lib/types";
 
 interface Props {
@@ -24,7 +24,7 @@ export function MediaPlate({ media }: Props) {
   return (
     <figure className="px-5 py-10 md:px-8 md:py-16">
       <div className="md:ml-auto" style={{ maxWidth: `calc(${media.width}px / var(--dpr))` }}>
-        <RevealPlate>
+        <RevealPlate className={PLATE_FRAME}>
           <Image
             src={media.src}
             alt={media.alt}

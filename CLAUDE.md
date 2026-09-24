@@ -60,7 +60,8 @@ app/about/page.tsx
 components/home/            ProjectSlider, SliderCanvas, ProjectThumbnailRail,
                             MobileProjects, HomeMasthead
 components/index/           IndexView (grid + list + preview), ProjectCover
-components/work/            ProjectHero, CaseSection, MediaPlate, CaseNav
+components/work/            ProjectHero, CaseSection, MediaPlate, MediaPair,
+                            CaseNav
 components/                 PageTransition + SharedMedia, SplitTextReveal,
                             RevealLines, RevealPlate, DisplayTitle,
                             MagneticLink, CharShift, CustomCursor, SiteNav,
@@ -112,7 +113,9 @@ Known corrections, so they are not "fixed" back from an older source:
 - **Dates come from first commits.** Lagna Atelier and Robust Health start in
   March 2026. The old sites' "2025" was never backed by a repository.
 - The Robust Health landing page shows marketing counters ("84% satisfaction").
-  They are not repeated as portfolio figures: nobody can check them.
+  They are not repeated as portfolio figures: nobody can check them. Its
+  member portal's badges (encryption, uptime, "HIPAA compliant") are left out
+  the same way, and so is that capture: a compliance claim is a legal one.
 
 A fact that is not to hand is left out and listed as a TODO in the README —
 never written plausibly. Fabricated detail is the one failure a portfolio
@@ -290,6 +293,33 @@ one-off values.
   stroked in ink, so the field assumes the ink ground both of its plates
   have. The dash is 0.01 long, not 0, which not every renderer paints.
 
+## Case-study media
+
+A section may be followed by one plate (`MediaPlate`) or a pair
+(`MediaPair`): `section.media`, a union on `kind`.
+
+- **A pair is two captures read together**, side by side from 48rem with a
+  short explanation in the label column, stacked below it. Each capture's
+  column is as wide as its own ratio (`flex-grow`), so the two share one
+  height whatever their shapes — no cropping to force a match. The band is
+  capped so the shorter capture is never upscaled, and it stays beside its
+  explanation rather than against the right edge: on a 2x screen the capped
+  band pushed right left a gap wider than either capture.
+- **Pairs are for compact captures, plates for wide ones.** These are 1x
+  captures of a large window, so interface text is ~16px at full size. Two
+  wide page regions at half width put it near 6px; a single card or panel at
+  half width keeps it near 11px. Choose a pair's halves by that, not by
+  which screens would be nice together.
+- **Every capture carries a hairline** (`PLATE_FRAME`), drawn inside its
+  edge so no dimension changes. The clinic's pages are beige, and without it
+  they ran into the paper ground and read as part of this page.
+- **What a capture must never show**, checked before cropping: an account's
+  email in an app header, a client's biometrics, another person's name,
+  birth details — the synastry form's date, time and place, and dasha screens
+  whose dates and nakshatra degree give a birth date away — and the clinic's
+  stated password format. Crop past it; do not blur what can be cropped.
+  Clinic captures are signed-out public pages only.
+
 ## Page transitions
 
 React `<ViewTransition>`, native in Next 16's App Router (see
@@ -355,9 +385,10 @@ portfolio refutes its own copy.
   density (`--dpr`, stepped from resolution queries in `globals.css`), and
   right-aligns what that leaves narrower than the page. The earlier rule —
   never wider than captured, in CSS pixels — still stretched a 1x capture 1.25x
-  at 125% scaling and 2x on Retina, which is where the plates went soft. The six
-  in-product plates are 1x captures (1600px-wide viewport shots, cropped), so on
-  dense screens they now render smaller; 2x recaptures restore their size.
+  at 125% scaling and 2x on Retina, which is where the plates went soft. The
+  in-product captures are 1x — his 2560-wide screen at 100% — cropped to the
+  component, so on dense screens they render smaller; 2x recaptures restore
+  their size.
   Heroes are the 2x captures at full size (2880×1800), which covers the widest
   hero plate up to 2x.
 - **Screenshots are served at quality 90** (`SCREENSHOT_QUALITY`, allowed by

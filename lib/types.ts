@@ -65,6 +65,28 @@ export interface ImageMedia extends ImageAsset {
   readonly caption?: string;
 }
 
+/**
+ * Two captures read together, side by side from 48rem with the explanation
+ * beside them, stacked below it. Exactly two: a tuple, so a third cannot be
+ * added without a layout for it.
+ */
+export interface MediaPair {
+  readonly kind: "pair";
+  /** A few words, set as metadata: what the two show together. */
+  readonly title: string;
+  /** A sentence or two, set beside the pair. */
+  readonly body: string;
+  readonly images: readonly [PairedImage, PairedImage];
+}
+
+/** One half of a pair, with a label of a few words under it. */
+export interface PairedImage extends ImageAsset {
+  readonly label: string;
+}
+
+/** What may follow a case-study section: one plate, or a pair. */
+export type SectionMedia = ImageMedia | MediaPair;
+
 /* ---------------------------------------------------------------- figures */
 
 /**
@@ -93,8 +115,8 @@ export interface CaseSection {
   readonly body: readonly string[];
   /** Optional decisions, one per line. Not a feature list. */
   readonly points?: readonly string[];
-  /** A large plate rendered after this section. */
-  readonly plate?: ImageMedia;
+  /** Rendered after this section: one large plate, or a pair. */
+  readonly media?: SectionMedia;
 }
 
 export interface CaseStudy {

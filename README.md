@@ -75,12 +75,14 @@ loose ends found while scraping.
 - **The palm-reading clip** for Lagna Atelier: the one interaction a visitor
   will never try on a stranger's site. The poster-gated video player from the
   previous design is at commit `17e793e` (`components/ProjectMedia.tsx`).
-- **2x recaptures of the six in-product screenshots** — Lagna Atelier's
-  signed-in landing, chart and ashtakavarga; Robust Health's onboarding,
-  dashboard and workout. They are 1x captures, so on a 125% or Retina screen
-  they render smaller to stay sharp (see *Adding media*). Take each screen at
-  the same framing with your display at 200%, or in the browser's device mode
-  at a device pixel ratio of 2, and replace the file under the same name.
+- **2x recaptures of the in-product screenshots** — the reading, chart
+  settings, wheel and houses for Lagna Atelier; onboarding, intake, progress,
+  dashboard and trainer view for Robust Health; the clinic's booking form,
+  doctor and admin pages. They are 1x captures (a 2560-wide screen at 100%),
+  so on a 125% or Retina screen they render smaller to stay sharp (see
+  *Adding media*). Take each screen at the same framing with display scaling
+  at 200%, crop to the same component, and replace the file under the same
+  name.
 
 **Found while scraping — worth fixing at the source**
 
@@ -116,6 +118,10 @@ device, time — and this repository is public. Nothing goes into
 metadata unless asked to keep it, but call `.rotate()` first, or a photo that
 relied on its orientation tag lands sideways. Git keeps every version of a
 file forever, so commit the sized WebP, never the camera original.
+
+Before cropping, look for what must not be published: an account email in
+an app's header, anyone's biometrics or name, birth details, a stated
+password rule. Crop past it (see *Case-study media* in `CLAUDE.md`).
 
 After adding or re-cropping one:
 
