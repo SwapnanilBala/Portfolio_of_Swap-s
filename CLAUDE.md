@@ -76,7 +76,7 @@ components/                 PageTransition + SharedMedia, SplitTextReveal,
 lib/content.ts              every word on the site
 lib/types.ts                the contract
 lib/blur.ts                 generated — run `node scripts/build-blur.mjs`
-lib/media.ts                hero brightness, plate, case-hero and portrait sizes, record numbers
+lib/media.ts                hero brightness, plate and case-hero sizes, record numbers
 lib/preload.ts              media-scoped preloads, warming a hero on intent
 lib/slider.ts               slider maths (step, presence) + DESKTOP_QUERY
 lib/motion.ts               easings, durations, media-query hooks
@@ -238,6 +238,26 @@ competes.
   preview. **Nothing at the foot of a case study is a shared element.** The
   crop marks lock onto a half's words rather than the half, which runs to
   the window's edge where marks set outside it were cut off.
+
+## The About page's photographs
+
+The page reads person, record, city, and its photographs follow that order.
+
+- **Three portraits as a triangle of circles** (`Portraits`) beside the
+  intro, on request — the site's only round forms besides the dot field.
+  Largest first: the sharpest source takes the biggest circle. The suit
+  portrait's source is 400px whole, so it takes the smallest, which a 250px
+  crop keeps sharp at 2x (on a 3x phone it is 1.36x short). A paper edge on
+  each circle cuts cleanly where two overlap. Positions are percentages of
+  the cluster, so it scales as one.
+- **The campus is a pair after the education record**, and **the Fenway
+  plate closes the page** above the footer that gives Boston's time — the
+  same `MediaPair` and `MediaPlate` as the case studies, so the same
+  sharpness caps and frames apply.
+- **Personal photographs are cropped for privacy as well as framing**: the
+  snow portrait is cut to head and shoulders, which leaves out the entrance
+  of the building behind him. Captions state only what the photograph or
+  the record shows.
 
 ## Motion
 
@@ -473,15 +493,16 @@ portfolio refutes its own copy.
   source (WebP q90: 45–51) and 1–2% less edge contrast; at 3x
   magnification the text is indistinguishable. Recheck with an enlarged
   side-by-side before raising compression further.
-- **The stylesheet is inlined** (`experimental.inlineCss`): one render-
-  blocking request fewer for a first-time visitor, who is most of this
-  site's audience. Next writes the CSS twice into the HTML (the style tag
-  and the RSC payload); brotli, which Vercel serves, compresses the second
-  copy away, leaving about +5–6 KB per page against a separate 7.8 KB
-  stylesheet. **Measure it compressed with brotli, not locally:** `next
-  start` sends gzip, whose 32 KB window cannot reach the first copy of a
-  42 KB stylesheet, so a local Lighthouse run shows the page 26 KB heavier
-  and the saving cancelled.
+- **The stylesheet stays a file; inlining was measured and reverted.**
+  `experimental.inlineCss` removes the one render-blocking request, but Next
+  writes the CSS into the HTML twice (the style tag and the RSC payload):
+  +12 KB per page under Vercel's brotli, against a 7.8 KB stylesheet. Five
+  live Lighthouse runs per page on the throttled phone: first paint no
+  better (0.97–1.03s against 0.92–1.00s), the home and Index LCP slower,
+  the case studies level — and returning visitors lost the cached file. Do
+  not retry it without a measurement that shows otherwise, and measure on
+  the live site: `next start` sends gzip, which cannot compress the
+  duplicate at all.
 - **In an art-directed `<picture>`, every real image is a `<source>` and the
   `<img>`'s own is a transparent pixel** (`TRANSPARENT_PIXEL`). React sets a
   picture's `<img>` attributes before the element is inside the picture, so on

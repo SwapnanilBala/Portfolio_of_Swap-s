@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import type { ReactNode } from "react";
+import { Portraits } from "@/components/about/Portraits";
 import { PageTransition } from "@/components/PageTransition";
 import { SiteFooter } from "@/components/SiteFooter";
+import { MediaPair } from "@/components/work/MediaPair";
+import { MediaPlate } from "@/components/work/MediaPlate";
 import { content } from "@/lib/content";
 import type { MotionKit } from "@/lib/kit";
-import { blurFor, PORTRAIT_MAX_WIDTH } from "@/lib/media";
 
 export const aboutMetadata: Metadata = { title: content.ui.aboutSectionLabels.about };
 
@@ -32,17 +33,17 @@ function Section({
 }
 
 /**
- * The oversized statement, then the person, then the record. Technologies are
+ * The oversized statement, then the person, then the record -- and the
+ * photographs follow the same order: him beside the intro, the campus after
+ * the education it belongs to, the city to close. Technologies are
  * plain text lists joined by em dashes -- not a wall of coloured logos, which
  * say only that a logo exists. One view for both trees; the kit decides how
  * it moves.
  */
 export function About({ kit }: { readonly kit: MotionKit }) {
-  const { Text, Plate } = kit;
-  const { about, profile, ui } = content;
+  const { Text } = kit;
+  const { about, ui } = content;
   const labels = ui.aboutSectionLabels;
-  const portrait = profile.portrait;
-  const portraitWidth = Math.min(PORTRAIT_MAX_WIDTH, portrait.width / 2);
 
   return (
     <PageTransition>
@@ -58,22 +59,8 @@ export function About({ kit }: { readonly kit: MotionKit }) {
         </header>
 
         <Section id="about" label={labels.about}>
-          <div className="grid gap-10 lg:grid-cols-[minmax(0,15rem)_1fr]">
-            {/* Sized by its display box, not by its source: no `sizes`, so
-                the srcset is that box at 1x and 2x (see PORTRAIT_MAX_WIDTH). */}
-            <Plate className="w-full">
-              <div style={{ maxWidth: `${portraitWidth}px` }}>
-                <Image
-                  src={portrait.src}
-                  alt={portrait.alt}
-                  width={portraitWidth}
-                  height={Math.round((portraitWidth * portrait.height) / portrait.width)}
-                  placeholder="blur"
-                  blurDataURL={blurFor(portrait.src)}
-                  className="h-auto w-full"
-                />
-              </div>
-            </Plate>
+          <div className="grid gap-10 lg:grid-cols-[minmax(0,18rem)_1fr]">
+            <Portraits portraits={about.portraits} kit={kit} />
             <div className="grid max-w-[60ch] gap-5">
               {about.intro.map((paragraph) => (
                 <Text
@@ -145,6 +132,8 @@ export function About({ kit }: { readonly kit: MotionKit }) {
           </ul>
         </Section>
 
+        <MediaPair media={about.campus} kit={kit} />
+
         <Section id="technologies" label={labels.technologies}>
           <dl className="grid gap-7">
             {about.technologies.map((group) => (
@@ -171,6 +160,8 @@ export function About({ kit }: { readonly kit: MotionKit }) {
             ))}
           </ul>
         </Section>
+
+        <MediaPlate media={about.city} kit={kit} />
 
         <SiteFooter kit={kit} />
       </main>

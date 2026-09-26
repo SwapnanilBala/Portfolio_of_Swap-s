@@ -13,6 +13,10 @@
  * `LINK_LABELS` gives link roles.
  */
 export type BlurredMedia =
+  | "/media/about-smile.webp"
+  | "/media/about-snow.webp"
+  | "/media/about-suit.webp"
+  | "/media/fenway.webp"
   | "/media/kb-clinic-admin.webp"
   | "/media/kb-clinic-booking.webp"
   | "/media/kb-clinic-doctor.webp"
@@ -25,6 +29,8 @@ export type BlurredMedia =
   | "/media/lagna-atelier-reading.webp"
   | "/media/lagna-atelier-settings.webp"
   | "/media/lagna-atelier-wheel.webp"
+  | "/media/northeastern-street.webp"
+  | "/media/northeastern-window.webp"
   | "/media/robust-health-hero.webp"
   | "/media/robust-health-intake.webp"
   | "/media/robust-health-member.webp"
@@ -32,10 +38,17 @@ export type BlurredMedia =
   | "/media/robust-health-progress.webp"
   | "/media/robust-health-start.webp"
   | "/media/robust-health-trainer.webp"
-  | "/media/robust-health-weeks.webp"
-  | "/media/swapnanil-bala.webp";
+  | "/media/robust-health-weeks.webp";
 
 export const BLUR_PLACEHOLDERS: Readonly<Record<BlurredMedia, string>> = {
+  "/media/about-smile.webp":
+    "data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAAAwAgCdASoMAAwAAwBSJZgCdADcUBZvv8zAAAD+23k6DTLdjaAXBr/kHPcfZVINRB/rLwDXa9y609ZbdwBfa2exjyK6X0VFgPFghZHY1qraw4f1wAA=",
+  "/media/about-snow.webp":
+    "data:image/webp;base64,UklGRlQAAABXRUJQVlA4IEgAAADQAQCdASoMAAwAAwBSJQBOgBX+SrDT1AD+9gtevh65iqVglu1OMZ6Fiek09dBp/Mh+I9nUheetkliapABUBekjfNFIWVRVoAA=",
+  "/media/about-suit.webp":
+    "data:image/webp;base64,UklGRlIAAABXRUJQVlA4IEYAAADwAQCdASoMAAwAAwBSJYwCdAD0XhetrgAA/qNTMb2RCtUf5VOox3jZcbRrtPUMTd4ftzcdDspIEXAqRraeXF18XmsacAAA",
+  "/media/fenway.webp":
+    "data:image/webp;base64,UklGRlQAAABXRUJQVlA4IEgAAACwAQCdASoMAAYAAwBSJQBOgBszGSJgAM491KMvsxshnlWYC1FIJbEhcrwlHTXh9K1VxF3a8tXMLJ562E3nTqXwO6NUfen6cAA=",
   "/media/kb-clinic-admin.webp":
     "data:image/webp;base64,UklGRjIAAABXRUJQVlA4ICYAAACwAQCdASoMAAQAAwBSJZwAAudQDaMAAP73Jz897cFy0oeNzIAAAA==",
   "/media/kb-clinic-booking.webp":
@@ -60,6 +73,10 @@ export const BLUR_PLACEHOLDERS: Readonly<Record<BlurredMedia, string>> = {
     "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAADwAQCdASoMAAYAAwBSJZwCdAD0sb7vh+AA/vasPI3xVK5PbhL8ZCnwePQGFQAA",
   "/media/lagna-atelier-wheel.webp":
     "data:image/webp;base64,UklGRkoAAABXRUJQVlA4ID4AAADQAwCdASoMABEAPt1cpkyopSOiMAgBEBuJZwCdACHftMm7itx4iwAA/vDJtzzrmrnWZfxVfV3SvEnch1kAAA==",
+  "/media/northeastern-street.webp":
+    "data:image/webp;base64,UklGRk4AAABXRUJQVlA4IEIAAADQAQCdASoMAAkAAwBSJQBOgBt1Znj5AAD9nTDvpgnK5hfJLQKx6IZ+VVONnJr5de5mvWnvvN9zBpkbBrpAJpm7gAA=",
+  "/media/northeastern-window.webp":
+    "data:image/webp;base64,UklGRlQAAABXRUJQVlA4IEgAAADQAQCdASoMAAkAAwBSJQBOgBuJVuLcAAD9/A8bUARReJ7ETi6iF3SUnO5VkigExJGGJz6Jj5YG1cAZkOZ/xAFxebYXlsda4AA=",
   "/media/robust-health-hero.webp":
     "data:image/webp;base64,UklGRlIAAABXRUJQVlA4IEYAAADQAQCdASoMAAgAAwBSJYwAAlpBv/rUAAD+9F19RmG3v6oZHe4SL3ktxxzX1iNN2dU5LndKSo4N6tRG/FHpLZpX8EHsQAAA",
   "/media/robust-health-intake.webp":
@@ -76,6 +93,4 @@ export const BLUR_PLACEHOLDERS: Readonly<Record<BlurredMedia, string>> = {
     "data:image/webp;base64,UklGRiwAAABXRUJQVlA4ICAAAAAwAQCdASoMAAUAAwBSJaQAA3AA/vWaq653tjwZctBAAA==",
   "/media/robust-health-weeks.webp":
     "data:image/webp;base64,UklGRjIAAABXRUJQVlA4ICYAAAAwAQCdASoMAAoAAwBSJZwAA3AA/vIymizPkVLMyJfI1LivhwAAAA==",
-  "/media/swapnanil-bala.webp":
-    "data:image/webp;base64,UklGRlYAAABXRUJQVlA4IEoAAABQAgCdASoMAAwAAwBSJYwCdIEyu/xBAIhpaAAA/olmquLAyhCvZ8L86L3UeXk0guXHAE4m6k8dfOj6sBDW8g6N/+B3njxtJb4AAA==",
 };

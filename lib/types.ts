@@ -277,6 +277,15 @@ export interface AboutContent {
   readonly certificates: readonly Certificate[];
   readonly technologies: readonly TechGroup[];
   readonly exploring: readonly Exploration[];
+  /**
+   * Three portraits, set as a triangle of circles beside the intro: largest
+   * first, so the sharpest photograph takes the biggest circle. Squares.
+   */
+  readonly portraits: readonly [ImageAsset, ImageAsset, ImageAsset];
+  /** The campus, as a pair after the education record. */
+  readonly campus: MediaPair;
+  /** The city, closing the page above the footer. */
+  readonly city: ImageMedia;
 }
 
 /* ---------------------------------------------------------------- profile */
@@ -291,11 +300,6 @@ export interface Profile {
   /** IANA zone for the footer clock. */
   readonly timeZone: string;
   readonly availability: string;
-  /**
-   * Dimensions come from here, not from the component, so a higher-resolution
-   * replacement is a one-line change to this object.
-   */
-  readonly portrait: ImageAsset;
 }
 
 export type ContactKey = "email" | "github" | "linkedin" | "resume";

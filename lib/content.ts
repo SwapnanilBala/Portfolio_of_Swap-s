@@ -22,14 +22,6 @@ export const content: SiteContent = {
     location: "Boston, MA",
     timeZone: "America/New_York",
     availability: "Spring 2027 co-op",
-    // Placeholder until the higher-resolution upload arrives. Swap `src`,
-    // `width` and `height` together and rerun scripts/build-blur.mjs.
-    portrait: {
-      src: "/media/swapnanil-bala.webp",
-      width: 400,
-      height: 400,
-      alt: "Swapnanil Bala in a grey suit and dark red tie, on a deck above a pond, bare autumn treeline behind.",
-    },
   },
 
   projects: [
@@ -676,6 +668,59 @@ export const content: SiteContent = {
         evidence: "Claude vision behind Lagna Atelier's palm reading",
       },
     ],
+    // Squares, cropped so a circle frames the face. The snow photograph is
+    // cut to head and shoulders, which also leaves out the entrance of the
+    // building behind him. The suit portrait's source is 400px whole, so it
+    // takes the smallest circle, where 250px of it stays sharp on a 2x screen.
+    portraits: [
+      {
+        src: "/media/about-smile.webp",
+        width: 675,
+        height: 675,
+        alt: "Swapnanil Bala smiling broadly, in an orange collared shirt, indoors.",
+      },
+      {
+        src: "/media/about-snow.webp",
+        width: 720,
+        height: 720,
+        alt: "Swapnanil Bala in a grey beanie and a blue hooded coat, snow falling around him on a city street.",
+      },
+      {
+        src: "/media/about-suit.webp",
+        width: 250,
+        height: 250,
+        alt: "Swapnanil Bala in a grey suit and dark red tie, standing at a railing above a pond.",
+      },
+    ],
+    campus: {
+      kind: "pair",
+      title: "Northeastern, Boston",
+      body: "Khoury College's M.S. in Data Science, on the Boston campus, from September 2025 to December 2027.",
+      images: [
+        {
+          src: "/media/northeastern-street.webp",
+          width: 1200,
+          height: 900,
+          label: "From the street",
+          alt: "A long pale-brick university building with tall windows behind a fenced tram line and young trees, a red Northeastern banner on a lamppost, under a blue sky.",
+        },
+        {
+          src: "/media/northeastern-window.webp",
+          width: 1200,
+          height: 900,
+          label: "From a window above",
+          alt: "Seen from a window above a tram platform: a long glass-walled building among trees, towers and a construction crane on the skyline under a cloudy blue sky.",
+        },
+      ],
+    },
+    city: {
+      kind: "image",
+      src: "/media/fenway.webp",
+      width: 2040,
+      height: 1020,
+      alt: "A still river between tall trees in full leaf, the trees and a clear blue sky mirrored in the water, a pale building on the far bank.",
+      caption: "The Fenway, Boston.",
+    },
   },
 
   contact: [

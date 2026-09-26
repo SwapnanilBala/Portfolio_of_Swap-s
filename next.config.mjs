@@ -26,15 +26,6 @@ const nextConfig = {
     // small coloured interface text is not smeared by chroma subsampling.
     formats: ["image/avif", "image/webp"],
   },
-  experimental: {
-    // The stylesheet arrives inside the HTML rather than as a request the
-    // page must wait for: one round trip less before first paint, which is
-    // most of what a first-time visitor on a phone pays for. It is ~8 KB
-    // compressed (Tailwind generates only what is used), and a portfolio's
-    // visitors are mostly first-time, so the lost stylesheet cache costs
-    // little. Production builds only.
-    inlineCss: true,
-  },
   // Two trees, one set of URLs. A phone is served the phone tree (app/m):
   // the same design without GSAP, Lenis, the cursor or three.js. These are
   // routing rules, not a Proxy function, so on Vercel they are evaluated at

@@ -71,12 +71,12 @@ loose ends found while scraping.
 
 **Waiting on you**
 
-- **Portrait.** A higher-resolution photo is coming. Drop the original in
-  `incoming/` (see *Adding media*), save the processed copy to `public/media/`,
-  update `profile.portrait` (`src`, `width`, `height`) in `lib/content.ts`, then
-  run `node scripts/build-blur.mjs`. The About page shows it at up to 240px
-  (`PORTRAIT_MAX_WIDTH`), so 720px wide covers a 3x phone and 1200px is
-  plenty; nothing else changes.
+- **A sharper suit portrait.** The About page's third circle (`about-suit.webp`)
+  is cut from a 400px photo, so on a 3x phone it is shown 1.36x larger than
+  its pixels. Any square crop of 360px or more fixes it: drop the original in
+  `incoming/`, save the crop over `public/media/about-suit.webp`, update its
+  `width` and `height` in `about.portraits` in `lib/content.ts`, and run
+  `node scripts/build-blur.mjs`.
 - **What you learned**, per project. The brief's Outcome sections are meant to
   cover it; nothing documents it yet, so Outcome states results only.
 - **The palm-reading clip** for Lagna Atelier: the one interaction a visitor
