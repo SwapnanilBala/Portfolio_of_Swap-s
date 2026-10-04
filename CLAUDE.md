@@ -361,17 +361,21 @@ one-off values.
   landscape, under 30rem tall; no iPad is that short, so iPads keep the
   stacked screens). Stacked, the title alone at 15vw outgrew a 340px-tall
   screen and the plate got 0px; capping the title by height still left a
-  plate under 100px. The plate is 16:10, `min(50vw, (100svh − 2.5rem) × 1.6)`
-  wide, so the capture loses nothing; it and the live link end on one bottom
-  line. The title is sized by its column (`17cqw`, the portrait title's
-  share of its width) and capped by what the screen leaves under the nav.
-  The masthead cannot share that screen, so it heads the first one and
-  scrolls away: section one is the masthead plus a full screen, both snap
-  points, and the counter observes each project's screen, not its section.
-  The page opens on the name with the first plate and title in view.
-  Checked at 667×320, 740×300, 844×340 and 932×430. At 568 wide (iPhone SE,
-  first generation) the column is too narrow for one-line metadata, and the
-  wrapped lines push the title up to the nav.
+  plate under 100px. The plate is 16:10, so the capture loses nothing, and
+  it and the live link end on one bottom line. Its width is the least of
+  half the screen, what the height allows, and what leaves the type column
+  17.5rem: the widest metadata line (with the counter's room) and the
+  clinic's address each need about 17rem on one line, and below that the
+  wrapped metadata pushed the title into the nav. The title is sized by
+  its column (`17cqw`, the portrait title's share of its width) and capped
+  by what the screen leaves under the nav (4rem, at least 15px under its
+  type). The masthead cannot share that screen, so it heads the first one
+  and scrolls away: section one is the masthead plus a full screen, both
+  snap points, and the counter observes each project's screen, not its
+  section. The page opens on the name with the first plate and title in
+  view. Checked for clipping, wrapped metadata, overflow in the live link
+  and the nav at 568×260, 568×300, 600×280, 640×320, 667×320, 740×300,
+  844×340 and 932×430.
 - **`useMediaQuery` shares one `MediaQueryList` per query**, notifying every
   subscriber from one listener, so all consumers of a query re-render in one
   commit. With a list per consumer, React committed between their change events

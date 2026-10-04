@@ -150,13 +150,18 @@ export function MobileProjects({ projects, copy, liveLabel, profile }: Props) {
                   and the type sit side by side on one bottom line, and the
                   masthead heads the first screen and scrolls away above it --
                   there is no room for both. The plate is 16:10, the capture's
-                  own shape, so nothing is cropped from its header. */}
+                  own shape, so nothing is cropped from its header: half the
+                  width, as much as the height allows, and never so much that
+                  the type column falls under 17.5rem (after 3.75rem of
+                  gutters and gap) -- the widest metadata line with the
+                  counter's room, and the clinic's address in the live link,
+                  each need about 17rem on one line. */}
               <div
                 ref={(screen) => {
                   screenRefs.current[i] = screen;
                 }}
                 data-index={i}
-                className="flex min-h-0 flex-1 flex-col short:h-svh short:flex-none short:snap-start short:flex-row short:items-end short:gap-x-5 short:p-5 short:[--plate-w:min(50vw,(100svh-2.5rem)*1.6)]"
+                className="flex min-h-0 flex-1 flex-col short:h-svh short:flex-none short:snap-start short:flex-row short:items-end short:gap-x-5 short:p-5 short:[--plate-w:min(50vw,(100svh-2.5rem)*1.6,100vw-3.75rem-17.5rem)]"
               >
                 <SharedMedia slug={project.slug} enabled={hydrated && !isDesktop && i === active}>
                   {/* A tap on the plate opens the project too. The title below is
@@ -174,11 +179,12 @@ export function MobileProjects({ projects, copy, liveLabel, profile }: Props) {
                   <Link href={`/work/${project.slug}`} transitionTypes={["page"]} className="block text-paper">
                     {/* Short screens: the column's width, as 15vw is the
                         screen's, but never taller than the screen leaves --
-                        13.75rem is the nav above and the metadata, live link
-                        and padding below; two lines at 0.84 are 1.68em. */}
+                        13.25rem is the nav above (4rem, at least 15px under
+                        its type at any width) and the metadata, live link and
+                        padding below; two lines at 0.84 are 1.68em. */}
                     <DisplayTitle
                       lines={displayLinesOf(project)}
-                      className="text-[15vw] short:text-[min(17cqw,(100svh-13.75rem)/1.68)]"
+                      className="text-[15vw] short:text-[min(17cqw,(100svh-13.25rem)/1.68)]"
                     />
                   </Link>
                   <div className="meta mt-4 grid gap-y-1 text-paper">
