@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { DisplayTitle } from "@/components/DisplayTitle";
 import { SharedMedia } from "@/components/PageTransition";
 import { HomeMasthead } from "@/components/home/HomeMasthead";
+import { LiveSiteLink } from "@/components/home/LiveSiteLink";
 import {
   blurFor,
   HERO_BRIGHTNESS,
@@ -18,11 +19,13 @@ import {
 } from "@/lib/media";
 import { useHydrated, useMediaQuery } from "@/lib/motion";
 import { DESKTOP_QUERY } from "@/lib/slider";
-import { displayLinesOf, type Profile, type SelectedProject, type UiCopy } from "@/lib/types";
+import { displayLinesOf, liveLinkOf, type Profile, type SelectedProject, type UiCopy } from "@/lib/types";
 
 interface Props {
   readonly projects: readonly SelectedProject[];
   readonly copy: UiCopy["slider"];
+  /** The live site's label, shared with the case studies' links. */
+  readonly liveLabel: string;
   readonly profile: Profile;
 }
 
@@ -93,7 +96,7 @@ function PhonePlate({ project, first }: { readonly project: SelectedProject; rea
  * simulated, and nothing here loads WebGL. The masthead opens the first
  * screen and scrolls away with it; a counter tracks the screen in view.
  */
-export function MobileProjects({ projects, copy, profile }: Props) {
+export function MobileProjects({ projects, copy, liveLabel, profile }: Props) {
   const router = useRouter();
   const isDesktop = useMediaQuery(DESKTOP_QUERY);
   // See ProjectSlider: no plate claims the shared name until the device is
@@ -129,51 +132,64 @@ export function MobileProjects({ projects, copy, profile }: Props) {
         data-lenis-prevent
         className="h-svh snap-y snap-mandatory overflow-y-auto overscroll-contain"
       >
-        {projects.map((project, i) => (
-          <section
-            key={project.slug}
-            ref={(screen) => {
-              screenRefs.current[i] = screen;
-            }}
-            data-index={i}
-            aria-label={project.name}
-            className="relative flex h-svh snap-start flex-col overflow-hidden pb-10"
-          >
-            {i === 0 ? <HomeMasthead profile={profile} className="shrink-0 px-5 pt-16" /> : null}
+        {projects.map((project, i) => {
+          const live = liveLinkOf(project);
+          return (
+            <section
+              key={project.slug}
+              ref={(screen) => {
+                screenRefs.current[i] = screen;
+              }}
+              data-index={i}
+              aria-label={project.name}
+              className="relative flex h-svh snap-start flex-col overflow-hidden pb-10"
+            >
+              {i === 0 ? <HomeMasthead profile={profile} className="shrink-0 px-5 pt-16" /> : null}
 
-            <SharedMedia slug={project.slug} enabled={hydrated && !isDesktop && i === active}>
-              {/* A tap on the plate opens the project too. The title below is
-                  the link keyboards and screen readers use, so the plate is
-                  not a second one. */}
-              <div
-                onClick={() => router.push(`/work/${project.slug}`, { transitionTypes: ["page"] })}
-                className={`relative mx-5 min-h-0 flex-1 overflow-hidden bg-ink ${i === 0 ? "mt-6" : "mt-16"}`}
-              >
-                <PhonePlate project={project} first={i === 0} />
-              </div>
-            </SharedMedia>
+              <SharedMedia slug={project.slug} enabled={hydrated && !isDesktop && i === active}>
+                {/* A tap on the plate opens the project too. The title below is
+                    the link keyboards and screen readers use, so the plate is
+                    not a second one. */}
+                <div
+                  onClick={() => router.push(`/work/${project.slug}`, { transitionTypes: ["page"] })}
+                  className={`relative mx-5 min-h-0 flex-1 overflow-hidden bg-ink ${i === 0 ? "mt-6" : "mt-16"}`}
+                >
+                  <PhonePlate project={project} first={i === 0} />
+                </div>
+              </SharedMedia>
 
-            <div className="relative -mt-7 px-5">
-              <Link href={`/work/${project.slug}`} transitionTypes={["page"]} className="block text-paper">
-                <DisplayTitle lines={displayLinesOf(project)} className="text-[15vw]" />
-              </Link>
-              <div className="meta mt-4 grid gap-y-1 text-paper">
-                <p className="flex gap-x-6 tabular-nums">
-                  <span>
-                    {recordNumber(i)} / {project.category}
-                  </span>
-                  <span>{project.year}</span>
-                </p>
-                <p className="pr-16">{project.stack.slice(0, 3).join(" / ")}</p>
+              <div className="relative -mt-7 px-5">
+                <Link href={`/work/${project.slug}`} transitionTypes={["page"]} className="block text-paper">
+                  <DisplayTitle lines={displayLinesOf(project)} className="text-[15vw]" />
+                </Link>
+                <div className="meta mt-4 grid gap-y-1 text-paper">
+                  <p className="flex gap-x-6 tabular-nums">
+                    <span>
+                      {recordNumber(i)} / {project.category}
+                    </span>
+                    <span>{project.year}</span>
+                  </p>
+                  <p className="pr-16">{project.stack.slice(0, 3).join(" / ")}</p>
+                </div>
+                {/* A fixed height, which the counter's position allows for. */}
+                {live ? (
+                  <LiveSiteLink
+                    href={live.href}
+                    label={liveLabel}
+                    project={project.name}
+                    className="mt-5 h-14 w-full px-4 text-[0.9375rem]"
+                  />
+                ) : null}
               </div>
-            </div>
-          </section>
-        ))}
+            </section>
+          );
+        })}
       </div>
 
       <p
         aria-hidden="true"
-        className="meta pointer-events-none fixed bottom-10 right-5 z-10 text-right tabular-nums text-paper"
+        // Level with the last line of metadata, above the live link.
+        className="meta pointer-events-none fixed bottom-[calc(2.5rem+3.5rem+1.25rem)] right-5 z-10 text-right tabular-nums text-paper"
       >
         {recordNumber(active)} <span className="text-ink-muted">/ {recordNumber(projects.length - 1)}</span>
       </p>

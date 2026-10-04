@@ -36,6 +36,11 @@ export function isResolvedLink(link: ProjectLink): link is ResolvedLink {
   return typeof link.href === "string" && link.href.length > 0;
 }
 
+/** A project's live site, when it has one with an address. */
+export function liveLinkOf(project: { readonly links: readonly ProjectLink[] }): ResolvedLink | undefined {
+  return project.links.find((link): link is ResolvedLink => link.role === "live" && isResolvedLink(link));
+}
+
 /* ------------------------------------------------------------------ media */
 
 /**

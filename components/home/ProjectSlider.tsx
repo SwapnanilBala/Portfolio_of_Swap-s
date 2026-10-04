@@ -14,6 +14,7 @@ import {
 } from "react";
 import { DisplayTitle } from "@/components/DisplayTitle";
 import { SharedMedia } from "@/components/PageTransition";
+import { LiveSiteLink } from "@/components/home/LiveSiteLink";
 import { ProjectThumbnailRail } from "@/components/home/ProjectThumbnailRail";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { blurFor, CASE_HERO, HERO_BRIGHTNESS, recordNumber, SCREENSHOT_QUALITY } from "@/lib/media";
@@ -35,7 +36,7 @@ import {
   wrapIndex,
   type SliderMotion,
 } from "@/lib/slider";
-import { displayLinesOf, type SelectedProject, type UiCopy } from "@/lib/types";
+import { displayLinesOf, liveLinkOf, type SelectedProject, type UiCopy } from "@/lib/types";
 
 // three.js only ever loads here, and only once the desktop slider decides to
 // use it -- never on the other pages, and never on touch devices.
@@ -47,6 +48,8 @@ const SliderCanvas = dynamic(
 interface Props {
   readonly projects: readonly SelectedProject[];
   readonly copy: UiCopy["slider"];
+  /** The live site's label, shared with the case studies' links. */
+  readonly liveLabel: string;
 }
 
 let webglSupport: boolean | null = null;
@@ -86,7 +89,7 @@ const SETTLE_MS = 160;
  * from, so they are always rendered and always in position. Their layout box
  * is also the geometry the WebGL plates copy: CSS sizes the frame once.
  */
-export function ProjectSlider({ projects, copy }: Props) {
+export function ProjectSlider({ projects, copy, liveLabel }: Props) {
   const router = useRouter();
   const isDesktop = useMediaQuery(DESKTOP_QUERY);
   // The shared view-transition name waits for the real media query. During
@@ -108,6 +111,8 @@ export function ProjectSlider({ projects, copy }: Props) {
   const frameRef = useRef<HTMLDivElement>(null);
   const stepRef = useRef(0);
   const titleRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const liveRef = useRef<HTMLDivElement>(null);
+  const hostRef = useRef<HTMLSpanElement>(null);
   const motion = useRef<SliderMotion>({ current: 0, velocity: 0, hover: 0 });
   const target = useRef(0);
   const lastInput = useRef(0);
@@ -352,6 +357,8 @@ export function ProjectSlider({ projects, copy }: Props) {
       const first = titleRefs.current[activeRef.current];
       if (!first) return;
       first.dataset.revealed = "";
+      const liveBox = liveRef.current;
+      if (liveBox) liveBox.dataset.revealed = "";
       if (reduced) return;
       gsap.from(first.querySelectorAll("[data-line]"), {
         yPercent: 110,
@@ -360,7 +367,7 @@ export function ProjectSlider({ projects, copy }: Props) {
         stagger: 0.07,
         delay: 0.25,
       });
-      gsap.from(first.querySelectorAll("[data-title-meta]"), {
+      gsap.from([...first.querySelectorAll("[data-title-meta]"), ...(liveBox ? [liveBox] : [])], {
         autoAlpha: 0,
         y: 10,
         duration: DURATION.meta,
@@ -387,15 +394,19 @@ export function ProjectSlider({ projects, copy }: Props) {
       const inLines = incoming.querySelectorAll("[data-line]");
       const outMeta = outgoing.querySelectorAll("[data-title-meta]");
       const inMeta = incoming.querySelectorAll("[data-title-meta]");
+      // One live link serves every plate, so a visitor focused on it keeps
+      // focus while the arrow keys change project; only its address changes,
+      // and that follows the metadata in.
+      const host = hostRef.current ? [hostRef.current] : [];
       incoming.dataset.revealed = "";
 
-      gsap.killTweensOf([outgoing, incoming, ...outLines, ...inLines, ...outMeta, ...inMeta]);
+      gsap.killTweensOf([outgoing, incoming, ...outLines, ...inLines, ...outMeta, ...inMeta, ...host]);
 
       if (reduced) {
         gsap.set(outgoing, { autoAlpha: 0 });
         gsap.set(incoming, { autoAlpha: 1 });
         gsap.set([...inLines], { yPercent: 0 });
-        gsap.set([...inMeta], { autoAlpha: 1, y: 0 });
+        gsap.set([...inMeta, ...host], { autoAlpha: 1, y: 0 });
         return;
       }
 
@@ -410,7 +421,7 @@ export function ProjectSlider({ projects, copy }: Props) {
         { yPercent: 0, duration: DURATION.title, ease: EASE.out, stagger: 0.06, delay: 0.12 },
       );
       gsap.fromTo(
-        inMeta,
+        [...inMeta, ...host],
         { autoAlpha: 0, y: 10 },
         { autoAlpha: 1, y: 0, duration: DURATION.meta, ease: EASE.out, delay: 0.12 + META_LAG },
       );
@@ -419,6 +430,7 @@ export function ProjectSlider({ projects, copy }: Props) {
   );
 
   const current = projects[active];
+  const live = current ? liveLinkOf(current) : undefined;
   const announcement = current
     ? copy.announce
         .replace("{index}", String(active + 1))
@@ -438,7 +450,8 @@ export function ProjectSlider({ projects, copy }: Props) {
       }}
       data-cursor="drag"
       data-lenis-prevent
-      className="absolute inset-0 hidden touch-none select-none overflow-hidden bg-ink focus-visible:outline-2 focus-visible:-outline-offset-[12px] focus-visible:outline-paper desktop:block"
+      // The frame, defined once: the plates and the live link below them.
+      className="[--plate-top:7.25rem] [--plate-w:min(99.2vh,76vw)] absolute inset-0 hidden touch-none select-none overflow-hidden bg-ink focus-visible:outline-2 focus-visible:-outline-offset-[12px] focus-visible:outline-paper desktop:block"
     >
       <p id="slider-hint" className="sr-only">
         {copy.hint}
@@ -461,7 +474,7 @@ export function ProjectSlider({ projects, copy }: Props) {
           // The plate on stage opens on a click; the cursor's marks lock onto it.
           data-cursor="open"
           data-cursor-frame
-          className="absolute left-[calc(50%-min(49.6vh,38vw))] top-[7.25rem] aspect-[16/10] w-[min(99.2vh,76vw)] overflow-hidden bg-ink will-change-transform"
+          className="absolute left-[calc(50%-var(--plate-w)/2)] top-(--plate-top) aspect-[16/10] w-(--plate-w) overflow-hidden bg-ink will-change-transform"
           // Until the loop's first tick only the first plate is on stage.
           style={i === 0 ? undefined : { visibility: "hidden" }}
         >
@@ -543,6 +556,29 @@ export function ProjectSlider({ projects, copy }: Props) {
           </div>
         ))}
       </div>
+
+      {/* Under the plate on stage, flush with its right edge, while the title
+          crosses its lower left. The box runs from just under the plate to
+          just above the metadata line: the link sits at its top, and in a
+          window too short for both, auto margins collapse and justify-end
+          lifts it onto the plate's corner instead of onto the metadata. In a
+          portrait window the rail, centred on the right edge, would cover it,
+          so there it keeps the rail's width clear. */}
+      {current && live ? (
+        <div
+          ref={liveRef}
+          data-reveal=""
+          className="absolute bottom-[calc(6vh+2.25rem)] right-[calc(50%-var(--plate-w)/2)] top-[calc(var(--plate-top)+var(--plate-w)*10/16+1.25rem)] flex flex-col justify-end portrait:right-[max(calc(50%-var(--plate-w)/2),8.75rem)]"
+        >
+          <LiveSiteLink
+            href={live.href}
+            label={liveLabel}
+            project={current.name}
+            hostRef={hostRef}
+            className="mb-auto shrink-0 px-6 py-4 text-[clamp(1rem,1.1vw,1.375rem)]"
+          />
+        </div>
+      ) : null}
 
       <ProjectThumbnailRail projects={projects} active={active} onSelect={goTo} copy={copy} />
     </section>

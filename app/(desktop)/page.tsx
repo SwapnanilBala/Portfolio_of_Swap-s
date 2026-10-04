@@ -28,8 +28,8 @@ export default function Home() {
   return (
     <PageTransition>
       <main id="main" data-tone="dark" className="relative h-svh overflow-hidden bg-ink text-paper">
-        <ProjectSlider projects={projects} copy={ui.slider} />
-        <MobileProjects projects={projects} copy={ui.slider} profile={profile} />
+        <ProjectSlider projects={projects} copy={ui.slider} liveLabel={ui.linkLabels.live} />
+        <MobileProjects projects={projects} copy={ui.slider} liveLabel={ui.linkLabels.live} profile={profile} />
         <HomeMasthead
           profile={profile}
           className="absolute inset-x-0 top-0 z-10 hidden px-8 pt-7 desktop:grid"

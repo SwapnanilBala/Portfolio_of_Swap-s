@@ -21,7 +21,7 @@ export default function Page() {
   return (
     <PageTransition>
       <main id="main" data-tone="dark" className="relative h-svh overflow-hidden bg-ink text-paper">
-        <MobileProjects projects={projects} copy={ui.slider} profile={profile} />
+        <MobileProjects projects={projects} copy={ui.slider} liveLabel={ui.linkLabels.live} profile={profile} />
       </main>
     </PageTransition>
   );

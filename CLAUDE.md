@@ -60,7 +60,7 @@ app/(desktop)/about/
 app/m/layout.tsx            phone tree: PhoneReveals
 app/m/...                   the same four pages for phones, served at the same URLs
 components/home/            ProjectSlider, SliderCanvas, ProjectThumbnailRail,
-                            MobileProjects, HomeMasthead
+                            MobileProjects, HomeMasthead, LiveSiteLink
 components/index/           IndexPage, IndexView (Flip + preview), parts
                             (grid, list, toggle, links), ProjectCover
 components/work/            CaseStudy, ProjectHero, CaseSection, MediaPlate,
@@ -222,6 +222,8 @@ competes.
   nothing refers to is still decoration.
 - **No cards, no drop shadows, no glass, no gradient washes, no pills, no icon
   badges for technologies.** Technologies are text lists joined by em dashes.
+  One filled control, on request: the home page's live-site link (see *The
+  home slider*). Do not let it spread — everything else stays type.
 - **The way home is top left, on every page but home** (`HomeLink`, in the
   layout, hidden on `/` where the name holds that corner). Crop marks around
   the monogram — the cursor's mark, in the plates' 16:10 — opening a few
@@ -301,9 +303,30 @@ one-off values.
   leave the stage and light as they arrive (`presenceAt`) — DOM opacity over
   the ink, and the same mix toward ink in the shader. A click opens a project
   only on the plate on stage; the ink around it does nothing.
-- **CSS defines the frame once.** The WebGL plates measure a DOM plate's
-  layout box (`frameRef`) and step by the same `slideStep`; nothing restates
-  the geometry in JavaScript.
+- **CSS defines the frame once**, as `--plate-top` and `--plate-w` on the
+  slider. The WebGL plates measure a DOM plate's layout box (`frameRef`) and
+  step by the same `slideStep`; nothing restates the geometry in JavaScript.
+- **Every slide leads to its live site** (`LiveSiteLink`), on request: "big
+  and visible". A block of paper with ink type, the label from
+  `ui.linkLabels.live` and the address in meta under it, opening a new tab;
+  it is the site's one filled control. A project with no live address shows
+  none.
+  - Desktop: under the plate on stage, flush with its right edge, while the
+    title crosses the lower left. It is one link for every plate, so a
+    keyboard visitor on it keeps focus while the arrow keys change project;
+    its address follows the metadata in. Its box runs from 1.25rem under the
+    plate to just above the metadata line, the link held at the top by an
+    auto margin: in a window too short for both (under ~690px tall), the
+    margin collapses and `justify-end` lifts the link onto the plate's
+    corner instead of onto the metadata. In a portrait window the rail,
+    centred on the right edge, would cover it, so there it keeps the rail's
+    width clear. Swept clear of the title, metadata and rail at 32 window
+    sizes from 800×500 to 3440×1440.
+  - Phones: a full-width bar of fixed height (`h-14`) after the metadata.
+    The fixed counter sits level with the last metadata line, so its offset
+    adds the bar's height and margin — change one, change the other. The
+    bar costs the first screen's plate about 76px; on a 375×548 phone it is
+    87px tall.
 - **The DOM plates are always rendered and always in position.** They are the
   no-WebGL and reduced-motion path, the LCP frame, and the element a page
   transition morphs from.
