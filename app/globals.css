@@ -48,6 +48,12 @@
    which one is wired up, and the two must never disagree. */
 @custom-variant desktop (@media (min-width: 48rem) and (hover: hover) and (pointer: fine));
 
+/* `short:` is a landscape screen too short to stack a plate over its title,
+   metadata and live link -- a phone on its side, where the title alone at
+   15vw outgrew the screen. No phone is 30rem tall in landscape, and no iPad
+   is that short, so iPads keep the stacked screens. */
+@custom-variant short (@media (orientation: landscape) and (max-height: 30rem));
+
 /* Enormous display type and tiny metadata are the whole typographic system. */
 @utility display {
   font-weight: 650;

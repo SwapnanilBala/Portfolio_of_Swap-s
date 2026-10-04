@@ -94,7 +94,8 @@ function PhonePlate({ project, first }: { readonly project: SelectedProject; rea
  * The home page for touch and narrow screens: one framed plate per screen on
  * native vertical scroll-snap. The browser's own touch physics beat anything
  * simulated, and nothing here loads WebGL. The masthead opens the first
- * screen and scrolls away with it; a counter tracks the screen in view.
+ * screen and scrolls away with it; a counter tracks the screen in view. A
+ * phone on its side (`short:`) sets each plate beside its type instead.
  */
 export function MobileProjects({ projects, copy, liveLabel, profile }: Props) {
   const router = useRouter();
@@ -137,49 +138,68 @@ export function MobileProjects({ projects, copy, liveLabel, profile }: Props) {
           return (
             <section
               key={project.slug}
-              ref={(screen) => {
-                screenRefs.current[i] = screen;
-              }}
-              data-index={i}
               aria-label={project.name}
-              className="relative flex h-svh snap-start flex-col overflow-hidden pb-10"
+              className="relative flex h-svh snap-start flex-col overflow-hidden pb-10 short:h-auto short:pb-0"
             >
-              {i === 0 ? <HomeMasthead profile={profile} className="shrink-0 px-5 pt-16" /> : null}
+              {/* On the nav's line when the screen is short, as on desktop. */}
+              {i === 0 ? (
+                <HomeMasthead profile={profile} className="shrink-0 px-5 pt-16 short:pt-5 short:md:pt-7" />
+              ) : null}
 
-              <SharedMedia slug={project.slug} enabled={hydrated && !isDesktop && i === active}>
-                {/* A tap on the plate opens the project too. The title below is
-                    the link keyboards and screen readers use, so the plate is
-                    not a second one. */}
-                <div
-                  onClick={() => router.push(`/work/${project.slug}`, { transitionTypes: ["page"] })}
-                  className={`relative mx-5 min-h-0 flex-1 overflow-hidden bg-ink ${i === 0 ? "mt-6" : "mt-16"}`}
-                >
-                  <PhonePlate project={project} first={i === 0} />
-                </div>
-              </SharedMedia>
+              {/* The project's screen. On a short landscape screen the plate
+                  and the type sit side by side on one bottom line, and the
+                  masthead heads the first screen and scrolls away above it --
+                  there is no room for both. The plate is 16:10, the capture's
+                  own shape, so nothing is cropped from its header. */}
+              <div
+                ref={(screen) => {
+                  screenRefs.current[i] = screen;
+                }}
+                data-index={i}
+                className="flex min-h-0 flex-1 flex-col short:h-svh short:flex-none short:snap-start short:flex-row short:items-end short:gap-x-5 short:p-5 short:[--plate-w:min(50vw,(100svh-2.5rem)*1.6)]"
+              >
+                <SharedMedia slug={project.slug} enabled={hydrated && !isDesktop && i === active}>
+                  {/* A tap on the plate opens the project too. The title below is
+                      the link keyboards and screen readers use, so the plate is
+                      not a second one. */}
+                  <div
+                    onClick={() => router.push(`/work/${project.slug}`, { transitionTypes: ["page"] })}
+                    className={`relative mx-5 min-h-0 flex-1 overflow-hidden bg-ink ${i === 0 ? "mt-6" : "mt-16"} short:mx-0 short:mt-0 short:aspect-[16/10] short:w-(--plate-w) short:flex-none`}
+                  >
+                    <PhonePlate project={project} first={i === 0} />
+                  </div>
+                </SharedMedia>
 
-              <div className="relative -mt-7 px-5">
-                <Link href={`/work/${project.slug}`} transitionTypes={["page"]} className="block text-paper">
-                  <DisplayTitle lines={displayLinesOf(project)} className="text-[15vw]" />
-                </Link>
-                <div className="meta mt-4 grid gap-y-1 text-paper">
-                  <p className="flex gap-x-6 tabular-nums">
-                    <span>
-                      {recordNumber(i)} / {project.category}
-                    </span>
-                    <span>{project.year}</span>
-                  </p>
-                  <p className="pr-16">{project.stack.slice(0, 3).join(" / ")}</p>
+                <div className="relative -mt-7 px-5 short:mt-0 short:min-w-0 short:flex-1 short:px-0 short:@container">
+                  <Link href={`/work/${project.slug}`} transitionTypes={["page"]} className="block text-paper">
+                    {/* Short screens: the column's width, as 15vw is the
+                        screen's, but never taller than the screen leaves --
+                        13.75rem is the nav above and the metadata, live link
+                        and padding below; two lines at 0.84 are 1.68em. */}
+                    <DisplayTitle
+                      lines={displayLinesOf(project)}
+                      className="text-[15vw] short:text-[min(17cqw,(100svh-13.75rem)/1.68)]"
+                    />
+                  </Link>
+                  <div className="meta mt-4 grid gap-y-1 text-paper">
+                    <p className="flex gap-x-6 tabular-nums">
+                      <span>
+                        {recordNumber(i)} / {project.category}
+                      </span>
+                      <span>{project.year}</span>
+                    </p>
+                    <p className="pr-16">{project.stack.slice(0, 3).join(" / ")}</p>
+                  </div>
+                  {/* A fixed height, which the counter's position allows for. */}
+                  {live ? (
+                    <LiveSiteLink
+                      href={live.href}
+                      label={liveLabel}
+                      project={project.name}
+                      className="mt-5 h-14 w-full px-4 text-[0.9375rem]"
+                    />
+                  ) : null}
                 </div>
-                {/* A fixed height, which the counter's position allows for. */}
-                {live ? (
-                  <LiveSiteLink
-                    href={live.href}
-                    label={liveLabel}
-                    project={project.name}
-                    className="mt-5 h-14 w-full px-4 text-[0.9375rem]"
-                  />
-                ) : null}
               </div>
             </section>
           );
@@ -188,8 +208,9 @@ export function MobileProjects({ projects, copy, liveLabel, profile }: Props) {
 
       <p
         aria-hidden="true"
-        // Level with the last line of metadata, above the live link.
-        className="meta pointer-events-none fixed bottom-[calc(2.5rem+3.5rem+1.25rem)] right-5 z-10 text-right tabular-nums text-paper"
+        // Level with the last line of metadata, above the live link: the
+        // screen's bottom padding, the link's height and its margin.
+        className="meta pointer-events-none fixed bottom-[calc(2.5rem+3.5rem+1.25rem)] right-5 z-10 text-right tabular-nums text-paper short:bottom-[calc(1.25rem+3.5rem+1.25rem)]"
       >
         {recordNumber(active)} <span className="text-ink-muted">/ {recordNumber(projects.length - 1)}</span>
       </p>

@@ -326,7 +326,8 @@ one-off values.
     The fixed counter sits level with the last metadata line, so its offset
     adds the bar's height and margin — change one, change the other. The
     bar costs the first screen's plate about 76px; on a 375×548 phone it is
-    87px tall.
+    87px tall. On a phone on its side the screen's padding is 1.25rem, not
+    2.5rem, and the counter's `short:` offset says so.
 - **The DOM plates are always rendered and always in position.** They are the
   no-WebGL and reduced-motion path, the LCP frame, and the element a page
   transition morphs from.
@@ -356,6 +357,21 @@ one-off values.
   phone capture (`heroMobile`), a landscape one its desktop capture. CSS
   (`desktop:` variant) decides which slider shows and JS (`DESKTOP_QUERY`)
   decides which is wired up — keep the two queries identical.
+- **A phone on its side sets plate and type side by side** (`short:` —
+  landscape, under 30rem tall; no iPad is that short, so iPads keep the
+  stacked screens). Stacked, the title alone at 15vw outgrew a 340px-tall
+  screen and the plate got 0px; capping the title by height still left a
+  plate under 100px. The plate is 16:10, `min(50vw, (100svh − 2.5rem) × 1.6)`
+  wide, so the capture loses nothing; it and the live link end on one bottom
+  line. The title is sized by its column (`17cqw`, the portrait title's
+  share of its width) and capped by what the screen leaves under the nav.
+  The masthead cannot share that screen, so it heads the first one and
+  scrolls away: section one is the masthead plus a full screen, both snap
+  points, and the counter observes each project's screen, not its section.
+  The page opens on the name with the first plate and title in view.
+  Checked at 667×320, 740×300, 844×340 and 932×430. At 568 wide (iPhone SE,
+  first generation) the column is too narrow for one-line metadata, and the
+  wrapped lines push the title up to the nav.
 - **`useMediaQuery` shares one `MediaQueryList` per query**, notifying every
   subscriber from one listener, so all consumers of a query re-render in one
   commit. With a list per consumer, React committed between their change events
