@@ -128,6 +128,31 @@ export const content: SiteContent = {
               "Interpretation is rules-as-data. Each yoga is defined in a Zod-validated DSL over a closed union of 15 predicate operators, with binding checks at build time, so a malformed rule fails the build instead of producing a wrong reading.",
               "A seeded Monte Carlo harness runs every rule over population-weighted simulated births and measures how often it actually fires.",
             ],
+            // Both crops sit clear of anything that dates a birth: the natal
+            // degree table beside the week is cut away, and the dasha and
+            // nakshatra screens from the same round are not published.
+            // The week's method is from lib/engines/weekly-energy-engine.ts.
+            media: {
+              kind: "pair",
+              title: "A lifetime, and a week",
+              body: "Yogas are read once, from the birth chart: every one the chart matches, grouped by strength, with its classical meaning and the planets that form it. The week is read against the moving sky, scored once a day at local sunrise — half from the panchanga everyone shares, half counted from the reader's natal Moon, so two people in one city do not get the same week.",
+              images: [
+                {
+                  src: "/media/lagna-atelier-yogas.webp",
+                  width: 996,
+                  height: 828,
+                  label: "Yogas",
+                  alt: "A Your Planetary Yogas panel: a note that every yoga detected in the birth chart is listed by strength, then Strong Yogas (9) and three cards — Dhanakaraka, Adhi and Lagna Benefic Flank yoga — each with a manifestation chance of 92 or 93%, an activation window, the planets involved, a classical meaning and its effects.",
+                },
+                {
+                  src: "/media/lagna-atelier-week.webp",
+                  width: 883,
+                  height: 626,
+                  label: "The week",
+                  alt: "A Your Weekly Energy panel for October 3 to 9, 2026: a line across seven days against low, balanced and high bands, peaking on Monday the 5th under the words Peak Grace, above four forecast cards — Creative Spark, New Opportunities, Steady Progress and Emotional Flow.",
+                },
+              ],
+            },
           },
           {
             id: "engineering",
@@ -324,6 +349,30 @@ export const content: SiteContent = {
             body: [
               "Live at app.robusthealth.in. Load time is the measured part: next/image compression and route-level code splitting cut Lighthouse load time by about half on web and two thirds on mobile.",
             ],
+            // Android captures, cropped below the status bar's notification
+            // icons; the activity card is taken alone, without the programme
+            // summary above it.
+            media: {
+              kind: "pair",
+              title: "On a phone",
+              body: "A workout runs one exercise at a time, each marked off as it is done, and a finished session joins the dashboard's recent activity with the exercises completed and the minutes it took — the record each next week is revised against.",
+              images: [
+                {
+                  src: "/media/robust-health-phone-workout.webp",
+                  width: 720,
+                  height: 1456,
+                  label: "Mid-workout",
+                  alt: "Robust Health's workout screen on a phone: Day 4, Mobility Style, two of three exercises done, a placeholder for the exercise video, and the third exercise — hanging leg raises with cable crunches, three sets of fifteen — marked completed, above Previous and Finish Workout buttons.",
+                },
+                {
+                  src: "/media/robust-health-phone-activity.webp",
+                  width: 720,
+                  height: 1022,
+                  label: "Recent activity",
+                  alt: "The phone dashboard's Recent Activity: five sessions, each with its programme day, its date and the exercises completed, two with their length in minutes, above the app's bottom bar — Dashboard, Programme, Progress, Inbox and More.",
+                },
+              ],
+            },
           },
         ],
       },

@@ -439,10 +439,13 @@ A section may be followed by one plate (`MediaPlate`) or a pair
   they ran into the paper ground and read as part of this page.
 - **What a capture must never show**, checked before cropping: an account's
   email in an app header, a client's biometrics, another person's name,
-  birth details — the synastry form's date, time and place, and dasha screens
-  whose dates and nakshatra degree give a birth date away — and the clinic's
-  stated password format. Crop past it; do not blur what can be cropped.
-  Clinic captures are signed-out public pages only.
+  birth details — the synastry form's date, time and place, dasha screens
+  whose dates and nakshatra degree give a birth date away, natal degree
+  tables, and a reading that names the Moon's nakshatra and pada beside the
+  running dasha, which dates a birth from the sign placements the wheel
+  already shows — and the clinic's stated password format. Crop past it; do
+  not blur what can be cropped. Clinic captures are signed-out public pages
+  only.
 
 ## Page transitions
 
