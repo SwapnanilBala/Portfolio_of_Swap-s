@@ -168,7 +168,7 @@ Known corrections, so they are not "fixed" back from an older source:
   member portal's badges (encryption, uptime, "HIPAA compliant") are left out
   the same way, and so is that capture: a compliance claim is a legal one.
 
-A fact that is not to hand is left out and listed as a TODO in the README —
+A fact that is not to hand is left out and listed in `TODO.md` —
 never written plausibly. Fabricated detail is the one failure a portfolio
 cannot recover from in an interview.
 

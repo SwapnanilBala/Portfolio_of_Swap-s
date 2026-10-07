@@ -1,5 +1,7 @@
 # Swapnanil Bala — portfolio
 
+**Live:** [swapportfolio.vercel.app](https://swapportfolio.vercel.app)
+
 A cinematic, editorial portfolio: a WebGL project slider, an Index archive,
 case studies and an About page, joined by page transitions. Next.js App Router,
 React, TypeScript in strict mode, Tailwind CSS v4, GSAP, Lenis and three.js.
@@ -66,53 +68,7 @@ a request for `/index` as `/`.
 
 ## Outstanding TODOs
 
-Nothing on the site is filler. These are the facts not yet to hand, and the
-loose ends found while scraping.
-
-**Waiting on you**
-
-- **A sharper suit portrait.** The About page's third circle (`about-suit.webp`)
-  is cut from a 400px photo, so on a 3x phone it is shown 1.36x larger than
-  its pixels. Any square crop of 360px or more fixes it: drop the original in
-  `incoming/`, save the crop over `public/media/about-suit.webp`, update its
-  `width` and `height` in `about.portraits` in `lib/content.ts`, and run
-  `node scripts/build-blur.mjs`.
-- **What you learned**, per project. The brief's Outcome sections are meant to
-  cover it; nothing documents it yet, so Outcome states results only.
-- **The palm-reading clip** for Lagna Atelier: the one interaction a visitor
-  will never try on a stranger's site. The poster-gated video player from the
-  previous design is at commit `17e793e` (`components/ProjectMedia.tsx`).
-- **2x recaptures of the in-product screenshots** — the reading, chart
-  settings, wheel and houses for Lagna Atelier; onboarding, intake, progress,
-  dashboard and trainer view for Robust Health; the clinic's booking form,
-  doctor and admin pages. They are 1x captures (a 2560-wide screen at 100%),
-  so on a 125% or Retina screen they render smaller to stay sharp (see
-  *Adding media*). Take each screen at the same framing with display scaling
-  at 200%, crop to the same component, and replace the file under the same
-  name.
-
-**Found while scraping — worth fixing at the source**
-
-- **KB Patient Booking admin login.** The private repo's README documents a
-  default admin username and password for a panel holding patient names, ages
-  and contact details. Confirm the deployed password has been changed to a
-  strong, unique one — this site now links to the app — and take the defaults
-  out of that README. (They are deliberately not repeated here: this repository
-  is public.)
-- `drkbalaortho.com` no longer resolves, though the clinic README says the app
-  is live there. The portfolio links the Vercel URL instead.
-- Your resume says Lagna Atelier "computes full Vedic charts client-side". The
-  code computes them in server API routes. It also claims Robust Health uses
-  Supabase Row-Level Security, but that app's own README says the server uses
-  the service-role client, with authorisation in application code. Either could
-  come up in an interview.
-- The Lagna Atelier README is stale: it still names `OPENAI_API_KEY` for palm
-  reading, and says Neon holds "accounts and sessions, and nothing else yet".
-
-**Snapshots that drift**
-
-- Commit counts (719 on Lagna Atelier) and test counts are as of September 23
-  2026. Refresh them in `lib/content.ts` when they move meaningfully.
+Facts not yet to hand live in [`TODO.md`](TODO.md).
 
 ## Adding media
 
