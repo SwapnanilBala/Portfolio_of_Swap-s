@@ -1,3 +1,4 @@
+import { SectionLabel } from "@/components/SectionLabel";
 import type { MotionKit } from "@/lib/kit";
 import type { CaseSection as CaseSectionContent } from "@/lib/types";
 
@@ -19,10 +20,8 @@ export function CaseSection({ section, label, kit }: Props) {
       aria-labelledby={`section-${section.id}`}
       className="grid grid-cols-12 gap-x-5 border-t border-paper-rule px-5 py-16 md:px-8 md:py-24"
     >
-      <h2 id={`section-${section.id}`} className="meta col-span-12 text-paper-muted md:col-span-3">
-        {label}
-      </h2>
-      <div className="col-span-12 mt-6 grid gap-x-10 gap-y-6 md:col-span-8 md:col-start-5 md:mt-0 lg:grid-cols-2">
+      <SectionLabel id={`section-${section.id}`}>{label}</SectionLabel>
+      <div className="col-span-12 mt-8 grid gap-x-10 gap-y-6 md:col-span-8 md:col-start-5 md:mt-0 lg:grid-cols-2">
         {section.body.map((paragraph) => (
           <Text
             key={paragraph}

@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { Portraits } from "@/components/about/Portraits";
 import { OutArrow } from "@/components/OutArrow";
 import { PageTransition } from "@/components/PageTransition";
+import { SectionLabel } from "@/components/SectionLabel";
 import { SiteFooter } from "@/components/SiteFooter";
 import { MediaPair } from "@/components/work/MediaPair";
 import { MediaPlate } from "@/components/work/MediaPlate";
@@ -22,9 +23,7 @@ function Section({
       aria-labelledby={id}
       className="grid grid-cols-12 gap-x-5 border-t border-paper-rule px-5 py-14 md:px-8 md:py-20"
     >
-      <h2 id={id} className="display col-span-12 text-[1.875rem] md:col-span-4 md:text-[clamp(1.625rem,3.1vw,3.25rem)]">
-        {label}
-      </h2>
+      <SectionLabel id={id}>{label}</SectionLabel>
       <div className="col-span-12 mt-8 md:col-span-8 md:col-start-5 md:mt-0">{children}</div>
     </section>
   );

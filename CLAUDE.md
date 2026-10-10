@@ -72,7 +72,7 @@ components/                 PageTransition + SharedMedia, SplitTextReveal,
                             RevealLines, RevealPlate, DisplayTitle,
                             MagneticLink, CharShift, CustomCursor, SiteNav,
                             HomeLink, SiteFooter, LocalTime, SmoothScroll,
-                            WarmOnIntent, DotField
+                            WarmOnIntent, DotField, SectionLabel
 lib/content.ts              every word on the site
 lib/types.ts                the contract
 lib/blur.ts                 generated — run `node scripts/build-blur.mjs`
@@ -212,10 +212,12 @@ competes.
 - **Type** — Inter Tight throughout. `display` utility: 650 weight, −0.05em
   tracking, 0.84 line height, uppercase. `meta` utility: 11px, 500, uppercase.
   No mono: it is the developer-portfolio tell the brief asks to avoid. The
-  About page's section labels are display type in ink, on request — 1.875rem
-  on phones, and from 48rem sized by width (3.1vw, 1.625–3.25rem) so
-  "Technologies", the longest word, fits its four columns; at 768px a fixed
-  2.25rem overran them. A first pass a fifth larger read as too big. The case studies' section labels are still meta.
+  section labels of the About page and the case studies are display type in
+  ink, on request, from one component (`SectionLabel`) so the two cannot
+  drift — 1.875rem on phones, and from 48rem sized by width (3.1vw,
+  1.625–3.25rem) so "Technologies", the longest, fits its four columns; at
+  768px a fixed 2.25rem overran them. A first pass a fifth larger read as too
+  big. Captions inside a section (a pair's title) stay meta.
 - **The name** is medium size (`clamp(1.25rem, 1.55vw, 1.875rem)`) and appears
   only on the home page, where it is the h1 — per his instruction. Home has
   been the About page since October 2026, so the name heads the resume there
