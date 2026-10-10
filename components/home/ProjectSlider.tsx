@@ -72,7 +72,7 @@ const FOLLOW = 0.085;
 const SETTLE_MS = 160;
 
 /**
- * The desktop home page: a looping horizontal run of framed project plates,
+ * The desktop Selected page: a looping horizontal run of framed project plates,
  * one on stage at a time, driven by drag, wheel, arrow keys and the thumbnail
  * rail. The title crosses the lower edge of the plate on stage.
  *

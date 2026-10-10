@@ -41,7 +41,7 @@ animation library, plain CSS only") are reversed, deliberately.
   `lib/gsap.ts`. Import GSAP from there, never from `"gsap"` directly, so no
   component can use an unregistered plugin.
 - **Lenis** for smooth scrolling, driven by GSAP's ticker.
-- **three.js**, plain, for the home slider only. Not React Three Fiber: three
+- **three.js**, plain, for the slider only. Not React Three Fiber: three
   plates need no reconciler, and R3F's own `react-reconciler` has to agree with
   the canary React the App Router runs — a coupling not worth carrying.
 - Inter Tight via `next/font`, variable, self-hosted at build time.
@@ -54,13 +54,13 @@ animation library, plain CSS only") are reversed, deliberately.
 ```
 app/layout.tsx              the shared shell: fonts, metadata, nav, home link
 app/(desktop)/layout.tsx    desktop tree: smooth scroll, cursor
-app/(desktop)/page.tsx      Selected — the WebGL slider, one viewport
+app/(desktop)/page.tsx      the landing page: About, opening on the resume
+app/(desktop)/selected/     Selected — the WebGL slider, one viewport
 app/(desktop)/work/...      Index, and case studies (static params; unknown slug = 404)
-app/(desktop)/about/
 app/m/layout.tsx            phone tree: PhoneReveals
 app/m/...                   the same four pages for phones, served at the same URLs
 components/home/            ProjectSlider, SliderCanvas, ProjectThumbnailRail,
-                            MobileProjects, HomeMasthead, LiveSiteLink
+                            MobileProjects, SliderMasthead, LiveSiteLink
 components/index/           IndexPage, IndexView (Flip + preview), parts
                             (grid, list, toggle, links), ProjectCover
 components/work/            CaseStudy, ProjectHero, CaseSection, MediaPlate,
@@ -119,7 +119,9 @@ throttled phone (0.5–0.7s from 1.0–1.4s), Speed Index 0.8–0.9s from
   user agent, so a phone never mixes the trees. `/m` is never an address:
   direct visits redirect to the real path. iPads send a desktop user agent
   and get the desktop tree, which is responsive — as is every narrow
-  desktop window, which still gets `MobileProjects` from the desktop home.
+  desktop window, which still gets `MobileProjects` from the desktop slider.
+  The four routes are `/`, `/selected`, `/work` and `/work/:slug`; `/about`
+  is a redirect, so it needs no rewrite.
 - **One set of views, two kits.** Pages under `app/(desktop)` and `app/m` are
   a few lines each: they render the same views (`CaseStudy`, `About`,
   `IndexPage`, `SiteFooter`, `ProjectHero`, `CaseSection`, `MediaPlate`,
@@ -184,8 +186,9 @@ competes.
   Colour lives only in the `@theme` block.
 - **A page's tone is the ground it opens on** (`data-tone` on `<main>`), and
   the root takes it — which is the ground a page transition crossfades through.
-  Home and case studies are dark (a case study's body is paper, but it opens on
-  an ink hero and closes on the ink footer); the Index and About are light.
+  The slider and case studies are dark (a case study's body is paper, but it
+  opens on an ink hero and closes on the ink footer); the landing page (About)
+  and the Index are light.
   Marking case studies light made the root flash paper mid-transition between
   two dark screens. Text selection is one highlight for both grounds (paper on
   `paper-muted`, 5.9:1), because a tone-keyed one went paper-on-paper inside a
@@ -214,10 +217,11 @@ competes.
   "Technologies", the longest word, fits its four columns; at 768px a fixed
   2.25rem overran them. A first pass a fifth larger read as too big. The case studies' section labels are still meta.
 - **The name** is medium size (`clamp(1.25rem, 1.55vw, 1.875rem)`) and appears
-  only on the home page, where it is the h1 — per his instruction. Elsewhere
-  the footer's tiny © is the only mention. The home link's "SB" is the
-  favicon's monogram, a mark rather than the name, and it is absent on the
-  one page the name is on.
+  only on the home page, where it is the h1 — per his instruction. Home has
+  been the About page since October 2026, so the name heads the resume there
+  and the slider's masthead no longer carries it. Elsewhere the footer's tiny
+  © is the only mention. The home link's "SB" is the favicon's monogram, a
+  mark rather than the name, and it is absent on the one page the name is on.
 - **Separators are `/`**, not the brief's `·` — the brief itself uses `/` in the
   case-study STACK line, and middle-dot meta strings were a generated-design
   tell in the old forbidden list. One token to flip if he prefers `·`.
@@ -226,10 +230,12 @@ competes.
   nothing refers to is still decoration.
 - **No cards, no drop shadows, no glass, no gradient washes, no pills, no icon
   badges for technologies.** Technologies are text lists joined by em dashes.
-  One filled control, on request: the home page's live-site link (see *The
-  home slider*). Do not let it spread — everything else stays type.
+  One filled control, on request: the slider's live-site link (see *The
+  slider*). Do not let it spread — everything else stays type, including
+  the landing page's resume link, which is display type with a hairline arrow.
 - **The way home is top left, on every page but home** (`HomeLink`, in the
-  layout, hidden on `/` where the name holds that corner). Crop marks around
+  layout, hidden on `/`, the landing page, which opens on the name). On the
+  slider it holds the corner the name used to. Crop marks around
   the monogram — the cursor's mark, in the plates' 16:10 — opening a few
   pixels on hover, then "Home" in the nav's type. `mix-blend-difference`
   like the nav, so it reads on paper, on ink and over imagery, and it sits on
@@ -245,9 +251,34 @@ competes.
   crop marks lock onto a half's words rather than the half, which runs to
   the window's edge where marks set outside it were cut off.
 
+## The landing page
+
+**About is home, on request (October 2026)**, so a recruiter lands on the
+resume. The slider moved to `/selected`, and the nav reads About / Selected /
+Index, home first. `/about` redirects to `/` for the links elsewhere that
+still use it; not permanently, because browsers keep a permanent redirect
+long after the decision behind it might change.
+
+- **It opens on what a recruiter came for**: the name (the h1, at its medium
+  size), role and affiliation, the availability line, Email, GitHub and
+  LinkedIn, and the resume link set as display type: "Resume", a hairline
+  arrow, its date and format in meta. The PDF opens in a new tab, so the page
+  is still there after. Nothing in this header is revealed by script: it is
+  in the first paint whatever loads after. On a phone on its side (`short:`)
+  the spacing tightens, so the resume link is still in the first screen.
+- **Then the record, then the person**: experience, education and its
+  campus pair, the statement (display type, no longer the h1), the intro
+  beside the portraits, technologies, current work, the city, the footer.
+- **The slider page has a visually hidden h1** ("Selected work"): the slider
+  is what it names, and the intro line keeps its place at the top.
+- The resume's date is written twice, in the contact's `detail` and in
+  `ui.landing.resumeNote`. Change both when the file is replaced.
+
 ## The About page's photographs
 
-The page reads person, record, city, and its photographs follow that order.
+The page reads resume, record, person, city, and its photographs follow what
+they belong to: the campus after the education, him beside the intro, the
+city to close.
 
 - **Three portraits as a triangle of circles** (`Portraits`) beside the
   intro, on request — the site's only round forms besides the dot field.
@@ -293,7 +324,7 @@ one-off values.
   replaced a filled circle — the only round element on the site, and the
   stock agency-portfolio cursor.
 
-## The home slider
+## The slider (`/selected`)
 
 - **One physics loop** on `gsap.ticker` in `ProjectSlider` owns the state —
   target, current (following with inertia), velocity — and shares it by

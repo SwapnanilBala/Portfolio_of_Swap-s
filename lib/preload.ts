@@ -6,7 +6,7 @@ import type { ImageAsset } from "@/lib/types";
 /**
  * Preload an image under one media query only.
  *
- * `next/image`'s own `preload` cannot be scoped: the home page server-renders
+ * `next/image`'s own `preload` cannot be scoped: the Selected page server-renders
  * both sliders, so it would fetch the desktop plate on phones and the phone
  * plate on desktops. This emits the same `<link rel="preload">` with a `media`
  * attribute and the srcset the `<img>` will choose from -- `sizes` must be the

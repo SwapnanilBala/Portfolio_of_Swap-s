@@ -19,8 +19,8 @@ const CORNERS = [
 ] as const;
 
 /**
- * The way home, top left on every page but home itself, where the name holds
- * that corner. The favicon's monogram sits inside crop marks -- the cursor's
+ * The way home, top left on every page but home itself -- the landing page,
+ * which opens on the name. The favicon's monogram sits inside crop marks -- the cursor's
  * mark, and the plates' 16:10 -- which open a few pixels on hover, as the
  * cursor's do when they lock onto something a click opens.
  *

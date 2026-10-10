@@ -4,7 +4,7 @@ import { content } from "@/lib/content";
 import type { MotionKit } from "@/lib/kit";
 
 /**
- * The oversized close on every page but the home page, which is one viewport
+ * The oversized close on every page but Selected, which is one viewport
  * with nowhere below it to put one. Always dark: on the light pages it lands
  * as a hard change of ground, which is the point of ending on it.
  */

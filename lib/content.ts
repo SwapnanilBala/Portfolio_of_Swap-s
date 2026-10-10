@@ -823,7 +823,14 @@ export const content: SiteContent = {
       exploring: "Currently exploring",
     },
     caseMeta: { role: "Role", year: "Year", stack: "Stack", type: "Type" },
+    landing: {
+      availability: "Seeking a {availability}",
+      // The resume contact's detail says the same: "Resume, September 2026
+      // (PDF)". Change both when the file is replaced.
+      resumeNote: "September 2026 / PDF",
+    },
     slider: {
+      heading: "Selected work",
       announce: "Project {index} of {total}: {name}",
       region: "Selected projects",
       rail: "Choose a project",

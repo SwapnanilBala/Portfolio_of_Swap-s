@@ -15,7 +15,7 @@ interface Props {
 }
 
 /**
- * The archive: a deliberate contrast with the home page -- paper instead of
+ * The archive: a deliberate contrast with the Selected page -- paper instead of
  * imagery, one enormous word instead of a slider. The year range is computed
  * from the projects' first-commit years, never typed, so it cannot drift from
  * the work it describes. One view for both trees, which pass their own kit and

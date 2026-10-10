@@ -164,7 +164,7 @@ interface ProjectBase {
 }
 
 /**
- * A project in the home slider. The hero and the case study are required, not
+ * A project in the slider. The hero and the case study are required, not
  * optional: the slider cannot render a slide without a texture, and every
  * slide opens a case study.
  *
@@ -299,7 +299,7 @@ export interface Profile {
   readonly name: string;
   readonly role: string;
   readonly affiliation: string;
-  /** The understated line at the top centre of the home page. */
+  /** The understated line at the top centre of the Selected page. */
   readonly intro: string;
   readonly location: string;
   /** IANA zone for the footer clock. */
@@ -333,7 +333,16 @@ export interface UiCopy {
     readonly stack: string;
     readonly type: string;
   };
+  /** The top of the landing page, for whoever arrives with a resume in mind. */
+  readonly landing: {
+    /** Template. Token: {availability} */
+    readonly availability: string;
+    /** Under the resume link: its date and format, in step with its contact detail. */
+    readonly resumeNote: string;
+  };
   readonly slider: {
+    /** The page's h1, visually hidden: the slider is the heading's content. */
+    readonly heading: string;
     /** Template. Tokens: {index} {total} {name} */
     readonly announce: string;
     readonly region: string;

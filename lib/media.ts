@@ -59,7 +59,7 @@ export const PLATE_SIZES = {
  * capture below it.
  *
  * Everything that leads to a case study asks for its hero with these same
- * `sizes` -- the home slider's plates (narrower than this on screen, on
+ * `sizes` -- the slider's plates (narrower than this on screen, on
  * purpose), their WebGL textures, and every preload. The browser then picks
  * one candidate for all of them, so the image the page transition lands on is
  * already downloaded and decoded instead of arriving a moment after the morph

@@ -8,7 +8,7 @@ import { DURATION, EASE, META_LAG, useReducedMotion } from "@/lib/motion";
 /**
  * Raises every `[data-line]` inside it out of its mask on arrival, then fades
  * in `[data-reveal-meta]` a beat behind -- the title-then-metadata cadence the
- * home page uses, for any enormous title built with DisplayTitle.
+ * slider uses, for any enormous title built with DisplayTitle.
  */
 export function RevealLines({ children, className, delay = 0.35 }: LinesRevealProps) {
   const ref = useRef<HTMLDivElement>(null);

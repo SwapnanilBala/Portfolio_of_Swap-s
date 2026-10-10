@@ -37,9 +37,9 @@ const nextConfig = {
     return {
       beforeFiles: [
         { source: "/", destination: "/m", has: PHONE },
+        { source: "/selected", destination: "/m/selected", has: PHONE },
         { source: "/work", destination: "/m/work", has: PHONE },
         { source: "/work/:slug", destination: "/m/work/:slug", has: PHONE },
-        { source: "/about", destination: "/m/about", has: PHONE },
       ],
       afterFiles: [],
       fallback: [],
@@ -47,8 +47,12 @@ const nextConfig = {
   },
   // Nobody should ever see /m: a direct visit goes to the page's real address,
   // where the rewrite above serves whichever tree fits the device.
+  // The About page became the landing page in October 2026, so /about, which
+  // links elsewhere still point at, goes home. Not permanent: a browser keeps
+  // a permanent redirect long after the decision behind it might change.
   async redirects() {
     return [
+      { source: "/about", destination: "/", permanent: false },
       { source: "/m", destination: "/", permanent: false },
       { source: "/m/:path*", destination: "/:path*", permanent: false },
     ];

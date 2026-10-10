@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { DisplayTitle } from "@/components/DisplayTitle";
 import { SharedMedia } from "@/components/PageTransition";
-import { HomeMasthead } from "@/components/home/HomeMasthead";
+import { SliderMasthead } from "@/components/home/SliderMasthead";
 import { LiveSiteLink } from "@/components/home/LiveSiteLink";
 import {
   blurFor,
@@ -91,7 +91,7 @@ function PhonePlate({ project, first }: { readonly project: SelectedProject; rea
 }
 
 /**
- * The home page for touch and narrow screens: one framed plate per screen on
+ * The Selected page for touch and narrow screens: one framed plate per screen on
  * native vertical scroll-snap. The browser's own touch physics beat anything
  * simulated, and nothing here loads WebGL. The masthead opens the first
  * screen and scrolls away with it; a counter tracks the screen in view. A
@@ -141,9 +141,10 @@ export function MobileProjects({ projects, copy, liveLabel, profile }: Props) {
               aria-label={project.name}
               className="relative flex h-svh snap-start flex-col overflow-hidden pb-10 short:h-auto short:pb-0"
             >
-              {/* On the nav's line when the screen is short, as on desktop. */}
+              {/* Below the nav's line at every size: the way home holds its
+                  left end on this page. */}
               {i === 0 ? (
-                <HomeMasthead profile={profile} className="shrink-0 px-5 pt-16 short:pt-5 short:md:pt-7" />
+                <SliderMasthead heading={copy.heading} intro={profile.intro} className="shrink-0 px-5 pt-16" />
               ) : null}
 
               {/* The project's screen. On a short landscape screen the plate
