@@ -24,10 +24,10 @@ function Section({
       aria-labelledby={id}
       className="grid grid-cols-12 gap-x-5 border-t border-paper-rule px-5 py-14 md:px-8 md:py-20"
     >
-      <h2 id={id} className="meta col-span-12 text-paper-muted md:col-span-3">
+      <h2 id={id} className="display col-span-12 text-[2.25rem] md:col-span-4 md:text-[clamp(1.875rem,3.9vw,4rem)]">
         {label}
       </h2>
-      <div className="col-span-12 mt-6 md:col-span-8 md:col-start-5 md:mt-0">{children}</div>
+      <div className="col-span-12 mt-8 md:col-span-8 md:col-start-5 md:mt-0">{children}</div>
     </section>
   );
 }
