@@ -209,10 +209,10 @@ competes.
 - **Type** — Inter Tight throughout. `display` utility: 650 weight, −0.05em
   tracking, 0.84 line height, uppercase. `meta` utility: 11px, 500, uppercase.
   No mono: it is the developer-portfolio tell the brief asks to avoid. The
-  About page's section labels are display type in ink, on request — 2.25rem
-  on phones, and from 48rem sized by width (3.9vw, 1.875–4rem) so
+  About page's section labels are display type in ink, on request — 1.875rem
+  on phones, and from 48rem sized by width (3.1vw, 1.625–3.25rem) so
   "Technologies", the longest word, fits its four columns; at 768px a fixed
-  2.25rem overran them. The case studies' section labels are still meta.
+  2.25rem overran them. A first pass a fifth larger read as too big. The case studies' section labels are still meta.
 - **The name** is medium size (`clamp(1.25rem, 1.55vw, 1.875rem)`) and appears
   only on the home page, where it is the h1 — per his instruction. Elsewhere
   the footer's tiny © is the only mention. The home link's "SB" is the
