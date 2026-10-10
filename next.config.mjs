@@ -37,7 +37,7 @@ const nextConfig = {
     return {
       beforeFiles: [
         { source: "/", destination: "/m", has: PHONE },
-        { source: "/selected", destination: "/m/selected", has: PHONE },
+        { source: "/projects", destination: "/m/projects", has: PHONE },
         { source: "/work", destination: "/m/work", has: PHONE },
         { source: "/work/:slug", destination: "/m/work/:slug", has: PHONE },
       ],
@@ -50,9 +50,11 @@ const nextConfig = {
   // The About page became the landing page in October 2026, so /about, which
   // links elsewhere still point at, goes home. Not permanent: a browser keeps
   // a permanent redirect long after the decision behind it might change.
+  // The slider was at /selected for a day before it was renamed Projects.
   async redirects() {
     return [
       { source: "/about", destination: "/", permanent: false },
+      { source: "/selected", destination: "/projects", permanent: false },
       { source: "/m", destination: "/", permanent: false },
       { source: "/m/:path*", destination: "/:path*", permanent: false },
     ];

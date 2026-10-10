@@ -299,7 +299,7 @@ export interface Profile {
   readonly name: string;
   readonly role: string;
   readonly affiliation: string;
-  /** The understated line at the top centre of the Selected page. */
+  /** The understated line at the top centre of the Projects page. */
   readonly intro: string;
   readonly location: string;
   /** IANA zone for the footer clock. */
@@ -318,7 +318,7 @@ export interface ContactRoute {
 
 /* --------------------------------------------------------------------- ui */
 
-export type NavKey = "selected" | "index" | "about";
+export type NavKey = "projects" | "index" | "about";
 
 export interface UiCopy {
   readonly nav: Readonly<Record<NavKey, string>>;

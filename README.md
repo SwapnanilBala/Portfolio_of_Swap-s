@@ -59,11 +59,12 @@ reversals from the two earlier designs, and why each constraint exists.
 | Route          | What it is                                                         |
 | -------------- | ------------------------------------------------------------------ |
 | `/`            | About — the resume and contacts first, then experience, education, technologies, current work |
-| `/selected`    | Selected work — the slider. Drag, scroll, arrow keys or thumbnails |
+| `/projects`    | Projects — the slider. Drag, scroll, arrow keys or thumbnails      |
 | `/work`        | The Index — grid or list, animated between                         |
 | `/work/[slug]` | Case studies, for the projects that have one                       |
 
-`/about` redirects to `/`, which has been the About page since October 2026.
+`/about` redirects to `/`, which has been the About page since October 2026,
+and `/selected`, the slider's address for a day, redirects to `/projects`.
 
 The Index is at `/work`, not `/index`, because Next.js has historically treated
 a request for `/index` as `/`.

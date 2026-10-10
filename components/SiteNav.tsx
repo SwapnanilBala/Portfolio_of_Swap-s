@@ -12,7 +12,7 @@ import type { NavKey } from "@/lib/types";
 // resume arrives.
 const ITEMS: readonly { readonly key: NavKey; readonly href: string }[] = [
   { key: "about", href: "/" },
-  { key: "selected", href: "/selected" },
+  { key: "projects", href: "/projects" },
   { key: "index", href: "/work" },
 ];
 
@@ -21,7 +21,7 @@ interface Props {
 }
 
 /**
- * Selected / Index / About, set into the composition rather than into a bar.
+ * About / Projects / Index, set into the composition rather than into a bar.
  * `mix-blend-difference` against paper-coloured text reads as ink on the light
  * pages and as paper on the dark ones and over imagery, so one nav works on
  * every ground without knowing which it is on.

@@ -9,10 +9,10 @@ import { preloadFor } from "@/lib/preload";
 import { DESKTOP_QUERY } from "@/lib/slider";
 import { isSelected } from "@/lib/types";
 
-export const metadata: Metadata = { title: content.ui.nav.selected };
+export const metadata: Metadata = { title: content.ui.nav.projects };
 
 /**
- * Selected work: one cinematic viewport. Both sliders are server-rendered and
+ * Projects: one cinematic viewport. Both sliders are server-rendered and
  * CSS shows the one that fits the device, so there is no layout shift while
  * JavaScript decides which one to wire up.
  *

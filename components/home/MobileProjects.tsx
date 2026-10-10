@@ -91,7 +91,7 @@ function PhonePlate({ project, first }: { readonly project: SelectedProject; rea
 }
 
 /**
- * The Selected page for touch and narrow screens: one framed plate per screen on
+ * The Projects page for touch and narrow screens: one framed plate per screen on
  * native vertical scroll-snap. The browser's own touch physics beat anything
  * simulated, and nothing here loads WebGL. The masthead opens the first
  * screen and scrolls away with it; a counter tracks the screen in view. A

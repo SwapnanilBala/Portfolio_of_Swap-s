@@ -799,7 +799,7 @@ export const content: SiteContent = {
   ],
 
   ui: {
-    nav: { selected: "Selected", index: "Index", about: "About" },
+    nav: { projects: "Projects", index: "Index", about: "About" },
     skipLink: "Skip to content",
     linkLabels: { live: "Open the live site", source: "Read the source", certificate: "View the certificate" },
     contactLabels: {
@@ -830,9 +830,9 @@ export const content: SiteContent = {
       resumeNote: "September 2026 / PDF",
     },
     slider: {
-      heading: "Selected work",
+      heading: "Projects",
       announce: "Project {index} of {total}: {name}",
-      region: "Selected projects",
+      region: "Projects",
       rail: "Choose a project",
       thumbnail: "Show {name}",
       open: "Open the case study",

@@ -6,10 +6,10 @@ import { PHONE_QUALITY, PLATE_SIZES } from "@/lib/media";
 import { preloadFor } from "@/lib/preload";
 import { isSelected } from "@/lib/types";
 
-export const metadata: Metadata = { title: content.ui.nav.selected };
+export const metadata: Metadata = { title: content.ui.nav.projects };
 
 /**
- * Selected work on a phone: the scroll-snapped plates alone. The desktop
+ * Projects on a phone: the scroll-snapped plates alone. The desktop
  * page renders the WebGL slider beside these and lets CSS pick; here there is
  * nothing to pick between, so neither the slider nor its preload is sent.
  */

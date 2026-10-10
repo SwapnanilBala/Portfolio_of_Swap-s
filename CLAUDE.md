@@ -55,7 +55,7 @@ animation library, plain CSS only") are reversed, deliberately.
 app/layout.tsx              the shared shell: fonts, metadata, nav, home link
 app/(desktop)/layout.tsx    desktop tree: smooth scroll, cursor
 app/(desktop)/page.tsx      the landing page: About, opening on the resume
-app/(desktop)/selected/     Selected — the WebGL slider, one viewport
+app/(desktop)/projects/     Projects — the WebGL slider, one viewport
 app/(desktop)/work/...      Index, and case studies (static params; unknown slug = 404)
 app/m/layout.tsx            phone tree: PhoneReveals
 app/m/...                   the same four pages for phones, served at the same URLs
@@ -120,8 +120,8 @@ throttled phone (0.5–0.7s from 1.0–1.4s), Speed Index 0.8–0.9s from
   direct visits redirect to the real path. iPads send a desktop user agent
   and get the desktop tree, which is responsive — as is every narrow
   desktop window, which still gets `MobileProjects` from the desktop slider.
-  The four routes are `/`, `/selected`, `/work` and `/work/:slug`; `/about`
-  is a redirect, so it needs no rewrite.
+  The four routes are `/`, `/projects`, `/work` and `/work/:slug`; `/about`
+  and `/selected` are redirects, so they need no rewrite.
 - **One set of views, two kits.** Pages under `app/(desktop)` and `app/m` are
   a few lines each: they render the same views (`CaseStudy`, `About`,
   `IndexPage`, `SiteFooter`, `ProjectHero`, `CaseSection`, `MediaPlate`,
@@ -256,8 +256,10 @@ competes.
 ## The landing page
 
 **About is home, on request (October 2026)**, so a recruiter lands on the
-resume. The slider moved to `/selected`, and the nav reads About / Selected /
-Index, home first. `/about` redirects to `/` for the links elsewhere that
+resume. The slider moved to `/projects`, and the nav reads About / Projects /
+Index, home first. It was "Selected" at `/selected` for a day, renamed on
+request because he did not read "Selected" as the projects; `/selected`
+redirects. `/about` redirects to `/` for the links elsewhere that
 still use it; not permanently, because browsers keep a permanent redirect
 long after the decision behind it might change.
 
@@ -271,7 +273,7 @@ long after the decision behind it might change.
 - **Then the record, then the person**: experience, education and its
   campus pair, the statement (display type, no longer the h1), the intro
   beside the portraits, technologies, current work, the city, the footer.
-- **The slider page has a visually hidden h1** ("Selected work"): the slider
+- **The slider page has a visually hidden h1** ("Projects"): the slider
   is what it names, and the intro line keeps its place at the top.
 - The resume's date is written twice, in the contact's `detail` and in
   `ui.landing.resumeNote`. Change both when the file is replaced.
@@ -326,7 +328,7 @@ one-off values.
   replaced a filled circle — the only round element on the site, and the
   stock agency-portfolio cursor.
 
-## The slider (`/selected`)
+## The slider (`/projects`)
 
 - **One physics loop** on `gsap.ticker` in `ProjectSlider` owns the state —
   target, current (following with inertia), velocity — and shares it by
@@ -466,6 +468,11 @@ A section may be followed by one plate (`MediaPlate`) or a pair
   capped so the shorter capture is never upscaled, and it stays beside its
   explanation rather than against the right edge: on a 2x screen the capped
   band pushed right left a gap wider than either capture.
+- **A pair's captions are text, not metadata**, on request: the title is a
+  semibold heading the size of the About page's roles (1.375rem on phones,
+  1.125–1.625rem by width from 48rem, where it has three columns), the
+  explanation 1rem, and each capture's label 1rem medium in ink. A lone
+  plate's caption stays small (0.8125rem, muted).
 - **Pairs are for compact captures, plates for wide ones.** These are 1x
   captures of a large window, so interface text is ~16px at full size. Two
   wide page regions at half width put it near 6px; a single card or panel at
