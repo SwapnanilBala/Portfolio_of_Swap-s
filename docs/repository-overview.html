@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Swapnanil Bala - Repository Portfolio Overview</title>
+    <style>
+      :root {
+        --bg: #f4f7fb;
+        --panel: #ffffff;
+        --ink: #1a1d2a;
+        --muted: #5d6473;
+        --line: #dde5f0;
+        --accent: #153b6b;
+        --accent-2: #2a7ae2;
+        --tag: #edf4ff;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: var(--bg);
+        color: var(--ink);
+        line-height: 1.5;
+      }
+      .page {
+        max-width: 1100px;
+        margin: 32px auto;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+        padding: 36px 42px 52px;
+      }
+      h1, h2, h3 {
+        margin-top: 0;
+        color: var(--accent);
+      }
+      h1 {
+        font-size: 32px;
+        border-bottom: 2px solid var(--line);
+        padding-bottom: 12px;
+        margin-bottom: 20px;
+      }
+      h2 {
+        font-size: 24px;
+        margin-top: 32px;
+        padding-top: 16px;
+        border-top: 1px solid var(--line);
+      }
+      h3 {
+        font-size: 18px;
+        margin-bottom: 8px;
+      }
+      p, li {
+        font-size: 15px;
+      }
+      ul {
+        padding-left: 22px;
+      }
+      .meta {
+        color: var(--muted);
+        font-size: 14px;
+      }
+      .tag {
+        display: inline-block;
+        background: var(--tag);
+        color: var(--accent);
+        border: 1px solid #d7e7ff;
+        border-radius: 999px;
+        padding: 4px 10px;
+        margin: 4px 6px 4px 0;
+        font-size: 12px;
+        font-weight: 600;
+      }
+      .section {
+        margin-top: 12px;
+      }
+      .repo-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 18px;
+        margin-top: 18px;
+      }
+      .repo {
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 16px 16px 12px;
+        background: #fafcff;
+      }
+      .repo strong {
+        display: inline-block;
+        margin-bottom: 6px;
+        color: var(--accent);
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 12px;
+        font-size: 14px;
+      }
+      th, td {
+        border: 1px solid var(--line);
+        padding: 8px 10px;
+        text-align: left;
+        vertical-align: top;
+      }
+      th {
+        background: #f0f6ff;
+      }
+      .highlight {
+        color: #0a6d3d;
+        font-weight: 700;
+      }
+      @media print {
+        body {
+          background: white;
+        }
+        .page {
+          box-shadow: none;
+          border: none;
+          margin: 0;
+          max-width: none;
+          padding: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <h1>Swapnanil Bala — Portfolio Overview</h1>
+      <p class="meta">A summary of the major repositories, projects, and technical directions represented across the GitHub profile.</p>
+
+      <div class="section">
+        <h2>1. Summary of Technical Portfolio</h2>
+        <p>
+          You have built a broad and impressive portfolio spanning <strong>data science</strong>, <strong>full-stack web development</strong>,
+          <strong>AI/ML</strong>, <strong>mobile app development</strong>, <strong>interactive dashboards</strong>, and <strong>game/agent-based experimentation</strong>.
+          Your repositories show a strong mix of technical depth, practical architecture, and project-oriented work with clear evidence of learning and iteration.
+        </p>
+        <div class="tag">Python</div>
+        <div class="tag">TypeScript</div>
+        <div class="tag">Next.js</div>
+        <div class="tag">SwiftUI</div>
+        <div class="tag">Jetpack Compose</div>
+        <div class="tag">Machine Learning</div>
+        <div class="tag">Astrology Engine</div>
+        <div class="tag">Dashboards</div>
+      </div>
+
+      <div class="section">
+        <h2>2. Major Repositories</h2>
+        <div class="repo-grid">
+          <div class="repo">
+            <strong>Lagna Atelier</strong><br />
+            <span class="meta">Large_Astro_Web_App</span><br />
+            <p>A full-stack Vedic astrology engine built in Next.js with chart generation, dasha analysis, yoga detection, palm-reading support, and AI-backed readings.</p>
+          </div>
+
+          <div class="repo">
+            <strong>BRFSS Dashboard</strong><br />
+            <span class="meta">BRFSS_Dash_App</span><br />
+            <p>Interactive CDC health-data dashboard built with Plotly Dash. It allows filters across demographics, states, and trends with confidence intervals.</p>
+          </div>
+
+          <div class="repo">
+            <strong>Robust Health iOS</strong><br />
+            <span class="meta">Vibe_Robust_Health_IOS_App</span><br />
+            <p>Native SwiftUI fitness app with onboarding, plans, member/trainer portals, and deterministic local plan generation.</p>
+          </div>
+
+          <div class="repo">
+            <strong>Robust Health Android</strong><br />
+            <span class="meta">Vibe_Robust_Health_Android</span><br />
+            <p>Native Android client in Kotlin/Jetpack Compose with Supabase backend integration and demo-mode fallback.</p>
+          </div>
+
+          <div class="repo">
+            <strong>Grid Game with Pygame</strong><br />
+            <span class="meta">Grid_Game_with_pygame</span><br />
+            <p>Puzzle game with shape placement logic, adjacency rules, and Gym-style interface for AI experimentation.</p>
+          </div>
+
+          <div class="repo">
+            <strong>Grid World Dual Search Visualizer</strong><br />
+            <span class="meta">Grid_Game_With_Multiple_SA</span><br />
+            <p>Visual comparison of search algorithms including BFS, DFS, DLS, UCS, A*, and Bidirectional Search.</p>
+          </div>
+
+          <div class="repo">
+            <strong>Waze Churn Prediction</strong><br />
+            <span class="meta">Waze</span><br />
+            <p>Predictive modeling project for customer churn, using feature engineering and tree-based classifiers, while emphasizing honest business metrics.</p>
+          </div>
+
+          <div class="repo">
+            <strong>TikTok Claims Classifier</strong><br />
+            <span class="meta">Tik-Tok</span><br />
+            <p>Moderation-focused classifier for distinguishing claims vs opinions in TikTok videos using engagement and content features.</p>
+          </div>
+
+          <div class="repo">
+            <strong>NYC Taxi Tip Predictor</strong><br />
+            <span class="meta">Automatidata</span><br />
+            <p>Regression + classification pipeline for predicting generous taxi tips using NYC TLC data and business-style analyses.</p>
+          </div>
+
+          <div class="repo">
+            <strong>CIFAR-10 CNN</strong><br />
+            <span class="meta">Pytorch_Beginner_Image_Classification</span><br />
+            <p>PyTorch beginner image classifier built from scratch with realistic training and tuning notes.</p>
+          </div>
+
+          <div class="repo">
+            <strong>Portfolio</strong><br />
+            <span class="meta">Portfolio_of_Swap-s</span><br />
+            <p>Cinematic portfolio site using Next.js, Tailwind, GSAP, Lenis, and three.js with responsive desktop/mobile frameworks.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>3. Detailed Project Breakdowns</h2>
+
+        <h3>Lagna Atelier</h3>
+        <p>
+          This is the most advanced and architecturally ambitious repository in your profile. It is a Vedic astrology platform that computes natal charts, life periods, yogas, and chart-based insights. It combines server-side astronomy calculations with browser-side profiles, AI-powered readings, and Google sign-in backed by Neon Postgres. It has a strong emphasis on accuracy, tests, and a structured architecture.
+        </p>
+        <ul>
+          <li><span class="highlight">Core domain:</span> astrology, chart generation, Vimshottari dasha, divisional charts, house systems, ayanamshas</li>
+          <li><span class="highlight">Stack:</span> Next.js 16, React 19, TypeScript, astronomy-engine, Drizzle ORM, Neon Postgres, Claude/OpenAI APIs</li>
+          <li><span class="highlight">Notable strength:</span> 1,863 tests across 138 files, plus comparison harnesses against external astrology references</li>
+          <li><span class="highlight">Interesting part:</span> local profile storage plus consent-based cloud sync</li>
+        </ul>
+
+        <h3>BRFSS Dashboard</h3>
+        <p>
+          This is a strong example of applied statistical analysis in a dashboard. It converts a CDC health dataset into a highly usable interactive tool. The real sophistication is not just visualizing data, but harmonizing categories across years and computing pooled confidence intervals correctly.
+        </p>
+        <ul>
+          <li><span class="highlight">Core domain:</span> public health, prevalence estimation</li>
+          <li><span class="highlight">Stack:</span> Python, pandas, NumPy, Plotly Dash</li>
+          <li><span class="highlight">Interesting part:</span> state-level prevalence pooling and confidence interval handling across many years</li>
+        </ul>
+
+        <h3>Robust Health Apps</h3>
+        <p>
+          The Robust Health projects show a clear product mindset across mobile clients. The iOS version is a deterministic on-device health planner; the Android version includes a Supabase-backed app shell plus mock/demo mode. This suggests a strong interest in turning product requirements into real user flows and architecture patterns.
+        </p>
+        <ul>
+          <li><span class="highlight">iOS:</span> SwiftUI, local JSON persistence, feature service architecture, deterministic plan generation</li>
+          <li><span class="highlight">Android:</span> Jetpack Compose, Material 3, Retrofit + OkHttp, Koin DI, Supabase integration</li>
+          <li><span class="highlight">Design insight:</span> you build cross-platform product experiences while preserving domain consistency</li>
+        </ul>
+
+        <h3>Grid Game / Search Visualizer</h3>
+        <p>
+          These projects show strong algorithmic thinking. The search visualizer is particularly strong because it compares multiple strategies under consistent conditions and makes the differences visible, rather than merely reporting numbers. The pygame-based game also introduces AI compatibility and state modeling.
+        </p>
+        <ul>
+          <li><span class="highlight">Grid world visualizer:</span> BFS, DFS, DLS, UCS, A*, and Bidirectional Search</li>
+          <li><span class="highlight">Game project:</span> adjacency constraint, puzzle validation, AI gym-style interface</li>
+          <li><span class="highlight">Skill shown:</span> algorithm preferences, heuristics, analysis-driven experimentation</li>
+        </ul>
+
+        <h3>Waze, TikTok, and Taxi Projects</h3>
+        <p>
+          These three projects represent your strongest machine-learning/analytics work. They are all organized around a consistent professional pattern: EDA, feature engineering, model selection, metric choice, and honest interpretation of results. The key thing is that you evaluate beyond raw accuracy and consider the real decision cost of each error type.
+        </p>
+        <ul>
+          <li><span class="highlight">Waze:</span> churn modeling with recall-oriented tuning and threshold analysis</li>
+          <li><span class="highlight">TikTok:</span> claims detection with engagement-based feature engineering</li>
+          <li><span class="highlight">Taxi:</span> regression combined with classification, showing a full end-to-end classification workflow</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>4. Cross-Project Skill Summary</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Skill Area</th>
+              <th>Evidence in Projects</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Data Science</td>
+              <td>Waze, TikTok, Automatidata, BRFSS, fraud detection</td>
+            </tr>
+            <tr>
+              <td>Full-Stack Web</td>
+              <td>Lagna Atelier, portfolio, coffee shop storefront</td>
+            </tr>
+            <tr>
+              <td>Mobile Dev</td>
+              <td>Robust Health iOS, Android, Lagna Android scaffold</td>
+            </tr>
+            <tr>
+              <td>AI / LLM</td>
+              <td>Lagna Atelier with Claude/OpenAI-backed readings, palm analysis flows</td>
+            </tr>
+            <tr>
+              <td>Algorithms</td>
+              <td>Grid search visualizer, AI/game logic, graph search education</td>
+            </tr>
+            <tr>
+              <td>Statistical Rigor</td>
+              <td>Using recall instead of accuracy where necessary, leakage analysis, confidence intervals</td>
+            </tr>
+            <tr>
+              <td>Architecture</td>
+              <td>Feature services, DTOs, modular app structure, local/cloud data layers</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="section">
+        <h2>5. Strategic Interpretation</h2>
+        <p>
+          The strongest thread across your portfolio is that you are not just building demos — you are building systems with real product logic, domain modeling, and operational thinking. You move fluidly between <strong>statistics</strong>, <strong>ML pipelines</strong>, <strong>UI/UX design</strong>, <strong>App architecture</strong>, and <strong>backend/data services</strong>.
+        </p>
+        <p>
+          The most mature repository appears to be <strong>Lagna Atelier</strong>, because it combines multiple complex domains: astrology calculations, browser storage, sync, AI reading generation, and a production-like architecture. The next strongest combination is your ability to build <strong>data-driven products</strong> such as dashboard analytics and classification pipelines while also maintaining strong engineering discipline.
+        </p>
+      </div>
+
+      <div class="section">
+        <h2>6. Bottom Line</h2>
+        <p>
+          You have a portfolio that demonstrates a highly capable generalist developer who is increasingly becoming a <strong>full-stack AI + product engineer</strong> with domain depth in analytics, systems thinking, and user-facing product builds. The combination of algorithmic depth, product instincts, and applied data science makes this a strong technical profile.
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
