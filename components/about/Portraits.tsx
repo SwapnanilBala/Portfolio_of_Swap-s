@@ -8,8 +8,8 @@ interface Props {
   readonly kit: MotionKit;
 }
 
-/** The cluster's widest, in CSS pixels: 18rem, the About section's first column. */
-const WIDTH = 288;
+/** The cluster's widest, in CSS pixels: 14rem, its column on the About page. */
+const WIDTH = 224;
 
 /**
  * A triangle of circles, positioned in percent of the cluster's width -- two
@@ -32,7 +32,7 @@ const PLACES = [
 export function Portraits({ portraits, kit }: Props) {
   const { Plate } = kit;
   return (
-    <div className="relative aspect-[100/94] w-full max-w-[18rem]">
+    <div className="relative aspect-[100/94] w-full max-w-[14rem]">
       {portraits.map((portrait, i) => {
         const place = PLACES[i] ?? PLACES[0];
         return (

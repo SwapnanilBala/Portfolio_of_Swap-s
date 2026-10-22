@@ -20,8 +20,10 @@ export function CaseSection({ section, label, kit }: Props) {
       aria-labelledby={`section-${section.id}`}
       className="grid grid-cols-12 gap-x-5 border-t border-paper-rule px-5 py-16 md:px-8 md:py-24"
     >
-      <SectionLabel id={`section-${section.id}`}>{label}</SectionLabel>
-      <div className="col-span-12 mt-8 grid gap-x-10 gap-y-6 md:col-span-8 md:col-start-5 md:mt-0 lg:grid-cols-2">
+      <SectionLabel id={`section-${section.id}`} className="col-span-12 md:col-span-4">
+        {label}
+      </SectionLabel>
+      <div className="col-span-12 mt-6 grid gap-x-10 gap-y-6 md:col-span-8 md:col-start-5 md:mt-0 lg:grid-cols-2">
         {section.body.map((paragraph) => (
           <Text
             key={paragraph}

@@ -872,35 +872,29 @@ export const content: SiteContent = {
         alt: "Swapnanil Bala in a grey suit and dark red tie, standing at a railing above a pond.",
       },
     ],
-    campus: {
-      kind: "pair",
-      title: "Northeastern, Boston",
-      body: "Khoury College's M.S. in Data Science, on the Boston campus, from September 2025 to December 2027.",
-      images: [
-        {
-          src: "/media/northeastern-street.webp",
-          width: 1200,
-          height: 900,
-          label: "From the street",
-          alt: "A long pale-brick university building with tall windows behind a fenced tram line and young trees, a red Northeastern banner on a lamppost, under a blue sky.",
-        },
-        {
-          src: "/media/northeastern-window.webp",
-          width: 1200,
-          height: 900,
-          label: "From a window above",
-          alt: "Seen from a window above a tram platform: a long glass-walled building among trees, towers and a construction crane on the skyline under a cloudy blue sky.",
-        },
-      ],
-    },
-    city: {
-      kind: "image",
-      src: "/media/fenway.webp",
-      width: 2040,
-      height: 1020,
-      alt: "A still river between tall trees in full leaf, the trees and a clear blue sky mirrored in the water, a pale building on the far bank.",
-      caption: "The Fenway, Boston.",
-    },
+    photos: [
+      {
+        src: "/media/northeastern-street.webp",
+        width: 1200,
+        height: 900,
+        caption: "Northeastern, from the street",
+        alt: "A long pale-brick university building with tall windows behind a fenced tram line and young trees, a red Northeastern banner on a lamppost, under a blue sky.",
+      },
+      {
+        src: "/media/northeastern-window.webp",
+        width: 1200,
+        height: 900,
+        caption: "Northeastern, from a window above",
+        alt: "Seen from a window above a tram platform: a long glass-walled building among trees, towers and a construction crane on the skyline under a cloudy blue sky.",
+      },
+      {
+        src: "/media/fenway.webp",
+        width: 2040,
+        height: 1020,
+        caption: "The Fenway, Boston",
+        alt: "A still river between tall trees in full leaf, the trees and a clear blue sky mirrored in the water, a pale building on the far bank.",
+      },
+    ],
   },
 
   contact: [

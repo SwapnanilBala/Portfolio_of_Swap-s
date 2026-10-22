@@ -303,10 +303,16 @@ export interface AboutContent {
    * first, so the sharpest photograph takes the biggest circle. Squares.
    */
   readonly portraits: readonly [ImageAsset, ImageAsset, ImageAsset];
-  /** The campus, as a pair after the education record. */
-  readonly campus: MediaPair;
-  /** The city, closing the page above the footer. */
-  readonly city: ImageMedia;
+  /**
+   * The campus twice and the city, as one row of three after the record,
+   * each cropped to the same 4:3 frame.
+   */
+  readonly photos: readonly [Photograph, Photograph, Photograph];
+}
+
+/** A photograph with a line under it that says only what it shows. */
+export interface Photograph extends ImageAsset {
+  readonly caption: string;
 }
 
 /* ---------------------------------------------------------------- profile */
