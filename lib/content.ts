@@ -56,7 +56,9 @@ export const content: SiteContent = {
         { value: "23", label: "divisional charts" },
         { value: "51", label: "yogas detected" },
         { value: "6 × 6", label: "ayanamshas × house systems" },
-        { value: "6", label: "languages" },
+        // Seven since October 2026: English, Spanish, Bengali, Hindi, Italian,
+        // French and German, per the live language menu (confirmed by him).
+        { value: "7", label: "languages" },
         { value: "719", label: "commits" },
       ],
       links: [
@@ -125,7 +127,7 @@ export const content: SiteContent = {
             id: "overview",
             body: [
               "Lagna Atelier builds a Vedic natal chart from four details — name, birth date, birth time and birthplace — and reads it. The chart is the full working set: lagna, houses and planetary positions, then 23 divisional charts from D1 to D60, Vimshottari dasha timelines and 51 yoga detections on top.",
-              "It is live at lagnaatelier.site in six languages.",
+              "It is live at lagnaatelier.site in seven languages.",
             ],
             // The hero is the form that goes in; this is the reading that
             // comes back. The three takeaways are the same selection from
@@ -221,7 +223,7 @@ export const content: SiteContent = {
           {
             id: "outcome",
             body: [
-              "Live at lagnaatelier.site in six languages, with 561 tests and 719 commits behind it.",
+              "Live at lagnaatelier.site in seven languages, with 561 tests and 719 commits behind it.",
               "The detail most worth keeping is small: when the Ashtakavarga houses total 367 bindus against a 337 pool, the page says so instead of rounding the numbers into agreement.",
             ],
           },
@@ -257,10 +259,12 @@ export const content: SiteContent = {
         "A training, nutrition and recovery planner for members and their trainers, with each week's plan revised against what was actually logged.",
       figures: [
         { value: "15", label: "training programmes" },
-        { value: "160+", label: "exercises modelled" },
+        // 900+ exercises and English and Spanish, per the live landing page
+        // (October 2026, confirmed by him); Portuguese is no longer offered.
+        { value: "900+", label: "exercises modelled" },
         { value: "−50%", label: "load time, web" },
         { value: "−67%", label: "load time, mobile" },
-        { value: "3", label: "languages" },
+        { value: "2", label: "languages" },
       ],
       links: [
         { role: "live", href: "https://app.robusthealth.in" },
@@ -342,7 +346,7 @@ export const content: SiteContent = {
             id: "overview",
             body: [
               "Robust Health turns a member's profile into a weekly plan — training, nutrition and recovery — and gives trainers a portal of their own to author plans, assign them and follow each client's adherence.",
-              "It is live at app.robusthealth.in in English, Spanish and Portuguese.",
+              "It is live at app.robusthealth.in in English and Spanish.",
             ],
             media: {
               kind: "image",
@@ -385,7 +389,7 @@ export const content: SiteContent = {
             id: "approach",
             body: [
               "A plan can come from four places: a deterministic planner, the Claude API, a trainer's own scaffold, or a curated catalogue. The member flow runs onboarding, generate, track, then regenerate.",
-              "Programmes are data rather than code — 15 of them over 160+ exercises, each carrying sets, reps, rest and RPE-based progression — and calorie targets come from the Mifflin-St Jeor equation.",
+              "Programmes are data rather than code — 15 of them over more than 900 exercises, each carrying sets, reps, rest and RPE-based progression — and calorie targets come from the Mifflin-St Jeor equation.",
             ],
             points: [
               "Trainers author and assign their own plans, and track each client's adherence over an adjustable window.",

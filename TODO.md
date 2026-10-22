@@ -27,17 +27,12 @@ and listed here instead of being written plausibly.
 
 ## Snapshots that drift
 
-- **The live sites have moved past some of the copy** (seen while capturing
-  them on October 21 2026). Check each against its repository before
-  changing `lib/content.ts`:
-  - Lagna Atelier's language menu lists seven languages (English, Spanish,
-    Bengali, Hindi, Italian, French, German); the site says six.
-  - Robust Health's landing page says 900+ exercises and English and
-    Spanish, and its How It Works page 450 tagged exercises; the site says
-    160+ exercises and three languages, Portuguese among them.
-  - The clinic now confirms visits on WhatsApp, runs in English, Bengali and
-    Hindi, and lists five chambers in three towns; the case study still
-    describes a confirmation email, and its booking-form, doctor and admin
-    captures show the earlier design.
+- **The clinic's case study describes the earlier build.** The project is on
+  hold (October 2026), so its copy is left as written. The live site has
+  moved on: it confirms visits on WhatsApp rather than by email, runs in
+  English, Bengali and Hindi, and lists five chambers in three towns, and
+  the case study's booking-form, doctor and admin captures show the earlier
+  design. Its heroes and Index frames are the live site as of October 21
+  2026. Update the copy if the project resumes.
 - Commit counts (719 on Lagna Atelier) and test counts are as of September 23
   2026. Refresh them in `lib/content.ts` when they move meaningfully.
