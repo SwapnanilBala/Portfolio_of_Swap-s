@@ -31,23 +31,22 @@ export function IndexPage({ kit, View }: Props) {
   return (
     <PageTransition>
       <main id="main" data-tone="light" className="min-h-svh bg-paper text-ink">
-        <header className="px-5 pt-20 md:px-8 md:pt-24">
-          <div className="meta grid grid-cols-12 gap-x-5 border-b border-paper-rule pb-3">
-            <span className="col-span-8 md:col-span-4">{ui.index.description}</span>
-            <span className="col-span-4 text-right tabular-nums md:col-span-2 md:col-start-9 md:text-left">
-              {range}
-            </span>
-          </div>
-          {/* Fitted to the measure: "INDEX" sets 2.62 times its font size
-              wide in this face, so the size is the content width over that. */}
+        {/* The word shares its line with the description, about a third of
+            the height it had when it was fitted to the full measure: there it
+            took half the first screen and pushed every project below it. */}
+        <header className="grid grid-cols-12 items-end gap-x-5 px-5 pb-6 pt-20 md:px-8 md:pb-8 md:pt-24">
           <Text
             as="h1"
             by="chars"
             stagger={0.035}
-            className="display -ml-[0.04em] text-[calc((100vw-2.5rem)/2.66)] md:text-[calc((100vw-4rem)/2.66)]"
+            className="display col-span-12 -ml-[0.04em] text-[clamp(4.5rem,12vw,11rem)] md:col-span-7"
           >
             {ui.index.heading}
           </Text>
+          <div className="meta col-span-12 mt-5 flex justify-between gap-5 md:col-span-5 md:mt-0 md:flex-col md:items-end md:gap-1 md:pb-[0.4em] md:text-right">
+            <span>{ui.index.description}</span>
+            <span className="whitespace-nowrap tabular-nums">{range}</span>
+          </div>
         </header>
 
         <View projects={projects} copy={ui.index} />

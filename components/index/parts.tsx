@@ -7,7 +7,7 @@ import { warmCaseHero } from "@/lib/preload";
 import { hasCaseStudy, isResolvedLink, type LinkRole, type Project, type UiCopy } from "@/lib/types";
 
 /*
- * What the Index's two trees share: the grid's slots, how a tile links, and
+ * What the Index's two trees share: the grid, how a tile links, and
  * the row of destinations under an entry without a case study. The desktop
  * view (IndexView) animates between grid and list with GSAP Flip and trails a
  * preview after the pointer; the phone view (PhoneIndexView) has neither, and
@@ -16,57 +16,19 @@ import { hasCaseStudy, isResolvedLink, type LinkRole, type Project, type UiCopy 
  * data attributes) are inert on a phone.
  */
 
-export interface GridSlot {
-  /** Column start, span and vertical offset at each breakpoint. */
-  readonly place: string;
-  /** Shape of a typographic plate here; captures keep their own ratio. */
-  readonly aspect: string;
-  /** The slot's rendered width, for next/image. */
-  readonly sizes: string;
-}
+/**
+ * A tile's rendered width, for next/image: three to a row from 48rem across
+ * the page less its margins and two gaps, the full width below.
+ */
+const TILE_SIZES = "(min-width: 48rem) calc((100vw - 6.5rem) / 3), calc(100vw - 2.5rem)";
 
 /**
- * The loose asymmetric grid: three projects to a row from 64rem, two from
- * 48rem, one below, each at its own width and height so no two rows repeat.
- * Complete class strings, not assembled ones, so Tailwind can see every class
- * it has to generate. Offsets are in vw: the grid is sized by width, and vh
- * offsets ballooned on a tall window until a row held one project.
+ * Whether a project takes a tile: it has a capture to show. The rest -- a
+ * dataset, the certificates -- are listed in type beneath the tiles rather
+ * than set as plates that hold one number each.
  */
-export const GRID_SLOTS: readonly GridSlot[] = [
-  {
-    place: "col-span-12 md:col-span-7 md:col-start-1 lg:col-span-5 lg:col-start-1",
-    aspect: "aspect-[4/3]",
-    sizes: "(min-width: 64rem) 39vw, (min-width: 48rem) 54vw, 90vw",
-  },
-  {
-    place: "col-span-10 col-start-3 md:col-span-4 md:col-start-9 md:mt-[14vw] lg:col-span-3 lg:col-start-7 lg:mt-[9vw]",
-    aspect: "aspect-[4/5]",
-    sizes: "(min-width: 64rem) 26vw, (min-width: 48rem) 32vw, 75vw",
-  },
-  {
-    place: "col-span-12 md:col-span-5 md:col-start-2 md:mt-[5vw] lg:col-span-3 lg:col-start-10 lg:mt-[3vw]",
-    aspect: "aspect-[4/3]",
-    sizes: "(min-width: 64rem) 26vw, (min-width: 48rem) 40vw, 90vw",
-  },
-  {
-    place: "col-span-8 md:col-span-4 md:col-start-8 md:mt-[12vw] lg:col-span-3 lg:col-start-2 lg:mt-[7vw]",
-    aspect: "aspect-[4/5]",
-    sizes: "(min-width: 64rem) 26vw, (min-width: 48rem) 32vw, 60vw",
-  },
-  {
-    place: "col-span-10 col-start-3 md:col-span-5 md:col-start-1 md:mt-[4vw] lg:col-span-4 lg:col-start-6 lg:mt-[2vw]",
-    aspect: "aspect-[4/3]",
-    sizes: "(min-width: 64rem) 32vw, (min-width: 48rem) 40vw, 75vw",
-  },
-  {
-    place: "col-span-7 md:col-span-3 md:col-start-8 md:mt-[9vw] lg:col-span-2 lg:col-start-11 lg:mt-[11vw]",
-    aspect: "aspect-[3/4]",
-    sizes: "(min-width: 64rem) 19vw, (min-width: 48rem) 24vw, 52vw",
-  },
-];
-
-export function slotFor(index: number) {
-  return GRID_SLOTS[index % GRID_SLOTS.length] ?? GRID_SLOTS[0];
+export function hasTile(project: Project): boolean {
+  return (project.cover ?? project.hero) !== undefined;
 }
 
 /** Where a project opens: its case study, or its first link when it has none. */
@@ -209,33 +171,35 @@ export function IndexToggle({
   );
 }
 
-/** The loose asymmetric grid, each project in its own slot. */
+/**
+ * An even grid: every project with a capture as one of a row of equal 16:10
+ * tiles, three to a row from 48rem, then the rest in type, one column each.
+ * Record numbers follow the content's order, which puts the tiles first.
+ */
 export function IndexGrid({ projects, copy }: ViewProps) {
+  const records = projects.map((project, index) => ({ project, index }));
+  const tiles = records.filter(({ project }) => hasTile(project));
+  const entries = records.filter(({ project }) => !hasTile(project));
+
   return (
-    <ol className="grid grid-cols-12 gap-x-5 gap-y-14 px-5 pb-32 pt-12 md:gap-y-[4vw] md:px-8">
-      {projects.map((project, i) => {
-        const slot = slotFor(i);
-        return (
-          <li key={project.slug} className={slot?.place}>
+    <div className="px-5 pb-32 pt-10 md:px-8 md:pt-12">
+      <ol className="grid grid-cols-1 gap-x-5 gap-y-12 md:grid-cols-3">
+        {tiles.map(({ project, index }) => (
+          <li key={project.slug}>
             <ProjectLink project={project} className="group block" cursor="view">
               <div data-grid-media data-cursor-frame className="overflow-hidden">
                 <SharedMedia slug={project.slug} enabled={hasCaseStudy(project)}>
                   <div className="transition-transform duration-700 ease-out-expo group-hover:scale-[1.04] reduced:transition-none reduced:group-hover:scale-100">
-                    <ProjectCover
-                      project={project}
-                      sizes={slot?.sizes ?? "90vw"}
-                      aspect={slot?.aspect}
-                      eager={i === 0}
-                    />
+                    <ProjectCover project={project} sizes={TILE_SIZES} framed eager={index === 0} />
                   </div>
                 </SharedMedia>
               </div>
-              {/* Stacked, not name-left and type-right: in a narrow slot the
+              {/* Stacked, not name-left and type-right: in a narrow tile the
                   two sides wrapped into each other. The name hugs its text
                   (justify-self-start), because Flip scales that box into
                   the list row's name. */}
               <div className="meta mt-3 grid grid-cols-[auto_1fr] items-baseline gap-x-2 gap-y-1 transition-transform duration-500 ease-out-expo group-hover:translate-x-1.5 reduced:transition-none">
-                <span className="tabular-nums text-paper-muted">{recordNumber(i)}</span>
+                <span className="tabular-nums text-paper-muted">{recordNumber(index)}</span>
                 <span data-flip-id={project.slug} className="inline-block origin-left justify-self-start">
                   {project.name}
                 </span>
@@ -244,16 +208,42 @@ export function IndexGrid({ projects, copy }: ViewProps) {
                 </span>
               </div>
             </ProjectLink>
-            <DestinationLinks
-              project={project}
-              labels={copy.destinations}
-              data-grid-media
-              className="mt-3 border-t border-paper-rule pt-2"
-            />
           </li>
-        );
-      })}
-    </ol>
+        ))}
+      </ol>
+
+      {entries.length > 0 ? (
+        <ol className="mt-14 grid grid-cols-1 gap-x-5 border-t border-paper-rule md:mt-16 md:grid-cols-3">
+          {entries.map(({ project, index }) => (
+            <li key={project.slug} className="border-b border-paper-rule py-5 md:border-b-0 md:pt-4">
+              <ProjectLink project={project} className="group block">
+                <span className="meta tabular-nums text-paper-muted">{recordNumber(index)}</span>
+                {/* Uppercase like the list row it flies into, so Flip only
+                    scales the word and never changes its case mid-flight. */}
+                <span
+                  data-flip-id={project.slug}
+                  className="mt-2 block origin-left text-[1.375rem] font-semibold uppercase leading-[0.95] tracking-[-0.03em] transition-transform duration-500 ease-out-expo group-hover:translate-x-1.5 reduced:transition-none md:w-fit md:text-[clamp(1.125rem,1.7vw,1.625rem)]"
+                >
+                  {project.name}
+                </span>
+                <span className="meta mt-2 block text-paper-muted">
+                  {project.type} / {project.year}
+                </span>
+              </ProjectLink>
+              <p data-grid-media className="mt-3 max-w-[44ch] text-[0.8125rem] leading-snug text-paper-muted">
+                {project.summary}
+              </p>
+              <DestinationLinks
+                project={project}
+                labels={copy.destinations}
+                data-grid-media
+                className="mt-3 border-t border-paper-rule pt-2"
+              />
+            </li>
+          ))}
+        </ol>
+      ) : null}
+    </div>
   );
 }
 

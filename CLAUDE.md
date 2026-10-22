@@ -61,7 +61,7 @@ app/m/layout.tsx            phone tree: PhoneReveals
 app/m/...                   the same four pages for phones, served at the same URLs
 components/home/            ProjectSlider, SliderCanvas, ProjectThumbnailRail,
                             MobileProjects, SliderMasthead, LiveSiteLink
-components/index/           IndexPage, IndexView (Flip + preview), parts
+components/index/           IndexPage, IndexView (Flip + preview), IndexCaptures, parts
                             (grid, list, toggle, links), ProjectCover
 components/work/            CaseStudy, ProjectHero, CaseSection, MediaPlate,
                             MediaPair, CaseNav
@@ -431,16 +431,25 @@ one-off values.
 
 ## The Index
 
-- **Three projects to a row from 64rem, two from 48rem, one below**, each slot
-  at its own column, span and offset (`GRID_SLOTS`). Offsets are in `vw`: the
-  grid is sized by width, and `vh` offsets on a tall window left one project to
-  a row.
-- **A capture keeps its own aspect ratio.** Forcing covers into slot shapes cut
-  headlines mid-word. Only the typographic plates take the slot's shape, and
-  their figures are sized in container units so a narrow slot cannot overflow.
+- **The opening is a heading and an even grid** (October 2026, on request).
+  "Index" is display type at `clamp(4.5rem, 12vw, 11rem)` beside the
+  description and the year range: fitted to the full measure it was 435px
+  tall at 1440×900, half the first screen. Below the switch, every project
+  with a capture (`hasTile`) is one of a row of equal 16:10 tiles, three from
+  48rem, one below; the rest — the dot field and the two certificates — are
+  listed in type under them, one column each, with their summary and where
+  they lead. It replaced a loose asymmetric grid of six slots at their own
+  sizes and offsets, whose typographic plates were large ink boxes holding one
+  number each; with the live-sites section below, the opening read as a
+  collage. All six projects now start in the first screen at 1440×900.
+- **A capture is never cropped to the tile.** It is contained in the tile's
+  ink frame, centred, so covers of different shapes still make a row of equal
+  tiles (`ProjectCover`'s `framed`). Forcing covers into slot shapes once cut
+  headlines mid-word.
 - Captions stack (name, then type and year): side by side they wrapped into
-  each other in narrow slots. The name's box hugs its text, because Flip scales
-  that box into the list row.
+  each other in narrow tiles. The name's box hugs its text, because Flip
+  scales that box into the list row; the names in type are uppercase like
+  the row, so Flip never changes a word's case mid-flight.
 - Robust Health's cover is its dashboard, not its landing page: the Index shows
   the product, not its marketing photography.
 - **The live sites, frame by frame, close the Index** (`IndexCaptures`, after
@@ -453,20 +462,22 @@ one-off values.
   and languages, and Robust Health's come from its How It Works page. Taken
   October 21 2026; the slider's heroes are from the same round. Retake both
   together, so the note under the heading stays true.
-- **An entry without a case study lists where it leads** under the tile, one
+- **An entry without a case study lists where it leads** under its name, one
   small section per link — Meta Database Engineer's certificate and its
-  repository side by side — in both layouts. The tile still opens the first
+  repository side by side — in both layouts. The name still opens the first
   link, so order `links` by what the entry is: the certificate before the
-  code. The row sits outside the tile's link, which cannot contain another.
+  code. The row sits outside the name's link, which cannot contain another.
   Its labels are `ui.index.destinations`, a word or two per role: the
-  narrowest slot is about 13rem, and the case pages' sentences wrapped there.
+  narrowest column is about 13rem, and the case pages' sentences wrapped there.
 - **The fake news classifier has no screen, so its picture is its data**
   (`DotField`): LIAR's 10,269 training claims at one dot per five, laid down
   as fake, set aside, real — the class imbalance the project fought, in plain
   sight. Every count is from its RESULTS.md, and the hero's legend states
-  them. It is the Index cover and the case-study hero. Two arrangements of
-  the same dots: `wide` (vertical bands, ~16:10) for the cover and the hero
-  on a wide screen, so that morph is one picture growing; `tall` (stacked
+  them. It is the case-study hero, and the list view's preview; in the grid
+  the project is listed in type, so opening it there crossfades rather than
+  morphs. Two arrangements of the same dots: `wide` (vertical bands, ~16:10)
+  for the preview and the hero on a wide screen, so that morph is one picture
+  growing; `tall` (stacked
   bands, portrait) for the hero on a phone, where the wide one filled less
   than half the plate.
 - **Each line of dots is one stroke**: a round-capped dash per cell. Drawn

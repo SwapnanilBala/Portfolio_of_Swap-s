@@ -11,6 +11,11 @@ interface Props {
   readonly aspect?: string;
   /** The first cover on a page: in the first viewport, and the phone's largest paint. */
   readonly eager?: boolean;
+  /**
+   * Set the capture in a 16:10 frame of ink, whole and centred, so a row of
+   * covers with different shapes still reads as a row of equal tiles.
+   */
+  readonly framed?: boolean;
 }
 
 /**
@@ -24,8 +29,32 @@ interface Props {
  * crop. The plate's figure is sized to the plate (container units), so a
  * narrow slot cannot push it past the edge.
  */
-export function ProjectCover({ project, sizes, aspect = "aspect-[4/3]", eager = false }: Props) {
+export function ProjectCover({ project, sizes, aspect = "aspect-[4/3]", eager = false, framed = false }: Props) {
   const image = project.cover ?? project.hero;
+
+  // Contained, never cropped: cutting a capture to the frame's shape cut
+  // headlines mid-word. objectFit goes in `style` so next/image sizes the
+  // blur placeholder the same way.
+  if (image && framed) {
+    return (
+      <div className="aspect-[16/10] overflow-hidden bg-ink">
+        <Image
+          src={image.src}
+          alt={image.alt}
+          width={image.width}
+          height={image.height}
+          sizes={sizes}
+          quality={SCREENSHOT_QUALITY}
+          loading={eager ? "eager" : "lazy"}
+          fetchPriority={eager ? "high" : undefined}
+          placeholder="blur"
+          blurDataURL={blurFor(image.src)}
+          className="block h-full w-full"
+          style={{ objectFit: "contain" }}
+        />
+      </div>
+    );
+  }
 
   if (image) {
     return (
