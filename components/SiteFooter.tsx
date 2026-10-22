@@ -3,21 +3,33 @@ import { LocalTime } from "@/components/LocalTime";
 import { content } from "@/lib/content";
 import type { MotionKit } from "@/lib/kit";
 
+interface Props {
+  readonly kit: MotionKit;
+  /**
+   * The landing page's close: the same headline and routes at a size that
+   * ends the page without taking a screen of it, because that page is read
+   * for the record and was a long scroll.
+   */
+  readonly compact?: boolean;
+}
+
 /**
  * The oversized close on every page but Projects, which is one viewport
  * with nowhere below it to put one. Always dark: on the light pages it lands
  * as a hard change of ground, which is the point of ending on it.
  */
-export function SiteFooter({ kit }: { readonly kit: MotionKit }) {
+export function SiteFooter({ kit, compact = false }: Props) {
   const { Link: ContactLink } = kit;
   const { ui, contact, profile } = content;
   const year = new Date().getFullYear();
 
   return (
-    <footer className="flex min-h-[92svh] flex-col justify-between bg-ink px-5 pb-6 pt-24 text-paper md:px-8">
+    <footer
+      className={`bg-ink px-5 pb-6 text-paper md:px-8 ${compact ? "pt-14 md:pt-16" : "flex min-h-[92svh] flex-col justify-between pt-24"}`}
+    >
       {/* A real space between the block lines keeps the accessible name
           "Let's build something." rather than "Let's buildsomething." */}
-      <h2 className="display text-[14.2vw]">
+      <h2 className={`display ${compact ? "text-[clamp(2.75rem,7vw,7rem)]" : "text-[14.2vw]"}`}>
         {ui.footer.headline.map((line, i) => (
           <Fragment key={line}>
             {i > 0 ? " " : null}
@@ -26,7 +38,7 @@ export function SiteFooter({ kit }: { readonly kit: MotionKit }) {
         ))}
       </h2>
 
-      <div className="mt-16 grid gap-y-6 border-t border-ink-rule pt-5 md:grid-cols-12">
+      <div className={`${compact ? "mt-10" : "mt-16"} grid gap-y-6 border-t border-ink-rule pt-5 md:grid-cols-12`}>
         <ul className="flex flex-wrap gap-x-8 gap-y-3 md:col-span-7">
           {contact.map((route) => (
             <li key={route.key}>

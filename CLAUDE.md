@@ -214,10 +214,9 @@ competes.
   No mono: it is the developer-portfolio tell the brief asks to avoid. The
   section labels of the About page and the case studies are display type in
   ink, on request, from one component (`SectionLabel`) so the two cannot
-  drift — 1.875rem on phones, and from 48rem sized by width (3.1vw,
-  1.625–3.25rem) so "Technologies", the longest, fits its four columns; at
-  768px a fixed 2.25rem overran them. A first pass a fifth larger read as too
-  big. Captions inside a section (a pair's title) stay meta.
+  drift — `clamp(1.375rem, 1.9vw, 1.875rem)`, 22–30px. Two larger passes
+  (up to 64px, then 52px) made the About page a 6.5-screen scroll and were
+  called too big. Captions inside a section (a pair's title) stay meta.
 - **The name** is medium size (`clamp(1.25rem, 1.55vw, 1.875rem)`) and appears
   only on the home page, where it is the h1 — per his instruction. Home has
   been the About page since October 2026, so the name heads the resume there
@@ -270,9 +269,17 @@ long after the decision behind it might change.
   is still there after. Nothing in this header is revealed by script: it is
   in the first paint whatever loads after. On a phone on its side (`short:`)
   the spacing tightens, so the resume link is still in the first screen.
-- **Then the record, then the person**: experience, education and its
-  campus pair, the statement (display type, no longer the h1), the intro
-  beside the portraits, technologies, current work, the city, the footer.
+- **A two-up grid, chosen from three templates** (October 2026): it was
+  6.5 screens long at 1440×900, and is 2.7 (5.5 on an iPhone, which stacks
+  it). The statement shares the resume's line, in display type at
+  2.5rem at most, right-aligned and `text-balance`d. Then the person — the
+  portraits beside the intro — and the record two parts to a row from
+  64rem: experience beside education, technologies beside current work,
+  stacked in that order below. The photographs close it as one row, and
+  the footer is `SiteFooter compact`: the same close at a size that does
+  not take a screen. The other pages keep the full-height footer. The
+  templates not chosen were a tightened version of the old order (4.2
+  screens) and a résumé with a sticky sidebar (2.9).
 - **The slider page has a visually hidden h1** ("Projects"): the slider
   is what it names, and the intro line keeps its place at the top.
 - The resume's date is written twice, in the contact's `detail` and in
@@ -280,21 +287,23 @@ long after the decision behind it might change.
 
 ## The About page's photographs
 
-The page reads resume, record, person, city, and its photographs follow what
-they belong to: the campus after the education, him beside the intro, the
-city to close.
+The page reads resume, person, record, and the photographs follow: him beside
+the intro, then the campus twice and the city as the last row.
 
 - **Three portraits as a triangle of circles** (`Portraits`) beside the
   intro, on request — the site's only round forms besides the dot field.
-  Largest first: the sharpest source takes the biggest circle. The suit
-  portrait's source is 400px whole, so it takes the smallest, which a 250px
-  crop keeps sharp at 2x (on a 3x phone it is 1.36x short). A paper edge on
+  Largest first: the sharpest source takes the biggest circle. The cluster
+  is 14rem at most. The suit portrait's source is 400px whole, so it takes
+  the smallest circle (94px), which its 250px crop keeps sharp at 2x (on a
+  3x phone it is 1.13x short). A paper edge on
   each circle cuts cleanly where two overlap. Positions are percentages of
   the cluster, so it scales as one.
-- **The campus is a pair after the education record**, and **the Fenway
-  plate closes the page** above the footer that gives Boston's time — the
-  same `MediaPair` and `MediaPlate` as the case studies, so the same
-  sharpness caps and frames apply.
+- **The campus and the Fenway are one row of three** (`about.photos`), each
+  cropped to a 4:3 frame with the plates' hairline, so the row is one band
+  whatever the sources' shapes. The campus captures are 4:3 already; the
+  Fenway's 2:1 loses its sides. Every crop is at least 1200px wide, enough
+  for a third of a 1920px screen at 2x. Each caption names the place, since
+  the pair's title no longer sits beside them.
 - **Personal photographs are cropped for privacy as well as framing**: the
   snow portrait is cut to head and shoulders, which leaves out the entrance
   of the building behind him. Captions state only what the photograph or
