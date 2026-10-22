@@ -46,13 +46,13 @@ export type BlurredMedia =
   | "/media/robust-health-live-next.webp"
   | "/media/robust-health-live-onboarding.webp"
   | "/media/robust-health-live-plans.webp"
+  | "/media/robust-health-live-programmes.webp"
   | "/media/robust-health-live-session.webp"
   | "/media/robust-health-live-week.webp"
   | "/media/robust-health-member.webp"
   | "/media/robust-health-mobile.webp"
   | "/media/robust-health-phone-activity.webp"
   | "/media/robust-health-phone-workout.webp"
-  | "/media/robust-health-progress.webp"
   | "/media/robust-health-start.webp"
   | "/media/robust-health-trainer.webp"
   | "/media/robust-health-weeks.webp";
@@ -124,6 +124,8 @@ export const BLUR_PLACEHOLDERS: Readonly<Record<BlurredMedia, string>> = {
     "data:image/webp;base64,UklGRmYAAABXRUJQVlA4IFoAAADwAQCdASoMAAgAAwBSJbACdAEQUC/HgGAA/vXbSPQmXOhcp9xdgKcMFGJcaxH+M95/9JftET+ZX8pBJdklw5CFYOuCpOu/rXOvydxfb+IUxvxbAUOsYLkAAAA=",
   "/media/robust-health-live-plans.webp":
     "data:image/webp;base64,UklGRkIAAABXRUJQVlA4IDYAAADQAQCdASoMAAgAAwBSJZQAAu08AgTSIAD++I1AIcb5u/gJhlfkpoiH2U0fIam2k9xbN4uAAAA=",
+  "/media/robust-health-live-programmes.webp":
+    "data:image/webp;base64,UklGRj4AAABXRUJQVlA4IDIAAACQAQCdASoMAAgAAwBSJZQAAp0XNbAA/vbuWlryvCjBP/9lJtGYFCAeLCMZneo0swAAAA==",
   "/media/robust-health-live-session.webp":
     "data:image/webp;base64,UklGRkIAAABXRUJQVlA4IDYAAADQAQCdASoMAAgAAwBSJZQAAxf4S/GIgAD+9771d/97a/CcAJPie2c+IC3nFBWtIQRt3i4AAAA=",
   "/media/robust-health-live-week.webp":
@@ -136,8 +138,6 @@ export const BLUR_PLACEHOLDERS: Readonly<Record<BlurredMedia, string>> = {
     "data:image/webp;base64,UklGRkYAAABXRUJQVlA4IDoAAADwAgCdASoMABEAPt1cp0yopSOiMAgBEBuJZwAAiUzLgAD+8LbuSZfy7P0m/nXq/3+fTkco2djTYAAA",
   "/media/robust-health-phone-workout.webp":
     "data:image/webp;base64,UklGRnwAAABXRUJQVlA4IHAAAABQBACdASoMABgAPt1apkyopSOiMAgBEBuJZgCdIKnJimJVgFQojBu2/ahAAP79W9GPKycci14VpLaLthbWTcb6lVf/MD8jCSpO9M3BOPVLOQ9NkXIelSiVbAUNNq6AvGwP7kImxZ50ojep4stFLAAA",
-  "/media/robust-health-progress.webp":
-    "data:image/webp;base64,UklGRjQAAABXRUJQVlA4ICgAAACwAQCdASoMAAkAAwBSJZwAAxf+7AGUAP71vtiUIjaB0rVTNE1hwAAA",
   "/media/robust-health-start.webp":
     "data:image/webp;base64,UklGRjwAAABXRUJQVlA4IDAAAADQAQCdASoMAAgAAwBSJZwAAu0eoDTM2AD+8O1O24jlE/L8+gSLxmj2jisAL/xQAAA=",
   "/media/robust-health-trainer.webp":

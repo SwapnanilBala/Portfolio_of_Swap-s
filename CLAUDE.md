@@ -450,8 +450,10 @@ one-off values.
   each other in narrow tiles. The name's box hugs its text, because Flip
   scales that box into the list row; the names in type are uppercase like
   the row, so Flip never changes a word's case mid-flight.
-- Robust Health's cover is its dashboard, not its landing page: the Index shows
-  the product, not its marketing photography.
+- Robust Health's cover is a product screen, not its landing page: the Index
+  shows the product, not its marketing photography. Since October 2026 it is
+  the signed-out quick-start catalogue, which replaced a dashboard capture
+  from the earlier design.
 - **The live sites, frame by frame, close the Index** (`IndexCaptures`, after
   the grid or list, in both trees): one record per project with `captures`,
   its Index number, name and address in the label column, the frames two to

@@ -284,14 +284,15 @@ export const content: SiteContent = {
         height: 2532,
         alt: "Robust Health on a phone: the halftone photograph and its speech bubble first, then “Train. Eat. Recover. Adapt.”, buttons to get started, see how it works, sign in, sign in as a coach and download the app, and three counters.",
       },
-      // A dashboard, not the landing page: the Index shows the product
-      // rather than its marketing photography. Cropped below the app's
-      // header, which carries the signed-in account's email address.
+      // The product, not the landing page: the Index shows the app rather
+      // than its marketing photography. The quick-start catalogue, signed
+      // out, on 2026-10-21; the age, height and weight are the page's own
+      // defaults. It replaced a dashboard capture from the earlier design.
       cover: {
-        src: "/media/robust-health-progress.webp",
-        width: 1360,
-        height: 1020,
-        alt: "Robust Health's progress dashboard, open on Plan Evolution: a timeline of three weekly plans with their dates, calories and training days, beside a table comparing week one with week two line by line.",
+        src: "/media/robust-health-live-programmes.webp",
+        width: 2880,
+        height: 1800,
+        alt: "Robust Health's quick start, “Train like a legend, starting today”: a Your numbers panel of sex, age, height, weight and activity with a maintenance estimate of about 2,551 kcal a day from the Mifflin-St Jeor equation, a search box, filters for training days and experience, and the first programme cards — Krissy Cela Glute Days, German Volume Training and DoggCrapp Training.",
       },
       // Taken from the live site on 2026-10-21, signed out: the How It Works
       // page walks the weekly loop through the product's own panels, then
