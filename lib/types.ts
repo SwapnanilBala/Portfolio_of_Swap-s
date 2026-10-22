@@ -89,6 +89,16 @@ export interface PairedImage extends ImageAsset {
   readonly label: string;
 }
 
+/**
+ * One frame of a project's live site, for the Index's captures: a 1440×900
+ * window at 2x, so every frame of every project shares one 16:10 shape and
+ * the captures form a grid rather than a collage. The label says what the
+ * frame shows, in a word or two.
+ */
+export interface LiveCapture extends ImageAsset {
+  readonly label: string;
+}
+
 /** What may follow a case-study section: one plate, or a pair. */
 export type SectionMedia = ImageMedia | MediaPair;
 
@@ -161,6 +171,12 @@ interface ProjectBase {
   readonly links: readonly ProjectLink[];
   /** Index cover. Falls back to the hero, then to a typographic plate. */
   readonly cover?: ImageAsset;
+  /**
+   * Frames of the live site, set together after the Index's grid or list.
+   * Public, signed-out pages only: nothing typed into a form, nothing
+   * submitted.
+   */
+  readonly captures?: readonly LiveCapture[];
 }
 
 /**
@@ -377,6 +393,14 @@ export interface UiCopy {
      * narrowest slot is about 13rem: one or two words, not a sentence.
      */
     readonly destinations: Readonly<Record<LinkRole, string>>;
+    /** The live sites' frames, after the grid or list. */
+    readonly captures: {
+      readonly heading: string;
+      /** When the frames were taken, so a visitor knows how current they are. */
+      readonly note: string;
+      /** Template. Token: {count} */
+      readonly count: string;
+    };
   };
   /** Previous and next at the foot of each case study. */
   readonly caseNav: {

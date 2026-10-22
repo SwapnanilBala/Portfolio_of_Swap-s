@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import type { ComponentType } from "react";
+import { IndexCaptures } from "@/components/index/IndexCaptures";
 import { PageTransition } from "@/components/PageTransition";
 import { SiteFooter } from "@/components/SiteFooter";
 import { content } from "@/lib/content";
@@ -50,6 +51,7 @@ export function IndexPage({ kit, View }: Props) {
         </header>
 
         <View projects={projects} copy={ui.index} />
+        <IndexCaptures projects={projects} copy={ui.index} kit={kit} />
         <SiteFooter kit={kit} />
       </main>
     </PageTransition>

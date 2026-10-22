@@ -434,6 +434,16 @@ one-off values.
   that box into the list row.
 - Robust Health's cover is its dashboard, not its landing page: the Index shows
   the product, not its marketing photography.
+- **The live sites, frame by frame, close the Index** (`IndexCaptures`, after
+  the grid or list, in both trees): one record per project with `captures`,
+  its Index number, name and address in the label column, the frames two to
+  a row from 40rem beside it. Every frame is a 1440×900 window at 2x, so all
+  share 16:10 and nothing is cropped to line up. They are signed-out public
+  pages, walked no further than a form's first choices — nothing typed,
+  nothing submitted — so Lagna Atelier's are its landing screen's themes
+  and languages, and Robust Health's come from its How It Works page. Taken
+  October 21 2026; the slider's heroes are from the same round. Retake both
+  together, so the note under the heading stays true.
 - **An entry without a case study lists where it leads** under the tile, one
   small section per link — Meta Database Engineer's certificate and its
   repository side by side — in both layouts. The tile still opens the first

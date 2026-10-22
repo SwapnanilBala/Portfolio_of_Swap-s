@@ -71,13 +71,13 @@ export const content: SiteContent = {
         src: "/media/lagna-atelier-hero.webp",
         width: 2880,
         height: 1800,
-        alt: "Lagna Atelier's landing screen: “Create your Vedic birth chart” in gold capitals on a dark starfield, above a four-step birth-details form and a live sky panel waiting for input.",
+        alt: "Lagna Atelier's landing screen in its dark theme: “Create your Vedic birth chart” in gold capitals on a starfield, the first of four steps — name, birth date, birth time, birthplace — asking what to call the reader, and a Live sky build panel waiting for its six details.",
       },
       heroMobile: {
         src: "/media/lagna-atelier-mobile.webp",
         width: 1170,
         height: 2532,
-        alt: "Lagna Atelier on a phone: “Create your Vedic birth chart” in gold capitals, then the first step of the birth-details form asking for a name, and a continue button.",
+        alt: "Lagna Atelier on a phone: question one of four, “What should we call you?”, a name field, an optional choice of sex at birth, and a continue button held at the foot of the screen.",
       },
       cover: {
         src: "/media/lagna-atelier-cover.webp",
@@ -85,6 +85,40 @@ export const content: SiteContent = {
         height: 962,
         alt: "A circular chart on a starfield, its rim ringed with zodiac glyphs and numbered houses, the centre reading Cancer, beside a week-long line chart of daily energy that peaks on Thursday above four forecast cards.",
       },
+      // Taken from the live site on 2026-10-21, signed out. The landing
+      // screen is as far as a visitor gets without typing birth details, so
+      // these are its themes and its languages; the chart itself is in the
+      // case study.
+      captures: [
+        {
+          src: "/media/lagna-atelier-hero.webp",
+          width: 2880,
+          height: 1800,
+          label: "Dark theme",
+          alt: "Lagna Atelier's landing screen in its dark theme: gold capitals on a starfield, the four-step birth-details form and the Live sky build panel.",
+        },
+        {
+          src: "/media/lagna-atelier-live-light.webp",
+          width: 2880,
+          height: 1800,
+          label: "Light theme",
+          alt: "The same screen in the light theme: “Create your Vedic birth chart” in dark serif capitals on a pale rose ground, the form's first step, and the sky panel's Sun, Moon, MC and ascendant markers.",
+        },
+        {
+          src: "/media/lagna-atelier-live-languages.webp",
+          width: 2880,
+          height: 1800,
+          label: "Languages",
+          alt: "The language menu open over the landing screen: English, Español, বাংলা, हिन्दी, Italiano, Français and Deutsch.",
+        },
+        {
+          src: "/media/lagna-atelier-live-hindi.webp",
+          width: 2880,
+          height: 1800,
+          label: "In Hindi",
+          alt: "The landing screen in Hindi: the headline, the form's four steps, its questions and the sky panel all translated, the Sign in button too.",
+        },
+      ],
       caseStudy: {
         sections: [
           {
@@ -238,13 +272,13 @@ export const content: SiteContent = {
         src: "/media/robust-health-hero.webp",
         width: 2880,
         height: 1800,
-        alt: "Robust Health's landing page: the headline “Structured programming, refined every week” beside three gym photographs, above a row of usage counters.",
+        alt: "Robust Health's landing page, set like a comic: “Train. Eat. Recover. Adapt.” in heavy italic capitals, buttons to get started, see how it works and sign in as a member or as a coach, three counters, and a halftone photograph of an athlete under a speech bubble reading “Structured programming, refined every week.”",
       },
       heroMobile: {
         src: "/media/robust-health-mobile.webp",
         width: 1170,
         height: 2532,
-        alt: "Robust Health on a phone: the headline “Structured programming, refined every week”, sign-up and trainer-login buttons, three gym photographs and a row of usage counters.",
+        alt: "Robust Health on a phone: the halftone photograph and its speech bubble first, then “Train. Eat. Recover. Adapt.”, buttons to get started, see how it works, sign in, sign in as a coach and download the app, and three counters.",
       },
       // A dashboard, not the landing page: the Index shows the product
       // rather than its marketing photography. Cropped below the app's
@@ -255,6 +289,53 @@ export const content: SiteContent = {
         height: 1020,
         alt: "Robust Health's progress dashboard, open on Plan Evolution: a timeline of three weekly plans with their dates, calories and training days, beside a table comparing week one with week two line by line.",
       },
+      // Taken from the live site on 2026-10-21, signed out: the How It Works
+      // page walks the weekly loop through the product's own panels, then
+      // onboarding's first screen. The account screens are in the case study.
+      captures: [
+        {
+          src: "/media/robust-health-live-plans.webp",
+          width: 2880,
+          height: 1800,
+          label: "Four ways in",
+          alt: "From the How It Works page: “Your plan gets written. Four ways in.” beside a panel of the four — written by a coach, imported from a document, generated then edited, started from a known split — with the loop's six steps down the left, Intake to Adjust, at Build.",
+        },
+        {
+          src: "/media/robust-health-live-week.webp",
+          width: 2880,
+          height: 1800,
+          label: "The week",
+          alt: "“Monday already knows what it is for”: a week of upper-body, lower-body and rest days, each with its exercise count and length, above calorie, protein and sleep targets.",
+        },
+        {
+          src: "/media/robust-health-live-session.webp",
+          width: 2880,
+          height: 1800,
+          label: "The session",
+          alt: "“Log it while you are still holding the bar”: today's upper-body session at three of six, bench press and barbell rows ticked off and the overhead press's rest timer running.",
+        },
+        {
+          src: "/media/robust-health-live-coach.webp",
+          width: 2880,
+          height: 1800,
+          label: "The coach's view",
+          alt: "“Your coach sees the week you actually had”: a coach's board of twelve clients, a bar chart of body weight, sessions and calories, and one week's sessions, last log and energy check-in.",
+        },
+        {
+          src: "/media/robust-health-live-next.webp",
+          width: 2880,
+          height: 1800,
+          label: "Next week",
+          alt: "“Next week is a reply to this one”: a notice that week five is ready, the press going up 2.5 kg after a good week, above tabs for weeks five back to two.",
+        },
+        {
+          src: "/media/robust-health-live-onboarding.webp",
+          width: 2880,
+          height: 1800,
+          label: "Getting started",
+          alt: "Onboarding: “Build a plan that fits your real life” beside a halftone gym photograph, then two ways to start — a personalised plan, recommended, in about three to five minutes, or a quick start from proven programmes.",
+        },
+      ],
       caseStudy: {
         sections: [
           {
@@ -407,14 +488,47 @@ export const content: SiteContent = {
         src: "/media/kb-clinic-hero.webp",
         width: 2880,
         height: 1800,
-        alt: "The clinic's booking page: the practice name above scheduling and dashboard buttons, a doctor-availability card, and a city-and-chamber picker that starts a booking.",
+        alt: "The clinic's booking page in its dark theme: “Book a visit with Dr. Kamalesh Bala”, four steps — town, chamber, day and time, your details — with the first open on Dinhata, Kolkata and Rampurhat, the doctor's chamber days this week, and an empty visit summary.",
       },
       heroMobile: {
         src: "/media/kb-clinic-mobile.webp",
         width: 1170,
         height: 2532,
-        alt: "The clinic's booking page on a phone: the practice name, booking and available-dates buttons, and the top of a doctor-availability card.",
+        alt: "The clinic's booking page on a phone: the doctor's name and speciality, English, Bengali and Hindi switches, this week's chamber days, and the first step, choosing a town.",
       },
+      // Taken from the live site on 2026-10-21, signed out. The booking was
+      // walked as far as a day and time and no further: the details step
+      // asks for a patient's own, and nothing was submitted.
+      captures: [
+        {
+          src: "/media/kb-clinic-live-chamber.webp",
+          width: 2880,
+          height: 1800,
+          label: "Chamber",
+          alt: "The second step, after choosing Kolkata: two chambers, Laboni Estate and Salt Lake, each with its address.",
+        },
+        {
+          src: "/media/kb-clinic-live-day.webp",
+          width: 2880,
+          height: 1800,
+          label: "Day and time",
+          alt: "The third step at the Salt Lake chamber: the days ahead, those without a chamber marked closed, and half-hourly times from 10:00 am to 5:30 pm, with the visit summary filled in beside it.",
+        },
+        {
+          src: "/media/kb-clinic-live-chambers.webp",
+          width: 2880,
+          height: 1800,
+          label: "Five chambers",
+          alt: "Where to find us: five chambers across Dinhata, Kolkata and Rampurhat, each with its address, the days it is open this week and a button to book there, then the three steps of a booking and a sign-in for patients who have booked before.",
+        },
+        {
+          src: "/media/kb-clinic-live-bangla.webp",
+          width: 2880,
+          height: 1800,
+          label: "In Bengali",
+          alt: "The booking page in Bengali: the headline, the steps, the visit summary and the help card translated, the town names left in English.",
+        },
+      ],
       caseStudy: {
         sections: [
           {
@@ -860,6 +974,11 @@ export const content: SiteContent = {
       toggle: "Layout",
       columns: { name: "Project", category: "Category", year: "Year" },
       destinations: { live: "Live site", source: "Repository", certificate: "Certificate" },
+      captures: {
+        heading: "From the live sites",
+        note: "Captured October 2026, signed out",
+        count: "{count} frames",
+      },
     },
     caseNav: { label: "More case studies", previous: "Previous project", next: "Next project" },
     homeLink: { label: "Home", monogram: "SB" },

@@ -21,10 +21,17 @@ export type BlurredMedia =
   | "/media/kb-clinic-booking.webp"
   | "/media/kb-clinic-doctor.webp"
   | "/media/kb-clinic-hero.webp"
+  | "/media/kb-clinic-live-bangla.webp"
+  | "/media/kb-clinic-live-chamber.webp"
+  | "/media/kb-clinic-live-chambers.webp"
+  | "/media/kb-clinic-live-day.webp"
   | "/media/kb-clinic-mobile.webp"
   | "/media/lagna-atelier-cover.webp"
   | "/media/lagna-atelier-hero.webp"
   | "/media/lagna-atelier-houses.webp"
+  | "/media/lagna-atelier-live-hindi.webp"
+  | "/media/lagna-atelier-live-languages.webp"
+  | "/media/lagna-atelier-live-light.webp"
   | "/media/lagna-atelier-mobile.webp"
   | "/media/lagna-atelier-reading.webp"
   | "/media/lagna-atelier-settings.webp"
@@ -35,6 +42,12 @@ export type BlurredMedia =
   | "/media/northeastern-window.webp"
   | "/media/robust-health-hero.webp"
   | "/media/robust-health-intake.webp"
+  | "/media/robust-health-live-coach.webp"
+  | "/media/robust-health-live-next.webp"
+  | "/media/robust-health-live-onboarding.webp"
+  | "/media/robust-health-live-plans.webp"
+  | "/media/robust-health-live-session.webp"
+  | "/media/robust-health-live-week.webp"
   | "/media/robust-health-member.webp"
   | "/media/robust-health-mobile.webp"
   | "/media/robust-health-phone-activity.webp"
@@ -60,17 +73,31 @@ export const BLUR_PLACEHOLDERS: Readonly<Record<BlurredMedia, string>> = {
   "/media/kb-clinic-doctor.webp":
     "data:image/webp;base64,UklGRiwAAABXRUJQVlA4ICAAAACQAQCdASoMAAgAAwBSJZwAAudUxLAA/vcKVlcppZgAAA==",
   "/media/kb-clinic-hero.webp":
-    "data:image/webp;base64,UklGRjgAAABXRUJQVlA4ICwAAADQAQCdASoMAAgAAwBSJZwAAxf83caAAAD+9dMH+xXaUXohcOssLL11QEAAAA==",
+    "data:image/webp;base64,UklGRjYAAABXRUJQVlA4ICoAAADwAQCdASoMAAgAAwBSJZQCdAEPhvcDgNAA/vXN3ClpLy/oCvi88OXeAAA=",
+  "/media/kb-clinic-live-bangla.webp":
+    "data:image/webp;base64,UklGRj4AAABXRUJQVlA4IDIAAADwAQCdASoMAAgAAwBSJZQCdAEfbjbjujAA/vXTCSXdUSWU3/FRCjCfuEGAkc15NYAAAA==",
+  "/media/kb-clinic-live-chamber.webp":
+    "data:image/webp;base64,UklGRjYAAABXRUJQVlA4ICoAAADwAQCdASoMAAgAAwBSJZQCdAEf/wwbPYAA/vXQPf6lEscVEQyXj9d4gAA=",
+  "/media/kb-clinic-live-chambers.webp":
+    "data:image/webp;base64,UklGRjYAAABXRUJQVlA4ICoAAADQAQCdASoMAAgAAwBSJZQCdAEO9qYiwAD+9tioNqHtB835Ro/aTKYAAAA=",
+  "/media/kb-clinic-live-day.webp":
+    "data:image/webp;base64,UklGRjgAAABXRUJQVlA4ICwAAAAQAgCdASoMAAgAAwBSJZQCdAEQUNk32twAAP710BSpjSfMcS8nvFjM+EQAAA==",
   "/media/kb-clinic-mobile.webp":
-    "data:image/webp;base64,UklGRlwAAABXRUJQVlA4IFAAAACQAwCdASoMABoAPt1cp0yopSOiMAgBEBuJZwAAV/qoJ/d/A1YAAP7vTCKaVD7NtNgxMDMPfNuMnxot8ZTvOJ0KaF+5OT6l4jkVqS7IsAFAAA==",
+    "data:image/webp;base64,UklGRnAAAABXRUJQVlA4IGQAAAAQBACdASoMABoAPt1cpkyopSOiMAgBEBuJZQCsACIB/aSSBLU4g7OHgAD+6RQ3XzDWySQYKaHlSBbsGf6Zd4YHhyR/nkUms9EauCgHXd8GrLawr1jV/7k7VcV7zlP6Yr4no2AA",
   "/media/lagna-atelier-cover.webp":
     "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACwAQCdASoMAAcAAwBSJZQCdADsj24AAP73glukekzGhzujOExQKByho0HuAAAA",
   "/media/lagna-atelier-hero.webp":
-    "data:image/webp;base64,UklGRjAAAABXRUJQVlA4ICQAAABwAQCdASoMAAgAAwBSJZQC7AFAAAD+86lKAaphCMCZ81W4AAA=",
+    "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACQAQCdASoMAAgAAwBSJZwAAp02KwAA/vWew3vnPd4ZiNPcC+xnvF4laV9wAAAA",
   "/media/lagna-atelier-houses.webp":
     "data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAADwAwCdASoMABQAPt1cpkyopSOiMAgBEBuJZwDA3CIGv4S2kBiFHkdAAP7NEKt/sc+9twrO1N8+je6sZVkiAxEAp88mbo22VHgIwfI2aeA0+a2GjHus8liF0NLnAA6pAAA=",
+  "/media/lagna-atelier-live-hindi.webp":
+    "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACwAQCdASoMAAgAAwBSJZwAAu0dh+wAAP71g3OykGgXr202326hcRMJPl6V9wAA",
+  "/media/lagna-atelier-live-languages.webp":
+    "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACQAQCdASoMAAgAAwBSJZwAAp02KwAA/vWew3vnQdLL/DXxSmKiJRMgoEPjyUgA",
+  "/media/lagna-atelier-live-light.webp":
+    "data:image/webp;base64,UklGRjYAAABXRUJQVlA4ICoAAADQAQCdASoMAAgAAwBSJZwC7AEf/qfDwAD+9xYUdYuE7c4X6AV0a3hdgAA=",
   "/media/lagna-atelier-mobile.webp":
-    "data:image/webp;base64,UklGRloAAABXRUJQVlA4IE4AAABwAwCdASoMABoAPt1cp0yopSOiMAgBEBuJZwDLLCzfQu78ahAA/vAJEHwPuBLA7csuW3nR1vSzbXahGOd5nUDyLzfOoQxZn+gQhWmCgAA=",
+    "data:image/webp;base64,UklGRlIAAABXRUJQVlA4IEYAAAAQAwCdASoMABoAPt1apkyopSOiMAgBEBuJaQAAW+qe6sAA/vDVqH6Syb23Sg1rxXhi6Wxkxw+vLKkd9HTDQ2/CWYzi4AAA",
   "/media/lagna-atelier-reading.webp":
     "data:image/webp;base64,UklGRjQAAABXRUJQVlA4ICgAAACwAQCdASoMAAUAAwBSJZwCdADyfvaAAP71gnccjo2zaM3XxJW5oAAA",
   "/media/lagna-atelier-settings.webp":
@@ -86,13 +113,25 @@ export const BLUR_PLACEHOLDERS: Readonly<Record<BlurredMedia, string>> = {
   "/media/northeastern-window.webp":
     "data:image/webp;base64,UklGRlQAAABXRUJQVlA4IEgAAADQAQCdASoMAAkAAwBSJQBOgBuJVuLcAAD9/A8bUARReJ7ETi6iF3SUnO5VkigExJGGJz6Jj5YG1cAZkOZ/xAFxebYXlsda4AA=",
   "/media/robust-health-hero.webp":
-    "data:image/webp;base64,UklGRlIAAABXRUJQVlA4IEYAAADQAQCdASoMAAgAAwBSJYwAAlpBv/rUAAD+9F19RmG3v6oZHe4SL3ktxxzX1iNN2dU5LndKSo4N6tRG/FHpLZpX8EHsQAAA",
+    "data:image/webp;base64,UklGRk4AAABXRUJQVlA4IEIAAACQAQCdASoMAAgAAwBSJYw3AJQQCgwA/vUvf8BMtibhwe7jvOpd1FLloMm5nHZUIrkjhKz/n3l6tIEzbUpmQBiPAAA=",
   "/media/robust-health-intake.webp":
     "data:image/webp;base64,UklGRjAAAABXRUJQVlA4ICQAAABwAQCdASoMAAkAAwBSJYwCdAFAAAD+80MDfqKSPIm7DtujwAA=",
+  "/media/robust-health-live-coach.webp":
+    "data:image/webp;base64,UklGRj4AAABXRUJQVlA4IDIAAADwAQCdASoMAAgAAwBSJZQAAu1/D25xywAA/viNQDsNOqr4+OWBw718jIm2eIlU6WYAAA==",
+  "/media/robust-health-live-next.webp":
+    "data:image/webp;base64,UklGRjgAAABXRUJQVlA4ICwAAADQAQCdASoMAAgAAwBSJZQAAureu+acAAD+9771EkkblSN70KZwSOlNA6WYAA==",
+  "/media/robust-health-live-onboarding.webp":
+    "data:image/webp;base64,UklGRmYAAABXRUJQVlA4IFoAAADwAQCdASoMAAgAAwBSJbACdAEQUC/HgGAA/vXbSPQmXOhcp9xdgKcMFGJcaxH+M95/9JftET+ZX8pBJdklw5CFYOuCpOu/rXOvydxfb+IUxvxbAUOsYLkAAAA=",
+  "/media/robust-health-live-plans.webp":
+    "data:image/webp;base64,UklGRkIAAABXRUJQVlA4IDYAAADQAQCdASoMAAgAAwBSJZQAAu08AgTSIAD++I1AIcb5u/gJhlfkpoiH2U0fIam2k9xbN4uAAAA=",
+  "/media/robust-health-live-session.webp":
+    "data:image/webp;base64,UklGRkIAAABXRUJQVlA4IDYAAADQAQCdASoMAAgAAwBSJZQAAxf4S/GIgAD+9771d/97a/CcAJPie2c+IC3nFBWtIQRt3i4AAAA=",
+  "/media/robust-health-live-week.webp":
+    "data:image/webp;base64,UklGRj4AAABXRUJQVlA4IDIAAACwAQCdASoMAAgAAwBSJZQAAup6R8wYAP73vvWBJKkO1S+ExehL6sRrAT43BirLxcAAAA==",
   "/media/robust-health-member.webp":
     "data:image/webp;base64,UklGRkIAAABXRUJQVlA4IDYAAADQAQCdASoMAAUAAwBSJZQCdAEOPBOwAAD+9qJTjHaJbdch4dscl+vejPKI6swSG4H7SswPIAA=",
   "/media/robust-health-mobile.webp":
-    "data:image/webp;base64,UklGRp4AAABXRUJQVlA4IJIAAADwAwCdASoMABoAPt0+s1SooiWjmAEQG4lAFcONJzqyqNzVv/T3AZAAAP75JWR6fIbCEq4a14435p4ln7NYQSxWYDuZem33s9gqW2lqfHRP33zW0VE+QHyS2+zu/KbJ4T6SSoosHyPMY4PJrOTJDSM7MnuoAb4jzgCUinSSqOR54Q/mNcpsZVxwcNVuE1ekcgvgAA==",
+    "data:image/webp;base64,UklGRsYAAABXRUJQVlA4ILoAAACQBACdASoMABoAPt1apkyopSOiMAgBEBuJagCdMoMxgEm4rlRVlIczX3iHUaYA/sB9SZCsrYt/lMobk6rAJytnq602qRId3EByBoheNs5hzahw0pUCV/is60bRc7xd8FvDkvgDHYnjBXSxhpHOpgsqpK14jnl30bKhU1DA1ZwWHzl/Tzzp89IhdlL1322PQqBtTdtVwjf6wULakT93oSFlrh6oUlAz4iv/hdGxtSMoDRy/XK0VJfkAAAA=",
   "/media/robust-health-phone-activity.webp":
     "data:image/webp;base64,UklGRkYAAABXRUJQVlA4IDoAAADwAgCdASoMABEAPt1cp0yopSOiMAgBEBuJZwAAiUzLgAD+8LbuSZfy7P0m/nXq/3+fTkco2djTYAAA",
   "/media/robust-health-phone-workout.webp":
