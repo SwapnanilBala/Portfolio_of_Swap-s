@@ -667,7 +667,6 @@ portfolio refutes its own copy.
   `Animation.setPlaybackRate` to slow a transition down) at a real viewport.
 - The Next.js dev badge sits over the bottom-left corner in development; a
   contrast failure there is the badge, not the page. Audit a production build.
-- `photo-review` predates both the dossier and this design. Do not merge it.
 - `agentRules: false` in `next.config.mjs` stops Next writing an agent block
   into this file. Keep it.
 
