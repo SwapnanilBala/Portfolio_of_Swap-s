@@ -1,5 +1,5 @@
 import Image from "next/image";
-import type { ReactNode } from "react";
+import { Fragment, type ReactNode } from "react";
 import { Portraits } from "@/components/about/Portraits";
 import { OutArrow } from "@/components/OutArrow";
 import { PageTransition } from "@/components/PageTransition";
@@ -132,7 +132,7 @@ export function About({ kit }: { readonly kit: MotionKit }) {
                 {about.experience.map((role) => (
                   <li key={`${role.org}-${role.period}`}>
                     <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
-                      <h3 className="text-lg font-semibold tracking-[-0.02em]">{role.role}</h3>
+                      <h3 className="text-lg font-semibold leading-snug tracking-[-0.02em]">{role.role}</h3>
                       <p className="meta tabular-nums text-paper-muted">{role.period}</p>
                     </div>
                     <p className="mt-1 text-[0.9375rem] text-paper-muted">
@@ -156,7 +156,7 @@ export function About({ kit }: { readonly kit: MotionKit }) {
                 {about.education.map((entry) => (
                   <li key={entry.school} className="grid gap-x-6 gap-y-1 md:grid-cols-[1fr_auto] md:items-baseline">
                     <div>
-                      <h3 className="text-lg font-semibold tracking-[-0.02em]">{entry.degree}</h3>
+                      <h3 className="text-lg font-semibold leading-snug tracking-[-0.02em]">{entry.degree}</h3>
                       <p className="mt-0.5 text-[0.9375rem] text-paper-muted">
                         {entry.school} — {entry.location}
                       </p>
@@ -184,8 +184,20 @@ export function About({ kit }: { readonly kit: MotionKit }) {
                 {about.technologies.map((group) => (
                   <div key={group.label} className="grid gap-1 md:grid-cols-[9rem_1fr] md:gap-6">
                     <dt className="meta pt-1 text-paper-muted">{group.label}</dt>
-                    <dd className="text-[1.0625rem] leading-snug tracking-[-0.01em] md:text-lg">
-                      {group.items.join(" — ")}
+                    {/* A dash is held to the word before it by a no-break
+                        space, so a line can end on one but never opens with
+                        one, and a one-word item ("Scikit-Learn") never breaks
+                        at its hyphen. */}
+                    <dd className="text-pretty text-[1.0625rem] leading-snug tracking-[-0.01em] md:text-lg">
+                      {group.items.map((item, i) => (
+                        <Fragment key={item}>
+                          {i > 0 ? " " : null}
+                          <span className={item.includes(" ") ? undefined : "whitespace-nowrap"}>
+                            {item}
+                            {i < group.items.length - 1 ? " —" : null}
+                          </span>
+                        </Fragment>
+                      ))}
                     </dd>
                   </div>
                 ))}
@@ -195,7 +207,7 @@ export function About({ kit }: { readonly kit: MotionKit }) {
             <Cell id="exploring" label={labels.exploring} className="col-span-12 lg:col-span-5">
               <ul className="grid gap-4">
                 {about.exploring.map((item) => (
-                  <li key={item.title} className="grid gap-1 border-b border-paper-rule pb-4">
+                  <li key={item.title} className="grid gap-1 border-b border-paper-rule pb-4 last:border-b-0 last:pb-0">
                     <p className="text-[1.0625rem] tracking-[-0.01em] md:text-lg">{item.title}</p>
                     <p className="meta text-paper-muted">{item.evidence}</p>
                   </li>
