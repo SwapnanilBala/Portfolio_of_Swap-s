@@ -40,6 +40,12 @@ export type BlurredMedia =
   | "/media/lagna-atelier-yogas.webp"
   | "/media/northeastern-street.webp"
   | "/media/northeastern-window.webp"
+  | "/media/robust-health-android-coach.webp"
+  | "/media/robust-health-android-dashboard.webp"
+  | "/media/robust-health-android-diet.webp"
+  | "/media/robust-health-android-home.webp"
+  | "/media/robust-health-android-runs.webp"
+  | "/media/robust-health-android-workout.webp"
   | "/media/robust-health-hero.webp"
   | "/media/robust-health-intake.webp"
   | "/media/robust-health-live-coach.webp"
@@ -112,6 +118,18 @@ export const BLUR_PLACEHOLDERS: Readonly<Record<BlurredMedia, string>> = {
     "data:image/webp;base64,UklGRk4AAABXRUJQVlA4IEIAAADQAQCdASoMAAkAAwBSJQBOgBt1Znj5AAD9nTDvpgnK5hfJLQKx6IZ+VVONnJr5de5mvWnvvN9zBpkbBrpAJpm7gAA=",
   "/media/northeastern-window.webp":
     "data:image/webp;base64,UklGRlQAAABXRUJQVlA4IEgAAADQAQCdASoMAAkAAwBSJQBOgBuJVuLcAAD9/A8bUARReJ7ETi6iF3SUnO5VkigExJGGJz6Jj5YG1cAZkOZ/xAFxebYXlsda4AA=",
+  "/media/robust-health-android-coach.webp":
+    "data:image/webp;base64,UklGRmQAAABXRUJQVlA4IFgAAAAwAwCdASoMABkAPt1apkyopSOiMAgBEBuJYwAASqPd+PbgAP4dfgcg3aftYvEV91LKeExA583rCiJjYpB64k3flYHZ9/3NvA6FRSzQXm3QB7Y+3W++EkAA",
+  "/media/robust-health-android-dashboard.webp":
+    "data:image/webp;base64,UklGRnoAAABXRUJQVlA4IG4AAAAQBACdASoMABkAPt1apkyopSOiMAgBEBuJZgCdACPLtcBpD/7fBSuPAAD6Kl15spl6FQdEkktjMr5UBS/5VC60IP8VfAPDcLSRARgm/aXCb032ATuT1WtG948kXYn5Fe/E3OwoHIFXQMG16IwAAA==",
+  "/media/robust-health-android-diet.webp":
+    "data:image/webp;base64,UklGRpQAAABXRUJQVlA4IIgAAACQAwCdASoMABkAPt1cpkyopSOiMAgBEBuJZgCdACFk/p4DkgsAAP4fnJ6LpHa7RUHSFNo3TW4Kgy6OL6FL1yhhC7OG4O2ivB0aj4F4HZ/dL1VbVJOsr1fxgP8Vfg+YfRLrK9Kuqby+o+6/70YJd1hSEi4GUr7AYf7Ob//Es9Cvug8/8X8/AAAA",
+  "/media/robust-health-android-home.webp":
+    "data:image/webp;base64,UklGRoAAAABXRUJQVlA4IHQAAADQAwCdASoMABkAPt1gqU2opaQiMAgBEBuJbACdABsjiDhpm8wE2UAAybRemt2r4GRnecKvMrROXr4RuB+vFrz8ZxaCTl11tag9mNpD1ghOHK1gQy6RrED9RUnpIW+N2bKRgSF6t+Lf/9Tkz+DaD4zhKNOcAA==",
+  "/media/robust-health-android-runs.webp":
+    "data:image/webp;base64,UklGRnoAAABXRUJQVlA4IG4AAAAwAwCdASoMABkAPt1apkyopSOiMAgBEBuJYgAAWpt4o0vgAP4fnJ9X2wBFrIsojEAtgTNfB2GWzYFPx3BuS21lsHU1z31BjMOX/LTlqa21BiJd+Gau6FrJ1CLYbm4fSr5ZUF0sKZNthlTCqAAAAA==",
+  "/media/robust-health-android-workout.webp":
+    "data:image/webp;base64,UklGRogAAABXRUJQVlA4IHwAAABQBACdASoMABkAPt1ep00opSOiMAgBEBuJYgCdIIjDAeCXLvmn83GVHmjIAP7y1+AhIv7K7HzqNsayo/uN4QOW9BaxJVGHobChwafIni5emi+pC44GbZetUr0kYDaofhyBvt/qVFyPoLkA/f+n/H9RUm9DY966HwMHoAAA",
   "/media/robust-health-hero.webp":
     "data:image/webp;base64,UklGRk4AAABXRUJQVlA4IEIAAACQAQCdASoMAAgAAwBSJYw3AJQQCgwA/vUvf8BMtibhwe7jvOpd1FLloMm5nHZUIrkjhKz/n3l6tIEzbUpmQBiPAAA=",
   "/media/robust-health-intake.webp":

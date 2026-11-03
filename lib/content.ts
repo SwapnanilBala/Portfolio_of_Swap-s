@@ -266,6 +266,65 @@ export const content: SiteContent = {
         { value: "−67%", label: "load time, mobile" },
         { value: "2", label: "languages" },
       ],
+      // The Android app, from its CLAUDE.md and history (checked 2026-11-03):
+      // first commit 2026-10-30, 97 commits, all his; version 1.0.7,
+      // side-loaded, not on the Play Store. Its repository is private, so no
+      // source link and nothing on how sign-in or the API are secured. The
+      // screens are its debug build's sample data, signed out: every name is
+      // invented, and none is a real account.
+      companion: {
+        name: "Robust Health for Android",
+        body: [
+          "A native app for members and coaches, begun in late October 2026 and still a prototype: builds are installed by hand rather than from the Play Store. It calls the website's own API unchanged, so plans, AI plans, diets and the streak are worked out once, on the server, and never copied into the phone.",
+          "Logic that has to run on the phone — the training schedule, missed days, allergens — is ported from the website and tested against the website's own test vectors, so the two give the same answers. Runs and walks are tracked by GPS, and the strings come from the website's English and Spanish. Health Connect and push notifications are still to come.",
+        ],
+        stack: ["Kotlin", "Jetpack Compose", "OkHttp", "Retrofit", "kotlinx.serialization", "Credential Manager", "JUnit"],
+        note: "Version 1.0.7 on an Android 16 emulator, November 2026, showing the app's built-in sample data: the people are invented.",
+        screens: [
+          {
+            src: "/media/robust-health-android-home.webp",
+            width: 1080,
+            height: 2260,
+            label: "Signed out",
+            alt: "The app's first screen, over an orange and blue gradient: slide one of three, Train — “A split that fits your week.”, workout split plus progression — above a Get started button and sign-in buttons for a member or a coach.",
+          },
+          {
+            src: "/media/robust-health-android-dashboard.webp",
+            width: 1080,
+            height: 2260,
+            label: "The dashboard",
+            alt: "A sample member's dashboard greeting Maya: up next, Day 1, Legs — quads, glutes and hamstrings, six exercises, 61 minutes, week 6 of a push, pull, legs split — with a Start workout button, none of four workouts done this week, a three-week streak, a Monday-to-Sunday strip of training and rest days, and the dock: Dashboard, Programme, Progress, Inbox, More.",
+          },
+          {
+            src: "/media/robust-health-android-workout.webp",
+            width: 1080,
+            height: 2260,
+            label: "Mid-workout",
+            alt: "The workout screen at Day 1, Legs, exercise one of six: a warm-up row, the exercise's demo video, then back squat — four sets of six to eight reps, set buttons one to four, 150 seconds' rest, a 3-1-1 tempo and RPE 8 — a Mark exercise done switch, Romanian deadlift up next, and a Next exercise button.",
+          },
+          {
+            src: "/media/robust-health-android-diet.webp",
+            width: 1080,
+            height: 2260,
+            label: "Diet",
+            alt: "Build your diet: daily targets of 2,453 against 2,450 kcal, with protein, carbs and fat as bars, then the week's plates by weekday and meal, breakfast at 7:30 drawn as a 554 kcal ring, and a Build new meals button.",
+          },
+          {
+            src: "/media/robust-health-android-runs.webp",
+            width: 1080,
+            height: 2260,
+            label: "Runs and walks",
+            alt: "Runs and walks: a walk or run switch with a Start run button, 5,482 steps today against yesterday, the daily average and the best day, and past runs and walks with their distance, date, time and calories.",
+          },
+          {
+            src: "/media/robust-health-android-coach.webp",
+            width: 1080,
+            height: 2260,
+            label: "A coach's clients",
+            alt: "The coach's side with sample clients: six clients, two quiet this week and listed first, counts of who logged, who needs a plan and who powerlifts, filters, and a row per client with this week's adherence as a ring, the last log and the plan's age, above the coach's dock: Clients, Progress, Inbox, You.",
+          },
+        ],
+      },
       links: [
         { role: "live", href: "https://app.robusthealth.in" },
         // Private repository: no source link.

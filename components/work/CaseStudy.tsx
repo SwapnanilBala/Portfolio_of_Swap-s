@@ -5,6 +5,7 @@ import { PageTransition } from "@/components/PageTransition";
 import { SiteFooter } from "@/components/SiteFooter";
 import { CaseNav } from "@/components/work/CaseNav";
 import { CaseSection } from "@/components/work/CaseSection";
+import { CompanionApp } from "@/components/work/CompanionApp";
 import { MediaPair } from "@/components/work/MediaPair";
 import { MediaPlate } from "@/components/work/MediaPlate";
 import { ProjectHero } from "@/components/work/ProjectHero";
@@ -73,6 +74,10 @@ export function CaseStudy({ slug, kit }: Props) {
             {section.media?.kind === "image" ? <MediaPlate media={section.media} kit={kit} /> : null}
           </Fragment>
         ))}
+
+        {project.companion ? (
+          <CompanionApp app={project.companion} stackLabel={ui.caseMeta.stack} kit={kit} />
+        ) : null}
 
         {links.length > 0 ? (
           <ul className="flex flex-wrap gap-x-10 gap-y-3 border-t border-paper-rule px-5 py-10 md:px-8">
