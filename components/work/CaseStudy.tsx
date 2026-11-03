@@ -14,6 +14,21 @@ import { hasCaseStudy, isResolvedLink } from "@/lib/types";
 
 const cases = content.projects.filter(hasCaseStudy);
 
+/**
+ * The figures' grid, by how many there are, so the row is always full: set
+ * six across whatever the count, three figures took half the measure -- the
+ * rule under them stopped mid-page -- and a value wider than its sixth ran
+ * into the next ("+0.0330.372"). Two to a row on phones.
+ */
+const FIGURE_COLUMNS: Readonly<Record<number, string>> = {
+  1: "grid-cols-1",
+  2: "grid-cols-2",
+  3: "grid-cols-2 md:grid-cols-3",
+  4: "grid-cols-2 lg:grid-cols-4",
+  5: "grid-cols-2 md:grid-cols-3 lg:grid-cols-5",
+  6: "grid-cols-2 md:grid-cols-3 lg:grid-cols-6",
+};
+
 /** Every case study, for both trees' `generateStaticParams`. */
 export function caseStudyParams() {
   return cases.map((project) => ({ slug: project.slug }));
@@ -53,7 +68,11 @@ export function CaseStudy({ slug, kit }: Props) {
         <ProjectHero project={project} meta={ui.caseMeta} kit={kit} />
 
         {project.figures.length > 0 ? (
-          <dl className="grid grid-cols-2 px-5 md:grid-cols-3 md:px-8 lg:grid-cols-6">
+          // -mb-px lays the figures' last rule on the next section's, which
+          // runs edge to edge: side by side the two read as one stepped line.
+          <dl
+            className={`-mb-px grid px-5 md:px-8 ${FIGURE_COLUMNS[project.figures.length] ?? FIGURE_COLUMNS[6]}`}
+          >
             {project.figures.map((figure) => (
               <div
                 key={figure.label}
