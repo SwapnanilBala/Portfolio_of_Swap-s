@@ -14,8 +14,8 @@ const GAP = 20;
 const ratio = (image: PairedImage) => image.width / image.height;
 
 /**
- * Two captures read together, with a short explanation beside them: in the
- * label column from 48rem, above the pair below it.
+ * Two captures read together, with a short explanation: in the label
+ * column beside them from 64rem, above them below it.
  *
  * Side by side, each capture's column is as wide as its own ratio, so the two
  * share one height whatever their shapes -- a portrait panel beside a
@@ -38,15 +38,17 @@ export function MediaPair({ media, kit }: Props) {
   return (
     <figure className="grid grid-cols-12 gap-x-5 gap-y-8 px-5 py-10 md:px-8 md:py-16">
       {/* Set as large as the roles on the About page, not as metadata, on
-          request: from 48rem the title has three columns, so it grows with
-          the window rather than wrapping a word to a line at 768px. */}
-      <figcaption className="col-span-12 md:col-span-3">
-        <p className="border-t border-paper-rule pt-4 text-[1.375rem] font-semibold leading-[1.15] tracking-[-0.02em] md:text-[clamp(1.125rem,1.7vw,1.625rem)]">
+          request. In the label column from 64rem, where the title has three
+          columns and grows with the window; above the pair below that -- at
+          768px three columns are 10rem, and the explanation ran twenty lines
+          beside captures a third its height. */}
+      <figcaption className="col-span-12 lg:col-span-3">
+        <p className="border-t border-paper-rule pt-4 text-[1.375rem] font-semibold leading-[1.15] tracking-[-0.02em] lg:text-[clamp(1.125rem,1.7vw,1.625rem)]">
           {media.title}
         </p>
         <p className="mt-4 max-w-[46ch] text-base leading-[1.55] text-paper-muted">{media.body}</p>
       </figcaption>
-      <div className="col-span-12 md:col-span-9">
+      <div className="col-span-12 lg:col-span-9">
         <div
           className="flex flex-col gap-8 md:max-w-(--band) md:flex-row md:gap-5"
           style={{ "--band": band }}

@@ -493,8 +493,11 @@ one-off values.
 A section may be followed by one plate (`MediaPlate`) or a pair
 (`MediaPair`): `section.media`, a union on `kind`.
 
-- **A pair is two captures read together**, side by side from 48rem with a
-  short explanation in the label column, stacked below it. Each capture's
+- **A pair is two captures read together**, side by side from 48rem,
+  stacked below it. The short explanation sits in the label column beside
+  them from 64rem and above them below that: at 768px the label column is
+  10rem, and the explanation ran twenty lines beside captures a third its
+  height (November 2026). Each capture's
   column is as wide as its own ratio (`flex-grow`), so the two share one
   height whatever their shapes — no cropping to force a match. The band is
   capped so the shorter capture is never upscaled, and it stays beside its
@@ -502,7 +505,7 @@ A section may be followed by one plate (`MediaPlate`) or a pair
   band pushed right left a gap wider than either capture.
 - **A pair's captions are text, not metadata**, on request: the title is a
   semibold heading the size of the About page's roles (1.375rem on phones,
-  1.125–1.625rem by width from 48rem, where it has three columns), the
+  1.125–1.625rem by width from 64rem, where it has three columns), the
   explanation 1rem, and each capture's label 1rem medium in ink. A lone
   plate's caption stays small (0.8125rem, muted).
 - **Pairs are for compact captures, plates for wide ones.** These are 1x
