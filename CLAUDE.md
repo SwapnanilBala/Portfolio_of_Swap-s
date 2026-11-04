@@ -505,8 +505,11 @@ one-off values.
 A section may be followed by one plate (`MediaPlate`) or a pair
 (`MediaPair`): `section.media`, a union on `kind`.
 
-- **A pair is two captures read together**, side by side from 48rem with a
-  short explanation in the label column, stacked below it. Each capture's
+- **A pair is two captures read together**, side by side from 48rem,
+  stacked below it. The short explanation sits in the label column beside
+  them from 64rem and above them below that: at 768px the label column is
+  10rem, and the explanation ran twenty lines beside captures a third its
+  height (November 2026). Each capture's
   column is as wide as its own ratio (`flex-grow`), so the two share one
   height whatever their shapes — no cropping to force a match. The band is
   capped so the shorter capture is never upscaled, and it stays beside its
@@ -514,7 +517,7 @@ A section may be followed by one plate (`MediaPlate`) or a pair
   band pushed right left a gap wider than either capture.
 - **A pair's captions are text, not metadata**, on request: the title is a
   semibold heading the size of the About page's roles (1.375rem on phones,
-  1.125–1.625rem by width from 48rem, where it has three columns), the
+  1.125–1.625rem by width from 64rem, where it has three columns), the
   explanation 1rem, and each capture's label 1rem medium in ink. A lone
   plate's caption stays small (0.8125rem, muted).
 - **Pairs are for compact captures, plates for wide ones.** These are 1x
@@ -534,6 +537,15 @@ A section may be followed by one plate (`MediaPlate`) or a pair
   already shows — and the clinic's stated password format. Crop past it; do
   not blur what can be cropped. Clinic captures are signed-out public pages
   only.
+- **A project's phone app follows its sections** (`companion`,
+  `CompanionApp`): a section set like the others, then its screens as a row
+  of phones, six from 80rem, three from 48rem, two below. Robust Health for
+  Android is the one so far: a private repository, so no source link, and
+  its screens are the debug build's sample data on the emulator (invented
+  people, no account), status bar cropped off. The bezels are the one
+  device frame on the site, on request (November 2026): an ink border with
+  the phone's corners, scaled by `cqw`, and nothing more. Lone plates and
+  pairs stay frameless.
 
 ## Page transitions
 

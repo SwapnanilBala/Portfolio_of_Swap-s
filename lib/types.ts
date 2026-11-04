@@ -177,6 +177,29 @@ interface ProjectBase {
    * submitted.
    */
   readonly captures?: readonly LiveCapture[];
+  /** A native app beside the project, set after its case study's sections. */
+  readonly companion?: CompanionApp;
+}
+
+/**
+ * A project's app for phones, with its own repository and its own stage:
+ * a few lines on what it is and how far along, its stack, and its screens.
+ */
+export interface CompanionApp {
+  /** The subsection's heading, e.g. "Robust Health for Android". */
+  readonly name: string;
+  /** Paragraphs of prose, honest about the app's stage. */
+  readonly body: readonly string[];
+  readonly stack: readonly string[];
+  /** Under the screens: where they came from, so nobody takes them for real accounts. */
+  readonly note: string;
+  /** Full screens from the device, status bar cropped off. */
+  readonly screens: readonly PhoneScreen[];
+}
+
+/** One screen of a phone app, with a label of a few words under it. */
+export interface PhoneScreen extends ImageAsset {
+  readonly label: string;
 }
 
 /**

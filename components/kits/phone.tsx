@@ -61,7 +61,8 @@ function PhoneLink({ href, children, className, ariaLabel }: KitLinkProps) {
       </Link>
     );
   }
-  const external = isExternal(href);
+  // PDFs (the resume) open in a new tab too, so the site stays open behind them.
+  const external = isExternal(href) || /\.pdf($|[?#])/i.test(href);
   return (
     <a
       href={href}

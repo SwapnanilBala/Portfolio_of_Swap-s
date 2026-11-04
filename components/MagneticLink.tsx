@@ -62,7 +62,8 @@ export function MagneticLink({ href, children, className, ariaLabel, strength = 
     );
   }
 
-  const external = isExternal(href);
+  // PDFs (the resume) open in a new tab too, so the site stays open behind them.
+  const external = isExternal(href) || /\.pdf($|[?#])/i.test(href);
   return (
     <a
       ref={ref}
