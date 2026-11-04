@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { FRAME, PLATE_CORNERS } from "@/components/work/frame";
 import type { MotionKit } from "@/lib/kit";
 import { blurFor, PLATE_FRAME, SCREENSHOT_QUALITY } from "@/lib/media";
 import type { MediaPair as MediaPairContent, PairedImage } from "@/lib/types";
@@ -8,7 +9,7 @@ interface Props {
   readonly kit: MotionKit;
 }
 
-/** The space between the two captures, in px: Tailwind's `gap-5`. */
+/** The space between the two captures' frames, in px: Tailwind's `gap-5`. */
 const GAP = 20;
 
 const ratio = (image: PairedImage) => image.width / image.height;
@@ -29,52 +30,59 @@ const ratio = (image: PairedImage) => image.width / image.height;
  * than its column stays beside the explanation rather than against the right
  * edge as a lone plate does: on a 2x screen the gap between them was wider
  * than either capture, and the words no longer read as belonging to them.
+ *
+ * Each capture sits in its own light glass frame with its label, and the
+ * explanation in a panel of its own. A frame's padding is the same on both,
+ * so it is each column's flex-basis and only the captures share the growth:
+ * the two still come out one height.
  */
 export function MediaPair({ media, kit }: Props) {
   const { Plate } = kit;
   const [first, second] = media.images;
-  const band = `calc(${GAP}px + ${(ratio(first) + ratio(second)) * Math.min(first.height, second.height)}px / var(--dpr))`;
+  const band = `calc(${GAP + FRAME * 4}px + ${(ratio(first) + ratio(second)) * Math.min(first.height, second.height)}px / var(--dpr))`;
 
   return (
-    <figure className="grid grid-cols-12 gap-x-5 gap-y-8 px-5 py-10 md:px-8 md:py-16">
+    <figure className="grid grid-cols-12 gap-3 md:gap-5">
       {/* Set as large as the roles on the About page, not as metadata, on
           request. In the label column from 64rem, where the title has three
           columns and grows with the window; above the pair below that -- at
           768px three columns are 10rem, and the explanation ran twenty lines
           beside captures a third its height. */}
-      <figcaption className="col-span-12 lg:col-span-3">
-        <p className="border-t border-paper-rule pt-4 text-[1.375rem] font-semibold leading-[1.15] tracking-[-0.02em] lg:text-[clamp(1.125rem,1.7vw,1.625rem)]">
+      <figcaption className="glass-light col-span-12 px-5 py-6 md:px-7 md:py-7 lg:col-span-3">
+        <p className="text-[1.375rem] font-semibold leading-[1.15] tracking-[-0.02em] lg:text-[clamp(1.125rem,1.7vw,1.625rem)]">
           {media.title}
         </p>
-        <p className="mt-4 max-w-[46ch] text-base leading-[1.55] text-paper-muted">{media.body}</p>
+        <p className="mt-4 max-w-[46ch] text-base leading-[1.55] text-glass-ink-2">{media.body}</p>
       </figcaption>
       <div className="col-span-12 lg:col-span-9">
         <div
-          className="flex flex-col gap-8 md:max-w-(--band) md:flex-row md:gap-5"
+          className="flex flex-col gap-3 md:max-w-(--band) md:flex-row md:gap-5"
           style={{ "--band": band }}
         >
           {media.images.map((image) => (
             <figure
               key={image.src}
-              className="min-w-0 md:basis-0"
-              style={{ flexGrow: ratio(image), "--cap": `calc(${image.width}px / var(--dpr))` }}
+              className="glass-light min-w-0 max-w-(--cap) p-2.5 pb-3.5 md:max-w-none md:basis-(--frame)"
+              style={{
+                flexGrow: ratio(image),
+                "--frame": `${FRAME * 2}px`,
+                "--cap": `calc(${image.width}px / var(--dpr) + ${FRAME * 2}px)`,
+              }}
             >
-              <div className="max-w-(--cap) md:max-w-none">
-                <Plate className={PLATE_FRAME}>
-                  <Image
-                    src={image.src}
-                    alt={image.alt}
-                    width={image.width}
-                    height={image.height}
-                    sizes={`(min-width: 48rem) ${image.width}px, 100vw`}
-                    quality={SCREENSHOT_QUALITY}
-                    placeholder="blur"
-                    blurDataURL={blurFor(image.src)}
-                    className="h-auto w-full"
-                  />
-                </Plate>
-              </div>
-              <figcaption className="mt-3 text-base font-medium tracking-[-0.01em]">{image.label}</figcaption>
+              <Plate className={`${PLATE_FRAME} ${PLATE_CORNERS}`}>
+                <Image
+                  src={image.src}
+                  alt={image.alt}
+                  width={image.width}
+                  height={image.height}
+                  sizes={`(min-width: 48rem) ${image.width}px, 100vw`}
+                  quality={SCREENSHOT_QUALITY}
+                  placeholder="blur"
+                  blurDataURL={blurFor(image.src)}
+                  className="h-auto w-full"
+                />
+              </Plate>
+              <figcaption className="mt-3 px-1 text-base font-medium tracking-[-0.01em]">{image.label}</figcaption>
             </figure>
           ))}
         </div>

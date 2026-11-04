@@ -2,6 +2,7 @@ import { getImageProps } from "next/image";
 import { DisplayTitle } from "@/components/DisplayTitle";
 import { DotField, DotSwatch } from "@/components/DotField";
 import { SharedMedia } from "@/components/PageTransition";
+import { PLATE_CORNERS } from "@/components/work/frame";
 import type { MotionKit } from "@/lib/kit";
 import {
   blurFor,
@@ -102,57 +103,74 @@ function HeroPicture({ wide, narrow }: { readonly wide: ImageAsset; readonly nar
 }
 
 /**
- * The first viewport: a framed plate under the navigation, the title crossing
- * its lower edge, and the ROLE / YEAR / STACK / TYPE row under the title. The
+ * The first viewport, on the dark radiant ground: a plate in its glass bezel
+ * under the navigation, the title crossing the plate's lower edge, and the
+ * ROLE / YEAR / STACK / TYPE row in a dark glass strip under the title. The
  * plate is the far end of the shared-element morph from the slider or the
  * index, and it is wider than either, so arriving reads as the media opening
  * out.
+ *
+ * The view-transition name sits on the plate inside the bezel, never on the
+ * bezel: the slider's plate is in the same bezel, and the morph is the
+ * capture's, not its frame's. Nothing is laid over the capture itself -- no
+ * glass, no scrim -- and the bezel's lighter rim and padding keep it apart
+ * from the product's own glass (Robust Health's hero is dark glass and
+ * orange), so the capture still reads as a work sample inside a frame.
  */
 export function ProjectHero({ project, meta, kit }: Props) {
   const { Lines } = kit;
   const image = project.hero ?? project.cover;
   const field = project.selected ? undefined : project.dotField;
+  const plated = Boolean(image || field);
 
   return (
-    <section className="relative flex h-svh min-h-[36rem] flex-col overflow-hidden bg-ink px-5 pb-7 pt-[4.75rem] text-paper md:px-8 md:pb-9">
-      {image ? (
-        <SharedMedia slug={project.slug}>
-          <div className="relative min-h-0 flex-1 overflow-hidden bg-ink">
-            <HeroPicture wide={image} narrow={project.heroMobile ?? image} />
-          </div>
-        </SharedMedia>
-      ) : field ? (
-        <SharedMedia slug={project.slug}>
-          <div className="relative min-h-0 flex-1 overflow-hidden bg-ink">
-            <FieldPlate field={field} />
-          </div>
-        </SharedMedia>
+    <section className="radiant-dark relative flex h-svh min-h-[36rem] flex-col overflow-hidden px-5 pb-7 pt-[4.75rem] md:px-8 md:pb-9">
+      {plated ? (
+        <div className="glass-bezel flex min-h-0 flex-1 flex-col">
+          <SharedMedia slug={project.slug}>
+            <div className={`relative min-h-0 flex-1 overflow-hidden bg-ink ${PLATE_CORNERS}`}>
+              {image ? (
+                <HeroPicture wide={image} narrow={project.heroMobile ?? image} />
+              ) : field ? (
+                <div className="absolute inset-3 md:inset-4">
+                  <FieldPlate field={field} />
+                </div>
+              ) : null}
+            </div>
+          </SharedMedia>
+        </div>
       ) : (
         <div className="min-h-0 flex-1" />
       )}
 
-      {/* The title's cap line just crosses the plate's lower edge. Any deeper
-          and the capture's own buttons show between the letters. */}
-      <Lines className={`relative ${image || field ? "-mt-3 md:-mt-5" : ""}`}>
+      {/* The title crosses the bezel's lower edge, and its cap line sits on
+          the capture's: the bezel's padding and rim (0.6875rem) plus the
+          space above the capitals in the title's line box (0.03em of its
+          size). Deeper, the capitals ran over the capture's own type --
+          Lagna Atelier's "What should we call you?" at 1440px measured
+          2.26:1 under the letters -- and the capture's buttons showed
+          between them. On the frame, nothing of the product sits under the
+          title, so Robust Health's own glass and orange stay its own. */}
+      <Lines className={`relative ${plated ? "-mt-[calc(0.6875rem+0.03*min(13vh,12.5vw))]" : ""}`}>
         <DisplayTitle as="h1" lines={displayLinesOf(project)} className="text-[min(13vh,12.5vw)]" />
         <dl
           data-reveal-meta
-          className="meta mt-8 grid grid-cols-2 gap-x-8 gap-y-4 border-t border-ink-rule pt-4 md:grid-cols-12"
+          className="glass-dark meta mt-6 grid grid-cols-2 gap-x-8 gap-y-4 rounded-glass-sm px-4 py-3.5 md:mt-8 md:grid-cols-12 md:px-5 md:py-4"
         >
           <div className="md:col-span-2">
-            <dt className="text-ink-muted">{meta.role}</dt>
+            <dt className="text-glass-paper-2">{meta.role}</dt>
             <dd className="mt-1">{project.role}</dd>
           </div>
           <div className="md:col-span-2">
-            <dt className="text-ink-muted">{meta.year}</dt>
+            <dt className="text-glass-paper-2">{meta.year}</dt>
             <dd className="mt-1 tabular-nums">{project.year}</dd>
           </div>
           <div className="col-span-2 md:col-span-5">
-            <dt className="text-ink-muted">{meta.stack}</dt>
+            <dt className="text-glass-paper-2">{meta.stack}</dt>
             <dd className="mt-1">{project.stack.join(" / ")}</dd>
           </div>
           <div className="md:col-span-3">
-            <dt className="text-ink-muted">{meta.type}</dt>
+            <dt className="text-glass-paper-2">{meta.type}</dt>
             <dd className="mt-1">{project.type}</dd>
           </div>
         </dl>

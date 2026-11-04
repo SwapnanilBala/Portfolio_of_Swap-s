@@ -10,15 +10,16 @@ interface Props {
 
 /**
  * A label in its own column, the prose in two beside it -- the brief's upper
- * limit of three text columns, reached only on wide screens. Lines rise into
- * place as the section scrolls in.
+ * limit of three text columns, reached only on wide screens -- in a light
+ * glass panel on the body's radiant band. Lines rise into place as the
+ * section scrolls in.
  */
 export function CaseSection({ section, label, kit }: Props) {
   const { Text } = kit;
   return (
     <section
       aria-labelledby={`section-${section.id}`}
-      className="grid grid-cols-12 gap-x-5 border-t border-paper-rule px-5 py-16 md:px-8 md:py-24"
+      className="glass-light grid grid-cols-12 gap-x-5 px-5 py-8 md:px-8 md:py-12"
     >
       <SectionLabel id={`section-${section.id}`} className="col-span-12 md:col-span-4">
         {label}
