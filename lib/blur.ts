@@ -26,6 +26,12 @@ export type BlurredMedia =
   | "/media/kb-clinic-live-chambers.webp"
   | "/media/kb-clinic-live-day.webp"
   | "/media/kb-clinic-mobile.webp"
+  | "/media/lagna-atelier-android-birth-details.webp"
+  | "/media/lagna-atelier-android-chart-hindi.webp"
+  | "/media/lagna-atelier-android-home.webp"
+  | "/media/lagna-atelier-android-preferences.webp"
+  | "/media/lagna-atelier-android-reading.webp"
+  | "/media/lagna-atelier-android-timing.webp"
   | "/media/lagna-atelier-cover.webp"
   | "/media/lagna-atelier-hero.webp"
   | "/media/lagna-atelier-houses.webp"
@@ -90,6 +96,18 @@ export const BLUR_PLACEHOLDERS: Readonly<Record<BlurredMedia, string>> = {
     "data:image/webp;base64,UklGRjgAAABXRUJQVlA4ICwAAAAQAgCdASoMAAgAAwBSJZQCdAEQUNk32twAAP710BSpjSfMcS8nvFjM+EQAAA==",
   "/media/kb-clinic-mobile.webp":
     "data:image/webp;base64,UklGRnAAAABXRUJQVlA4IGQAAAAQBACdASoMABoAPt1cpkyopSOiMAgBEBuJZQCsACIB/aSSBLU4g7OHgAD+6RQ3XzDWySQYKaHlSBbsGf6Zd4YHhyR/nkUms9EauCgHXd8GrLawr1jV/7k7VcV7zlP6Yr4no2AA",
+  "/media/lagna-atelier-android-birth-details.webp":
+    "data:image/webp;base64,UklGRoQAAABXRUJQVlA4IHgAAADQAwCdASoMABkAPt1apkyopSOiMAgBEBuJaQAAWp71WEMz4gv7mwAA/vIvcqrnzXhaut9adSaMcCQZ6FV+PBs01nDm19PFrFVBnW7VBa7O0bimFeAWFta/PtNsq4M8U/EJxbvehK4o//Wfp/k2w3/pNKcLA6IQAAA=",
+  "/media/lagna-atelier-android-chart-hindi.webp":
+    "data:image/webp;base64,UklGRnIAAABXRUJQVlA4IGYAAACQAgCdASoMABkAAwBSJaQAD43xduQ1Uoi9hZ/AkAD+94bq7sWaVB5uU6QfBWfcpbUO96JEIjBCHg/6hfNEf3f2NlzFjyKWJHfvGPAZQOSUPGfCxzSn3gd6rLYyZ+0n555cisUAAAA=",
+  "/media/lagna-atelier-android-home.webp":
+    "data:image/webp;base64,UklGRm4AAABXRUJQVlA4IGIAAADwAwCdASoMABkAPt1apkyopSOiMAgBEBuJZwAAWsfc82BLtBKvhEAAAP7rMS8itkRdbh7p/F4GpZlUclDXchNGD7yNtdw3MXpiw6a1HW5qGkyUZL15d1j7NVTe7XMK8CAAAA==",
+  "/media/lagna-atelier-android-preferences.webp":
+    "data:image/webp;base64,UklGRowAAABXRUJQVlA4IIAAAADwAwCdASoMABkAPt1cpkyopSOiMAgBEBuJaQAD43oGufLO7vK6zZiAAP7p+aHpr1EQfWfOyogznLRjqTMC+pq0FS8JvZdm9R2f0Lwvpe3M6daX+ZhRKvpwclWCOk5+XguqYvu8JcnN1fSpLzgf+aNGepL/8PVdDpIsHLIe7YAAAA==",
+  "/media/lagna-atelier-android-reading.webp":
+    "data:image/webp;base64,UklGRn4AAABXRUJQVlA4IHIAAAAwAwCdASoMABkAPt1qqU4opqQiMAgBEBuJaQAAev+3eeAwAP7w1BOUmtIQyImwUK6ZGN8Pj3uS/w1SgfUDaPSJN/ztsP4iofuX9v3aMci9zAn0XnKJVDiv3w2g/tt568AZri2bFV8f+P+Do3jpBBgAAAA=",
+  "/media/lagna-atelier-android-timing.webp":
+    "data:image/webp;base64,UklGRmoAAABXRUJQVlA4IF4AAADwAwCdASoMABkAPt1qqU4opqQiMAgBEBuJaQAAWp/5X6ym2s6MyrUEAP7x6xd8tmlmzUg48Kax15y+6idMWo/fhcVDPfFaaFlU5bVovQjWtG5rxs/c6vh+xEMAAAAA",
   "/media/lagna-atelier-cover.webp":
     "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACwAQCdASoMAAcAAwBSJZQCdADsj24AAP73glukekzGhzujOExQKByho0HuAAAA",
   "/media/lagna-atelier-hero.webp":
