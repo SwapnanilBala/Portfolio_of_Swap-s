@@ -542,7 +542,10 @@ A section may be followed by one plate (`MediaPlate`) or a pair
   of phones, six from 80rem, three from 48rem, two below. Robust Health for
   Android is the one so far: a private repository, so no source link, and
   its screens are the debug build's sample data on the emulator (invented
-  people, no account), status bar cropped off. The bezels are the one
+  people, no account), status bar cropped off. Lagna Atelier for Android
+  is the second: its screens are a chart cast for an invented reader on
+  the emulator, signed out — never a real person's birth details, by the
+  same rule as the web captures. The bezels are the one
   device frame on the site, on request (November 2026): an ink border with
   the phone's corners, scaled by `cqw`, and nothing more. Lone plates and
   pairs stay frameless.

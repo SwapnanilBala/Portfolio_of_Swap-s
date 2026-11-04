@@ -61,6 +61,69 @@ export const content: SiteContent = {
         { value: "7", label: "languages" },
         { value: "719", label: "commits" },
       ],
+      // The Android app, from its repository (SwapnanilBala/Lagna_Atelier,
+      // public) and SIGN_IN.md, checked 2026-11-04: first commit 2026-11-02,
+      // 56 commits, all his; version 1.0, not on the Play Store. Not the
+      // March 2026 Kotlin scaffold (Astro_Android_Version, two commits) or
+      // the Flutter attempt (Atalier_Android, never committed): this is a
+      // fresh app. It sends every chart question to lagnaatelier.site's API,
+      // so charts are still computed on the server. Readings written by the
+      // site come back in English whatever the language (its own settings
+      // screen says so). The screens are a chart cast for an invented
+      // reader, Tara, on the emulator, signed out.
+      companion: {
+        name: "Lagna Atelier for Android",
+        body: [
+          "A native app, begun in November 2026 and still a prototype: it is not on the Play Store. It puts its questions to lagnaatelier.site's own API, so a chart is cast on the server, as on the website, and the two give the same answers; the phone keeps up to five charts of its own.",
+          "Four tabs carry the website's reading: the chart in South or North Indian style with its dasha timeline, planet positions and yogas; the running periods, written out, with the week ahead and compatibility; a palm read from a photograph, for signed-in readers; and the account. It is in the website's seven languages, in light and dark. Google sign-in, which keeps saved charts in step with the website account, was added last.",
+        ],
+        stack: ["Kotlin", "Jetpack Compose", "Material 3", "Credential Manager", "Android Keystore", "JUnit"],
+        note: "Version 1.0 on an Android 16 emulator, November 2026, signed out, with a chart cast for an invented reader: the name, birth date, time and place are made up.",
+        screens: [
+          {
+            src: "/media/lagna-atelier-android-home.webp",
+            width: 1080,
+            height: 2260,
+            label: "First screen",
+            alt: "The app's first screen on a pale ground: “Read the Sky You Were Born Under”, a line on the birth chart in six traditions, the period of life and the palm, a Start your chart button, cards for today's sky — Moon in Leo — the chapter you are in and 36 traditions, 205 yogas checked on every chart, and Sign in with Google beside Saved charts.",
+          },
+          {
+            src: "/media/lagna-atelier-android-birth-details.webp",
+            width: 1080,
+            height: 2260,
+            label: "Birth details",
+            alt: "The birth details form filled in for an invented reader: 17 January 1990 at 06:30, the exact time switched on, Pune, Maharashtra, India chosen from the place search with its time zone, UTC+5:30, sex at birth left at Prefer not to say, and the tradition — Lahiri, whole sign houses — above a Cast my chart button.",
+          },
+          {
+            src: "/media/lagna-atelier-android-reading.webp",
+            width: 1080,
+            height: 2260,
+            label: "The reading",
+            alt: "The reading for the invented chart: the chapter now, Jupiter and Saturn, 67% through, from 18 February 2025 to 1 September 2027; four cards for the lagna, Sagittarius, the Moon sign, Virgo, the nakshatra, Hasta, and the mahadasha, Jupiter; a dasha timeline of the whole life; the top of the birth chart; and the dock: Reading, Timing, Palm, Account.",
+          },
+          {
+            src: "/media/lagna-atelier-android-timing.webp",
+            width: 1080,
+            height: 2260,
+            label: "Timing",
+            alt: "The Timing tab: running now, Jupiter, Saturn and Mars, a paragraph on what the three periods mean together, then each period — maha, antar and pratyantar — as a bar showing how far through it is, its dates and a Read this period button, and the next one, Rahu, from 12 December 2026.",
+          },
+          {
+            src: "/media/lagna-atelier-android-preferences.webp",
+            width: 1080,
+            height: 2260,
+            label: "Dark, and settings",
+            alt: "The Account tab in the dark theme: the one saved chart, kept on this phone only, then preferences — appearance set to dark, chart style South or North Indian, the language as the phone's or one of English, Hindi, Bengali, Spanish, French, Italian and German, with a note that written readings still arrive in English — and the tradition new charts use.",
+          },
+          {
+            src: "/media/lagna-atelier-android-chart-hindi.webp",
+            width: 1080,
+            height: 2260,
+            label: "In Hindi",
+            alt: "The same chart in Hindi and the dark theme, drawn in the North Indian style: a diamond of twelve houses with the rising house filled and planets abbreviated in Devanagari, the Rasi and Navamsa switch, and the planet positions table beneath, its headings and sign names in Hindi too.",
+          },
+        ],
+      },
       links: [
         { role: "live", href: "https://lagnaatelier.site" },
         {
