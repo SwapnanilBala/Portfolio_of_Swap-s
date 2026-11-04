@@ -42,20 +42,20 @@ export type BlurredMedia =
   | "/media/northeastern-window.webp"
   | "/media/robust-health-hero.webp"
   | "/media/robust-health-intake.webp"
-  | "/media/robust-health-live-coach.webp"
-  | "/media/robust-health-live-next.webp"
+  | "/media/robust-health-live-how.webp"
+  | "/media/robust-health-live-inside.webp"
   | "/media/robust-health-live-onboarding.webp"
-  | "/media/robust-health-live-plans.webp"
+  | "/media/robust-health-live-plan.webp"
   | "/media/robust-health-live-programmes.webp"
-  | "/media/robust-health-live-session.webp"
-  | "/media/robust-health-live-week.webp"
-  | "/media/robust-health-member.webp"
+  | "/media/robust-health-live-questions.webp"
+  | "/media/robust-health-live-spanish.webp"
   | "/media/robust-health-mobile.webp"
-  | "/media/robust-health-phone-activity.webp"
-  | "/media/robust-health-phone-workout.webp"
+  | "/media/robust-health-phone-day.webp"
+  | "/media/robust-health-phone-plan.webp"
+  | "/media/robust-health-plan-week.webp"
+  | "/media/robust-health-sign-in.webp"
   | "/media/robust-health-start.webp"
-  | "/media/robust-health-trainer.webp"
-  | "/media/robust-health-weeks.webp";
+  | "/media/robust-health-week-five.webp";
 
 export const BLUR_PLACEHOLDERS: Readonly<Record<BlurredMedia, string>> = {
   "/media/about-smile.webp":
@@ -113,35 +113,35 @@ export const BLUR_PLACEHOLDERS: Readonly<Record<BlurredMedia, string>> = {
   "/media/northeastern-window.webp":
     "data:image/webp;base64,UklGRlQAAABXRUJQVlA4IEgAAADQAQCdASoMAAkAAwBSJQBOgBuJVuLcAAD9/A8bUARReJ7ETi6iF3SUnO5VkigExJGGJz6Jj5YG1cAZkOZ/xAFxebYXlsda4AA=",
   "/media/robust-health-hero.webp":
-    "data:image/webp;base64,UklGRk4AAABXRUJQVlA4IEIAAACQAQCdASoMAAgAAwBSJYw3AJQQCgwA/vUvf8BMtibhwe7jvOpd1FLloMm5nHZUIrkjhKz/n3l6tIEzbUpmQBiPAAA=",
+    "data:image/webp;base64,UklGRkYAAABXRUJQVlA4IDoAAACwAQCdASoMAAgAAwBSJZwAAp3OSjEAAP74jZYDDIcccB7EgYR38e7mBU3thwe1akH1laHSfRfmgAAA",
   "/media/robust-health-intake.webp":
-    "data:image/webp;base64,UklGRjAAAABXRUJQVlA4ICQAAABwAQCdASoMAAkAAwBSJYwCdAFAAAD+80MDfqKSPIm7DtujwAA=",
-  "/media/robust-health-live-coach.webp":
-    "data:image/webp;base64,UklGRj4AAABXRUJQVlA4IDIAAADwAQCdASoMAAgAAwBSJZQAAu1/D25xywAA/viNQDsNOqr4+OWBw718jIm2eIlU6WYAAA==",
-  "/media/robust-health-live-next.webp":
-    "data:image/webp;base64,UklGRjgAAABXRUJQVlA4ICwAAADQAQCdASoMAAgAAwBSJZQAAureu+acAAD+9771EkkblSN70KZwSOlNA6WYAA==",
+    "data:image/webp;base64,UklGRjgAAABXRUJQVlA4ICwAAABwAQCdASoMAAgAAwBSJZQCdAF1AAD+7oZSPtjw3+yJ7sKqTJdteopgEgAAAA==",
+  "/media/robust-health-live-how.webp":
+    "data:image/webp;base64,UklGRlIAAABXRUJQVlA4IEYAAAAwAgCdASoMAAgAAwBSJbACdIDZFxSzSnPeeAD+9dMJD1M1arM9Tdi1gkG+iCzGej13dGD1oJ0UVGGQ00gnTpbbwbQ1yAAA",
+  "/media/robust-health-live-inside.webp":
+    "data:image/webp;base64,UklGRkYAAABXRUJQVlA4IDoAAACwAQCdASoMAAgAAwBSJZwAAl2IrG2AAP71mzALXmzN3OB4EVvkICKRp10DMyE/jb0whUNkrFMz3wAA",
   "/media/robust-health-live-onboarding.webp":
-    "data:image/webp;base64,UklGRmYAAABXRUJQVlA4IFoAAADwAQCdASoMAAgAAwBSJbACdAEQUC/HgGAA/vXbSPQmXOhcp9xdgKcMFGJcaxH+M95/9JftET+ZX8pBJdklw5CFYOuCpOu/rXOvydxfb+IUxvxbAUOsYLkAAAA=",
-  "/media/robust-health-live-plans.webp":
-    "data:image/webp;base64,UklGRkIAAABXRUJQVlA4IDYAAADQAQCdASoMAAgAAwBSJZQAAu08AgTSIAD++I1AIcb5u/gJhlfkpoiH2U0fIam2k9xbN4uAAAA=",
+    "data:image/webp;base64,UklGRkoAAABXRUJQVlA4ID4AAAAQAgCdASoMAAgAAwBSJZQCdH8AFcVMZZrYAP74bVl14KTC67ehabDWSPNi36aT4pUs2CB0AzSM32u55AAAAA==",
+  "/media/robust-health-live-plan.webp":
+    "data:image/webp;base64,UklGRkgAAABXRUJQVlA4IDwAAADwAQCdASoMAAgAAwBSJZQC7AD0jecmqgAA/vFT9eY4S5+Fo0Bu6e49ldOGoQ/YpAFbqgBDGtTEKXoAAAA=",
   "/media/robust-health-live-programmes.webp":
-    "data:image/webp;base64,UklGRj4AAABXRUJQVlA4IDIAAACQAQCdASoMAAgAAwBSJZQAAp0XNbAA/vbuWlryvCjBP/9lJtGYFCAeLCMZneo0swAAAA==",
-  "/media/robust-health-live-session.webp":
-    "data:image/webp;base64,UklGRkIAAABXRUJQVlA4IDYAAADQAQCdASoMAAgAAwBSJZQAAxf4S/GIgAD+9771d/97a/CcAJPie2c+IC3nFBWtIQRt3i4AAAA=",
-  "/media/robust-health-live-week.webp":
-    "data:image/webp;base64,UklGRj4AAABXRUJQVlA4IDIAAACwAQCdASoMAAgAAwBSJZQAAup6R8wYAP73vvWBJKkO1S+ExehL6sRrAT43BirLxcAAAA==",
-  "/media/robust-health-member.webp":
-    "data:image/webp;base64,UklGRkIAAABXRUJQVlA4IDYAAADQAQCdASoMAAUAAwBSJZQCdAEOPBOwAAD+9qJTjHaJbdch4dscl+vejPKI6swSG4H7SswPIAA=",
+    "data:image/webp;base64,UklGRj4AAABXRUJQVlA4IDIAAACQAQCdASoMAAgAAwBSJaQAApz73AAA/vGANekirVNqd4mrYuzwAL1nKYW1LUK2KigoAA==",
+  "/media/robust-health-live-questions.webp":
+    "data:image/webp;base64,UklGRkIAAABXRUJQVlA4IDYAAACQAQCdASoMAAgAAwBSJaQAAltHmQAA/vLf+0igGCksm62LrZLXcnLKcVDpnwDBtBBCzgxeEAA=",
+  "/media/robust-health-live-spanish.webp":
+    "data:image/webp;base64,UklGRkIAAABXRUJQVlA4IDYAAACwAQCdASoMAAgAAwBSJZwAAp0uZvTAAP74ju4/zv5S/3tMfs4eNwzMPR5RMsE4rJjR+hHAAAA=",
   "/media/robust-health-mobile.webp":
-    "data:image/webp;base64,UklGRsYAAABXRUJQVlA4ILoAAACQBACdASoMABoAPt1apkyopSOiMAgBEBuJagCdMoMxgEm4rlRVlIczX3iHUaYA/sB9SZCsrYt/lMobk6rAJytnq602qRId3EByBoheNs5hzahw0pUCV/is60bRc7xd8FvDkvgDHYnjBXSxhpHOpgsqpK14jnl30bKhU1DA1ZwWHzl/Tzzp89IhdlL1322PQqBtTdtVwjf6wULakT93oSFlrh6oUlAz4iv/hdGxtSMoDRy/XK0VJfkAAAA=",
-  "/media/robust-health-phone-activity.webp":
-    "data:image/webp;base64,UklGRkYAAABXRUJQVlA4IDoAAADwAgCdASoMABEAPt1cp0yopSOiMAgBEBuJZwAAiUzLgAD+8LbuSZfy7P0m/nXq/3+fTkco2djTYAAA",
-  "/media/robust-health-phone-workout.webp":
-    "data:image/webp;base64,UklGRnwAAABXRUJQVlA4IHAAAABQBACdASoMABgAPt1apkyopSOiMAgBEBuJZgCdIKnJimJVgFQojBu2/ahAAP79W9GPKycci14VpLaLthbWTcb6lVf/MD8jCSpO9M3BOPVLOQ9NkXIelSiVbAUNNq6AvGwP7kImxZ50ojep4stFLAAA",
+    "data:image/webp;base64,UklGRpwAAABXRUJQVlA4IJAAAAAwBACdASoMABoAPt1cpkyopSOiMAgBEBuJQBdhxAAQGQ1n4xN20tg4uAAA/vxWqqXUlcuK0mB3PemdkNTd956XYqt8X+fIYoC9hl4oGoXH3lQN8dv6bh/oTtAPZ620Kn7gA8JeOYsL+RptbF8UVOD5Y6CRFtqx/ny83PD7AiVgd82fN2PPYbjqpwp5Wr/kAAA=",
+  "/media/robust-health-phone-day.webp":
+    "data:image/webp;base64,UklGRnYAAABXRUJQVlA4IGoAAADQAwCdASoMABsAPt1ap0yopSOiMAgBEBuJQBlljMIs8NGuamfhQwAA/vwIRMgzb5wkWAlrXuBneEGBlIRWgJVRzmmnZYrpOAegDa6Lx3DKeAmWu8cibUOCGw3yv1XcnY+gX9aRt8dn2cAA",
+  "/media/robust-health-phone-plan.webp":
+    "data:image/webp;base64,UklGRoQAAABXRUJQVlA4IHgAAADwAwCdASoMABsAPt1cpkyopSOiMAgBEBuJYgDA3Glw9duXN2NMkEAAAP79HKYmSw9hG0Mk4ekGXeMP0LYRxj6oZkDFkk3zFKd2BfwrxclJprJGV0UUGUChC5agvGZMgUcHPJ6HZMWAhZBJhISryrU9L6f6sjAsAAA=",
+  "/media/robust-health-plan-week.webp":
+    "data:image/webp;base64,UklGRjgAAABXRUJQVlA4ICwAAACQAQCdASoMAAcAAwBSJaQAAkrMYIAA/vK4Auh8rJg48EYctbiTnPLKKAAAAA==",
+  "/media/robust-health-sign-in.webp":
+    "data:image/webp;base64,UklGRkYAAABXRUJQVlA4IDoAAADQAQCdASoMAAgAAwBSJYwAAp1T1mNTAAD+9stgd2N1Q/BYXQecv8mZRdJmlpL71FKinTHrLNlpMIAA",
   "/media/robust-health-start.webp":
-    "data:image/webp;base64,UklGRjwAAABXRUJQVlA4IDAAAADQAQCdASoMAAgAAwBSJZwAAu0eoDTM2AD+8O1O24jlE/L8+gSLxmj2jisAL/xQAAA=",
-  "/media/robust-health-trainer.webp":
-    "data:image/webp;base64,UklGRiwAAABXRUJQVlA4ICAAAAAwAQCdASoMAAUAAwBSJaQAA3AA/vWaq653tjwZctBAAA==",
-  "/media/robust-health-weeks.webp":
-    "data:image/webp;base64,UklGRjIAAABXRUJQVlA4ICYAAAAwAQCdASoMAAoAAwBSJZwAA3AA/vIymizPkVLMyJfI1LivhwAAAA==",
+    "data:image/webp;base64,UklGRkQAAABXRUJQVlA4IDgAAACwAQCdASoMAAUAAwBSJQBOgB5vaUYAAP72sMdVQ4yDtc4rnmlfMN8MDNckinFCWz4qgy2GegAAAA==",
+  "/media/robust-health-week-five.webp":
+    "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAADQAQCdASoMAAgAAwBSJYwCdAD0iXREAAD+q60OnSz/tN7HC7qm21MWFPxfjrAA",
 };

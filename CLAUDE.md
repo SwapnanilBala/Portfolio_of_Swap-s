@@ -461,9 +461,21 @@ one-off values.
   share 16:10 and nothing is cropped to line up. They are signed-out public
   pages, walked no further than a form's first choices — nothing typed,
   nothing submitted — so Lagna Atelier's are its landing screen's themes
-  and languages, and Robust Health's come from its How It Works page. Taken
-  October 21 2026; the slider's heroes are from the same round. Retake both
-  together, so the note under the heading stays true.
+  and languages, and Robust Health's walk its landing page, How It Works,
+  onboarding, a quick-start plan and the Spanish landing page. Lagna
+  Atelier's and the clinic's were taken October 21 2026, Robust Health's on
+  November 3 2026 after its redesign; each project's slider hero is from
+  the same round as its frames. Retake both together, and keep the note
+  under the heading true.
+- **Capture in a guest browser.** A headless Edge profile on his machine
+  inherits his Windows sign-in and filled the Robust Health sign-in forms
+  with his saved email and password, unasked. `--guest` stops it; check
+  every form field in the frame before keeping a capture.
+- **Robust Health's case study shows no account screens since its
+  redesign.** The quick-start plan opens without one and carries the
+  product (targets, days, sets, RPE), so the in-product plates and the
+  phone pair come from it; the local app's environment points at the
+  production database, so seed logins were not used.
 - **An entry without a case study lists where it leads** under its name, one
   small section per link — Meta Database Engineer's certificate and its
   repository side by side — in both layouts. The name still opens the first

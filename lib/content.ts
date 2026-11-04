@@ -276,69 +276,70 @@ export const content: SiteContent = {
         src: "/media/robust-health-hero.webp",
         width: 2880,
         height: 1800,
-        alt: "Robust Health's landing page, set like a comic: “Train. Eat. Recover. Adapt.” in heavy italic capitals, buttons to get started, see how it works and sign in as a member or as a coach, three counters, and a halftone photograph of an athlete under a speech bubble reading “Structured programming, refined every week.”",
+        alt: "Robust Health's landing page: “Train. Eat. Recover. Adapt.” in large white type, Adapt in orange, over a dimmed photograph of a woman training; a line on workouts, calorie and macro targets and sleep from about five minutes of questions; Get my plan and How it works buttons and sign-in links for members and coaches; and a row of glass panels — workouts, food targets, sleep goal, changes weekly, and 900+ exercises, EN+ES and $0 to bring your coach.",
       },
       heroMobile: {
         src: "/media/robust-health-mobile.webp",
         width: 1170,
         height: 2532,
-        alt: "Robust Health on a phone: the halftone photograph and its speech bubble first, then “Train. Eat. Recover. Adapt.”, buttons to get started, see how it works, sign in, sign in as a coach and download the app, and three counters.",
+        alt: "Robust Health on a phone: “Train. Eat. Recover. Adapt.”, the line on workouts, targets and sleep, Get my plan and How it works buttons, sign-in links for members and coaches, three overlapping gym photographs, and the first counters — 900+ exercises and EN+ES.",
       },
       // The product, not the landing page: the Index shows the app rather
       // than its marketing photography. The quick-start catalogue, signed
-      // out, on 2026-10-21; the age, height and weight are the page's own
-      // defaults. It replaced a dashboard capture from the earlier design.
+      // out, on 2026-11-03; the age, height and weight are the page's own
+      // defaults.
       cover: {
         src: "/media/robust-health-live-programmes.webp",
         width: 2880,
         height: 1800,
-        alt: "Robust Health's quick start, “Train like a legend, starting today”: a Your numbers panel of sex, age, height, weight and activity with a maintenance estimate of about 2,551 kcal a day from the Mifflin-St Jeor equation, a search box, filters for training days and experience, and the first programme cards — Krissy Cela Glute Days, German Volume Training and DoggCrapp Training.",
+        alt: "Robust Health's quick start, “Start from a known programme”: 23 published programmes, a Your numbers panel of sex, age, height, weight and activity with a maintenance estimate of about 2,551 kcal a day from the Mifflin-St Jeor equation, a search box, filters for training days and experience, and the first programme cards — Krissy Cela Glute Days, German Volume Training and DoggCrapp Training.",
       },
-      // Taken from the live site on 2026-10-21, signed out: the How It Works
-      // page walks the weekly loop through the product's own panels, then
-      // onboarding's first screen. The account screens are in the case study.
+      // Taken from the live site on 2026-11-03, signed out, after the
+      // redesign: the landing page's second screen, How It Works, onboarding
+      // and its first questions (nothing typed), a quick-start plan, and the
+      // landing page in Spanish. The account screens are not shown.
       captures: [
         {
-          src: "/media/robust-health-live-plans.webp",
+          src: "/media/robust-health-live-inside.webp",
           width: 2880,
           height: 1800,
-          label: "Four ways in",
-          alt: "From the How It Works page: “Your plan gets written. Four ways in.” beside a panel of the four — written by a coach, imported from a document, generated then edited, started from a known split — with the loop's six steps down the left, Intake to Adjust, at Build.",
+          label: "What's inside",
+          alt: "The landing page's second screen, “For lifters, powerlifters and their coaches.”: three photographs, each under a panel from the product — week four's upper-body day, a back squat set logged at RPE 7.5, a coach's board of twelve clients — then four notes: plates from your kitchen and budget, sets logged with no signal, next week built from your logs, English and Spanish.",
         },
         {
-          src: "/media/robust-health-live-week.webp",
+          src: "/media/robust-health-live-how.webp",
           width: 2880,
           height: 1800,
-          label: "The week",
-          alt: "“Monday already knows what it is for”: a week of upper-body, lower-body and rest days, each with its exercise count and length, above calorie, protein and sleep targets.",
-        },
-        {
-          src: "/media/robust-health-live-session.webp",
-          width: 2880,
-          height: 1800,
-          label: "The session",
-          alt: "“Log it while you are still holding the bar”: today's upper-body session at three of six, bench press and barbell rows ticked off and the overhead press's rest timer running.",
-        },
-        {
-          src: "/media/robust-health-live-coach.webp",
-          width: 2880,
-          height: 1800,
-          label: "The coach's view",
-          alt: "“Your coach sees the week you actually had”: a coach's board of twelve clients, a bar chart of body weight, sessions and calories, and one week's sessions, last log and energy check-in.",
-        },
-        {
-          src: "/media/robust-health-live-next.webp",
-          width: 2880,
-          height: 1800,
-          label: "Next week",
-          alt: "“Next week is a reply to this one”: a notice that week five is ready, the press going up 2.5 kg after a good week, above tabs for weeks five back to two.",
+          label: "How it works",
+          alt: "The How It Works page, “A few answers in, a plan that keeps up.”, in three steps: an intake of goal and training days; this week's upper-body session beside 2,140 kcal, 160 g of protein and an eight-hour sleep target; and a notice that week five is ready, the press up 2.5 kg and Thursday a rest day. Below, a line for members training with a coach.",
         },
         {
           src: "/media/robust-health-live-onboarding.webp",
           width: 2880,
           height: 1800,
           label: "Getting started",
-          alt: "Onboarding: “Build a plan that fits your real life” beside a halftone gym photograph, then two ways to start — a personalised plan, recommended, in about three to five minutes, or a quick start from proven programmes.",
+          alt: "Onboarding: “Your plan, built around your week” beside two ways to start — personalised, recommended, in about three to five minutes, or a quick start from a published programme, ready right away.",
+        },
+        {
+          src: "/media/robust-health-live-questions.webp",
+          width: 2880,
+          height: 1800,
+          label: "The questions",
+          alt: "The personalised questionnaire's first step, body stats: empty name fields, age, sex, height and weight at the page's defaults, a BMI reading, and optional body fat and body type — between the four steps on the left and a running summary on the right of about 2,051 kcal a day, an upper/lower split four days a week and a full gym.",
+        },
+        {
+          src: "/media/robust-health-live-plan.webp",
+          width: 2880,
+          height: 1800,
+          label: "A quick-start plan",
+          alt: "A quick-start preview of German Volume Training: six days a week, about 72 minutes a session, 3,187 kcal and 165 g of protein a day, and a note that with no details entered the calorie, macro and water numbers are for a reference adult of 75 kg, 175 cm and 24 years, above the top of the daily targets and the week's workouts.",
+        },
+        {
+          src: "/media/robust-health-live-spanish.webp",
+          width: 2880,
+          height: 1800,
+          label: "In Spanish",
+          alt: "The landing page in Spanish: “Entrena. Come. Recupérate. Adáptate.”, with the same buttons, panels and counters.",
         },
       ],
       caseStudy: {
@@ -352,11 +353,11 @@ export const content: SiteContent = {
             media: {
               kind: "image",
               src: "/media/robust-health-start.webp",
-              width: 1639,
-              height: 1105,
-              alt: "Robust Health's onboarding over a blurred gym photograph: the headline Build a plan that fits your real life, then a panel asking How would you like to get started? with two cards — Personalised plan, recommended, about three to five minutes, and Quick start, to browse programmes.",
+              width: 2460,
+              height: 970,
+              alt: "Robust Health's onboarding over a dimmed gym photograph: “Your plan, built around your week” and a line on three to five minutes of questions, beside a panel asking How do you want to start? with two choices — Personalised, recommended, about three to five minutes, and Quick start, ready right away.",
               caption:
-                "Two ways in: a three-to-five minute questionnaire that generates a tailored first week, or a ready-made programme with optional body details for nutrition targets. Switching between them keeps whatever has already been entered.",
+                "Two ways in: three to five minutes of questions that build a first week around the member's goal, days, gear and injuries, or a published programme to browse now, with optional body details for calorie targets. Switching between them keeps whatever has already been typed.",
             },
           },
           {
@@ -367,21 +368,23 @@ export const content: SiteContent = {
             media: {
               kind: "pair",
               title: "What it asks, and what changed",
-              body: "The intake asks for a goal, the days a member can train and the constraints around them: equipment, diet, an injury. Week two is then laid against week one, line by line. Here the macros held, the split moved to an imported programme, and a sixth training day was added.",
+              // Both panels are from the How It Works page, which walks the
+              // loop with example values rather than a member's own.
+              body: "The intake asks for a goal and the days a member can train, then the gear, the food and any injury around them. Once a week is logged, the weekly update writes the next one and says what moved. The How It Works page walks it through: the press goes up 2.5 kg, and Thursday becomes a rest day.",
               images: [
                 {
                   src: "/media/robust-health-intake.webp",
-                  width: 568,
-                  height: 442,
+                  width: 724,
+                  height: 462,
                   label: "The intake",
-                  alt: "An intake card: Build strength selected from three goals, three training days selected from two to five, and three constraint chips — Full gym, No dairy, Left shoulder.",
+                  alt: "An intake panel: What are you training for? with Build strength selected over Lose fat and General fitness, and Days you can train with three selected from two to five.",
                 },
                 {
-                  src: "/media/robust-health-weeks.webp",
-                  width: 792,
-                  height: 668,
-                  label: "Week one against week two",
-                  alt: "A table of week one against week two: calories, protein, carbs and fat unchanged at 2851 kcal, 155 g, 416 g and 63 g; the training split changed from Push, Pull, Legs to an imported programme; days per week up from five to six; the sleep target unchanged at seven hours.",
+                  src: "/media/robust-health-week-five.webp",
+                  width: 728,
+                  height: 466,
+                  label: "The weekly update",
+                  alt: "A Week five panel: a notice that week five is ready, built from last week's logs — the press up 2.5 kg and Thursday a rest day — above tabs for weeks five back to two.",
                 },
               ],
             },
@@ -398,12 +401,14 @@ export const content: SiteContent = {
             ],
             media: {
               kind: "image",
-              src: "/media/robust-health-member.webp",
-              width: 1612,
-              height: 690,
-              alt: "Robust Health's member dashboard greeting Good morning, Gogol above two wide cards: an RPE-autoregulated powerlifting block with an Open your block button, and a standalone one-day plan with an Access your plan button.",
+              // A quick-start plan, signed out: the body details are the
+              // page's defaults, not a member's.
+              src: "/media/robust-health-plan-week.webp",
+              width: 2880,
+              height: 1644,
+              alt: "Further down a quick-start plan for German Volume Training: daily targets of 3,187 kcal, 165 g protein, 463 g carbs and 75 g fat against a 2,551 kcal TDEE, 3.6 litres of water and a meal timeline, beside the workouts — day one chest and back, day two legs and abs, each with its warm-up and exercises at ten sets of ten, 90 seconds' rest and RPE 8.",
               caption:
-                "Inside a member's account: the powerlifting block, where the RPE of every set is logged as it is lifted and the next load is recalculated from it, and a standalone one-day plan saved beside it.",
+                "A published programme as data: each day's warm-up, then every exercise with its sets, reps, rest and target RPE, beside calorie, macro and water targets for the member's height, weight and age — a reference adult's until they are entered. A quick-start plan like this one opens without an account.",
             },
           },
           {
@@ -417,17 +422,16 @@ export const content: SiteContent = {
               "Members, trainers and admins each get their own portal and their own signed session, and the more a session can reach, the sooner it expires. Requests pass a nonce-based content security policy, per-IP rate limiting on Upstash Redis with an in-memory fallback, and double-submit CSRF checks, and authorisation is checked per route.",
               "Sign-in runs through Supabase with OAuth for Google, GitHub and Discord, plus one-time email codes sent through Resend. Web push carries reminders.",
             ],
-            // Cropped below the client's email, age, height, weight and body
-            // fat, and the signed-in trainer's name: personal details rather
-            // than evidence, and the trainer's name is someone else's.
+            // Signed out, in a browser with no saved logins: both fields show
+            // only their placeholders.
             media: {
               kind: "image",
-              src: "/media/robust-health-trainer.webp",
-              width: 1730,
-              height: 775,
-              alt: "Nutrition targets as four rings — 2851 kcal, 155 g protein, 416 g carbs, 63 g fat — above a notes panel of six points on surplus, carb timing, protein distribution and micronutrients, and a workout plan of six day chips, D1 Legs mainly to D6 Arms, from an imported programme.",
+              src: "/media/robust-health-sign-in.webp",
+              width: 2440,
+              height: 1590,
+              alt: "The member sign-in page: “Sign in to your plans” beside a panel with Sign in and New here tabs, Sign in with Google, Discord and GitHub, an email and password form with a Cloudflare human check and a Keep me signed in switch, and a link to email a code instead.",
               caption:
-                "The trainer's side of one client's active plan: calorie and macro targets, the reasoning behind them in notes, and a six-day programme imported from a file.",
+                "The member sign-in: Google, Discord or GitHub, a password, or a one-time code by email, behind a human check. Coaches sign in to their own portal from a separate page.",
             },
           },
           {
@@ -435,27 +439,26 @@ export const content: SiteContent = {
             body: [
               "Live at app.robusthealth.in. Load time is the measured part: next/image compression and route-level code splitting cut Lighthouse load time by about half on web and two thirds on mobile.",
             ],
-            // Android captures, cropped below the status bar's notification
-            // icons; the activity card is taken alone, without the programme
-            // summary above it.
+            // The same quick-start plan at 360 pixels wide, signed out; the
+            // reference body is the page's default.
             media: {
               kind: "pair",
               title: "On a phone",
-              body: "A workout runs one exercise at a time, each marked off as it is done, and a finished session joins the dashboard's recent activity with the exercises completed and the minutes it took — the record each next week is revised against.",
+              body: "On a phone the plan splits into Workout, Fuel and Recovery, one day at a time. Each exercise carries its sets, rest and target RPE and a box to tick off as it is done.",
               images: [
                 {
-                  src: "/media/robust-health-phone-workout.webp",
+                  src: "/media/robust-health-phone-plan.webp",
                   width: 720,
-                  height: 1456,
-                  label: "Mid-workout",
-                  alt: "Robust Health's workout screen on a phone: Day 4, Mobility Style, two of three exercises done, a placeholder for the exercise video, and the third exercise — hanging leg raises with cable crunches, three sets of fifteen — marked completed, above Previous and Finish Workout buttons.",
+                  height: 1600,
+                  label: "The plan",
+                  alt: "A quick-start preview of German Volume Training on a phone: six days a week, about 72 minutes, 3,187 kcal; a note that the numbers are for a reference body of 75 kg, 175 cm and 24 years; Workout, Fuel and Recovery tabs; day one, chest and back, with its three warm-up moves folded away; and a Sign in to save button.",
                 },
                 {
-                  src: "/media/robust-health-phone-activity.webp",
+                  src: "/media/robust-health-phone-day.webp",
                   width: 720,
-                  height: 1022,
-                  label: "Recent activity",
-                  alt: "The phone dashboard's Recent Activity: five sessions, each with its programme day, its date and the exercises completed, two with their length in minutes, above the app's bottom bar — Dashboard, Programme, Progress, Inbox and More.",
+                  height: 1600,
+                  label: "Day one",
+                  alt: "Day one's exercises on a phone under the Workout tab: barbell bench press and pull-ups at ten sets of ten, incline dumbbell flyes and one-arm dumbbell rows at three sets of ten to twelve, each at 90 seconds' rest and RPE 8, with a box to tick and a play button.",
                 },
               ],
             },
@@ -975,7 +978,7 @@ export const content: SiteContent = {
       destinations: { live: "Live site", source: "Repository", certificate: "Certificate" },
       captures: {
         heading: "From the live sites",
-        note: "Captured October 2026, signed out",
+        note: "Captured October and November 2026, signed out",
         count: "{count} frames",
       },
     },
