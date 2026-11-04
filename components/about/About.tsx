@@ -9,7 +9,10 @@ import { content } from "@/lib/content";
 import type { MotionKit } from "@/lib/kit";
 import { blurFor, PLATE_FRAME } from "@/lib/media";
 
-/** One part of the record: a hairline, its label, then what it holds. */
+/** A frosted panel of the record, on the page's radiant ground. */
+const PANEL = "glass-light px-5 py-6 md:px-[1.875rem] md:py-7";
+
+/** One part of the record: a glass panel, its label, then what it holds. */
 function Cell({
   id,
   label,
@@ -22,7 +25,7 @@ function Cell({
   readonly children: ReactNode;
 }) {
   return (
-    <section aria-labelledby={id} className={`border-t border-paper-rule pb-10 pt-5 md:pb-12 ${className}`}>
+    <section aria-labelledby={id} className={`${PANEL} ${className}`}>
       <SectionLabel id={id} className="mb-6">
         {label}
       </SectionLabel>
@@ -38,7 +41,8 @@ function Cell({
  * on the resume's line. Then the person, his portraits beside the intro, and
  * the record two parts to a row: experience beside education, technologies
  * beside current work. The photographs close it, one row of three, before a
- * compact footer. Technologies are plain text lists joined by em dashes --
+ * compact footer. Each part is a frosted panel on a radiant ground, the
+ * contacts small glass chips. Technologies are plain text lists joined by em dashes --
  * not a wall of coloured logos, which say only that a logo exists. One view
  * for both trees; the kit decides how it moves.
  */
@@ -51,30 +55,30 @@ export function About({ kit }: { readonly kit: MotionKit }) {
 
   return (
     <PageTransition>
-      <main id="main" data-tone="light" className="min-h-svh bg-paper text-ink">
-        <div className="px-5 md:px-8">
+      <main id="main" data-tone="light" className="radiant-light about-ground min-h-svh text-ink">
+        <div className="grid gap-3.5 px-5 pb-10 pt-[5.25rem] md:gap-5 md:px-8 md:pb-16 md:pt-24 short:pt-16">
           {/* Nothing up here is revealed by script: it is what a reader came
               for, so it is there in the first paint whatever loads after. A
               phone on its side gets tighter spacing, so the resume link is
               still in the first screen. */}
-          <header className="pb-8 pt-24 md:pt-28 short:pb-6 short:pt-20">
+          <header className={`${PANEL} short:py-5`}>
             <div className="grid grid-cols-12 gap-x-5 gap-y-6">
               <div className="col-span-12 md:col-span-7">
                 <h1 className="text-[clamp(1.25rem,1.55vw,1.875rem)] font-semibold uppercase leading-[0.95] tracking-[-0.025em]">
                   {profile.name}
                 </h1>
-                <p className="meta mt-2.5 text-paper-muted">
+                <p className="meta mt-2.5 text-glass-ink-2">
                   {profile.role} / {profile.affiliation}
                 </p>
                 <p className="meta mt-1">{ui.landing.availability.replace("{availability}", profile.availability)}</p>
               </div>
-              <ul className="col-span-12 flex flex-wrap gap-x-8 gap-y-2 md:col-span-5 md:justify-self-end">
+              <ul className="col-span-12 flex flex-wrap gap-2 md:col-span-5 md:justify-self-end">
                 {reach.map((route) => (
                   <li key={route.key}>
                     <ContactLink
                       href={route.href}
                       ariaLabel={`${ui.contactLabels[route.key]}: ${route.detail}`}
-                      className="inline-block py-1 text-[0.9375rem] font-medium uppercase tracking-[0.01em] underline-offset-4 hover:underline"
+                      className="about-chip inline-block rounded-glass-xs px-3.5 py-2 text-[0.8125rem] font-medium uppercase tracking-[0.01em] underline-offset-4 hover:underline"
                     >
                       {ui.contactLabels[route.key]}
                     </ContactLink>
@@ -83,7 +87,7 @@ export function About({ kit }: { readonly kit: MotionKit }) {
               </ul>
             </div>
 
-            <div className="mt-8 grid grid-cols-12 items-end gap-x-5 gap-y-5 border-t border-paper-rule pt-5 md:mt-10 short:mt-6 short:pt-4">
+            <div className="mt-7 grid grid-cols-12 items-end gap-x-5 gap-y-5 border-t border-ink/12 pt-6 md:mt-8 short:mt-5 short:pt-4">
               {/* The PDF opens in a new tab, so the page is still here after. */}
               {resume ? (
                 <a
@@ -97,7 +101,7 @@ export function About({ kit }: { readonly kit: MotionKit }) {
                     {ui.contactLabels.resume}
                     <OutArrow className="mt-[0.08em] size-[0.32em]" />
                   </span>
-                  <span className="meta pb-1 text-paper-muted">{ui.landing.resumeNote}</span>
+                  <span className="meta pb-1 text-glass-ink-2">{ui.landing.resumeNote}</span>
                 </a>
               ) : null}
               <p className="display col-span-12 text-balance text-[clamp(1.5rem,2.5vw,2.5rem)] md:col-span-7 md:pb-1 md:text-right">
@@ -108,7 +112,7 @@ export function About({ kit }: { readonly kit: MotionKit }) {
 
           <section
             aria-labelledby="about"
-            className="grid grid-cols-12 gap-x-5 gap-y-6 border-t border-paper-rule pb-10 pt-5 md:pb-12"
+            className={`${PANEL} grid grid-cols-12 gap-x-5 gap-y-6`}
           >
             <SectionLabel id="about" className="col-span-12 md:col-span-3">
               {labels.about}
@@ -125,20 +129,20 @@ export function About({ kit }: { readonly kit: MotionKit }) {
             </div>
           </section>
 
-          {/* Two parts to a row from 64rem; stacked, in reading order, below. */}
-          <div className="grid grid-cols-12 lg:gap-x-10">
-            <Cell id="experience" label={labels.experience} className="col-span-12 lg:col-span-7">
+          {/* Two panels to a row from 64rem; stacked, in reading order, below. */}
+          <div className="grid grid-cols-12 gap-3.5 md:gap-5">
+            <Cell id="experience" label={labels.experience} className="col-span-12 lg:col-span-6">
               <ol className="grid gap-8">
                 {about.experience.map((role) => (
                   <li key={`${role.org}-${role.period}`}>
                     <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
                       <h3 className="text-lg font-semibold leading-snug tracking-[-0.02em]">{role.role}</h3>
-                      <p className="meta tabular-nums text-paper-muted">{role.period}</p>
+                      <p className="meta tabular-nums text-glass-ink-2">{role.period}</p>
                     </div>
-                    <p className="mt-1 text-[0.9375rem] text-paper-muted">
+                    <p className="mt-1 text-[0.9375rem] text-glass-ink-2">
                       {role.org} — {role.location}
                     </p>
-                    <ul className="mt-4 grid gap-2 border-t border-paper-rule pt-4">
+                    <ul className="mt-4 grid gap-2 border-t border-ink/10 pt-4">
                       {role.details.map((detail) => (
                         <li key={detail} className="grid grid-cols-[1.25rem_1fr] text-[0.9375rem] leading-[1.5]">
                           <span aria-hidden="true" className="mt-[0.72em] h-px w-2.5 bg-ink" />
@@ -151,25 +155,25 @@ export function About({ kit }: { readonly kit: MotionKit }) {
               </ol>
             </Cell>
 
-            <Cell id="education" label={labels.education} className="col-span-12 lg:col-span-5">
+            <Cell id="education" label={labels.education} className="col-span-12 lg:col-span-6">
               <ol className="grid gap-5">
                 {about.education.map((entry) => (
                   <li key={entry.school} className="grid gap-x-6 gap-y-1 md:grid-cols-[1fr_auto] md:items-baseline">
                     <div>
                       <h3 className="text-lg font-semibold leading-snug tracking-[-0.02em]">{entry.degree}</h3>
-                      <p className="mt-0.5 text-[0.9375rem] text-paper-muted">
+                      <p className="mt-0.5 text-[0.9375rem] text-glass-ink-2">
                         {entry.school} — {entry.location}
                       </p>
                     </div>
-                    <p className="meta tabular-nums text-paper-muted">{entry.period}</p>
+                    <p className="meta tabular-nums text-glass-ink-2">{entry.period}</p>
                   </li>
                 ))}
               </ol>
-              <ul className="mt-6 grid gap-5 border-t border-paper-rule pt-5 md:grid-cols-2 lg:grid-cols-1">
+              <ul className="mt-6 grid gap-5 border-t border-ink/10 pt-5 md:grid-cols-2 lg:grid-cols-1">
                 {about.certificates.map((certificate) => (
                   <li key={certificate.name}>
                     <p className="font-semibold">{certificate.name}</p>
-                    <p className="meta mt-1 text-paper-muted">
+                    <p className="meta mt-1 text-glass-ink-2">
                       {certificate.issuer}
                       {certificate.date ? ` / ${certificate.date}` : ""}
                     </p>
@@ -179,11 +183,11 @@ export function About({ kit }: { readonly kit: MotionKit }) {
               </ul>
             </Cell>
 
-            <Cell id="technologies" label={labels.technologies} className="col-span-12 lg:col-span-7">
+            <Cell id="technologies" label={labels.technologies} className="col-span-12 lg:col-span-6">
               <dl className="grid gap-4">
                 {about.technologies.map((group) => (
                   <div key={group.label} className="grid gap-1 md:grid-cols-[9rem_1fr] md:gap-6">
-                    <dt className="meta pt-1 text-paper-muted">{group.label}</dt>
+                    <dt className="meta pt-1 text-glass-ink-2">{group.label}</dt>
                     {/* A dash is held to the word before it by a no-break
                         space, so a line can end on one but never opens with
                         one, and a one-word item ("Scikit-Learn") never breaks
@@ -204,12 +208,12 @@ export function About({ kit }: { readonly kit: MotionKit }) {
               </dl>
             </Cell>
 
-            <Cell id="exploring" label={labels.exploring} className="col-span-12 lg:col-span-5">
+            <Cell id="exploring" label={labels.exploring} className="col-span-12 lg:col-span-6">
               <ul className="grid gap-4">
                 {about.exploring.map((item) => (
-                  <li key={item.title} className="grid gap-1 border-b border-paper-rule pb-4 last:border-b-0 last:pb-0">
+                  <li key={item.title} className="grid gap-1 border-b border-ink/10 pb-4 last:border-b-0 last:pb-0">
                     <p className="text-[1.0625rem] tracking-[-0.01em] md:text-lg">{item.title}</p>
-                    <p className="meta text-paper-muted">{item.evidence}</p>
+                    <p className="meta text-glass-ink-2">{item.evidence}</p>
                   </li>
                 ))}
               </ul>
@@ -217,23 +221,23 @@ export function About({ kit }: { readonly kit: MotionKit }) {
           </div>
 
           {/* The campus twice and the city, cropped to one 4:3 frame so the
-              row is one band. Each crop is at least 1200px wide, which covers a
-              third of a 1920px screen at 2x. */}
-          <div className="grid gap-5 border-t border-paper-rule pb-14 pt-6 md:grid-cols-3">
+              row is one band, each framed in glass. Each crop is at least
+              1200px wide, which covers a third of a 1920px screen at 2x. */}
+          <div className="grid gap-3.5 md:grid-cols-3 md:gap-5">
             {about.photos.map((photo) => (
-              <figure key={photo.src} className="min-w-0">
-                <Plate className={`${PLATE_FRAME} aspect-[4/3]`}>
+              <figure key={photo.src} className="glass-light min-w-0 p-2.5">
+                <Plate className={`${PLATE_FRAME} aspect-[4/3] rounded-glass-sm after:rounded-glass-sm`}>
                   <Image
                     src={photo.src}
                     alt={photo.alt}
                     fill
-                    sizes="(min-width: 48rem) calc((100vw - 6.5rem) / 3), calc(100vw - 2.5rem)"
+                    sizes="(min-width: 48rem) calc((100vw - 10.25rem) / 3), calc(100vw - 3.75rem)"
                     placeholder="blur"
                     blurDataURL={blurFor(photo.src)}
                     className="object-cover"
                   />
                 </Plate>
-                <figcaption className="mt-2 text-[0.9375rem] font-medium tracking-[-0.01em]">{photo.caption}</figcaption>
+                <figcaption className="px-1.5 pb-1 pt-3 text-[0.9375rem] font-medium tracking-[-0.01em]">{photo.caption}</figcaption>
               </figure>
             ))}
           </div>
