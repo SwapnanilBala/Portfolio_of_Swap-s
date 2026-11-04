@@ -189,7 +189,10 @@ export function ProjectSlider({ projects, copy, liveLabel }: Props) {
         const offset = slideOffset(i, state.current, count);
         plate.style.transform = `translate3d(${offset * distance}px, 0, 0)`;
         plate.style.opacity = String(presenceAt(offset));
-        plate.style.visibility = Math.abs(offset) < 1.25 ? "visible" : "hidden";
+        // Off stage once a full step away: at rest the neighbours wait past
+        // the window's edges, and their bezels' shadows must not reach in.
+        // The WebGL plates keep their own, wider margin for the bow.
+        plate.style.visibility = Math.abs(offset) < 1 ? "visible" : "hidden";
       });
 
       const index = wrapIndex(Math.round(state.current), count);
@@ -451,7 +454,14 @@ export function ProjectSlider({ projects, copy, liveLabel }: Props) {
       data-cursor="drag"
       data-lenis-prevent
       // The frame, defined once: the plates and the live link below them.
-      className="[--plate-top:7.25rem] [--plate-w:min(99.2vh,76vw)] absolute inset-0 hidden touch-none select-none overflow-hidden bg-ink focus-visible:outline-2 focus-visible:-outline-offset-[12px] focus-visible:outline-paper desktop:block"
+      // The ground is the page's radiant one, so the section paints none.
+      // Under ~880px tall the plate gives up to a tenth of its width so the
+      // live link still fits between the bezel and the metadata strip (the
+      // max: the plate's top, the bezel's ring, the link and its gaps and
+      // the strip, 94vh - 16.5rem tall, but never under 89vh wide). Below
+      // ~690px the link lifts onto the plate's corner instead, and the last
+      // term keeps the bezel clear of the strip (94vh - 12rem tall).
+      className="projects-frame [--plate-top:7.25rem] [--plate-w:min(99.2vh,76vw,max(89vh,(94vh-16.5rem)*1.6),(94vh-12rem)*1.6)] absolute inset-0 hidden touch-none select-none overflow-hidden focus-visible:outline-2 focus-visible:-outline-offset-[12px] focus-visible:outline-paper desktop:block"
     >
       <p id="slider-hint" className="sr-only">
         {copy.hint}
@@ -459,6 +469,13 @@ export function ProjectSlider({ projects, copy, liveLabel }: Props) {
       <p className="sr-only" aria-live="polite" aria-atomic="true">
         {announcement}
       </p>
+
+      {/* The gold glow behind the plate on stage. It holds still while the
+          plates travel across it. */}
+      <div
+        aria-hidden="true"
+        className="projects-glow pointer-events-none absolute left-[calc(50%-var(--plate-w)*0.8)] top-[calc(var(--plate-top)-var(--plate-w)*0.12)] h-[calc(var(--plate-w)*0.95)] w-[calc(var(--plate-w)*1.6)]"
+      />
 
       {projects.map((project, i) => (
         <div
@@ -474,12 +491,21 @@ export function ProjectSlider({ projects, copy, liveLabel }: Props) {
           // The plate on stage opens on a click; the cursor's marks lock onto it.
           data-cursor="open"
           data-cursor-frame
-          className="absolute left-[calc(50%-var(--plate-w)/2)] top-(--plate-top) aspect-[16/10] w-(--plate-w) overflow-hidden bg-ink will-change-transform"
+          // The plate is the image's box, which the WebGL plates measure; its
+          // bezel is drawn outside it, so neither the geometry nor the morph
+          // changes. The WebGL plate is drawn over the image only, with the
+          // same corners, and this bezel shows around it, travelling and
+          // dimming with its plate on the same tick.
+          className="absolute left-[calc(50%-var(--plate-w)/2)] top-(--plate-top) aspect-[16/10] w-(--plate-w) rounded-(--plate-r) bg-ink will-change-transform"
           // Until the loop's first tick only the first plate is on stage.
           style={i === 0 ? undefined : { visibility: "hidden" }}
         >
+          <div aria-hidden="true" className="glass-bezel pointer-events-none absolute -inset-(--bezel)" />
+          {/* The view-transition name is the image's, never the bezel's:
+              the case-study hero sits in the same bezel, and only the
+              media morphs between the two. */}
           <SharedMedia slug={project.slug} enabled={hydrated && isDesktop && i === active}>
-            <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute inset-0 overflow-hidden rounded-[inherit]">
               {/* Lazy, so the hidden phone layout never fetches it; the page
                   preloads the first plate under the desktop query instead.
                   Sized as the case-study hero, not as this plate: see
@@ -533,42 +559,50 @@ export function ProjectSlider({ projects, copy, liveLabel }: Props) {
               lines={displayLinesOf(project)}
               className="text-[min(12vh,9.5vw)] text-paper"
             />
-            <div
-              data-title-meta
-              className="meta mt-5 grid max-w-[64rem] grid-cols-[minmax(12rem,auto)_6rem_1fr_auto] items-baseline gap-x-10 text-paper"
-            >
-              <span className="tabular-nums">
-                {recordNumber(i)} / {project.category}
-              </span>
-              <span className="tabular-nums">{project.year}</span>
-              <span>{project.stack.slice(0, 3).join(" / ")}</span>
+            {/* The metadata on a glass strip; the case study's link stays
+                type beside it, under the live link at the bezel's edge. The
+                spacer after it holds it there, and gives way first when a
+                narrow window needs the room for the strip. */}
+            <div data-title-meta className="meta mt-5 flex items-center gap-x-8 text-paper">
+              <p className="glass-dark flex shrink-0 items-baseline divide-x divide-glass-dark-edge rounded-glass-sm px-5 py-3">
+                <span className="shrink-0 pr-5 tabular-nums">
+                  {recordNumber(i)} / {project.category}
+                </span>
+                <span className="shrink-0 px-5 tabular-nums">{project.year}</span>
+                <span className="pl-5">{project.stack.slice(0, 3).join(" / ")}</span>
+              </p>
               <Link
                 href={`/work/${project.slug}`}
                 transitionTypes={["page"]}
                 tabIndex={i === active ? 0 : -1}
                 onFocus={() => warm(i)}
                 onPointerEnter={() => warm(i)}
-                className="pointer-events-auto underline decoration-1 underline-offset-4"
+                className="pointer-events-auto ml-auto shrink-0 underline decoration-1 underline-offset-4"
               >
                 {copy.open}
               </Link>
+              <span
+                aria-hidden="true"
+                className="-ml-8 min-w-0 shrink-[20] basis-[max(0px,calc(50%-var(--plate-w)/2-var(--bezel)))]"
+              />
             </div>
           </div>
         ))}
       </div>
 
-      {/* Under the plate on stage, flush with its right edge, while the title
-          crosses its lower left. The box runs from just under the plate to
-          just above the metadata line: the link sits at its top, and in a
-          window too short for both, auto margins collapse and justify-end
-          lifts it onto the plate's corner instead of onto the metadata. In a
+      {/* Under the plate on stage, flush with its bezel's right edge, while
+          the title crosses its lower left. The box runs from just under the
+          bezel to just above the metadata strip: the link sits at its top, and
+          in a window too short for both, the box's top stops at its bottom,
+          the auto margin collapses and justify-end lifts the link onto the
+          plate's corner instead of onto the metadata. In a
           portrait window the rail, centred on the right edge, would cover it,
           so there it keeps the rail's width clear. */}
       {current && live ? (
         <div
           ref={liveRef}
           data-reveal=""
-          className="absolute bottom-[calc(6vh+2.25rem)] right-[calc(50%-var(--plate-w)/2)] top-[calc(var(--plate-top)+var(--plate-w)*10/16+1.25rem)] flex flex-col justify-end portrait:right-[max(calc(50%-var(--plate-w)/2),8.75rem)]"
+          className="absolute bottom-[calc(6vh+3.25rem)] right-[calc(50%-var(--plate-w)/2-var(--bezel))] top-[min(calc(var(--plate-top)+var(--plate-w)*10/16+var(--bezel)+0.875rem),calc(100%-6vh-3.25rem))] flex flex-col justify-end portrait:right-[max(calc(50%-var(--plate-w)/2-var(--bezel)),8.75rem)]"
         >
           <LiveSiteLink
             href={live.href}

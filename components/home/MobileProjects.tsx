@@ -125,7 +125,7 @@ export function MobileProjects({ projects, copy, liveLabel, profile }: Props) {
   }, [isDesktop]);
 
   return (
-    <div className="desktop:hidden">
+    <div className="projects-frame desktop:hidden">
       <div
         ref={scrollerRef}
         role="region"
@@ -154,27 +154,35 @@ export function MobileProjects({ projects, copy, liveLabel, profile }: Props) {
                   own shape, so nothing is cropped from its header: half the
                   width, as much as the height allows, and never so much that
                   the type column falls under 17.5rem (after 3.75rem of
-                  gutters and gap) -- the widest metadata line with the
-                  counter's room, and the clinic's address in the live link,
-                  each need about 17rem on one line. */}
+                  gutters and gap, and the bezel's ring on both sides) -- the
+                  widest metadata line with the counter's room, and the
+                  clinic's address in the live link, each need about 17rem on
+                  one line. */}
               <div
                 ref={(screen) => {
                   screenRefs.current[i] = screen;
                 }}
                 data-index={i}
-                className="flex min-h-0 flex-1 flex-col short:h-svh short:flex-none short:snap-start short:flex-row short:items-end short:gap-x-5 short:p-5 short:[--plate-w:min(50vw,(100svh-2.5rem)*1.6,100vw-3.75rem-17.5rem)]"
+                className="flex min-h-0 flex-1 flex-col short:h-svh short:flex-none short:snap-start short:flex-row short:items-end short:gap-x-5 short:p-5 short:[--plate-w:min(50vw-2*var(--bezel),(100svh-2.5rem-2*var(--bezel))*1.6,100vw-3.75rem-17.5rem-2*var(--bezel))]"
               >
-                <SharedMedia slug={project.slug} enabled={hydrated && !isDesktop && i === active}>
-                  {/* A tap on the plate opens the project too. The title below is
-                      the link keyboards and screen readers use, so the plate is
-                      not a second one. */}
-                  <div
-                    onClick={() => router.push(`/work/${project.slug}`, { transitionTypes: ["page"] })}
-                    className={`relative mx-5 min-h-0 flex-1 overflow-hidden bg-ink ${i === 0 ? "mt-6" : "mt-16"} short:mx-0 short:mt-0 short:aspect-[16/10] short:w-(--plate-w) short:flex-none`}
-                  >
-                    <PhonePlate project={project} first={i === 0} />
-                  </div>
-                </SharedMedia>
+                {/* The plate in its glass bezel. The view-transition name is
+                    the plate's, inside it, never the bezel's: the case-study
+                    hero sits in the same bezel and only the media morphs. */}
+                <div
+                  className={`glass-bezel mx-5 flex min-h-0 flex-1 flex-col ${i === 0 ? "mt-5" : "mt-16"} short:mx-0 short:mt-0 short:flex-none`}
+                >
+                  <SharedMedia slug={project.slug} enabled={hydrated && !isDesktop && i === active}>
+                    {/* A tap on the plate opens the project too. The title below is
+                        the link keyboards and screen readers use, so the plate is
+                        not a second one. */}
+                    <div
+                      onClick={() => router.push(`/work/${project.slug}`, { transitionTypes: ["page"] })}
+                      className="relative min-h-0 flex-1 overflow-hidden rounded-(--plate-r) bg-ink short:aspect-[16/10] short:w-(--plate-w) short:flex-none"
+                    >
+                      <PhonePlate project={project} first={i === 0} />
+                    </div>
+                  </SharedMedia>
+                </div>
 
                 <div className="relative -mt-7 px-5 short:mt-0 short:min-w-0 short:flex-1 short:px-0 short:@container">
                   <Link href={`/work/${project.slug}`} transitionTypes={["page"]} className="block text-paper">
@@ -188,7 +196,7 @@ export function MobileProjects({ projects, copy, liveLabel, profile }: Props) {
                       className="text-[15vw] short:text-[min(17cqw,(100svh-13.25rem)/1.68)]"
                     />
                   </Link>
-                  <div className="meta mt-4 grid gap-y-1 text-paper">
+                  <div className="meta glass-dark mt-4 grid gap-y-1 rounded-glass-sm px-4 py-3 text-paper">
                     <p className="flex gap-x-6 tabular-nums">
                       <span>
                         {recordNumber(i)} / {project.category}
@@ -203,7 +211,7 @@ export function MobileProjects({ projects, copy, liveLabel, profile }: Props) {
                       href={live.href}
                       label={liveLabel}
                       project={project.name}
-                      className="mt-5 h-14 w-full px-4 text-[0.9375rem]"
+                      className="mt-3 h-14 w-full px-4 text-[0.9375rem]"
                     />
                   ) : null}
                 </div>
@@ -215,11 +223,13 @@ export function MobileProjects({ projects, copy, liveLabel, profile }: Props) {
 
       <p
         aria-hidden="true"
-        // Level with the last line of metadata, above the live link: the
-        // screen's bottom padding, the link's height and its margin.
-        className="meta pointer-events-none fixed bottom-[calc(2.5rem+3.5rem+1.25rem)] right-5 z-10 text-right tabular-nums text-paper short:bottom-[calc(1.25rem+3.5rem+1.25rem)]"
+        // Level with the last line of metadata, inside its strip, above the
+        // live link: the screen's bottom padding, the link's height and its
+        // margin, then the strip's padding and edge; and in from the right by
+        // the gutter, the strip's padding and edge.
+        className="meta pointer-events-none fixed bottom-[calc(2.5rem+3.5rem+0.75rem+0.75rem+1px)] right-[calc(1.25rem+1rem+1px)] z-10 text-right tabular-nums text-paper short:bottom-[calc(1.25rem+3.5rem+0.75rem+0.75rem+1px)]"
       >
-        {recordNumber(active)} <span className="text-ink-muted">/ {recordNumber(projects.length - 1)}</span>
+        {recordNumber(active)} <span className="text-glass-paper-2">/ {recordNumber(projects.length - 1)}</span>
       </p>
     </div>
   );

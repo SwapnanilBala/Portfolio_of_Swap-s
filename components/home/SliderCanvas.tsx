@@ -58,6 +58,10 @@ interface SlideUniforms {
   uPresence: { value: number };
   uGround: { value: Vector3 };
   uReady: { value: number };
+  /** The DOM plate's corner radius, in CSS pixels. */
+  uRadius: { value: number };
+  /** Device pixels per CSS pixel, for a one-pixel edge on the corners. */
+  uRatio: { value: number };
 }
 
 interface Slide {
@@ -99,7 +103,19 @@ const FRAGMENT = /* glsl */ `
   uniform float uPresence;
   uniform vec3 uGround;
   uniform float uReady;
+  uniform float uRadius;
+  uniform float uRatio;
   varying vec2 vUv;
+
+  // The DOM plate's rounded corners, so the bezel beneath shows around the
+  // plate's curve rather than under a square corner. A rounded-box distance
+  // in CSS pixels, edged over one device pixel. Measured on the plate's own
+  // UVs, so the corners travel with the bow.
+  float corners(vec2 uv) {
+    vec2 q = abs((uv - 0.5) * uPlane) - (uPlane * 0.5 - uRadius);
+    float d = length(max(q, 0.0)) + min(max(q.x, q.y), 0.0) - uRadius;
+    return clamp(0.5 - d * uRatio, 0.0, 1.0);
+  }
 
   // object-fit: cover with object-position: top, in UV space (v = 1 is the
   // top edge), matching the DOM plate's object-cover object-top.
@@ -135,7 +151,8 @@ const FRAGMENT = /* glsl */ `
     // Dimmed toward the ground as the plate leaves the stage: the same mix the
     // DOM plate's opacity makes over the ink.
     vec3 lit = mix(uGround, color * uBrightness, uPresence);
-    gl_FragColor = vec4(lit * uReady, uReady);
+    float alpha = uReady * corners(vUv);
+    gl_FragColor = vec4(lit * alpha, alpha);
   }
 `;
 
@@ -200,6 +217,8 @@ export function SliderCanvas({ sources, motion, frameRef, initialIndex, onReady,
         uPresence: { value: 1 },
         uGround: { value: new Vector3(GROUND, GROUND, GROUND) },
         uReady: { value: 0 },
+        uRadius: { value: 0 },
+        uRatio: { value: 1 },
       };
       const material = new ShaderMaterial({
         uniforms,
@@ -240,9 +259,13 @@ export function SliderCanvas({ sources, motion, frameRef, initialIndex, onReady,
       frameX = (frame?.offsetLeft ?? 0) + frameWidth / 2 - width / 2;
       frameY = height / 2 - ((frame?.offsetTop ?? 0) + frameHeight / 2);
       step = slideStep(width, frameWidth);
+      // The corners are read from the DOM plate too, never restated here.
+      const radius = frame ? Number.parseFloat(getComputedStyle(frame).borderTopLeftRadius) : 0;
       for (const slide of slides) {
         slide.mesh.scale.set(frameWidth, frameHeight, 1);
         slide.uniforms.uPlane.value.set(frameWidth, frameHeight);
+        slide.uniforms.uRadius.value = Number.isFinite(radius) ? radius : 0;
+        slide.uniforms.uRatio.value = renderer.getPixelRatio();
       }
       dirty = true;
       repaint();
