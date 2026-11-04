@@ -38,6 +38,29 @@ export function destinationOf(project: Project): { href: string; internal: boole
   return link ? { href: link.href, internal: false } : null;
 }
 
+/**
+ * A card's frosted glass, as a layer behind its content rather than the card
+ * box itself. It carries the same hook as what only its layout has, so the
+ * grid-to-list Flip fades the glass out with the images and back in behind
+ * the names; the names are the only things that fly.
+ */
+function Surface({
+  layout,
+  className = "rounded-glass-sm md:rounded-glass",
+}: {
+  readonly layout: Layout;
+  readonly className?: string;
+}) {
+  return (
+    <span
+      aria-hidden="true"
+      data-grid-media={layout === "grid" ? true : undefined}
+      data-list-extra={layout === "list" ? true : undefined}
+      className={`index-surface glass-light ${className}`}
+    />
+  );
+}
+
 export function ProjectLink({
   project,
   className,
@@ -89,7 +112,7 @@ export function ProjectLink({
 
 /**
  * A project without a case study says where it leads: one small section per
- * link -- the certificate, the repository -- side by side under the tile, so a
+ * link -- the certificate, the repository -- as glass chips side by side, so a
  * second destination is not hidden behind the first. Outside the tile's own
  * link, which cannot contain another. The accessible name adds the project, so
  * links read out of context are not a run of "Repository".
@@ -110,15 +133,15 @@ export function DestinationLinks({
   const links = project.links.filter(isResolvedLink);
   if (links.length === 0) return null;
   return (
-    <ul className={`meta grid auto-cols-fr grid-flow-col divide-x divide-paper-rule ${className}`} {...rest}>
+    <ul className={`meta flex flex-wrap gap-2 ${className}`} {...rest}>
       {links.map((link) => (
-        <li key={link.role} className="px-3 first:pl-0 last:pr-0">
+        <li key={link.role}>
           <a
             href={link.href}
             target="_blank"
             rel="noopener noreferrer"
             aria-label={`${labels[link.role]}, ${project.name}`}
-            className="inline-block py-1 underline decoration-1 underline-offset-4 transition-colors duration-300 hover:text-paper-muted"
+            className="index-chip px-3 py-2 md:py-1.5"
           >
             {labels[link.role]}
           </a>
@@ -148,25 +171,28 @@ export function IndexToggle({
   readonly count: number;
 }) {
   return (
-    <div className="flex items-center justify-between border-b border-paper-rule px-5 py-3 md:px-8">
-      <div role="group" aria-label={copy.toggle} className="meta flex gap-5">
+    <div className="flex items-center justify-between px-5 pb-4 pt-5 md:px-8 md:pb-5 md:pt-6">
+      {/* A segmented glass strip: the pressed segment is a brighter pane. */}
+      <div role="group" aria-label={copy.toggle} className="meta glass-light inline-flex gap-0.5 rounded-glass-sm p-1">
         {(["grid", "list"] as const).map((option) => (
           <button
             key={option}
             type="button"
             aria-pressed={layout === option}
             onClick={() => onSwitch(option)}
-            // Dimmed by colour, not opacity: ink at half opacity on paper is
-            // 3.4:1, under AA for text this size; paper-muted is 5.8:1.
-            className={`py-1 transition-colors duration-300 ${
-              layout === option ? "underline decoration-1 underline-offset-4" : "text-paper-muted hover:text-ink"
+            // Dimmed by colour, not opacity: ink at half opacity is under AA
+            // for text this size; glass-ink-2 on light glass is 7.6:1.
+            className={`rounded-glass-xs px-3.5 py-2 transition-[color,background-color,box-shadow] duration-300 md:py-1.5 ${
+              layout === option ? "index-segment-on" : "text-glass-ink-2 hover:text-ink"
             }`}
           >
             {option === "grid" ? copy.grid : copy.list}
           </button>
         ))}
       </div>
-      <span className="meta tabular-nums text-paper-muted">{recordNumber(count - 1)}</span>
+      <span className="meta glass-light rounded-glass-xs px-3 py-2 tabular-nums text-glass-ink-2">
+        {recordNumber(count - 1)}
+      </span>
     </div>
   );
 }
@@ -182,14 +208,21 @@ export function IndexGrid({ projects, copy }: ViewProps) {
   const entries = records.filter(({ project }) => !hasTile(project));
 
   return (
-    <div className="px-5 pb-32 pt-10 md:px-8 md:pt-12">
-      <ol className="grid grid-cols-1 gap-x-5 gap-y-12 md:grid-cols-3">
+    <div className="px-5 pb-16 md:px-8 md:pb-20">
+      <ol className="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-5">
         {tiles.map(({ project, index }) => (
           <li key={project.slug}>
-            <ProjectLink project={project} className="group block" cursor="view">
-              <div data-grid-media data-cursor-frame className="overflow-hidden">
+            {/* The link is the glass card; the shared name stays on the
+                media inside it, never on the card. */}
+            <ProjectLink
+              project={project}
+              className="group relative isolate block p-2 pb-4 md:p-2.5 md:pb-5"
+              cursor="view"
+            >
+              <Surface layout="grid" />
+              <div data-grid-media data-cursor-frame className="overflow-hidden rounded-glass-xs md:rounded-glass-sm">
                 <SharedMedia slug={project.slug} enabled={hasCaseStudy(project)}>
-                  <div className="transition-transform duration-700 ease-out-expo group-hover:scale-[1.04] reduced:transition-none reduced:group-hover:scale-100">
+                  <div className="overflow-hidden rounded-glass-xs transition-transform duration-700 ease-out-expo group-hover:scale-[1.04] reduced:transition-none reduced:group-hover:scale-100 md:rounded-glass-sm">
                     <ProjectCover project={project} sizes={TILE_SIZES} framed eager={index === 0} />
                   </div>
                 </SharedMedia>
@@ -198,12 +231,12 @@ export function IndexGrid({ projects, copy }: ViewProps) {
                   two sides wrapped into each other. The name hugs its text
                   (justify-self-start), because Flip scales that box into
                   the list row's name. */}
-              <div className="meta mt-3 grid grid-cols-[auto_1fr] items-baseline gap-x-2 gap-y-1 transition-transform duration-500 ease-out-expo group-hover:translate-x-1.5 reduced:transition-none">
-                <span className="tabular-nums text-paper-muted">{recordNumber(index)}</span>
+              <div className="meta mt-3.5 grid grid-cols-[auto_1fr] items-baseline gap-x-3 gap-y-1 px-1.5 transition-transform duration-500 ease-out-expo group-hover:translate-x-1.5 reduced:transition-none">
+                <span className="tabular-nums text-glass-ink-2">{recordNumber(index)}</span>
                 <span data-flip-id={project.slug} className="inline-block origin-left justify-self-start">
                   {project.name}
                 </span>
-                <span className="col-start-2 text-paper-muted">
+                <span className="col-start-2 text-glass-ink-2">
                   {project.type} / {project.year}
                 </span>
               </div>
@@ -213,11 +246,12 @@ export function IndexGrid({ projects, copy }: ViewProps) {
       </ol>
 
       {entries.length > 0 ? (
-        <ol className="mt-14 grid grid-cols-1 gap-x-5 border-t border-paper-rule md:mt-16 md:grid-cols-3">
+        <ol className="mt-4 grid grid-cols-1 gap-4 md:mt-5 md:grid-cols-3 md:gap-5">
           {entries.map(({ project, index }) => (
-            <li key={project.slug} className="border-b border-paper-rule py-5 md:border-b-0 md:pt-4">
+            <li key={project.slug} className="relative isolate flex flex-col p-5 md:p-6">
+              <Surface layout="grid" />
               <ProjectLink project={project} className="group block">
-                <span className="meta tabular-nums text-paper-muted">{recordNumber(index)}</span>
+                <span className="meta tabular-nums text-glass-ink-2">{recordNumber(index)}</span>
                 {/* Uppercase like the list row it flies into, so Flip only
                     scales the word and never changes its case mid-flight. */}
                 <span
@@ -226,18 +260,18 @@ export function IndexGrid({ projects, copy }: ViewProps) {
                 >
                   {project.name}
                 </span>
-                <span className="meta mt-2 block text-paper-muted">
+                <span className="meta mt-2 block text-glass-ink-2">
                   {project.type} / {project.year}
                 </span>
               </ProjectLink>
-              <p data-grid-media className="mt-3 max-w-[44ch] text-[0.8125rem] leading-snug text-paper-muted">
+              <p data-grid-media className="mb-4 mt-3 max-w-[44ch] text-[0.8125rem] leading-snug text-glass-ink-2">
                 {project.summary}
               </p>
               <DestinationLinks
                 project={project}
                 labels={copy.destinations}
                 data-grid-media
-                className="mt-3 border-t border-paper-rule pt-2"
+                className="mt-auto border-t border-ink/10 pt-3.5"
               />
             </li>
           ))}
@@ -255,15 +289,18 @@ export function IndexList({
   onLeave,
 }: ViewProps & { readonly onHover?: (slug: string) => void; readonly onLeave?: () => void }) {
   return (
-    <ol className="px-5 pb-32 md:px-8" onPointerLeave={onLeave}>
+    <ol className="flex flex-col gap-2 px-5 pb-16 md:gap-2.5 md:px-8 md:pb-20" onPointerLeave={onLeave}>
       {projects.map((project, i) => (
-        <li key={project.slug} className="border-b border-paper-rule">
+        <li key={project.slug} className="relative isolate">
+          {/* Each row a glass strip, faded with the list's other extras so
+              the names fly into rows that frost in behind them. */}
+          <Surface layout="list" className="rounded-glass-sm" />
           <ProjectLink
             project={project}
             onPointerEnter={onHover ? () => onHover(project.slug) : undefined}
-            className="group grid grid-cols-12 items-baseline gap-x-5 py-5 md:py-6"
+            className="group grid grid-cols-12 items-baseline gap-x-5 px-4 py-5 md:px-6 md:py-6"
           >
-            <span data-list-extra className="meta col-span-2 tabular-nums text-paper-muted md:col-span-1">
+            <span data-list-extra className="meta col-span-2 tabular-nums text-glass-ink-2 md:col-span-1">
               {recordNumber(i)}
             </span>
             {/* Seven columns at 4vw hold the longest name, "Meta Database
@@ -274,15 +311,17 @@ export function IndexList({
             >
               {project.name}
             </span>
-            <span data-list-extra className="meta col-span-8 col-start-3 mt-3 md:col-span-3 md:col-start-auto md:mt-0">
+            <span data-list-extra className="meta col-span-6 col-start-3 mt-3 md:col-span-3 md:col-start-auto md:mt-0">
               {project.category}
             </span>
-            <span data-list-extra className="meta col-span-2 mt-3 text-right tabular-nums md:col-span-1 md:mt-0">
+            {/* Four columns on a phone: inside the strip's padding, two held "2026" and
+                wrapped its open-ended dash and "Fall 2025" onto a second line. */}
+            <span data-list-extra className="meta col-span-4 mt-3 whitespace-nowrap text-right tabular-nums md:col-span-1 md:mt-0">
               {project.year}
             </span>
           </ProjectLink>
           {hasCaseStudy(project) ? null : (
-            <div data-list-extra className="-mt-2 grid grid-cols-12 gap-x-5 pb-5 md:-mt-3 md:pb-6">
+            <div data-list-extra className="-mt-2 grid grid-cols-12 gap-x-5 px-4 pb-5 md:-mt-3 md:px-6 md:pb-6">
               <DestinationLinks
                 project={project}
                 labels={copy.destinations}

@@ -150,7 +150,7 @@ export function IndexView({ projects, copy }: Props) {
           >
             {hoveredProject ? (
               <SharedMedia slug={hoveredProject.slug} enabled={hasCaseStudy(hoveredProject)}>
-                <div>
+                <div className="overflow-hidden rounded-glass-sm shadow-[0_24px_60px_-28px_var(--color-glass-shadow)]">
                   <ProjectCover project={hoveredProject} sizes="22vw" />
                 </div>
               </SharedMedia>
