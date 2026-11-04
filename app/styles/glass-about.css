@@ -1,1 +1,51 @@
 /* Radiant glass: styles only the about area needs, beyond the shared utilities in globals.css. Owned by that area's files. */
+
+/* A contact chip on the header panel. A lighter glass than a panel and no
+   backdrop blur of its own: it sits inside a panel that has already blurred
+   the ground, and a second blur over the same pixels shows nothing new. */
+.about-chip {
+  background-color: var(--color-glass-light);
+  border: 1px solid var(--color-glass-light-edge);
+  box-shadow:
+    inset 0 1px 0 var(--color-glass-shine),
+    0 8px 18px -12px var(--color-glass-shadow);
+  transition: background-color 0.3s var(--ease-out-expo);
+}
+
+.about-chip:hover,
+.about-chip:focus-visible {
+  background-color: var(--color-glass-light-edge);
+}
+
+/* The About page's ground. `radiant-light` sizes its four glows in percent
+   of the box, which suits a screen-tall band; this page is three screens on
+   a desktop and six on a phone, where percent glows came out as two faint
+   corners on a desktop and as thin stripes down a phone's edges. Here each
+   glow is as wide as a rem measure says (a phone gets full-width bands) and
+   as tall as a share of the page, so the colour runs the whole length
+   behind the panels, as in the mock. Painted, not blurred elements: a
+   gradient costs nothing to scroll. */
+.about-ground {
+  background-image:
+    radial-gradient(56rem 15% at 4% 2%, color-mix(in oklab, var(--color-glow-apricot) 90%, transparent), transparent),
+    radial-gradient(50rem 15% at 98% 12%, color-mix(in oklab, var(--color-glow-lilac) 85%, transparent), transparent),
+    radial-gradient(54rem 17% at 62% 40%, color-mix(in oklab, var(--color-glow-sky) 80%, transparent), transparent),
+    radial-gradient(46rem 14% at 0% 30%, color-mix(in oklab, var(--color-glow-lilac) 55%, transparent), transparent),
+    radial-gradient(48rem 15% at 6% 64%, color-mix(in oklab, var(--color-glow-rose) 85%, transparent), transparent),
+    radial-gradient(50rem 15% at 98% 74%, color-mix(in oklab, var(--color-glow-lilac) 80%, transparent), transparent),
+    radial-gradient(52rem 13% at 40% 97%, color-mix(in oklab, var(--color-glow-rose) 80%, transparent), transparent);
+}
+
+/* The footer's ground, for the same reason: a band a few hundred pixels
+   tall (or 92svh on the pages with the large footer). The ember and magenta
+   sit high, behind the headline, and the glass bar low on the darker
+   ground: with the ember behind the bar, as in the mock, the phone's 12px
+   stamp measured 2.4:1 at worst. Placed like this the bar's small type
+   clears 4.5:1 on a phone and a desktop. */
+.footer-ground {
+  background-image:
+    radial-gradient(44rem 55% at 8% 30%, color-mix(in oklab, var(--color-glow-ember) 50%, transparent), transparent),
+    radial-gradient(38rem 50% at 55% 45%, color-mix(in oklab, var(--color-glow-magenta) 36%, transparent), transparent),
+    radial-gradient(40rem 65% at 94% 18%, color-mix(in oklab, var(--color-glow-indigo) 48%, transparent), transparent),
+    radial-gradient(30rem 45% at 92% 100%, color-mix(in oklab, var(--color-glow-teal) 18%, transparent), transparent);
+}

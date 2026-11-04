@@ -12,11 +12,11 @@ export default function NotFound() {
       <main
         id="main"
         data-tone="light"
-        className="flex min-h-svh flex-col justify-end bg-paper px-5 pb-10 text-ink md:px-8"
+        className="radiant-light flex min-h-svh flex-col justify-end px-5 pb-10 text-ink md:px-8"
       >
         <h1 className="display text-[22vw]">{notFound.heading}</h1>
-        <div className="mt-8 flex flex-wrap items-baseline justify-between gap-4 border-t border-paper-rule pt-4">
-          <p className="max-w-[36ch] text-paper-muted">{notFound.body}</p>
+        <div className="glass-light mt-8 flex flex-wrap items-baseline justify-between gap-4 px-5 py-4 md:px-[1.375rem]">
+          <p className="max-w-[36ch] text-glass-ink-2">{notFound.body}</p>
           <Link
             href="/work"
             transitionTypes={["page"]}

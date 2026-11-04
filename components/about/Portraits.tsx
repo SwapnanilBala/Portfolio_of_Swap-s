@@ -24,10 +24,11 @@ const PLACES = [
 ] as const;
 
 /**
- * Three portraits as a triangle of circles, largest first. Where two meet,
- * the upper one's paper-coloured edge cuts cleanly into the one beneath, so
- * they read as a group rather than as three separate badges. The site's only
- * round forms besides the dot field's dots, and there on request.
+ * Three portraits as a triangle of circles, largest first, each with a white
+ * rim and a soft shadow on its glass panel. Where two meet, the upper one's
+ * rim cuts cleanly into the one beneath, so they read as a group rather than
+ * as three separate badges. The site's only round forms besides the dot
+ * field's dots, and there on request.
  */
 export function Portraits({ portraits, kit }: Props) {
   const { Plate } = kit;
@@ -38,7 +39,7 @@ export function Portraits({ portraits, kit }: Props) {
         return (
           <div
             key={portrait.src}
-            className="absolute aspect-square overflow-hidden rounded-full border-4 border-paper bg-paper"
+            className="absolute aspect-square overflow-hidden rounded-full border-[3px] border-glass-shine bg-glass-light-solid shadow-[0_18px_40px_-18px_var(--color-glass-shadow)]"
             style={{ left: `${place.left}%`, top: `${place.top}%`, width: `${place.size}%` }}
           >
             <Plate className="size-full rounded-full">
