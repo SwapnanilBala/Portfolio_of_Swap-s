@@ -979,7 +979,7 @@ export const content: SiteContent = {
       // this repository is public. Regenerate the same way if it is replaced.
       key: "resume",
       href: "/resume.pdf",
-      detail: "Resume, September 2026 (PDF)",
+      detail: "Resume, October 2026 (PDF)",
     },
   ],
 
@@ -1010,9 +1010,9 @@ export const content: SiteContent = {
     caseMeta: { role: "Role", year: "Year", stack: "Stack", type: "Type" },
     landing: {
       availability: "Seeking a {availability}",
-      // The resume contact's detail says the same: "Resume, September 2026
+      // The resume contact's detail says the same: "Resume, October 2026
       // (PDF)". Change both when the file is replaced.
-      resumeNote: "September 2026 / PDF",
+      resumeNote: "October 2026 / PDF",
     },
     slider: {
       heading: "Projects",
