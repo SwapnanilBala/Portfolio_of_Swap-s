@@ -17,7 +17,8 @@ portfolio is a negative work sample no matter what the copy says.
 
 ## History, so nothing gets "restored" by accident
 
-The site has had three designs. Each replaced the last on request.
+The site has had three designs, and a fourth layer. Each replaced the last on
+request.
 
 1. **Ephemeris** — an astronomical almanac: beige and brass, Newsreader,
    bordered plates with a hover lift, an asymmetric right rail.
@@ -26,6 +27,17 @@ The site has had three designs. Each replaced the last on request.
 3. **Editorial** (current) — built to a detailed brief for a cinematic,
    motion-led portfolio: a WebGL project slider, an Index archive, case
    studies, an oversized footer and global page transitions.
+4. **Golden Hour Radiant Glass** (November 2026, on request, after the
+   mock-ups) — the editorial structure, type, motion and copy stay; the
+   grounds become radiant gradients (`radiant-light`, `radiant-dark`) and
+   the content sits in frosted panels (`glass-light`, `glass-dark`, and
+   `glass-bezel` around plates). This deliberately reverses the "no cards,
+   no shadows, no glass, no gradient washes, no pills" rule below, which now
+   applies only to what this list keeps: the nav and home link stay
+   `mix-blend-difference` type (a glass bar over a light capture measured
+   1.04:1), technologies stay em-dash text lists, and the slider's
+   live-site link stays the one solid control. The utilities and tokens are
+   in `app/globals.css`; area-only styles are in `app/styles/glass-*.css`.
 
 Do not reintroduce anything from the first two because an older note or commit
 describes it. In particular the dossier's stack rules ("no Tailwind, no
@@ -229,8 +241,9 @@ competes.
 - **Numbers are references.** `01 / Category` in the slider is cited by the
   thumbnail rail's counter and the Index's record numbers; a number on a block
   nothing refers to is still decoration.
-- **No cards, no drop shadows, no glass, no gradient washes, no pills, no icon
-  badges for technologies.** Technologies are text lists joined by em dashes.
+- **No icon badges for technologies.** (The old "no cards, no drop shadows,
+  no glass, no gradient washes, no pills" rule was reversed by the Radiant
+  Glass layer; see *History*.) Technologies are text lists joined by em dashes.
   One filled control, on request: the slider's live-site link (see *The
   slider*). Do not let it spread — everything else stays type, including
   the landing page's resume link, which is display type with a hairline arrow.

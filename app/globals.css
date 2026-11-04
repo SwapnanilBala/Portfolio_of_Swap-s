@@ -1,4 +1,8 @@
 @import "tailwindcss";
+@import "./styles/glass-about.css";
+@import "./styles/glass-projects.css";
+@import "./styles/glass-index.css";
+@import "./styles/glass-case.css";
 
 /* ==========================================================================
    Tokens
@@ -27,6 +31,158 @@
 
   --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
   --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+
+  /* Golden Hour Radiant Glass (November 2026, on request). Glows sit behind
+     the glass as radial gradients, never as blurred elements: a gradient
+     costs nothing to scroll, a 90px filter on four large layers does.
+     Light glows: apricot, lilac, sky, rose. Dark glows: ember, magenta,
+     indigo, teal. Secondary text on glass is glass-ink-2 (7.6:1 worst
+     measured on light glass) and glass-paper-2 on dark glass. */
+  --color-glow-apricot: #ffb37a;
+  --color-glow-lilac: #c6b1ff;
+  --color-glow-sky: #9fdcf0;
+  --color-glow-rose: #ffadc9;
+  --color-glow-ember: #ff6a1f;
+  --color-glow-magenta: #c2359c;
+  --color-glow-indigo: #4a4dff;
+  --color-glow-teal: #18b7a6;
+  --color-glow-gold: #e9b04a;
+
+  --color-ground-light: #f4f1ee;
+  --color-ground-dark: #0b0a0f;
+  --color-glass-ink-2: #3d3b45;
+  --color-glass-paper-2: #c9c6d2;
+
+  --color-glass-light: rgb(255 255 255 / 0.42);
+  --color-glass-light-edge: rgb(255 255 255 / 0.7);
+  --color-glass-light-solid: rgb(250 248 246 / 0.94);
+  --color-glass-dark: rgb(255 255 255 / 0.07);
+  --color-glass-dark-edge: rgb(255 255 255 / 0.16);
+  --color-glass-dark-solid: rgb(24 22 30 / 0.94);
+  --color-glass-shine: rgb(255 255 255 / 0.85);
+  --color-glass-shine-dark: rgb(255 255 255 / 0.2);
+  --color-glass-sheen: rgb(255 255 255 / 0.28);
+  --color-glass-sheen-dark: rgb(255 255 255 / 0.1);
+  --color-glass-shadow: rgb(70 40 90 / 0.3);
+  --color-glass-shadow-dark: rgb(0 0 0 / 0.7);
+
+  --radius-glass: 22px;
+  --radius-glass-sm: 14px;
+  --radius-glass-xs: 10px;
+}
+
+/* ==========================================================================
+   Radiant glass
+   Grounds: `radiant-light` / `radiant-dark` paint the band they sit on.
+   Panels: `glass-light` / `glass-dark` (22px radius); `rounded-glass-sm`
+   sizes one down for chips and strips. Pick the panel by the band it sits
+   on, not the page's tone: a case study's body is a light band in a dark
+   page. The nav and the home link are NOT glass: they keep
+   `mix-blend-difference`, because a glass bar over a light capture measured
+   1.04:1. The slider's live-site link stays the one solid control.
+   ========================================================================== */
+
+@utility radiant-light {
+  background-color: var(--color-ground-light);
+  background-image:
+    radial-gradient(42% 38% at 8% 6%, --alpha(var(--color-glow-apricot) / 85%), transparent 70%),
+    radial-gradient(38% 34% at 92% 18%, --alpha(var(--color-glow-lilac) / 80%), transparent 70%),
+    radial-gradient(40% 36% at 14% 72%, --alpha(var(--color-glow-sky) / 75%), transparent 70%),
+    radial-gradient(40% 38% at 86% 88%, --alpha(var(--color-glow-rose) / 80%), transparent 70%);
+  color: var(--color-ink);
+}
+
+@utility radiant-dark {
+  background-color: var(--color-ground-dark);
+  background-image:
+    radial-gradient(42% 40% at 10% 8%, --alpha(var(--color-glow-ember) / 45%), transparent 70%),
+    radial-gradient(38% 36% at 90% 20%, --alpha(var(--color-glow-magenta) / 38%), transparent 70%),
+    radial-gradient(42% 40% at 18% 86%, --alpha(var(--color-glow-indigo) / 38%), transparent 70%),
+    radial-gradient(36% 34% at 88% 80%, --alpha(var(--color-glow-teal) / 26%), transparent 70%);
+  color: var(--color-paper);
+}
+
+@utility glass-light {
+  position: relative;
+  isolation: isolate;
+  border-radius: var(--radius-glass);
+  background-color: var(--color-glass-light);
+  border: 1px solid var(--color-glass-light-edge);
+  box-shadow:
+    inset 0 1px 0 var(--color-glass-shine),
+    0 24px 60px -28px var(--color-glass-shadow);
+  -webkit-backdrop-filter: blur(var(--glass-blur, 24px)) saturate(160%);
+  backdrop-filter: blur(var(--glass-blur, 24px)) saturate(160%);
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    pointer-events: none;
+    background: linear-gradient(135deg, var(--color-glass-sheen), transparent 38%);
+  }
+}
+
+@utility glass-dark {
+  position: relative;
+  isolation: isolate;
+  border-radius: var(--radius-glass);
+  background-color: var(--color-glass-dark);
+  border: 1px solid var(--color-glass-dark-edge);
+  box-shadow:
+    inset 0 1px 0 var(--color-glass-shine-dark),
+    0 30px 70px -30px var(--color-glass-shadow-dark);
+  -webkit-backdrop-filter: blur(var(--glass-blur, 24px)) saturate(160%);
+  backdrop-filter: blur(var(--glass-blur, 24px)) saturate(160%);
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    pointer-events: none;
+    background: linear-gradient(135deg, var(--color-glass-sheen-dark), transparent 40%);
+  }
+}
+
+/* The frame around a project plate. The slider's plate and the case-study
+   hero both use this, unchanged, so the shared-element morph runs between
+   two boxes of the same shape. The image inside keeps the view-transition
+   name; the bezel never carries one. No backdrop-filter: it sits over a
+   capture-sized area and would be the most expensive blur on the site. */
+@utility glass-bezel {
+  padding: 0.625rem;
+  border-radius: var(--radius-glass);
+  background-color: var(--color-glass-dark);
+  border: 1px solid var(--color-glass-dark-edge);
+  box-shadow:
+    inset 0 1px 0 var(--color-glass-shine-dark),
+    0 40px 90px -40px var(--color-glass-shadow-dark);
+}
+
+/* Phones blur less: backdrop-filter is recomputed on every scroll frame. */
+@media (pointer: coarse) {
+  :root {
+    --glass-blur: 12px;
+  }
+}
+
+/* Anyone who asks for less transparency gets near-opaque panels. */
+@media (prefers-reduced-transparency: reduce) {
+  .glass-light {
+    background-color: var(--color-glass-light-solid);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .glass-dark {
+    background-color: var(--color-glass-dark-solid);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
 }
 
 /* `reduced:` applies under the reduced-motion media query or the
