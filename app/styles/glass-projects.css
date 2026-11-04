@@ -1,1 +1,20 @@
 /* Radiant glass: styles only the projects area needs, beyond the shared utilities in globals.css. Owned by that area's files. */
+
+/* The plate's frame in both sliders. `--bezel` is glass-bezel's ring (its
+   padding and border), so a bezel set outside a plate by it, or around one
+   in flow, meets the plate's edge exactly. The plate's corners are the
+   bezel's, less the ring, so the two curves are concentric. The WebGL plates
+   read the radius back from the DOM plate rather than restating it. */
+.projects-frame {
+  --bezel: calc(0.625rem + 1px);
+  --plate-r: calc(var(--radius-glass) - var(--bezel));
+}
+
+/* The soft gold glow behind the plate on stage (gold from Lagna Atelier's
+   palette). A gradient, never a blurred element: it costs nothing while the
+   slider moves over it. It stays still; only the plates travel. */
+.projects-glow {
+  background-image:
+    radial-gradient(closest-side, color-mix(in oklab, var(--color-glow-gold) 42%, transparent), transparent),
+    radial-gradient(closest-side at 50% 75%, color-mix(in oklab, var(--color-glow-gold) 22%, transparent), transparent);
+}

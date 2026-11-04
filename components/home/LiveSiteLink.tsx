@@ -16,7 +16,9 @@ interface Props {
  * The way from a slider plate to the product itself: a filled block of paper
  * under the plate, so a visitor who wants the real thing never has to read a
  * case study to find it. It is the site's one filled control, on request --
- * big and plainly visible against the ink. Its address line says where it
+ * big and plainly visible against the ink. Under the Radiant Glass layer it
+ * keeps that: opaque paper among the glass strips, with only the strips'
+ * corners, so it is still the strongest thing to press on the page. Its address line says where it
  * goes before anyone clicks; the accessible name says which project.
  */
 export function LiveSiteLink({ href, label, project, className = "", tabIndex, hostRef }: Props) {
@@ -27,7 +29,7 @@ export function LiveSiteLink({ href, label, project, className = "", tabIndex, h
       rel="noopener noreferrer"
       tabIndex={tabIndex}
       aria-label={`${label}, ${project}`}
-      className={`group flex items-center justify-between gap-8 bg-paper text-ink focus-visible:outline-paper focus-visible:outline-offset-4 ${className}`}
+      className={`group flex items-center justify-between gap-8 rounded-glass-sm bg-paper text-ink focus-visible:outline-paper focus-visible:outline-offset-4 ${className}`}
     >
       <span className="grid gap-1.5">
         <span className="font-semibold uppercase leading-none tracking-[-0.01em]">{label}</span>
