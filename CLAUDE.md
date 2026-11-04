@@ -525,6 +525,15 @@ A section may be followed by one plate (`MediaPlate`) or a pair
   already shows — and the clinic's stated password format. Crop past it; do
   not blur what can be cropped. Clinic captures are signed-out public pages
   only.
+- **A project's phone app follows its sections** (`companion`,
+  `CompanionApp`): a section set like the others, then its screens as a row
+  of phones, six from 80rem, three from 48rem, two below. Robust Health for
+  Android is the one so far: a private repository, so no source link, and
+  its screens are the debug build's sample data on the emulator (invented
+  people, no account), status bar cropped off. The bezels are the one
+  device frame on the site, on request (November 2026): an ink border with
+  the phone's corners, scaled by `cqw`, and nothing more. Lone plates and
+  pairs stay frameless.
 
 ## Page transitions
 
