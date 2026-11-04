@@ -1,1 +1,41 @@
 /* Radiant glass: styles only the index area needs, beyond the shared utilities in globals.css. Owned by that area's files. */
+
+@layer components {
+  /* The Grid / List switch: the pressed segment is a brighter pane set into
+     the strip, as in the mock. */
+  .index-segment-on {
+    background-color: var(--color-glass-shine);
+    box-shadow:
+      inset 0 1px 0 var(--color-glass-shine),
+      0 4px 10px -4px var(--color-glass-shadow);
+    font-weight: 600;
+  }
+
+  /* A destination as a small glass chip: brighter than the card under it. */
+  .index-chip {
+    display: inline-block;
+    border-radius: var(--radius-glass-xs);
+    border: 1px solid var(--color-glass-shine);
+    background-color: --alpha(var(--color-glass-light-edge) / 80%);
+    box-shadow: inset 0 1px 0 var(--color-glass-shine);
+    font-weight: 600;
+    transition: background-color 300ms var(--ease-out-expo);
+
+    &:hover {
+      background-color: var(--color-glass-shine);
+    }
+  }
+}
+
+/* A card's glass is its own layer behind the content, not the card box
+   itself, so the grid-to-list Flip can fade the surfaces with the images
+   while the names fly: only the small name spans ever move, and no
+   backdrop-filtered box changes size mid-flight. Unlayered, so it wins over
+   the `glass-light` utility's own `position: relative` on the same element. */
+.index-surface {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
