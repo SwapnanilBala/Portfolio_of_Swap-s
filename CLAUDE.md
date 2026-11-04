@@ -216,7 +216,9 @@ competes.
   Vedic birth chart", "Structured programming…") and read as two sites stacked;
   the zoom also cut each product's nav bar at the viewport edge. Now a capture
   is shown whole, anchored to its top so its header stays intact, and the title
-  only crosses the plate's lower edge. Dimming and scrims were tried first and
+  only crosses the plate's lower edge (since Radiant Glass: its cap line sits
+  on the capture's lower edge and the letters cross only the `glass-bezel`
+  rim; deeper, Lagna's capitals ran over its own headline at 2.26:1). Dimming and scrims were tried first and
   did not work: a legible headline competes at any brightness that keeps the
   capture worth showing. Full-bleed only comes back with imagery that carries
   no headline of its own — an in-product view such as the chart wheel — and
@@ -560,8 +562,10 @@ A section may be followed by one plate (`MediaPlate`) or a pair
   the emulator, signed out — never a real person's birth details, by the
   same rule as the web captures. The bezels are the one
   device frame on the site, on request (November 2026): an ink border with
-  the phone's corners, scaled by `cqw`, and nothing more. Lone plates and
-  pairs stay frameless.
+  the phone's corners, scaled by `cqw`, and nothing more. Since Radiant
+  Glass, lone plates, pairs and each phone sit in glass frames (padding from
+  `components/work/frame.ts`); the ink device border is still the only
+  device frame.
 
 ## Page transitions
 
