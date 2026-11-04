@@ -1,1 +1,33 @@
 /* Radiant glass: styles only the case area needs, beyond the shared utilities in globals.css. Owned by that area's files. */
+
+/* The case study's body: one light band, several screens tall. `radiant-light`
+   sizes its four glows to the band they paint, so on a band this tall they
+   stretched into thin streaks down either edge with a flat ground between.
+   This is the same four glows, the same colours and strengths, set in a tile
+   (`--case-glow-tile`) repeated down the band. Each glow fades out inside its
+   own tile, so a repeat has no seam. Still gradients, never blurred
+   elements: they cost nothing to scroll. */
+@utility radiant-case-body {
+  --case-glow-tile: 2400px;
+  --case-glow-ry: calc(var(--case-glow-tile) * 0.29);
+  background-color: var(--color-ground-light);
+  background-image:
+    radial-gradient(46% var(--case-glow-ry) at 6% calc(var(--case-glow-tile) * 0.22), --alpha(var(--color-glow-apricot) / 85%), transparent 70%),
+    radial-gradient(42% var(--case-glow-ry) at 94% calc(var(--case-glow-tile) * 0.44), --alpha(var(--color-glow-lilac) / 80%), transparent 70%),
+    radial-gradient(44% var(--case-glow-ry) at 10% calc(var(--case-glow-tile) * 0.65), --alpha(var(--color-glow-sky) / 75%), transparent 70%),
+    radial-gradient(44% var(--case-glow-ry) at 88% calc(var(--case-glow-tile) * 0.78), --alpha(var(--color-glow-rose) / 80%), transparent 70%);
+  background-size: 100% var(--case-glow-tile);
+  background-repeat: repeat-y;
+  color: var(--color-ink);
+
+  /* A phone's column is narrow and long: a shorter tile keeps a glow in
+     every screen, and wider ellipses keep each one from reading as a stripe. */
+  @media (width < 48rem) {
+    --case-glow-tile: 1500px;
+    background-image:
+      radial-gradient(80% var(--case-glow-ry) at 0% calc(var(--case-glow-tile) * 0.22), --alpha(var(--color-glow-apricot) / 85%), transparent 70%),
+      radial-gradient(76% var(--case-glow-ry) at 100% calc(var(--case-glow-tile) * 0.44), --alpha(var(--color-glow-lilac) / 80%), transparent 70%),
+      radial-gradient(80% var(--case-glow-ry) at 0% calc(var(--case-glow-tile) * 0.65), --alpha(var(--color-glow-sky) / 75%), transparent 70%),
+      radial-gradient(76% var(--case-glow-ry) at 100% calc(var(--case-glow-tile) * 0.78), --alpha(var(--color-glow-rose) / 80%), transparent 70%);
+  }
+}

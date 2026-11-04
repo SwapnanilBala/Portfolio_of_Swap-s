@@ -41,12 +41,12 @@ interface NeighbourProps {
 
 function Neighbour({ project, label, back, className = "" }: NeighbourProps) {
   return (
-    <WarmOnIntent image={project.hero ?? project.cover} className={className}>
+    <WarmOnIntent image={project.hero ?? project.cover} className={`glass-light ${className}`}>
       <Link
         href={`/work/${project.slug}`}
         transitionTypes={["page"]}
         data-cursor="view"
-        className={`group flex h-full flex-col px-5 py-12 md:px-8 md:py-16 ${
+        className={`group flex h-full flex-col rounded-[inherit] px-5 py-10 md:px-8 md:py-14 ${
           back ? "items-start" : "items-end text-right"
         }`}
       >
@@ -60,13 +60,13 @@ function Neighbour({ project, label, back, className = "" }: NeighbourProps) {
               : "items-end group-hover:translate-x-3 group-focus-visible:translate-x-3"
           }`}
         >
-          <span className="meta flex items-center gap-4 text-paper-muted">
+          <span className="meta flex items-center gap-4 text-glass-ink-2">
             {back ? <Arrow back /> : null}
             {label}
             {back ? null : <Arrow back={false} />}
           </span>
           <DisplayTitle as="p" lines={displayLinesOf(project)} className="text-[clamp(2.5rem,6.5vw,7rem)]" />
-          <span className="meta text-paper-muted">
+          <span className="meta text-glass-ink-2">
             {project.category} / {project.year}
           </span>
         </div>
@@ -81,15 +81,16 @@ function Neighbour({ project, label, back, className = "" }: NeighbourProps) {
  * so opening it flew that small cover up into the next hero -- often a
  * different image from the cover, crossfading while the box grew, which read
  * as a glitch. Words carry it now and the page transition does the rest.
- * Each half is one link, edge to edge; on a fine pointer the crop marks lock
- * onto its words, which lean a few pixels the way the link goes.
+ * Each half is one link, edge to edge of its light glass panel; on a fine
+ * pointer the crop marks lock onto its words, which lean a few pixels the
+ * way the link goes. The panels are the only glass here: the words stay type.
  */
 export function CaseNav({ previous, next, copy }: Props) {
   if (!previous && !next) return null;
   return (
     <nav
       aria-label={copy.label}
-      className="grid divide-y divide-paper-rule border-t border-paper-rule md:grid-cols-2 md:divide-x md:divide-y-0"
+      className="grid gap-3 md:grid-cols-2 md:gap-5"
     >
       {previous ? <Neighbour project={previous} label={copy.previous} back /> : null}
       {next ? (
