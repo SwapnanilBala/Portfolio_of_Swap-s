@@ -326,11 +326,20 @@ export interface AboutContent {
    * first, so the sharpest photograph takes the biggest circle. Squares.
    */
   readonly portraits: readonly [ImageAsset, ImageAsset, ImageAsset];
-  /**
-   * The campus twice and the city, as one row of three after the record,
-   * each cropped to the same 4:3 frame.
-   */
-  readonly photos: readonly [Photograph, Photograph, Photograph];
+  /** One place over a run of days, as a grid after the record. */
+  readonly photos: PhotoSet;
+}
+
+/**
+ * Photographs of one place, in the order they were taken, under one line that
+ * names the place and the dates. Each is a 4:3 frame, so the grid has no
+ * ragged rows.
+ */
+export interface PhotoSet {
+  readonly place: string;
+  /** When the first and last were taken, e.g. "October 25 — November 4, 2026". */
+  readonly dates: string;
+  readonly images: readonly Photograph[];
 }
 
 /** A photograph with a line under it that says only what it shows. */

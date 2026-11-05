@@ -16,7 +16,12 @@ export type BlurredMedia =
   | "/media/about-smile.webp"
   | "/media/about-snow.webp"
   | "/media/about-suit.webp"
-  | "/media/fenway.webp"
+  | "/media/fens-nov-4-pond.webp"
+  | "/media/fens-nov-4-rocks.webp"
+  | "/media/fens-nov-4-trees.webp"
+  | "/media/fens-oct-25.webp"
+  | "/media/fens-oct-26-leaves.webp"
+  | "/media/fens-oct-26-water.webp"
   | "/media/kb-clinic-admin.webp"
   | "/media/kb-clinic-booking.webp"
   | "/media/kb-clinic-doctor.webp"
@@ -44,8 +49,6 @@ export type BlurredMedia =
   | "/media/lagna-atelier-week.webp"
   | "/media/lagna-atelier-wheel.webp"
   | "/media/lagna-atelier-yogas.webp"
-  | "/media/northeastern-street.webp"
-  | "/media/northeastern-window.webp"
   | "/media/robust-health-android-coach-plan.webp"
   | "/media/robust-health-android-coach.webp"
   | "/media/robust-health-android-dashboard.webp"
@@ -76,8 +79,18 @@ export const BLUR_PLACEHOLDERS: Readonly<Record<BlurredMedia, string>> = {
     "data:image/webp;base64,UklGRlQAAABXRUJQVlA4IEgAAADQAQCdASoMAAwAAwBSJQBOgBX+SrDT1AD+9gtevh65iqVglu1OMZ6Fiek09dBp/Mh+I9nUheetkliapABUBekjfNFIWVRVoAA=",
   "/media/about-suit.webp":
     "data:image/webp;base64,UklGRlIAAABXRUJQVlA4IEYAAADwAQCdASoMAAwAAwBSJYwCdAD0XhetrgAA/qNTMb2RCtUf5VOox3jZcbRrtPUMTd4ftzcdDspIEXAqRraeXF18XmsacAAA",
-  "/media/fenway.webp":
-    "data:image/webp;base64,UklGRlQAAABXRUJQVlA4IEgAAACwAQCdASoMAAYAAwBSJQBOgBszGSJgAM491KMvsxshnlWYC1FIJbEhcrwlHTXh9K1VxF3a8tXMLJ562E3nTqXwO6NUfen6cAA=",
+  "/media/fens-nov-4-pond.webp":
+    "data:image/webp;base64,UklGRk4AAABXRUJQVlA4IEIAAACwAQCdASoMAAkAAwBSJZACdADaPx8AAP22XKMES7n7j8xiEW3TJxPveMGeAN9bT28E84VQRML5ebBLSqGCio/rMAA=",
+  "/media/fens-nov-4-rocks.webp":
+    "data:image/webp;base64,UklGRlwAAABXRUJQVlA4IFAAAADwAQCdASoMAAkAAwBSJaACdAD0Z5DXBwAA/FsM5Q1Y3hHsvUb8wruaA6wbAomS43I/LN44dgoh+W9qv/C5oPtsOJ7dSB/l9f1SP3kVv4AAAA==",
+  "/media/fens-nov-4-trees.webp":
+    "data:image/webp;base64,UklGRk4AAABXRUJQVlA4IEIAAADwAQCdASoMAAkAAwBSJZgCdADhZQzzzQAA+0YhTHM4nVwbG+1Xs1XKa1Esd4tsoe/+WK2CAxYgFCsna3pjCfIAAAA=",
+  "/media/fens-oct-25.webp":
+    "data:image/webp;base64,UklGRlYAAABXRUJQVlA4IEoAAADwAQCdASoMAAkAAwBSJbACdAEDe8wfMAAA/pTiLJoqcvWujP5t+bHclFTHUisj/GL/W7oHXVs7HCEvCOnVxgut481r2X+gfVYAAA==",
+  "/media/fens-oct-26-leaves.webp":
+    "data:image/webp;base64,UklGRk4AAABXRUJQVlA4IEIAAADQAQCdASoMAAkAAwBSJbACdADdSGa+UADOOUhMcG0vi7T7zyfiu0b5n/zUlg+CmnOc6XWTcUSmSRq676H4P8QAAAA=",
+  "/media/fens-oct-26-water.webp":
+    "data:image/webp;base64,UklGRk4AAABXRUJQVlA4IEIAAADwAQCdASoMAAkAAwBSJbACdADhlIUj0OAA/swuGRbPiNCyCIu6G83pP8bxV81Yw2oUuCL+gompwYj1ELXEbB1mAAA=",
   "/media/kb-clinic-admin.webp":
     "data:image/webp;base64,UklGRjIAAABXRUJQVlA4ICYAAACwAQCdASoMAAQAAwBSJZwAAudQDaMAAP73Jz897cFy0oeNzIAAAA==",
   "/media/kb-clinic-booking.webp":
@@ -132,10 +145,6 @@ export const BLUR_PLACEHOLDERS: Readonly<Record<BlurredMedia, string>> = {
     "data:image/webp;base64,UklGRkoAAABXRUJQVlA4ID4AAADQAwCdASoMABEAPt1cpkyopSOiMAgBEBuJZwCdACHftMm7itx4iwAA/vDJtzzrmrnWZfxVfV3SvEnch1kAAA==",
   "/media/lagna-atelier-yogas.webp":
     "data:image/webp;base64,UklGRjgAAABXRUJQVlA4ICwAAABwAQCdASoMAAoAAwBSJZwC7AF1AAD+8r66U9XargG93BcGnipTt6OScgAAAA==",
-  "/media/northeastern-street.webp":
-    "data:image/webp;base64,UklGRk4AAABXRUJQVlA4IEIAAADQAQCdASoMAAkAAwBSJQBOgBt1Znj5AAD9nTDvpgnK5hfJLQKx6IZ+VVONnJr5de5mvWnvvN9zBpkbBrpAJpm7gAA=",
-  "/media/northeastern-window.webp":
-    "data:image/webp;base64,UklGRlQAAABXRUJQVlA4IEgAAADQAQCdASoMAAkAAwBSJQBOgBuJVuLcAAD9/A8bUARReJ7ETi6iF3SUnO5VkigExJGGJz6Jj5YG1cAZkOZ/xAFxebYXlsda4AA=",
   "/media/robust-health-android-coach-plan.webp":
     "data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAABQAwCdASoMABkAPt1eqU2opSQiMAgBEBuJZQAAetkLwnQBqgD+8N0CME7QUVCjlAPslvaEC07BVN9l3N3DXcNbl8iZdl+A/xO74bxJsh8/i3eia2b2YgmzPQAAAA==",
   "/media/robust-health-android-coach.webp":
