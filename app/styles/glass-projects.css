@@ -10,47 +10,70 @@
   --plate-r: calc(var(--radius-glass) - var(--bezel));
 }
 
-/* The desktop page's frame, defined once: the list on the left, the stage
-   from its right edge to the window's, and the plate centred in the stage.
-   The plate is as wide as the stage allows less a gutter each side (so its
-   right edge sits a gutter in from the window's, and its left a gutter from
-   the list's), and no taller than leaves room for the line under it: the
-   bezel, a 1.25rem gap, the 4.5rem line, and the 6vh foot under that.
-   `--plate-x` is the plate's left edge in the window, for what sits outside
-   the stage (the glow, the line under the plate). The list runs from the
-   bezel's top to the line's bottom.
+/* The desktop page's frame, defined once: two boxes of one height side by
+   side -- the list on the left, the plate in its bezel on the right -- and a
+   line under each: the counter under the list, the case study and the live
+   site under the plate. Symmetric, on request (November 2026): the boxes
+   share their top and bottom edges, the outer margins are equal, and the
+   whole is centred in the window, at least `--my` from its top and bottom,
+   which clears the nav and the way home.
+
+   The plate is as wide as leaves the list its minimum and a gutter each side
+   and between, and no taller than the window less those margins, the line and
+   its gap allow. The list takes the rest of the width, up to 40rem; what a
+   very wide window leaves past that goes to the two outer margins equally.
+   The stage runs from the list's right edge to a gutter past the plate's, so
+   the plate is centred in it with a gutter each side and its neighbours wait
+   just past its edges. `--plate-x` is the plate's left edge in the window,
+   for what sits outside the stage (the glow, the line under the plate).
 
    The list's names fit "KB Patient" on one line in the list's width (the
    row's padding and the number's column are 6.25rem; uppercase display type
-   runs about 7em per 10 characters), and in its height: three two-line
-   names at 0.84 are 5.04em, and 14rem is the rows' padding, the details of
-   the row on stage and the counter. */
+   runs about 7em per 10 characters), and in its height: three two-line names
+   at 0.84 are 5.04em, and 12.5rem is the panel's and rows' padding and the
+   details of the row on stage. */
 .projects-list-frame {
   --gut: 2rem;
-  --list-w: clamp(20rem, 28vw, 40rem);
-  --stage-l: calc(var(--gut) + var(--list-w));
-  --plate-top: 7.25rem;
-  --plate-w: min(100vw - var(--stage-l) - 2 * var(--gut) - 2 * var(--bezel), (94vh - var(--plate-top) - 2 * var(--bezel) - 5.75rem) * 1.6);
-  --plate-x: calc(var(--stage-l) + (100vw - var(--stage-l) - var(--plate-w)) / 2);
-  --foot: calc(var(--plate-top) + var(--plate-w) * 10 / 16 + var(--bezel) + 1.25rem);
+  --my: 5rem;
+  --gap: 1.25rem;
   --foot-h: 4.5rem;
-  --list-l: var(--gut);
-  --list-top: calc(var(--plate-top) - var(--bezel));
-  --list-h: calc(var(--foot) + var(--foot-h) - var(--list-top));
-  --name-size: min((var(--list-w) - 6.25rem) / 7, (var(--list-h) - 14rem) / 5.04);
+  --list-min: clamp(20rem, 28vw, 40rem);
+  --plate-w: min(100vw - 3 * var(--gut) - 2 * var(--bezel) - var(--list-min), (100vh - 2 * var(--my) - 2 * var(--bezel) - var(--gap) - var(--foot-h)) * 1.6);
+  --box-h: calc(var(--plate-w) * 10 / 16 + 2 * var(--bezel));
+  --list-w: min(40rem, 100vw - 3 * var(--gut) - 2 * var(--bezel) - var(--plate-w));
+  --side: calc((100vw - var(--list-w) - var(--gut) - var(--plate-w) - 2 * var(--bezel)) / 2);
+  --list-l: var(--side);
+  --list-top: calc((100vh - var(--box-h) - var(--gap) - var(--foot-h)) / 2);
+  --list-h: var(--box-h);
+  --stage-l: calc(var(--side) + var(--list-w));
+  --stage-r: calc(var(--side) - var(--gut));
+  --plate-top: calc(var(--list-top) + var(--bezel));
+  --plate-x: calc(var(--stage-l) + var(--gut) + var(--bezel));
+  --foot: calc(var(--list-top) + var(--box-h) + var(--gap));
+  --count-top: var(--foot);
+  --count-h: var(--foot-h);
+  --name-size: min((var(--list-w) - 6.25rem) / 7, (var(--list-h) - 12.5rem) / 5.04);
 }
 
 /* A portrait window (a narrow desktop window, or a tablet with a mouse) has
-   no room beside the plate, so the list goes under the line instead: the
-   stage is the window's width, and the plate gives the list at least 40% of
-   the height. */
+   no room beside the plate, so the boxes stack: the plate and its line at the
+   top, the list under them and its counter last, the same margins all round.
+   The stage is the window's width, and the plate gives the list at least 40%
+   of the height. */
 @media (orientation: portrait) {
   .projects-list-frame {
+    --side: var(--gut);
     --list-w: calc(100vw - 2 * var(--gut));
     --stage-l: 0px;
-    --plate-w: min(100vw - 2 * var(--gut) - 2 * var(--bezel), (60vh - var(--plate-top) - 2 * var(--bezel) - 5.75rem) * 1.6);
-    --list-top: calc(var(--foot) + var(--foot-h) + 1.25rem);
-    --list-h: calc(94vh - var(--list-top));
+    --stage-r: 0px;
+    --plate-w: min(100vw - 2 * var(--gut) - 2 * var(--bezel), (60vh - var(--my) - 2 * var(--bezel) - var(--gap) - var(--foot-h)) * 1.6);
+    --plate-top: calc(var(--my) + var(--bezel));
+    --plate-x: calc((100vw - var(--plate-w)) / 2);
+    --foot: calc(var(--plate-top) + var(--plate-w) * 10 / 16 + var(--bezel) + var(--gap));
+    --list-top: calc(var(--foot) + var(--foot-h) + var(--gap));
+    --count-h: 2.5rem;
+    --list-h: calc(100vh - var(--my) - var(--count-h) - var(--list-top));
+    --count-top: calc(var(--list-top) + var(--list-h));
   }
 }
 

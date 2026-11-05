@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { DisplayTitle } from "@/components/DisplayTitle";
 import { SharedMedia } from "@/components/PageTransition";
-import { SliderMasthead } from "@/components/home/SliderMasthead";
 import { LiveSiteLink } from "@/components/home/LiveSiteLink";
 import {
   blurFor,
@@ -19,14 +18,13 @@ import {
 } from "@/lib/media";
 import { useHydrated, useMediaQuery, useReducedMotion } from "@/lib/motion";
 import { DESKTOP_QUERY } from "@/lib/slider";
-import { displayLinesOf, liveLinkOf, type Profile, type SelectedProject, type UiCopy } from "@/lib/types";
+import { displayLinesOf, liveLinkOf, type SelectedProject, type UiCopy } from "@/lib/types";
 
 interface Props {
   readonly projects: readonly SelectedProject[];
   readonly copy: UiCopy["slider"];
   /** The live site's label, shared with the case studies' links. */
   readonly liveLabel: string;
-  readonly profile: Profile;
 }
 
 /**
@@ -92,14 +90,14 @@ function PhonePlate({ project, first }: { readonly project: SelectedProject; rea
 
 /**
  * The Projects page for touch and narrow screens, as on desktop: one plate
- * and the projects listed by name. The first screen is the masthead, the
- * plate on stage in its bezel, and the live site and the case study under it;
+ * and the projects listed by name. The first screen is the plate on stage in
+ * its bezel, under the nav, and the live site and the case study under it;
  * the list follows, and a tap on a name brings its plate on stage and scrolls
  * back up to it. Nothing here loads WebGL, and the browser's own scrolling
  * does the rest. A phone on its side (`short:`) sets the plate beside its
- * links instead, under the masthead, which scrolls away.
+ * links instead.
  */
-export function MobileProjects({ projects, copy, liveLabel, profile }: Props) {
+export function MobileProjects({ projects, copy, liveLabel }: Props) {
   const router = useRouter();
   const isDesktop = useMediaQuery(DESKTOP_QUERY);
   // See ProjectSlider: no plate claims the shared name until the device is
@@ -136,17 +134,11 @@ export function MobileProjects({ projects, copy, liveLabel, profile }: Props) {
           {announcement}
         </p>
 
-        {/* The first screen. On a short landscape screen it is a grid: the
-            plate down the left, the intro over the links on the right. */}
-        <div className="flex min-h-svh flex-col short:grid short:h-svh short:min-h-0 short:grid-cols-[auto_minmax(0,1fr)] short:grid-rows-[auto_1fr] short:gap-x-5 short:px-5 short:pb-5 short:pt-16 short:[--plate-w:min(50vw-2*var(--bezel),(100svh-5.25rem-2*var(--bezel))*1.6,100vw-3.75rem-17.5rem-2*var(--bezel))]">
-          {/* Below the nav's line at every size: the way home holds its
-              left end on this page. */}
-          <SliderMasthead
-            heading={copy.heading}
-            intro={profile.intro}
-            className="shrink-0 px-5 pt-16 short:col-start-2 short:row-start-1 short:p-0"
-          />
+        <h1 className="sr-only">{copy.heading}</h1>
 
+        {/* The first screen. On a short landscape screen it is a grid: the
+            plate down the left, the links at the foot of the right. */}
+        <div className="flex min-h-svh flex-col short:grid short:h-svh short:min-h-0 short:grid-cols-[auto_minmax(0,1fr)] short:grid-rows-[auto_1fr] short:gap-x-5 short:px-5 short:pb-5 short:pt-16 short:[--plate-w:min(50vw-2*var(--bezel),(100svh-5.25rem-2*var(--bezel))*1.6,100vw-3.75rem-17.5rem-2*var(--bezel))]">
           {/* The plate on stage, and the line under it. On a short landscape
               screen the plate is 16:10, the capture's own shape, and ends on
               the links' bottom line: half the width, as much as the height
@@ -155,7 +147,7 @@ export function MobileProjects({ projects, copy, liveLabel, profile }: Props) {
               bezel's ring on both sides) -- the clinic's address in the live
               link needs about 17rem on one line. */}
           <div className="flex min-h-0 flex-1 flex-col pb-5 short:contents">
-            <div className="glass-bezel mx-5 mt-5 flex min-h-64 flex-1 flex-col short:col-start-1 short:row-span-2 short:row-start-1 short:m-0 short:min-h-0 short:flex-none short:self-end">
+            <div className="glass-bezel mx-5 mt-16 flex min-h-64 flex-1 flex-col short:col-start-1 short:row-span-2 short:row-start-1 short:m-0 short:min-h-0 short:flex-none short:self-end">
               {/* A tap on the plate opens the project too. The link under it
                   is the one keyboards and screen readers use, so the plate is
                   not a second one. */}

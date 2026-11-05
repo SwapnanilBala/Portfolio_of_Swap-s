@@ -15,7 +15,7 @@ export const metadata: Metadata = { title: content.ui.nav.projects };
  */
 export default function Page() {
   const projects = content.projects.filter(isSelected);
-  const { profile, ui } = content;
+  const { ui } = content;
   const first = projects[0];
   if (first) {
     preloadFor(first.heroMobile, PLATE_SIZES.phone, "(max-width: 47.99rem) and (orientation: portrait)", PHONE_QUALITY);
@@ -24,7 +24,7 @@ export default function Page() {
   return (
     <PageTransition>
       <main id="main" data-tone="dark" className="radiant-dark relative h-svh overflow-hidden text-paper">
-        <MobileProjects projects={projects} copy={ui.slider} liveLabel={ui.linkLabels.live} profile={profile} />
+        <MobileProjects projects={projects} copy={ui.slider} liveLabel={ui.linkLabels.live} />
       </main>
     </PageTransition>
   );

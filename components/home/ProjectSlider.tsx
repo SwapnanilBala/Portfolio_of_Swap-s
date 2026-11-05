@@ -469,8 +469,7 @@ export function ProjectSlider({ projects, copy, liveLabel }: Props) {
 
       {/* The projects by name. The row on stage is lit and carries its
           category, year and stack; the others recede until hovered. Each row
-          is a real button, and the counter cites the same record numbers the
-          Index uses. */}
+          is a real button. */}
       <nav
         ref={listRef}
         aria-label={copy.rail}
@@ -528,17 +527,23 @@ export function ProjectSlider({ projects, copy, liveLabel }: Props) {
             );
           })}
         </ol>
-        <p aria-hidden="true" className="meta mt-auto px-4 pb-2 tabular-nums text-paper">
-          {recordNumber(active)} <span className="text-glass-paper-2">/ {recordNumber(count - 1)}</span>
-        </p>
       </nav>
+
+      {/* Under the list, on the plate's line: the counter, which cites the
+          same record numbers the Index uses, in line with the rows' numbers. */}
+      <p
+        aria-hidden="true"
+        className="meta absolute left-(--list-l) top-(--count-top) flex h-(--count-h) items-center px-[1.625rem] tabular-nums text-paper"
+      >
+        {recordNumber(active)}&nbsp;<span className="text-glass-paper-2">/ {recordNumber(count - 1)}</span>
+      </p>
 
       {/* The stage: the plates travel inside it and it clips them, so at
           rest the neighbours wait just past its edges. The WebGL canvas
           fills it, and measures the first plate's box inside it. It lets
           the pointer through to the list, which it covers in a portrait
           window; only the plates take it. */}
-      <div ref={stageRef} className="pointer-events-none absolute inset-y-0 left-(--stage-l) right-0 overflow-hidden">
+      <div ref={stageRef} className="pointer-events-none absolute inset-y-0 left-(--stage-l) right-(--stage-r) overflow-hidden">
         {projects.map((project, i) => (
           <div
             key={project.slug}
@@ -609,12 +614,12 @@ export function ProjectSlider({ projects, copy, liveLabel }: Props) {
 
       {/* Under the plate, edge to edge with its bezel: the way into the case
           study on the left, as type, and the live site on the right, the
-          page's one solid control. Its bottom is the list's. */}
+          page's one solid control. The counter shares its line. */}
       {current ? (
         <div
           ref={liveRef}
           data-reveal=""
-          className="absolute left-[calc(var(--plate-x)-var(--bezel))] top-(--foot) flex h-(--foot-h) w-[calc(var(--plate-w)+2*var(--bezel))] items-center justify-between gap-x-8 text-paper"
+          className="absolute left-[calc(var(--plate-x)-var(--bezel))] top-(--foot) flex h-(--foot-h) w-[calc(var(--plate-w)+2*var(--bezel))] items-center justify-between gap-x-6 text-paper"
         >
           <Link
             href={`/work/${current.slug}`}

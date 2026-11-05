@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { MobileProjects } from "@/components/home/MobileProjects";
 import { ProjectSlider } from "@/components/home/ProjectSlider";
-import { SliderMasthead } from "@/components/home/SliderMasthead";
 import { PageTransition } from "@/components/PageTransition";
 import { content } from "@/lib/content";
 import { CASE_HERO, PHONE_QUALITY, PLATE_SIZES } from "@/lib/media";
@@ -21,7 +20,7 @@ export const metadata: Metadata = { title: content.ui.nav.projects };
  */
 export default function Page() {
   const projects = content.projects.filter(isSelected);
-  const { profile, ui } = content;
+  const { ui } = content;
   const first = projects[0];
   if (first) {
     preloadFor(first.hero, CASE_HERO.sizes, DESKTOP_QUERY);
@@ -32,12 +31,10 @@ export default function Page() {
     <PageTransition>
       <main id="main" data-tone="dark" className="radiant-dark relative h-svh overflow-hidden text-paper">
         <ProjectSlider projects={projects} copy={ui.slider} liveLabel={ui.linkLabels.live} />
-        <MobileProjects projects={projects} copy={ui.slider} liveLabel={ui.linkLabels.live} profile={profile} />
-        <SliderMasthead
-          heading={ui.slider.heading}
-          intro={profile.intro}
-          className="absolute inset-x-0 top-0 z-10 hidden px-8 pt-4 desktop:grid"
-        />
+        <MobileProjects projects={projects} copy={ui.slider} liveLabel={ui.linkLabels.live} />
+        {/* The page's h1, visually hidden: the slider is what it names. Only
+            the desktop slider's; MobileProjects carries its own. */}
+        <h1 className="sr-only hidden desktop:block">{ui.slider.heading}</h1>
       </main>
     </PageTransition>
   );

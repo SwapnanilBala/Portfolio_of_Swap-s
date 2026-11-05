@@ -72,7 +72,7 @@ app/(desktop)/work/...      Index, and case studies (static params; unknown slug
 app/m/layout.tsx            phone tree: PhoneReveals
 app/m/...                   the same four pages for phones, served at the same URLs
 components/home/            ProjectSlider, SliderCanvas, MobileProjects,
-                            SliderMasthead, LiveSiteLink
+                            LiveSiteLink
 components/index/           IndexPage, IndexView (Flip + preview), IndexCaptures, parts
                             (grid, list, toggle, links), ProjectCover
 components/work/            CaseStudy, ProjectHero, CaseSection, MediaPlate,
@@ -296,7 +296,9 @@ long after the decision behind it might change.
   templates not chosen were a tightened version of the old order (4.2
   screens) and a résumé with a sticky sidebar (2.9).
 - **The slider page has a visually hidden h1** ("Projects"): the slider
-  is what it names, and the intro line keeps its place at the top.
+  is what it names. It had a one-line intro on a glass strip above the
+  plate; that went on request (November 2026), on desktop and phones, and
+  `SliderMasthead` with it. The line is still the site's description.
 - The resume's date is written twice, in the contact's `detail` and in
   `ui.landing.resumeNote`. Change both when the file is replaced.
 
@@ -383,24 +385,38 @@ narrower.
   reference (`SliderMotion`) with `SliderCanvas`, which only draws, on the same
   tick. A wheel gesture moves at most one plate, so a trackpad's momentum tail
   cannot skip past everything.
+- **Two boxes, symmetric** (November 2026, on request): the list and the
+  plate's bezel are one height and share their top and bottom edges, with a
+  line under each — the counter under the list, the case study and the live
+  site under the plate. The outer margins are equal (a 2rem gutter, the
+  same between the boxes), and the whole is centred in the window, at
+  least 5rem (`--my`) from its top and bottom. Before, the list ran down
+  beside the line, the plate floated in its stage when the height capped
+  it (33px on the left of the page, 77px on the right at 1280×720), and
+  the top was set by the intro. The plate takes what width leaves the list
+  its minimum, no taller than the height allows; the list takes the rest,
+  up to 40rem; what an ultrawide window leaves past that goes to both
+  outer margins equally. Checked at 17 sizes from 800×600 to 3440×1440,
+  portrait included.
 - **One plate on stage.** The frame is 16:10, centred in the stage: a box
-  from the list's right edge to the window's, which clips the plates (and
-  lets the pointer through; only the plates take it). The plate is the
-  stage's width less a gutter each side, and no taller than leaves room for
-  the line under it. Neighbours rest just past the stage's edges: the step
+  from the list's right edge to a gutter past the plate's, which clips the
+  plates (and lets the pointer through; only the plates take it). The plate
+  is the stage's width less a gutter each side. Neighbours rest just past
+  the stage's edges: the step
   between plates is derived from the stage and plate widths (`slideStep`,
   measured from the stage, not the window), never fixed, so no window shape
   shows a sliver of the next project. A portrait window has no room beside
-  the plate, so there the stage is the window's width and the list goes
-  under the line. Plates dim as they
+  the plate, so there the stage is the window's width and the boxes stack:
+  plate and line, then the list and its counter. Plates dim as they
   leave the stage and light as they arrive (`presenceAt`) — DOM opacity over
   the ink, and the same mix toward ink in the shader. A click opens a project
   only on the plate on stage; the ink around it does nothing.
 - **CSS defines the frame once**, in `.projects-list-frame`
-  (`app/styles/glass-projects.css`): the list's width and box, `--stage-l`,
-  `--plate-top`, `--plate-w`, `--plate-x` (the plate's left edge in the
-  window, for the glow and the line under it) and `--foot` (that line's
-  top). The canvas fills the stage, so the WebGL plates measure a DOM
+  (`app/styles/glass-projects.css`): the list's width and box, the stage's
+  edges (`--stage-l`, `--stage-r`), `--plate-top`, `--plate-w`,
+  `--plate-x` (the plate's left edge in the window, for the glow and the
+  line under it), `--foot` (that line's top) and `--count-top` (the
+  counter's). The canvas fills the stage, so the WebGL plates measure a DOM
   plate's layout box inside it (`frameRef`) and step by the same
   `slideStep`; nothing restates the geometry in JavaScript.
 - **Every slide leads to its live site** (`LiveSiteLink`), on request: "big
@@ -410,12 +426,13 @@ narrower.
   none.
   - Desktop: on a 4.5rem line 1.25rem under the plate, edge to edge with
     its bezel — "Open the case study" as type on the left, the live link
-    flush right. The line's bottom is the list's. It is one link for every
+    flush right; the counter shares the line, under the list. It is one link for every
     plate, so a keyboard visitor on it keeps focus while the arrow keys
     change project; its address follows the plate in. The plate's height
-    is capped so the line always fits above the 6vh foot, which replaced
-    the old lift onto the plate's corner in short windows. Checked at
-    1024×768, 1280×720, 1440×900, 1920×1080, 2560×1440 and 820×1180.
+    is capped so the boxes, the line and the margins always fit, which
+    replaced the old lift onto the plate's corner in short windows. The
+    line's gap is 1.5rem: at 2rem the live link ran 1.6px past the bezel
+    in an 800px window.
   - Phones: a full-width bar of fixed height (`h-14`) under the plate on
     the first screen, the case study's link under it. The counter is the
     list's, at its foot.
@@ -443,7 +460,7 @@ narrower.
 - Touch and narrow screens get `MobileProjects`, the same list and plate
   on native scrolling, no WebGL — alone in the phone tree, beside the WebGL
   slider in the desktop tree for narrow windows. The first screen is the
-  masthead, the plate on stage and the line under it; the list follows,
+  plate on stage under the nav and the line under it; the list follows,
   and a tap on a name brings its plate on stage (all plates stacked in one
   bezel, crossfading, only the one on stage named for the morph) and
   scrolls back up to it. Its first plate is eager and high priority, the
@@ -453,8 +470,8 @@ narrower.
   decides which is wired up — keep the two queries identical.
 - **A phone on its side is a grid** (`short:` — landscape, under 30rem
   tall; no iPad is that short, so iPads keep the stacked layout): the plate
-  down the left, the intro over the live link and the case study's link on
-  the right, all in the first screen under the nav; the list follows. The
+  down the left, the live link and the case study's link at the foot of the
+  right, all in the first screen under the nav; the list follows. The
   plate is 16:10, so the capture loses nothing, and it ends on the links'
   bottom line. Its width is the least of half the screen, what the height
   under the nav allows, and what leaves the column 17.5rem: the clinic's
