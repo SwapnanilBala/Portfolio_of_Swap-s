@@ -1,11 +1,9 @@
 "use client";
 
-import { useLayoutEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { SharedMedia } from "@/components/PageTransition";
-import { IndexGrid, IndexList, IndexToggle, type Layout } from "@/components/index/parts";
-import { ProjectCover } from "@/components/index/ProjectCover";
-import { Flip, gsap, useGSAP } from "@/lib/gsap";
-import { DURATION, EASE, useFinePointer, useReducedMotion } from "@/lib/motion";
+import { hasTile, IndexCover, IndexRows, ProjectLink } from "@/components/index/parts";
+import { useMediaQuery } from "@/lib/motion";
 import { hasCaseStudy, type Project, type UiCopy } from "@/lib/types";
 
 interface Props {
@@ -13,151 +11,102 @@ interface Props {
   readonly copy: UiCopy["index"];
 }
 
+/** Where the detail is shown beside the list; below it, rows carry covers. */
+const WIDE = "(min-width: 48rem)";
+
 /**
- * The archive, as a grid or as a list, animated between the two rather than
- * cut. GSAP Flip matches elements across the layouts by `data-flip-id`: going
- * to the list, the grid's images fade out first and then each small label
- * flies and scales into its row's large name; going back, the names return
- * and the images come in behind them.
+ * The archive as a list beside a detail (November 2026, chosen from four
+ * mock-ups): the names down the left, and the project under the pointer or
+ * keyboard focus open on the right -- its cover, summary, stack and figures.
+ * It opens on the first project.
  *
- * In list view a preview follows the pointer. It carries the shared
- * view-transition name of the hovered project, so opening a row morphs that
- * preview into the case-study hero.
+ * Every project's detail is rendered, stacked in one cell, and the open one
+ * crossfades in: switching rows never waits on an image, and the panel's
+ * height never changes under the pointer. The detail repeats what the rows
+ * say, so it is hidden from assistive technology and its cover is not a tab
+ * stop; the rows are the links.
+ *
+ * The open cover carries the page transition's shared name, so opening a row
+ * morphs it into the case-study hero. Below 48rem the detail is hidden and
+ * each row shows a small cover instead, which carries the name there.
+ *
+ * A certificate has no screen and no dataset to draw, and a cover this size
+ * would be a large ink box holding one number -- what the October redesign
+ * removed. Its summary takes the cover's place instead, large, on glass.
  */
 export function IndexView({ projects, copy }: Props) {
-  const [layout, setLayout] = useState<Layout>("grid");
-  const [hovered, setHovered] = useState<string | null>(null);
-  const rootRef = useRef<HTMLDivElement>(null);
-  const previewRef = useRef<HTMLDivElement>(null);
-  const pendingFlip = useRef<Flip.FlipState | null>(null);
-  const busy = useRef(false);
-  const reduced = useReducedMotion();
-  const fine = useFinePointer();
-
-  const names = () => rootRef.current?.querySelectorAll<HTMLElement>("[data-flip-id]") ?? [];
-
-  const switchTo = (next: Layout) => {
-    if (next === layout || busy.current) return;
-    if (reduced) {
-      setLayout(next);
-      return;
-    }
-    busy.current = true;
-    const commit = () => {
-      pendingFlip.current = Flip.getState(names());
-      setLayout(next);
-    };
-    const leaving =
-      rootRef.current?.querySelectorAll<HTMLElement>(
-        layout === "grid" ? "[data-grid-media]" : "[data-list-extra]",
-      ) ?? [];
-    if (leaving.length === 0) {
-      commit();
-      return;
-    }
-    gsap.to(leaving, {
-      autoAlpha: 0,
-      scale: layout === "grid" ? 0.96 : 1,
-      duration: DURATION.micro,
-      ease: EASE.inOut,
-      stagger: 0.02,
-      onComplete: commit,
-    });
-  };
-
-  // After React has rendered the new layout: fly the names from where they
-  // were, then bring in whatever only this layout has.
-  useLayoutEffect(() => {
-    const state = pendingFlip.current;
-    if (!state) return;
-    pendingFlip.current = null;
-    // Flip only calls onComplete when it animated something; this makes sure
-    // the toggle can never stay locked if it had nothing to move.
-    const unlock = window.setTimeout(() => {
-      busy.current = false;
-    }, 1400);
-    const arriving =
-      rootRef.current?.querySelectorAll<HTMLElement>(
-        layout === "grid" ? "[data-grid-media]" : "[data-list-extra]",
-      ) ?? [];
-    gsap.set(arriving, { autoAlpha: 0 });
-    // About 1.4s end to end, the fade out included: large motion, but a
-    // layout toggle should not outlast a page transition by much.
-    Flip.from(state, {
-      targets: names(),
-      duration: DURATION.layout,
-      ease: EASE.inOut,
-      scale: true,
-      stagger: 0.02,
-      onComplete: () => {
-        busy.current = false;
-      },
-    });
-    gsap.fromTo(
-      arriving,
-      { autoAlpha: 0, scale: layout === "grid" ? 0.96 : 1 },
-      { autoAlpha: 1, scale: 1, duration: DURATION.meta, ease: EASE.out, stagger: 0.03, delay: 0.4 },
-    );
-    return () => window.clearTimeout(unlock);
-  }, [layout]);
-
-  // The preview trails the pointer in list view.
-  useGSAP(
-    () => {
-      const preview = previewRef.current;
-      const root = rootRef.current;
-      if (layout !== "list" || !fine || !preview || !root) return;
-      const duration = reduced ? 0 : 0.55;
-      const xTo = gsap.quickTo(preview, "x", { duration, ease: "power3.out" });
-      const yTo = gsap.quickTo(preview, "y", { duration, ease: "power3.out" });
-      const onMove = (event: PointerEvent) => {
-        xTo(event.clientX);
-        yTo(event.clientY);
-      };
-      root.addEventListener("pointermove", onMove);
-      return () => root.removeEventListener("pointermove", onMove);
-    },
-    { dependencies: [layout, fine, reduced], scope: rootRef },
-  );
-
-  const hoveredProject = projects.find((project) => project.slug === hovered) ?? null;
+  const [active, setActive] = useState(projects[0]?.slug);
+  // The desktop tree is served to desktop user agents, so assume the wide
+  // layout until the query says otherwise: one shared name either way.
+  const wide = useMediaQuery(WIDE, true);
 
   return (
-    <div ref={rootRef}>
-      <IndexToggle layout={layout} onSwitch={switchTo} copy={copy} count={projects.length} />
-
-      {layout === "grid" ? (
-        <IndexGrid projects={projects} copy={copy} />
-      ) : (
-        <IndexList
+    <div className="grid grid-cols-12 gap-4 px-5 pb-16 pt-5 md:gap-5 md:px-8 md:pb-20 md:pt-6">
+      <div className="col-span-12 self-start md:col-span-5">
+        <IndexRows
           projects={projects}
           copy={copy}
-          onHover={setHovered}
-          onLeave={() => setHovered(null)}
+          active={active}
+          onActivate={setActive}
+          covers="narrow"
+          sharedCovers={!wide}
         />
-      )}
+      </div>
 
-      {layout === "list" && fine ? (
-        <div
-          ref={previewRef}
-          aria-hidden="true"
-          className="pointer-events-none fixed left-0 top-0 z-40"
-        >
-          <div
-            className={`w-[22vw] -translate-x-1/2 -translate-y-1/2 transition-[opacity,scale] duration-500 ease-out-expo reduced:transition-none ${
-              hoveredProject ? "scale-100 opacity-100" : "scale-90 opacity-0"
-            }`}
-          >
-            {hoveredProject ? (
-              <SharedMedia slug={hoveredProject.slug} enabled={hasCaseStudy(hoveredProject)}>
-                <div className="overflow-hidden rounded-glass-sm shadow-[0_24px_60px_-28px_var(--color-glass-shadow)]">
-                  <ProjectCover project={hoveredProject} sizes="22vw" />
+      <div aria-hidden="true" className="col-span-7 hidden self-start md:grid">
+        {projects.map((project, index) => {
+          const open = project.slug === active;
+          const words = !hasTile(project) && (project.selected || !project.dotField);
+          return (
+            <article
+              key={project.slug}
+              className={`glass-light col-start-1 row-start-1 rounded-glass p-3 transition-[opacity,visibility] duration-500 ease-out-expo reduced:transition-none ${
+                open ? "visible opacity-100" : "invisible opacity-0"
+              }`}
+            >
+              <ProjectLink project={project} cursor="view" tabIndex={-1} className="group block">
+                <div data-cursor-frame className="overflow-hidden rounded-glass-sm">
+                  {words ? (
+                    <div className="flex aspect-[16/10] flex-col justify-between rounded-glass-sm border border-ink/10 bg-glass-light-edge p-[6%]">
+                      <span className="meta text-glass-ink-2">
+                        {project.type} / {project.year}
+                      </span>
+                      <span className="max-w-[30ch] text-[clamp(1.375rem,2.2vw,2.125rem)] font-medium leading-[1.15] tracking-[-0.02em]">
+                        {project.summary}
+                      </span>
+                    </div>
+                  ) : (
+                    <SharedMedia slug={project.slug} enabled={open && wide && hasCaseStudy(project)}>
+                      <div className="overflow-hidden rounded-glass-sm transition-transform duration-700 ease-out-expo group-hover:scale-[1.02] reduced:transition-none reduced:group-hover:scale-100">
+                        <IndexCover project={project} sizes="calc(58vw - 4rem)" eager={index === 0} />
+                      </div>
+                    </SharedMedia>
+                  )}
                 </div>
-              </SharedMedia>
-            ) : null}
-          </div>
-        </div>
-      ) : null}
+              </ProjectLink>
+              <div className="grid grid-cols-7 gap-x-5 px-3 pb-3 pt-6">
+                <div className="col-span-4">
+                  <p className="text-[clamp(2rem,3.6vw,3.5rem)] font-semibold uppercase leading-[0.92] tracking-[-0.035em]">
+                    {project.name}
+                  </p>
+                  {words ? null : (
+                    <p className="mt-4 text-[0.9375rem] leading-snug text-glass-ink-2">{project.summary}</p>
+                  )}
+                  <p className="meta mt-5 leading-relaxed text-glass-ink-2">{project.stack.join(" / ")}</p>
+                </div>
+                <dl className="col-span-3 grid content-start gap-4">
+                  {project.figures.slice(0, 3).map((figure) => (
+                    <div key={figure.label} className="flex items-baseline justify-between gap-3 border-b border-ink/10 pb-2">
+                      <dt className="meta text-glass-ink-2">{figure.label}</dt>
+                      <dd className="text-[1.5rem] font-semibold tabular-nums tracking-[-0.03em]">{figure.value}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+            </article>
+          );
+        })}
+      </div>
     </div>
   );
 }

@@ -11,7 +11,7 @@ export const indexMetadata: Metadata = { title: content.ui.index.heading };
 
 interface Props {
   readonly kit: MotionKit;
-  /** The grid and list: GSAP Flip on desktop, a plain fade on phones. */
+  /** The list beside a detail on desktop; the list alone, with covers, on phones. */
   readonly View: ComponentType<{ readonly projects: readonly Project[]; readonly copy: UiCopy["index"] }>;
 }
 

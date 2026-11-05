@@ -1122,10 +1122,6 @@ export const content: SiteContent = {
     index: {
       heading: "Index",
       description: "Selected software projects and experiments",
-      grid: "Grid",
-      list: "List",
-      toggle: "Layout",
-      columns: { name: "Project", category: "Category", year: "Year" },
       destinations: { live: "Live site", source: "Repository", certificate: "Certificate" },
       captures: {
         heading: "From the live sites",

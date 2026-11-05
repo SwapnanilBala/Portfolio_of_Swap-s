@@ -7,25 +7,17 @@ import { warmCaseHero } from "@/lib/preload";
 import { hasCaseStudy, isResolvedLink, type LinkRole, type Project, type UiCopy } from "@/lib/types";
 
 /*
- * What the Index's two trees share: the grid, how a tile links, and
- * the row of destinations under an entry without a case study. The desktop
- * view (IndexView) animates between grid and list with GSAP Flip and trails a
- * preview after the pointer; the phone view (PhoneIndexView) has neither, and
- * both render these -- one markup, so the two cannot drift. The hooks only the
- * desktop reads (data-flip-id, data-grid-media, data-list-extra, the cursor's
- * data attributes) are inert on a phone.
+ * What the Index's two trees share: the list of names, how a row links, its
+ * small cover, and the destinations under an entry without a case study.
+ * The desktop view (IndexView) sets the list beside a detail of the project
+ * under the pointer or focus; the phone view (PhoneIndexView) is the list
+ * alone, with a small cover in every row. One markup, so the two cannot
+ * drift.
  */
 
 /**
- * A tile's rendered width, for next/image: three to a row from 48rem across
- * the page less its margins and two gaps, the full width below.
- */
-const TILE_SIZES = "(min-width: 48rem) calc((100vw - 6.5rem) / 3), calc(100vw - 2.5rem)";
-
-/**
- * Whether a project takes a tile: it has a capture to show. The rest -- a
- * dataset, the certificates -- are listed in type beneath the tiles rather
- * than set as plates that hold one number each.
+ * Whether a project has a capture to show. The rest -- a dataset, the
+ * certificates -- show their data as a dot field or their headline figure.
  */
 export function hasTile(project: Project): boolean {
   return (project.cover ?? project.hero) !== undefined;
@@ -38,41 +30,22 @@ export function destinationOf(project: Project): { href: string; internal: boole
   return link ? { href: link.href, internal: false } : null;
 }
 
-/**
- * A card's frosted glass, as a layer behind its content rather than the card
- * box itself. It carries the same hook as what only its layout has, so the
- * grid-to-list Flip fades the glass out with the images and back in behind
- * the names; the names are the only things that fly.
- */
-function Surface({
-  layout,
-  className = "rounded-glass-sm md:rounded-glass",
-}: {
-  readonly layout: Layout;
-  readonly className?: string;
-}) {
-  return (
-    <span
-      aria-hidden="true"
-      data-grid-media={layout === "grid" ? true : undefined}
-      data-list-extra={layout === "list" ? true : undefined}
-      className={`index-surface glass-light ${className}`}
-    />
-  );
-}
-
 export function ProjectLink({
   project,
   className,
   children,
   onPointerEnter,
+  onFocus,
   cursor,
+  tabIndex,
 }: {
   readonly project: Project;
   readonly className?: string;
   readonly children: ReactNode;
   readonly onPointerEnter?: () => void;
+  readonly onFocus?: () => void;
   readonly cursor?: "view";
+  readonly tabIndex?: number;
 }) {
   const destination = destinationOf(project);
   if (!destination) return <div className={className}>{children}</div>;
@@ -89,8 +62,12 @@ export function ProjectLink({
           warm();
           onPointerEnter?.();
         }}
-        onFocus={warm}
+        onFocus={() => {
+          warm();
+          onFocus?.();
+        }}
         data-cursor={cursor}
+        tabIndex={tabIndex}
       >
         {children}
       </Link>
@@ -103,7 +80,9 @@ export function ProjectLink({
       rel="noopener noreferrer"
       className={className}
       onPointerEnter={onPointerEnter}
+      onFocus={onFocus}
       data-cursor={cursor}
+      tabIndex={tabIndex}
     >
       {children}
     </a>
@@ -113,7 +92,7 @@ export function ProjectLink({
 /**
  * A project without a case study says where it leads: one small section per
  * link -- the certificate, the repository -- as glass chips side by side, so a
- * second destination is not hidden behind the first. Outside the tile's own
+ * second destination is not hidden behind the first. Outside the row's own
  * link, which cannot contain another. The accessible name adds the project, so
  * links read out of context are not a run of "Repository".
  */
@@ -121,19 +100,18 @@ export function DestinationLinks({
   project,
   labels,
   className = "",
-  ...rest
+  onFocus,
 }: {
   readonly project: Project;
   readonly labels: Readonly<Record<LinkRole, string>>;
   readonly className?: string;
-  readonly "data-grid-media"?: boolean;
-  readonly "data-list-extra"?: boolean;
+  readonly onFocus?: () => void;
 }) {
   if (hasCaseStudy(project)) return null;
   const links = project.links.filter(isResolvedLink);
   if (links.length === 0) return null;
   return (
-    <ul className={`meta flex flex-wrap gap-2 ${className}`} {...rest}>
+    <ul className={`meta flex flex-wrap gap-2 ${className}`}>
       {links.map((link) => (
         <li key={link.role}>
           <a
@@ -141,6 +119,7 @@ export function DestinationLinks({
             target="_blank"
             rel="noopener noreferrer"
             aria-label={`${labels[link.role]}, ${project.name}`}
+            onFocus={onFocus}
             className="index-chip px-3 py-2 md:py-1.5"
           >
             {labels[link.role]}
@@ -151,186 +130,131 @@ export function DestinationLinks({
   );
 }
 
-export type Layout = "grid" | "list";
-
-interface ViewProps {
-  readonly projects: readonly Project[];
-  readonly copy: UiCopy["index"];
-}
-
-/** The Grid / List switch and the record count. */
-export function IndexToggle({
-  layout,
-  onSwitch,
-  copy,
-  count,
+/**
+ * Any project as a 16:10 cover: a capture contained in an ink frame, whole
+ * and centred, so covers of different shapes still read as one size; the
+ * dot field for the classifier; the headline figure for a certificate.
+ * `compact` is for covers a few centimetres wide, where the figure plate's
+ * labels would not fit: the figure alone, sized to the cover.
+ */
+export function IndexCover({
+  project,
+  sizes,
+  eager = false,
+  compact = false,
 }: {
-  readonly layout: Layout;
-  readonly onSwitch: (next: Layout) => void;
-  readonly copy: UiCopy["index"];
-  readonly count: number;
+  readonly project: Project;
+  readonly sizes: string;
+  readonly eager?: boolean;
+  readonly compact?: boolean;
 }) {
-  return (
-    <div className="flex items-center justify-between px-5 pb-4 pt-5 md:px-8 md:pb-5 md:pt-6">
-      {/* A segmented glass strip: the pressed segment is a brighter pane. */}
-      <div role="group" aria-label={copy.toggle} className="meta glass-light inline-flex gap-0.5 rounded-glass-sm p-1">
-        {(["grid", "list"] as const).map((option) => (
-          <button
-            key={option}
-            type="button"
-            aria-pressed={layout === option}
-            onClick={() => onSwitch(option)}
-            // Dimmed by colour, not opacity: ink at half opacity is under AA
-            // for text this size; glass-ink-2 on light glass is 7.6:1.
-            className={`rounded-glass-xs px-3.5 py-2 transition-[color,background-color,box-shadow] duration-300 md:py-1.5 ${
-              layout === option ? "index-segment-on" : "text-glass-ink-2 hover:text-ink"
-            }`}
-          >
-            {option === "grid" ? copy.grid : copy.list}
-          </button>
-        ))}
+  const figure = project.figures[0];
+  const plate = !hasTile(project) && (project.selected || !project.dotField);
+  if (compact && plate && figure) {
+    return (
+      <div
+        role="img"
+        aria-label={`${project.name}: ${figure.value} ${figure.label}`}
+        className="@container flex aspect-[16/10] items-end overflow-hidden bg-ink p-[9%] text-paper"
+      >
+        <span className="display text-[24cqw] tabular-nums">{figure.value}</span>
       </div>
-      <span className="meta glass-light rounded-glass-xs px-3 py-2 tabular-nums text-glass-ink-2">
-        {recordNumber(count - 1)}
-      </span>
+    );
+  }
+  // Centred in the frame: the dot field is a little wider than 16:10.
+  return (
+    <div className="flex aspect-[16/10] items-center overflow-hidden bg-ink [&>div]:w-full">
+      <ProjectCover project={project} sizes={sizes} framed={hasTile(project)} aspect="aspect-[16/10]" eager={eager} />
     </div>
   );
 }
 
 /**
- * An even grid: every project with a capture as one of a row of equal 16:10
- * tiles, three to a row from 48rem, then the rest in type, one column each.
- * Record numbers follow the content's order, which puts the tiles first.
+ * One row per project: its record number, its name, and its category and
+ * year, in one glass panel. `onActivate` is the desktop's: the row under the
+ * pointer or focus opens in the detail beside the list, and the open row is
+ * a brighter pane with an arrow, the others' names a step quieter. A row
+ * also carries a small cover -- on every row in the phone tree, and below
+ * 48rem in a narrow desktop window, where the detail is not shown.
+ * `sharedCovers` gives those covers the page transition's shared name, for
+ * whichever tree is showing them; never both a row's cover and the detail.
  */
-export function IndexGrid({ projects, copy }: ViewProps) {
-  const records = projects.map((project, index) => ({ project, index }));
-  const tiles = records.filter(({ project }) => hasTile(project));
-  const entries = records.filter(({ project }) => !hasTile(project));
-
+export function IndexRows({
+  projects,
+  copy,
+  active,
+  onActivate,
+  covers,
+  sharedCovers,
+}: {
+  readonly projects: readonly Project[];
+  readonly copy: UiCopy["index"];
+  readonly active?: string;
+  readonly onActivate?: (slug: string) => void;
+  /** Where rows show their small cover: always, or only below 48rem. */
+  readonly covers: "always" | "narrow";
+  readonly sharedCovers: boolean;
+}) {
   return (
-    <div className="px-5 pb-16 md:px-8 md:pb-20">
-      <ol className="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-5">
-        {tiles.map(({ project, index }) => (
-          <li key={project.slug}>
-            {/* The link is the glass card; the shared name stays on the
-                media inside it, never on the card. */}
+    <ol className="glass-light flex flex-col rounded-glass-sm p-2 md:rounded-glass md:p-3">
+      {projects.map((project, index) => {
+        const open = project.slug === active;
+        const activate = onActivate ? () => onActivate(project.slug) : undefined;
+        return (
+          <li key={project.slug} className="border-b border-ink/10 last:border-b-0">
             <ProjectLink
               project={project}
-              className="group relative isolate block p-2 pb-4 md:p-2.5 md:pb-5"
-              cursor="view"
+              onPointerEnter={activate}
+              onFocus={activate}
+              className={`group grid grid-cols-[2rem_1fr_auto] items-center gap-x-3 rounded-glass-xs px-2.5 py-3.5 transition-[background-color,box-shadow] duration-300 md:grid-cols-[2.5rem_1fr_auto] md:px-3 md:py-4 ${
+                open ? "index-row-open" : ""
+              }`}
             >
-              <Surface layout="grid" />
-              <div data-grid-media data-cursor-frame className="overflow-hidden rounded-glass-xs md:rounded-glass-sm">
-                <SharedMedia slug={project.slug} enabled={hasCaseStudy(project)}>
-                  <div className="overflow-hidden rounded-glass-xs transition-transform duration-700 ease-out-expo group-hover:scale-[1.04] reduced:transition-none reduced:group-hover:scale-100 md:rounded-glass-sm">
-                    <ProjectCover project={project} sizes={TILE_SIZES} framed eager={index === 0} />
-                  </div>
-                </SharedMedia>
-              </div>
-              {/* Stacked, not name-left and type-right: in a narrow tile the
-                  two sides wrapped into each other. The name hugs its text
-                  (justify-self-start), because Flip scales that box into
-                  the list row's name. */}
-              <div className="meta mt-3.5 grid grid-cols-[auto_1fr] items-baseline gap-x-3 gap-y-1 px-1.5 transition-transform duration-500 ease-out-expo group-hover:translate-x-1.5 reduced:transition-none">
-                <span className="tabular-nums text-glass-ink-2">{recordNumber(index)}</span>
-                <span data-flip-id={project.slug} className="inline-block origin-left justify-self-start">
-                  {project.name}
-                </span>
-                <span className="col-start-2 text-glass-ink-2">
-                  {project.type} / {project.year}
-                </span>
-              </div>
-            </ProjectLink>
-          </li>
-        ))}
-      </ol>
-
-      {entries.length > 0 ? (
-        <ol className="mt-4 grid grid-cols-1 gap-4 md:mt-5 md:grid-cols-3 md:gap-5">
-          {entries.map(({ project, index }) => (
-            <li key={project.slug} className="relative isolate flex flex-col p-5 md:p-6">
-              <Surface layout="grid" />
-              <ProjectLink project={project} className="group block">
-                <span className="meta tabular-nums text-glass-ink-2">{recordNumber(index)}</span>
-                {/* Uppercase like the list row it flies into, so Flip only
-                    scales the word and never changes its case mid-flight. */}
+              <span className="meta tabular-nums text-glass-ink-2">{recordNumber(index)}</span>
+              <span className="min-w-0">
+                {/* Inactive names step down by colour, not opacity: glass-ink-2
+                    on light glass is 7.6:1. */}
                 <span
-                  data-flip-id={project.slug}
-                  className="mt-2 block origin-left text-[1.375rem] font-semibold uppercase leading-[0.95] tracking-[-0.03em] transition-transform duration-500 ease-out-expo group-hover:translate-x-1.5 reduced:transition-none md:w-fit md:text-[clamp(1.125rem,1.7vw,1.625rem)]"
+                  className={`block text-[clamp(1.25rem,2.2vw,2rem)] font-semibold uppercase leading-[0.92] tracking-[-0.035em] transition-[color,translate] duration-500 ease-out-expo group-hover:translate-x-1.5 reduced:transition-none ${
+                    onActivate && !open ? "md:text-glass-ink-2" : ""
+                  }`}
                 >
                   {project.name}
                 </span>
-                <span className="meta mt-2 block text-glass-ink-2">
-                  {project.type} / {project.year}
+                <span className="meta mt-1.5 block text-glass-ink-2">
+                  {/* Unbroken: "2026—" split from its dash on a phone. */}
+                  {project.category} / <span className="whitespace-nowrap">{project.year}</span>
                 </span>
-              </ProjectLink>
-              <p data-grid-media className="mb-4 mt-3 max-w-[44ch] text-[0.8125rem] leading-snug text-glass-ink-2">
-                {project.summary}
-              </p>
-              <DestinationLinks
-                project={project}
-                labels={copy.destinations}
-                data-grid-media
-                className="mt-auto border-t border-ink/10 pt-3.5"
-              />
-            </li>
-          ))}
-        </ol>
-      ) : null}
-    </div>
-  );
-}
-
-/** One row per project. `onHover` feeds the desktop's trailing preview. */
-export function IndexList({
-  projects,
-  copy,
-  onHover,
-  onLeave,
-}: ViewProps & { readonly onHover?: (slug: string) => void; readonly onLeave?: () => void }) {
-  return (
-    <ol className="flex flex-col gap-2 px-5 pb-16 md:gap-2.5 md:px-8 md:pb-20" onPointerLeave={onLeave}>
-      {projects.map((project, i) => (
-        <li key={project.slug} className="relative isolate">
-          {/* Each row a glass strip, faded with the list's other extras so
-              the names fly into rows that frost in behind them. */}
-          <Surface layout="list" className="rounded-glass-sm" />
-          <ProjectLink
-            project={project}
-            onPointerEnter={onHover ? () => onHover(project.slug) : undefined}
-            className="group grid grid-cols-12 items-baseline gap-x-5 px-4 py-5 md:px-6 md:py-6"
-          >
-            <span data-list-extra className="meta col-span-2 tabular-nums text-glass-ink-2 md:col-span-1">
-              {recordNumber(i)}
-            </span>
-            {/* Seven columns at 4vw hold the longest name, "Meta Database
-                Engineer", on one line at desktop widths. */}
-            <span
-              data-flip-id={project.slug}
-              className="col-span-10 inline-block origin-left text-[clamp(1.75rem,4vw,4.5rem)] font-semibold uppercase leading-[0.9] tracking-[-0.04em] transition-transform duration-500 ease-out-expo group-hover:translate-x-2 reduced:transition-none md:col-span-7"
-            >
-              {project.name}
-            </span>
-            <span data-list-extra className="meta col-span-6 col-start-3 mt-3 md:col-span-3 md:col-start-auto md:mt-0">
-              {project.category}
-            </span>
-            {/* Four columns on a phone: inside the strip's padding, two held "2026" and
-                wrapped its open-ended dash and "Fall 2025" onto a second line. */}
-            <span data-list-extra className="meta col-span-4 mt-3 whitespace-nowrap text-right tabular-nums md:col-span-1 md:mt-0">
-              {project.year}
-            </span>
-          </ProjectLink>
-          {hasCaseStudy(project) ? null : (
-            <div data-list-extra className="-mt-2 grid grid-cols-12 gap-x-5 px-4 pb-5 md:-mt-3 md:px-6 md:pb-6">
-              <DestinationLinks
-                project={project}
-                labels={copy.destinations}
-                className="col-span-10 col-start-3 md:col-span-7 md:col-start-2"
-              />
-            </div>
-          )}
-        </li>
-      ))}
+              </span>
+              <span
+                className={`w-24 overflow-hidden rounded-glass-xs ${covers === "narrow" ? "md:hidden" : ""}`}
+              >
+                <SharedMedia slug={project.slug} enabled={sharedCovers && hasCaseStudy(project)}>
+                  <div>
+                    <IndexCover project={project} sizes="6rem" compact />
+                  </div>
+                </SharedMedia>
+              </span>
+              {onActivate ? (
+                <span
+                  aria-hidden="true"
+                  className={`hidden text-xl transition-[opacity,translate] duration-500 ease-out-expo reduced:transition-none md:block ${
+                    open ? "opacity-100" : "-translate-x-2 opacity-0"
+                  }`}
+                >
+                  →
+                </span>
+              ) : null}
+            </ProjectLink>
+            <DestinationLinks
+              project={project}
+              labels={copy.destinations}
+              onFocus={activate}
+              className="-mt-1 pb-3.5 pl-[3.375rem] md:pl-16"
+            />
+          </li>
+        );
+      })}
     </ol>
   );
 }
