@@ -302,8 +302,8 @@ long after the decision behind it might change.
 
 ## The About page's photographs
 
-The page reads resume, person, record, and the photographs follow: him beside
-the intro, then the campus twice and the city as the last row.
+The page reads resume, person, record, and the photographs follow: the
+portraits beside the intro, then six of the Fens closing the page.
 
 - **Three portraits as a triangle of circles** (`Portraits`) beside the
   intro, on request — the site's only round forms besides the dot field.
@@ -313,12 +313,16 @@ the intro, then the campus twice and the city as the last row.
   3x phone it is 1.13x short). A paper edge on
   each circle cuts cleanly where two overlap. Positions are percentages of
   the cluster, so it scales as one.
-- **The campus and the Fenway are one row of three** (`about.photos`), each
-  cropped to a 4:3 frame with the plates' hairline, so the row is one band
-  whatever the sources' shapes. The campus captures are 4:3 already; the
-  Fenway's 2:1 loses its sides. Every crop is at least 1200px wide, enough
-  for a third of a 1920px screen at 2x. Each caption names the place, since
-  the pair's title no longer sits beside them.
+- **Six of the Fens, in the order taken, close the page** (`about.photos`,
+  November 2026, on request). They replaced the campus pair and a plate of
+  the Fenway. All six are the Back Bay Fens between October 25 and
+  November 4, from each original's own date and location; in that order the
+  leaves turn across the grid, green to full colour. One line above names
+  the place and the dates, so each caption says only what its frame shows.
+  Three to a row from 48rem, two below, each 4:3 in glass with the plates'
+  hairline. The sources are 4:3 already, so nothing is cropped; they are
+  1600px wide, enough for a third of a 2560px screen at 2x, and WebP at 82:
+  quality 90 is for interface text, and foliage at 90 ran to 1 MB a file.
 - **Personal photographs are cropped for privacy as well as framing**: the
   snow portrait is cut to head and shoulders, which leaves out the entrance
   of the building behind him. Captions state only what the photograph or

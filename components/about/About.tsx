@@ -220,27 +220,41 @@ export function About({ kit }: { readonly kit: MotionKit }) {
             </Cell>
           </div>
 
-          {/* The campus twice and the city, cropped to one 4:3 frame so the
-              row is one band, each framed in glass. Each crop is at least
-              1200px wide, which covers a third of a 1920px screen at 2x. */}
-          <div className="grid gap-3.5 md:grid-cols-3 md:gap-5">
-            {about.photos.map((photo) => (
-              <figure key={photo.src} className="glass-light min-w-0 p-2.5">
-                <Plate className={`${PLATE_FRAME} aspect-[4/3] rounded-glass-sm after:rounded-glass-sm`}>
-                  <Image
-                    src={photo.src}
-                    alt={photo.alt}
-                    fill
-                    sizes="(min-width: 48rem) calc((100vw - 10.25rem) / 3), calc(100vw - 3.75rem)"
-                    placeholder="blur"
-                    blurDataURL={blurFor(photo.src)}
-                    className="object-cover"
-                  />
-                </Plate>
-                <figcaption className="px-1.5 pb-1 pt-3 text-[0.9375rem] font-medium tracking-[-0.01em]">{photo.caption}</figcaption>
-              </figure>
-            ))}
-          </div>
+          {/* One place over ten days, in the order taken, so the leaves turn
+              across the grid: three to a row from 48rem, two below. The line
+              above names the place and the dates once, so each caption only
+              says what its own frame shows. Every source is 4:3 and 1600px
+              wide, enough for a third of a 2560px screen at 2x. */}
+          <figure className="grid gap-4 md:gap-5">
+            <figcaption className="flex flex-wrap items-baseline justify-between gap-x-5 gap-y-1 px-1">
+              <span className="text-[1.375rem] font-semibold leading-[1.15] tracking-[-0.02em] md:text-[clamp(1.125rem,1.7vw,1.625rem)]">
+                {about.photos.place}
+              </span>
+              <span className="meta text-glass-ink-2">{about.photos.dates}</span>
+            </figcaption>
+            <ol className="grid grid-cols-2 gap-3.5 md:grid-cols-3 md:gap-5">
+              {about.photos.images.map((photo) => (
+                <li key={photo.src} className="min-w-0">
+                  <figure className="glass-light h-full p-2 md:p-2.5">
+                    <Plate className={`${PLATE_FRAME} aspect-[4/3] rounded-glass-sm after:rounded-glass-sm`}>
+                      <Image
+                        src={photo.src}
+                        alt={photo.alt}
+                        fill
+                        sizes="(min-width: 48rem) calc((100vw - 10.25rem) / 3), calc((100vw - 4.625rem) / 2)"
+                        placeholder="blur"
+                        blurDataURL={blurFor(photo.src)}
+                        className="object-cover"
+                      />
+                    </Plate>
+                    <figcaption className="px-1 pb-0.5 pt-2.5 text-[0.8125rem] font-medium leading-snug tracking-[-0.01em] md:px-1.5 md:pb-1 md:pt-3 md:text-[0.9375rem]">
+                      {photo.caption}
+                    </figcaption>
+                  </figure>
+                </li>
+              ))}
+            </ol>
+          </figure>
         </div>
 
         <SiteFooter kit={kit} compact />

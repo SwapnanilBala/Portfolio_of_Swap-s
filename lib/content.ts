@@ -997,29 +997,59 @@ export const content: SiteContent = {
         alt: "Swapnanil Bala in a grey suit and dark red tie, standing at a railing above a pond.",
       },
     ],
-    photos: [
-      {
-        src: "/media/northeastern-street.webp",
-        width: 1200,
-        height: 900,
-        caption: "Northeastern, from the street",
-        alt: "A long pale-brick university building with tall windows behind a fenced tram line and young trees, a red Northeastern banner on a lamppost, under a blue sky.",
-      },
-      {
-        src: "/media/northeastern-window.webp",
-        width: 1200,
-        height: 900,
-        caption: "Northeastern, from a window above",
-        alt: "Seen from a window above a tram platform: a long glass-walled building among trees, towers and a construction crane on the skyline under a cloudy blue sky.",
-      },
-      {
-        src: "/media/fenway.webp",
-        width: 2040,
-        height: 1020,
-        caption: "The Fenway, Boston",
-        alt: "A still river between tall trees in full leaf, the trees and a clear blue sky mirrored in the water, a pale building on the far bank.",
-      },
-    ],
+    // The six shared on 2026-11-04, replacing the campus pair and the old
+    // Fenway plate. Place and dates are from each original's own record:
+    // all six in the Back Bay Fens, between October 25 and November 4. In
+    // the order taken, so the leaves turn across the grid. No people in any
+    // of them; GPS and the rest of the metadata are stripped from the WebPs.
+    photos: {
+      place: "The Fens, Boston",
+      dates: "October 25 — November 4, 2026",
+      images: [
+        {
+          src: "/media/fens-oct-25.webp",
+          width: 1600,
+          height: 1200,
+          caption: "October 25, still green",
+          alt: "A pond under a clear blue sky, its far bank lined with trees still mostly in green leaf, a few touched with yellow, reeds at the water's edge and a paved path running off the corner.",
+        },
+        {
+          src: "/media/fens-oct-26-leaves.webp",
+          width: 1600,
+          height: 1200,
+          caption: "October 26, under turning leaves",
+          alt: "Copper-orange leaves on a low branch frame the view across a pond to a line of trees, some still green, some turning, under a sky of scattered white clouds.",
+        },
+        {
+          src: "/media/fens-oct-26-water.webp",
+          width: 1600,
+          height: 1200,
+          caption: "October 26, yellow over the water",
+          alt: "A white-barked tree leaning out over dark water among others in bright yellow leaf, their colour reflected below, fallen leaves floating on the surface.",
+        },
+        {
+          src: "/media/fens-nov-4-pond.webp",
+          width: 1600,
+          height: 1200,
+          caption: "November 4, leaves on the water",
+          alt: "A pond with its surface covered in fallen leaves, a clump of tall grass on the near bank and a weeping willow at the right, trees in russet and gold behind it under a bright sun.",
+        },
+        {
+          src: "/media/fens-nov-4-trees.webp",
+          width: 1600,
+          height: 1200,
+          caption: "November 4, in full colour",
+          alt: "A tall tree in red-orange leaf beside younger trees in gold, the ground beneath them deep in fallen leaves and long shadows, still water and a low stone building through the trunks.",
+        },
+        {
+          src: "/media/fens-nov-4-rocks.webp",
+          width: 1600,
+          height: 1200,
+          caption: "November 4, from the rocks",
+          alt: "Seen from a grey outcrop of rock, a narrow stretch of water winds between trees in red, orange and yellow, the bright colours mirrored in it under a deep blue sky.",
+        },
+      ],
+    },
   },
 
   contact: [
