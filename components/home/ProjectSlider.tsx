@@ -15,7 +15,6 @@ import {
 import { DisplayTitle } from "@/components/DisplayTitle";
 import { SharedMedia } from "@/components/PageTransition";
 import { LiveSiteLink } from "@/components/home/LiveSiteLink";
-import { ProjectThumbnailRail } from "@/components/home/ProjectThumbnailRail";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { blurFor, CASE_HERO, HERO_BRIGHTNESS, recordNumber, SCREENSHOT_QUALITY } from "@/lib/media";
 import { warmCaseHero } from "@/lib/preload";
@@ -71,10 +70,15 @@ const FOLLOW = 0.085;
 /** After this long without input, the slider settles on the nearest plate. */
 const SETTLE_MS = 160;
 
+/** How long the pointer rests on a row of the list before its plate comes on stage. */
+const HOVER_INTENT_MS = 90;
+
 /**
- * The desktop Projects page: a looping horizontal run of framed project plates,
- * one on stage at a time, driven by drag, wheel, arrow keys and the thumbnail
- * rail. The title crosses the lower edge of the plate on stage.
+ * The desktop Projects page: the projects listed by name on the left, and a
+ * looping run of framed project plates on the right, one on stage at a time,
+ * driven by the list (hover, click, focus), drag, wheel and arrow keys. The
+ * plates travel inside a clipped stage, so their neighbours wait past its
+ * edges rather than the window's.
  *
  * The plates are framed rather than full-bleed on purpose. Every capture is a
  * landing page with its own headline; filling the viewport with one put two
@@ -106,12 +110,15 @@ export function ProjectSlider({ projects, copy, liveLabel }: Props) {
   const sources = useMemo(() => projects.map((project) => project.hero), [projects]);
 
   const regionRef = useRef<HTMLElement>(null);
+  // The clipped box the plates travel in, and the canvas fills.
+  const stageRef = useRef<HTMLDivElement>(null);
   const plateRefs = useRef<(HTMLDivElement | null)[]>([]);
   // Every plate shares one layout box; the first one is measured for it.
   const frameRef = useRef<HTMLDivElement>(null);
   const stepRef = useRef(0);
-  const titleRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const listRef = useRef<HTMLElement>(null);
   const liveRef = useRef<HTMLDivElement>(null);
+  const intentTimer = useRef(0);
   const hostRef = useRef<HTMLSpanElement>(null);
   const motion = useRef<SliderMotion>({ current: 0, velocity: 0, hover: 0 });
   const target = useRef(0);
@@ -152,17 +159,32 @@ export function ProjectSlider({ projects, copy, liveLabel }: Props) {
     if (isDesktop && document.activeElement === regionRef.current) warm(active);
   }, [active, isDesktop, warm]);
 
-  // The distance between plates follows the window.
+  /** Hovering a row brings its plate on stage once the pointer settles on it. */
+  const intend = useCallback(
+    (index: number) => {
+      window.clearTimeout(intentTimer.current);
+      intentTimer.current = window.setTimeout(() => {
+        if (index !== activeRef.current) goTo(index);
+        warm(index);
+      }, HOVER_INTENT_MS);
+    },
+    [goTo, warm],
+  );
+  const cancelIntent = useCallback(() => window.clearTimeout(intentTimer.current), []);
+  useEffect(() => cancelIntent, [cancelIntent]);
+
+  // The distance between plates follows the stage, not the window: the
+  // neighbours wait just past the stage's clipped edges.
   useEffect(() => {
-    const region = regionRef.current;
-    if (!isDesktop || !region) return;
+    const stage = stageRef.current;
+    if (!isDesktop || !stage) return;
     const measure = () => {
       const frame = frameRef.current;
-      if (frame) stepRef.current = slideStep(region.clientWidth, frame.offsetWidth);
+      if (frame) stepRef.current = slideStep(stage.clientWidth, frame.offsetWidth);
     };
     measure();
     const observer = new ResizeObserver(measure);
-    observer.observe(region);
+    observer.observe(stage);
     return () => observer.disconnect();
   }, [isDesktop]);
 
@@ -350,83 +372,56 @@ export function ProjectSlider({ projects, copy, liveLabel }: Props) {
     };
   }, [isDesktop, count, goTo, step, openActive, warm]);
 
-  // First reveal: the opening title rises into place once, on arrival.
+  // First reveal: the list's names rise into place once, on arrival, and the
+  // line under the plate follows them in.
   useGSAP(
     () => {
       if (!isDesktop) return;
-      titleRefs.current.forEach((wrapper, i) => {
-        if (wrapper && i !== activeRef.current) gsap.set(wrapper, { autoAlpha: 0 });
-      });
-      const first = titleRefs.current[activeRef.current];
-      if (!first) return;
-      first.dataset.revealed = "";
+      const list = listRef.current;
       const liveBox = liveRef.current;
+      if (list) list.dataset.revealed = "";
       if (liveBox) liveBox.dataset.revealed = "";
-      if (reduced) return;
-      gsap.from(first.querySelectorAll("[data-line]"), {
+      if (reduced || !list) return;
+      gsap.from(list.querySelectorAll("[data-line]"), {
         yPercent: 110,
         duration: DURATION.title,
         ease: EASE.out,
-        stagger: 0.07,
+        stagger: 0.05,
         delay: 0.25,
       });
-      gsap.from([...first.querySelectorAll("[data-title-meta]"), ...(liveBox ? [liveBox] : [])], {
-        autoAlpha: 0,
-        y: 10,
-        duration: DURATION.meta,
-        ease: EASE.out,
-        delay: 0.25 + META_LAG + 0.2,
-      });
+      if (liveBox) {
+        gsap.from(liveBox, {
+          autoAlpha: 0,
+          y: 10,
+          duration: DURATION.meta,
+          ease: EASE.out,
+          delay: 0.25 + META_LAG + 0.2,
+        });
+      }
     },
     { dependencies: [isDesktop], scope: regionRef },
   );
 
-  // Every change after that: the old title leaves in the direction of travel,
-  // the new one arrives behind it, and the metadata trails the title.
+  // Every change after that: the list's own CSS transitions carry the names
+  // and their details. One live link serves every plate, so a visitor focused
+  // on it keeps focus while the arrow keys change project; only its address
+  // changes, and that follows the plate in.
   useGSAP(
     () => {
       const from = previousActive.current;
-      const to = active;
-      if (from === to || !isDesktop) return;
-      previousActive.current = to;
-
-      const outgoing = titleRefs.current[from];
-      const incoming = titleRefs.current[to];
-      if (!outgoing || !incoming) return;
-      const outLines = outgoing.querySelectorAll("[data-line]");
-      const inLines = incoming.querySelectorAll("[data-line]");
-      const outMeta = outgoing.querySelectorAll("[data-title-meta]");
-      const inMeta = incoming.querySelectorAll("[data-title-meta]");
-      // One live link serves every plate, so a visitor focused on it keeps
-      // focus while the arrow keys change project; only its address changes,
-      // and that follows the metadata in.
-      const host = hostRef.current ? [hostRef.current] : [];
-      incoming.dataset.revealed = "";
-
-      gsap.killTweensOf([outgoing, incoming, ...outLines, ...inLines, ...outMeta, ...inMeta, ...host]);
-
+      if (from === active || !isDesktop) return;
+      previousActive.current = active;
+      const host = hostRef.current;
+      if (!host) return;
+      gsap.killTweensOf(host);
       if (reduced) {
-        gsap.set(outgoing, { autoAlpha: 0 });
-        gsap.set(incoming, { autoAlpha: 1 });
-        gsap.set([...inLines], { yPercent: 0 });
-        gsap.set([...inMeta, ...host], { autoAlpha: 1, y: 0 });
+        gsap.set(host, { autoAlpha: 1, y: 0 });
         return;
       }
-
-      const direction = slideOffset(to, from, count) >= 0 ? 1 : -1;
-      gsap.set(incoming, { autoAlpha: 1 });
-      gsap.to(outLines, { yPercent: -110 * direction, duration: 0.7, ease: EASE.inOut, stagger: 0.04 });
-      gsap.to(outMeta, { autoAlpha: 0, duration: 0.3 });
-      gsap.set(outgoing, { autoAlpha: 0, delay: 0.75 });
       gsap.fromTo(
-        inLines,
-        { yPercent: 110 * direction },
-        { yPercent: 0, duration: DURATION.title, ease: EASE.out, stagger: 0.06, delay: 0.12 },
-      );
-      gsap.fromTo(
-        [...inMeta, ...host],
-        { autoAlpha: 0, y: 10 },
-        { autoAlpha: 1, y: 0, duration: DURATION.meta, ease: EASE.out, delay: 0.12 + META_LAG },
+        host,
+        { autoAlpha: 0, y: 6 },
+        { autoAlpha: 1, y: 0, duration: DURATION.meta, ease: EASE.out, delay: META_LAG },
       );
     },
     { dependencies: [active, isDesktop, reduced], scope: regionRef },
@@ -453,15 +448,10 @@ export function ProjectSlider({ projects, copy, liveLabel }: Props) {
       }}
       data-cursor="drag"
       data-lenis-prevent
-      // The frame, defined once: the plates and the live link below them.
-      // The ground is the page's radiant one, so the section paints none.
-      // Under ~880px tall the plate gives up to a tenth of its width so the
-      // live link still fits between the bezel and the metadata strip (the
-      // max: the plate's top, the bezel's ring, the link and its gaps and
-      // the strip, 94vh - 16.5rem tall, but never under 89vh wide). Below
-      // ~690px the link lifts onto the plate's corner instead, and the last
-      // term keeps the bezel clear of the strip (94vh - 12rem tall).
-      className="projects-frame [--plate-top:7.25rem] [--plate-w:min(99.2vh,76vw,max(89vh,(94vh-16.5rem)*1.6),(94vh-12rem)*1.6)] absolute inset-0 hidden touch-none select-none overflow-hidden focus-visible:outline-2 focus-visible:-outline-offset-[12px] focus-visible:outline-paper desktop:block"
+      // The frame is defined once, in glass-projects.css: the list's width,
+      // the stage beside it, and the plate, its position and the line under
+      // it. The ground is the page's radiant one, so the section paints none.
+      className="projects-frame projects-list-frame absolute inset-0 hidden touch-none select-none overflow-hidden focus-visible:outline-2 focus-visible:-outline-offset-[12px] focus-visible:outline-paper desktop:block"
     >
       <p id="slider-hint" className="sr-only">
         {copy.hint}
@@ -471,150 +461,181 @@ export function ProjectSlider({ projects, copy, liveLabel }: Props) {
       </p>
 
       {/* The gold glow behind the plate on stage. It holds still while the
-          plates travel across it. */}
+          plates travel across it, and reaches under the list's glass. */}
       <div
         aria-hidden="true"
-        className="projects-glow pointer-events-none absolute left-[calc(50%-var(--plate-w)*0.8)] top-[calc(var(--plate-top)-var(--plate-w)*0.12)] h-[calc(var(--plate-w)*0.95)] w-[calc(var(--plate-w)*1.6)]"
+        className="projects-glow pointer-events-none absolute left-[calc(var(--plate-x)-var(--plate-w)*0.3)] top-[calc(var(--plate-top)-var(--plate-w)*0.12)] h-[calc(var(--plate-w)*0.95)] w-[calc(var(--plate-w)*1.6)]"
       />
 
-      {projects.map((project, i) => (
-        <div
-          key={project.slug}
-          ref={(plate) => {
-            plateRefs.current[i] = plate;
-            if (i === 0) frameRef.current = plate;
-          }}
-          role="group"
-          aria-roledescription="slide"
-          aria-label={project.name}
-          aria-hidden={i !== active}
-          // The plate on stage opens on a click; the cursor's marks lock onto it.
-          data-cursor="open"
-          data-cursor-frame
-          // The plate is the image's box, which the WebGL plates measure; its
-          // bezel is drawn outside it, so neither the geometry nor the morph
-          // changes. The WebGL plate is drawn over the image only, with the
-          // same corners, and this bezel shows around it, travelling and
-          // dimming with its plate on the same tick.
-          className="absolute left-[calc(50%-var(--plate-w)/2)] top-(--plate-top) aspect-[16/10] w-(--plate-w) rounded-(--plate-r) bg-ink will-change-transform"
-          // Until the loop's first tick only the first plate is on stage.
-          style={i === 0 ? undefined : { visibility: "hidden" }}
-        >
-          <div aria-hidden="true" className="glass-bezel pointer-events-none absolute -inset-(--bezel)" />
-          {/* The view-transition name is the image's, never the bezel's:
-              the case-study hero sits in the same bezel, and only the
-              media morphs between the two. */}
-          <SharedMedia slug={project.slug} enabled={hydrated && isDesktop && i === active}>
-            <div className="absolute inset-0 overflow-hidden rounded-[inherit]">
-              {/* Lazy, so the hidden phone layout never fetches it; the page
-                  preloads the first plate under the desktop query instead.
-                  Sized as the case-study hero, not as this plate: see
-                  CASE_HERO. */}
-              <Image
-                src={project.hero.src}
-                alt={project.hero.alt}
-                fill
-                fetchPriority={i === 0 ? "high" : undefined}
-                sizes={CASE_HERO.sizes}
-                quality={SCREENSHOT_QUALITY}
-                placeholder="blur"
-                blurDataURL={blurFor(project.hero.src)}
-                draggable={false}
-                className="object-cover object-top"
-                style={{ filter: `brightness(${HERO_BRIGHTNESS})` }}
-              />
-            </div>
-          </SharedMedia>
-        </div>
-      ))}
+      {/* The projects by name. The row on stage is lit and carries its
+          category, year and stack; the others recede until hovered. Each row
+          is a real button, and the counter cites the same record numbers the
+          Index uses. */}
+      <nav
+        ref={listRef}
+        aria-label={copy.rail}
+        data-reveal=""
+        className="glass-dark absolute left-(--list-l) top-(--list-top) flex h-(--list-h) w-(--list-w) flex-col p-2.5"
+      >
+        <ol className="grid gap-1.5">
+          {projects.map((project, i) => {
+            const on = i === active;
+            return (
+              <li key={project.slug}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    cancelIntent();
+                    goTo(i);
+                  }}
+                  onPointerEnter={() => intend(i)}
+                  onPointerLeave={cancelIntent}
+                  onFocus={() => warm(i)}
+                  aria-label={copy.thumbnail.replace("{name}", project.name)}
+                  aria-current={on ? "true" : undefined}
+                  className={`grid w-full grid-cols-[2.25rem_minmax(0,1fr)] rounded-glass-sm px-4 pb-5 pt-4 text-left outline-offset-2 transition-[color,background-color,box-shadow] duration-500 ease-out-expo focus-visible:outline-paper ${
+                    on
+                      ? "bg-white/[0.09] text-paper shadow-[inset_0_1px_0_var(--color-glass-shine-dark),inset_0_0_0_1px_var(--color-glass-dark-edge)]"
+                      : "text-paper/62 hover:text-paper/85"
+                  }`}
+                >
+                  <span className={`meta pt-[0.35em] tabular-nums ${on ? "" : "text-paper/80"}`}>
+                    {recordNumber(i)}
+                  </span>
+                  <span className="min-w-0">
+                    <DisplayTitle
+                      as="span"
+                      lines={displayLinesOf(project)}
+                      className="whitespace-nowrap text-(length:--name-size)"
+                    />
+                    {/* Opens on the row on stage: a grid row from 0fr to 1fr,
+                        so the height follows the content without measuring. */}
+                    <span
+                      className={`grid transition-[grid-template-rows] duration-500 ease-out-expo ${on ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
+                    >
+                      <span className="overflow-hidden">
+                        <span className="meta block pt-4 tabular-nums">
+                          {project.category} / {project.year}
+                        </span>
+                        <span className="meta block pt-1 text-paper/90">
+                          {project.stack.slice(0, 3).join(" / ")}
+                        </span>
+                      </span>
+                    </span>
+                  </span>
+                </button>
+              </li>
+            );
+          })}
+        </ol>
+        <p aria-hidden="true" className="meta mt-auto px-4 pb-2 tabular-nums text-paper">
+          {recordNumber(active)} <span className="text-glass-paper-2">/ {recordNumber(count - 1)}</span>
+        </p>
+      </nav>
 
-      {useCanvas ? (
-        <div
-          aria-hidden="true"
-          className={`pointer-events-none absolute inset-0 transition-opacity duration-700 ${canvasReady ? "opacity-100" : "opacity-0"}`}
-        >
-          <SliderCanvas
-            sources={sources}
-            motion={motion}
-            frameRef={frameRef}
-            initialIndex={0}
-            onReady={() => setCanvasReady(true)}
-            onLost={() => setCanvasLost(true)}
-          />
-        </div>
-      ) : null}
-
-      <div className="pointer-events-none absolute inset-x-5 bottom-[6vh] md:inset-x-8">
+      {/* The stage: the plates travel inside it and it clips them, so at
+          rest the neighbours wait just past its edges. The WebGL canvas
+          fills it, and measures the first plate's box inside it. It lets
+          the pointer through to the list, which it covers in a portrait
+          window; only the plates take it. */}
+      <div ref={stageRef} className="pointer-events-none absolute inset-y-0 left-(--stage-l) right-0 overflow-hidden">
         {projects.map((project, i) => (
           <div
             key={project.slug}
-            ref={(wrapper) => {
-              titleRefs.current[i] = wrapper;
+            ref={(plate) => {
+              plateRefs.current[i] = plate;
+              if (i === 0) frameRef.current = plate;
             }}
-            data-reveal={i === 0 ? "" : undefined}
+            role="group"
+            aria-roledescription="slide"
+            aria-label={project.name}
             aria-hidden={i !== active}
-            className={`absolute bottom-0 left-0 w-full ${i === 0 ? "" : "invisible"}`}
+            // The plate on stage opens on a click; the cursor's marks lock onto it.
+            data-cursor="open"
+            data-cursor-frame
+            // The plate is the image's box, which the WebGL plates measure; its
+            // bezel is drawn outside it, so neither the geometry nor the morph
+            // changes. The WebGL plate is drawn over the image only, with the
+            // same corners, and this bezel shows around it, travelling and
+            // dimming with its plate on the same tick.
+            className="pointer-events-auto absolute left-[calc(50%-var(--plate-w)/2)] top-(--plate-top) aspect-[16/10] w-(--plate-w) rounded-(--plate-r) bg-ink will-change-transform"
+            // Until the loop's first tick only the first plate is on stage.
+            style={i === 0 ? undefined : { visibility: "hidden" }}
           >
-            <DisplayTitle
-              lines={displayLinesOf(project)}
-              className="text-[min(12vh,9.5vw)] text-paper"
-            />
-            {/* The metadata on a glass strip; the case study's link stays
-                type beside it, under the live link at the bezel's edge. The
-                spacer after it holds it there, and gives way first when a
-                narrow window needs the room for the strip. */}
-            <div data-title-meta className="meta mt-5 flex items-center gap-x-8 text-paper">
-              <p className="glass-dark flex shrink-0 items-baseline divide-x divide-glass-dark-edge rounded-glass-sm px-5 py-3">
-                <span className="shrink-0 pr-5 tabular-nums">
-                  {recordNumber(i)} / {project.category}
-                </span>
-                <span className="shrink-0 px-5 tabular-nums">{project.year}</span>
-                <span className="pl-5">{project.stack.slice(0, 3).join(" / ")}</span>
-              </p>
-              <Link
-                href={`/work/${project.slug}`}
-                transitionTypes={["page"]}
-                tabIndex={i === active ? 0 : -1}
-                onFocus={() => warm(i)}
-                onPointerEnter={() => warm(i)}
-                className="pointer-events-auto ml-auto shrink-0 underline decoration-1 underline-offset-4"
-              >
-                {copy.open}
-              </Link>
-              <span
-                aria-hidden="true"
-                className="-ml-8 min-w-0 shrink-[20] basis-[max(0px,calc(50%-var(--plate-w)/2-var(--bezel)))]"
-              />
-            </div>
+            <div aria-hidden="true" className="glass-bezel pointer-events-none absolute -inset-(--bezel)" />
+            {/* The view-transition name is the image's, never the bezel's:
+                the case-study hero sits in the same bezel, and only the
+                media morphs between the two. */}
+            <SharedMedia slug={project.slug} enabled={hydrated && isDesktop && i === active}>
+              <div className="absolute inset-0 overflow-hidden rounded-[inherit]">
+                {/* Lazy, so the hidden phone layout never fetches it; the page
+                    preloads the first plate under the desktop query instead.
+                    Sized as the case-study hero, not as this plate: see
+                    CASE_HERO. */}
+                <Image
+                  src={project.hero.src}
+                  alt={project.hero.alt}
+                  fill
+                  fetchPriority={i === 0 ? "high" : undefined}
+                  sizes={CASE_HERO.sizes}
+                  quality={SCREENSHOT_QUALITY}
+                  placeholder="blur"
+                  blurDataURL={blurFor(project.hero.src)}
+                  draggable={false}
+                  className="object-cover object-top"
+                  style={{ filter: `brightness(${HERO_BRIGHTNESS})` }}
+                />
+              </div>
+            </SharedMedia>
           </div>
         ))}
+
+        {useCanvas ? (
+          <div
+            aria-hidden="true"
+            className={`pointer-events-none absolute inset-0 transition-opacity duration-700 ${canvasReady ? "opacity-100" : "opacity-0"}`}
+          >
+            <SliderCanvas
+              sources={sources}
+              motion={motion}
+              frameRef={frameRef}
+              initialIndex={0}
+              onReady={() => setCanvasReady(true)}
+              onLost={() => setCanvasLost(true)}
+            />
+          </div>
+        ) : null}
       </div>
 
-      {/* Under the plate on stage, flush with its bezel's right edge, while
-          the title crosses its lower left. The box runs from just under the
-          bezel to just above the metadata strip: the link sits at its top, and
-          in a window too short for both, the box's top stops at its bottom,
-          the auto margin collapses and justify-end lifts the link onto the
-          plate's corner instead of onto the metadata. In a
-          portrait window the rail, centred on the right edge, would cover it,
-          so there it keeps the rail's width clear. */}
-      {current && live ? (
+      {/* Under the plate, edge to edge with its bezel: the way into the case
+          study on the left, as type, and the live site on the right, the
+          page's one solid control. Its bottom is the list's. */}
+      {current ? (
         <div
           ref={liveRef}
           data-reveal=""
-          className="absolute bottom-[calc(6vh+3.25rem)] right-[calc(50%-var(--plate-w)/2-var(--bezel))] top-[min(calc(var(--plate-top)+var(--plate-w)*10/16+var(--bezel)+0.875rem),calc(100%-6vh-3.25rem))] flex flex-col justify-end portrait:right-[max(calc(50%-var(--plate-w)/2-var(--bezel)),8.75rem)]"
+          className="absolute left-[calc(var(--plate-x)-var(--bezel))] top-(--foot) flex h-(--foot-h) w-[calc(var(--plate-w)+2*var(--bezel))] items-center justify-between gap-x-8 text-paper"
         >
-          <LiveSiteLink
-            href={live.href}
-            label={liveLabel}
-            project={current.name}
-            hostRef={hostRef}
-            className="mb-auto shrink-0 px-6 py-4 text-[clamp(1rem,1.1vw,1.375rem)]"
-          />
+          <Link
+            href={`/work/${current.slug}`}
+            transitionTypes={["page"]}
+            onFocus={() => warm(active)}
+            onPointerEnter={() => warm(active)}
+            className="meta shrink-0 underline decoration-1 underline-offset-4"
+          >
+            {copy.open}
+          </Link>
+          {live ? (
+            <LiveSiteLink
+              href={live.href}
+              label={liveLabel}
+              project={current.name}
+              hostRef={hostRef}
+              className="h-full w-[min(22rem,60%)] shrink-0 px-6 text-[clamp(1rem,1.1vw,1.375rem)]"
+            />
+          ) : null}
         </div>
       ) : null}
-
-      <ProjectThumbnailRail projects={projects} active={active} onSelect={goTo} copy={copy} />
     </section>
   );
 }

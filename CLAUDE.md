@@ -71,8 +71,8 @@ app/(desktop)/projects/     Projects — the WebGL slider, one viewport
 app/(desktop)/work/...      Index, and case studies (static params; unknown slug = 404)
 app/m/layout.tsx            phone tree: PhoneReveals
 app/m/...                   the same four pages for phones, served at the same URLs
-components/home/            ProjectSlider, SliderCanvas, ProjectThumbnailRail,
-                            MobileProjects, SliderMasthead, LiveSiteLink
+components/home/            ProjectSlider, SliderCanvas, MobileProjects,
+                            SliderMasthead, LiveSiteLink
 components/index/           IndexPage, IndexView (Flip + preview), IndexCaptures, parts
                             (grid, list, toggle, links), ProjectCover
 components/work/            CaseStudy, ProjectHero, CaseSection, MediaPlate,
@@ -240,8 +240,8 @@ competes.
 - **Separators are `/`**, not the brief's `·` — the brief itself uses `/` in the
   case-study STACK line, and middle-dot meta strings were a generated-design
   tell in the old forbidden list. One token to flip if he prefers `·`.
-- **Numbers are references.** `01 / Category` in the slider is cited by the
-  thumbnail rail's counter and the Index's record numbers; a number on a block
+- **Numbers are references.** A Projects row's `01` is cited by the list's
+  counter and by the Index's record numbers; a number on a block
   nothing refers to is still decoration.
 - **No icon badges for technologies.** (The old "no cards, no drop shadows,
   no glass, no gradient washes, no pills" rule was reversed by the Radiant
@@ -354,43 +354,71 @@ one-off values.
 
 ## The slider (`/projects`)
 
+**List and plate (November 2026, on request)** — layout B of four mock-ups
+(stacked plates, list and plate, contact sheet, a screen per project), in
+Radiant Glass. The projects are listed by name on the left, in one
+`glass-dark` panel; the plate travels on the right. It replaced the
+full-width run with the title crossing the plate and a thumbnail rail on
+the right edge: a visitor could not see what else there was without
+dragging. The physics, the WebGL plates, the live region, the keys and the
+handover to the case study are unchanged; the stage they work in is
+narrower.
+
+- **The list is the navigator.** Each row is a real button ("Show {name}",
+  `aria-current` on the one on stage): the record number, the name in
+  display type, and on the row on stage its category, year and first three
+  stack items, opened by a `grid-template-rows` 0fr→1fr transition. A click
+  brings its plate on stage; so does resting the pointer on a row for 90ms
+  (`HOVER_INTENT_MS`), so a pass over the list does not launch every plate
+  in turn. Focus only warms a row's case-study hero: tabbing through the
+  list to the links under the plate keeps the project the visitor chose.
+  Inactive names are paper at 62%, their numbers 80%: at 55% and 70% the
+  first row measured 2.92:1 and 4.05:1 over the ember glow with another row
+  on stage. Worst now 3.39:1 (large) and above 4.5:1 for every small line,
+  measured on the build (brightest 2% under each box). Names are sized by
+  the list (`--name-size`) so "KB Patient" holds one line and three rows
+  fit its height; titles are `whitespace-nowrap`, so `displayLines` hold.
 - **One physics loop** on `gsap.ticker` in `ProjectSlider` owns the state —
   target, current (following with inertia), velocity — and shares it by
   reference (`SliderMotion`) with `SliderCanvas`, which only draws, on the same
   tick. A wheel gesture moves at most one plate, so a trackpad's momentum tail
   cannot skip past everything.
-- **One plate on stage.** The frame is 16:10, `min(99.2vh, 76vw)` wide, under
-  the masthead. Neighbours rest just past the window's edges: the step between
-  plates is derived from the stage and plate widths (`slideStep`), never fixed,
-  so no window shape shows a sliver of the next project. Plates dim as they
+- **One plate on stage.** The frame is 16:10, centred in the stage: a box
+  from the list's right edge to the window's, which clips the plates (and
+  lets the pointer through; only the plates take it). The plate is the
+  stage's width less a gutter each side, and no taller than leaves room for
+  the line under it. Neighbours rest just past the stage's edges: the step
+  between plates is derived from the stage and plate widths (`slideStep`,
+  measured from the stage, not the window), never fixed, so no window shape
+  shows a sliver of the next project. A portrait window has no room beside
+  the plate, so there the stage is the window's width and the list goes
+  under the line. Plates dim as they
   leave the stage and light as they arrive (`presenceAt`) — DOM opacity over
   the ink, and the same mix toward ink in the shader. A click opens a project
   only on the plate on stage; the ink around it does nothing.
-- **CSS defines the frame once**, as `--plate-top` and `--plate-w` on the
-  slider. The WebGL plates measure a DOM plate's layout box (`frameRef`) and
-  step by the same `slideStep`; nothing restates the geometry in JavaScript.
+- **CSS defines the frame once**, in `.projects-list-frame`
+  (`app/styles/glass-projects.css`): the list's width and box, `--stage-l`,
+  `--plate-top`, `--plate-w`, `--plate-x` (the plate's left edge in the
+  window, for the glow and the line under it) and `--foot` (that line's
+  top). The canvas fills the stage, so the WebGL plates measure a DOM
+  plate's layout box inside it (`frameRef`) and step by the same
+  `slideStep`; nothing restates the geometry in JavaScript.
 - **Every slide leads to its live site** (`LiveSiteLink`), on request: "big
   and visible". A block of paper with ink type, the label from
   `ui.linkLabels.live` and the address in meta under it, opening a new tab;
   it is the site's one filled control. A project with no live address shows
   none.
-  - Desktop: under the plate on stage, flush with its right edge, while the
-    title crosses the lower left. It is one link for every plate, so a
-    keyboard visitor on it keeps focus while the arrow keys change project;
-    its address follows the metadata in. Its box runs from 1.25rem under the
-    plate to just above the metadata line, the link held at the top by an
-    auto margin: in a window too short for both (under ~690px tall), the
-    margin collapses and `justify-end` lifts the link onto the plate's
-    corner instead of onto the metadata. In a portrait window the rail,
-    centred on the right edge, would cover it, so there it keeps the rail's
-    width clear. Swept clear of the title, metadata and rail at 32 window
-    sizes from 800×500 to 3440×1440.
-  - Phones: a full-width bar of fixed height (`h-14`) after the metadata.
-    The fixed counter sits level with the last metadata line, so its offset
-    adds the bar's height and margin — change one, change the other. The
-    bar costs the first screen's plate about 76px; on a 375×548 phone it is
-    87px tall. On a phone on its side the screen's padding is 1.25rem, not
-    2.5rem, and the counter's `short:` offset says so.
+  - Desktop: on a 4.5rem line 1.25rem under the plate, edge to edge with
+    its bezel — "Open the case study" as type on the left, the live link
+    flush right. The line's bottom is the list's. It is one link for every
+    plate, so a keyboard visitor on it keeps focus while the arrow keys
+    change project; its address follows the plate in. The plate's height
+    is capped so the line always fits above the 6vh foot, which replaced
+    the old lift onto the plate's corner in short windows. Checked at
+    1024×768, 1280×720, 1440×900, 1920×1080, 2560×1440 and 820×1180.
+  - Phones: a full-width bar of fixed height (`h-14`) under the plate on
+    the first screen, the case study's link under it. The counter is the
+    list's, at its foot.
 - **The DOM plates are always rendered and always in position.** They are the
   no-WebGL and reduced-motion path, the LCP frame, and the element a page
   transition morphs from.
@@ -412,33 +440,26 @@ one-off values.
   that cropped the capture at the frame. Keep it that way.
 - **`sources` passed to the canvas must be referentially stable.** A new array
   rebuilds the whole scene; it is memoised in the slider for that reason.
-- Touch and narrow screens get `MobileProjects`: one framed plate per screen on
-  native vertical scroll-snap, no WebGL — alone in the phone tree, beside the
-  WebGL slider in the desktop tree for narrow windows. Its first plate is
-  eager and high priority, the rest low: within lazy-load distance, they
-  downloaded alongside the first and shared its bandwidth. A portrait screen shows the project's
+- Touch and narrow screens get `MobileProjects`, the same list and plate
+  on native scrolling, no WebGL — alone in the phone tree, beside the WebGL
+  slider in the desktop tree for narrow windows. The first screen is the
+  masthead, the plate on stage and the line under it; the list follows,
+  and a tap on a name brings its plate on stage (all plates stacked in one
+  bezel, crossfading, only the one on stage named for the morph) and
+  scrolls back up to it. Its first plate is eager and high priority, the
+  rest low: they downloaded alongside the first and shared its bandwidth. A portrait screen shows the project's
   phone capture (`heroMobile`), a landscape one its desktop capture. CSS
   (`desktop:` variant) decides which slider shows and JS (`DESKTOP_QUERY`)
   decides which is wired up — keep the two queries identical.
-- **A phone on its side sets plate and type side by side** (`short:` —
-  landscape, under 30rem tall; no iPad is that short, so iPads keep the
-  stacked screens). Stacked, the title alone at 15vw outgrew a 340px-tall
-  screen and the plate got 0px; capping the title by height still left a
-  plate under 100px. The plate is 16:10, so the capture loses nothing, and
-  it and the live link end on one bottom line. Its width is the least of
-  half the screen, what the height allows, and what leaves the type column
-  17.5rem: the widest metadata line (with the counter's room) and the
-  clinic's address each need about 17rem on one line, and below that the
-  wrapped metadata pushed the title into the nav. The title is sized by
-  its column (`17cqw`, the portrait title's share of its width) and capped
-  by what the screen leaves under the nav (4rem, at least 15px under its
-  type). The masthead cannot share that screen, so it heads the first one
-  and scrolls away: section one is the masthead plus a full screen, both
-  snap points, and the counter observes each project's screen, not its
-  section. The page opens on the name with the first plate and title in
-  view. Checked for clipping, wrapped metadata, overflow in the live link
-  and the nav at 568×260, 568×300, 600×280, 640×320, 667×320, 740×300,
-  844×340 and 932×430.
+- **A phone on its side is a grid** (`short:` — landscape, under 30rem
+  tall; no iPad is that short, so iPads keep the stacked layout): the plate
+  down the left, the intro over the live link and the case study's link on
+  the right, all in the first screen under the nav; the list follows. The
+  plate is 16:10, so the capture loses nothing, and it ends on the links'
+  bottom line. Its width is the least of half the screen, what the height
+  under the nav allows, and what leaves the column 17.5rem: the clinic's
+  address in the live link needs about 17rem on one line. Checked at
+  568×300, 844×390 and 932×430.
 - **`useMediaQuery` shares one `MediaQueryList` per query**, notifying every
   subscriber from one listener, so all consumers of a query re-render in one
   commit. With a list per consumer, React committed between their change events
@@ -688,7 +709,8 @@ portfolio refutes its own copy.
 - Visible focus on every interactive element (`:focus-visible`, 2px
   `currentColor` outline). Never `outline-none` without a replacement.
 - The slider is a labelled carousel with a polite live region ("Project 2 of
-  3: …"), arrow keys, Home/End, Enter, and real buttons in the rail. The canvas
+  3: …"), arrow keys, Home/End, Enter, and a real button per project in the
+  list. The canvas
   is `aria-hidden`; the DOM is the source of truth.
 - Split and per-letter text is announced once, whole (`CharShift` keeps a
   visually hidden copy; `DisplayTitle` separates lines with real spaces).

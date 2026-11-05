@@ -3,7 +3,7 @@
 import { getImageProps } from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { DisplayTitle } from "@/components/DisplayTitle";
 import { SharedMedia } from "@/components/PageTransition";
 import { SliderMasthead } from "@/components/home/SliderMasthead";
@@ -17,7 +17,7 @@ import {
   SCREENSHOT_QUALITY,
   TRANSPARENT_PIXEL,
 } from "@/lib/media";
-import { useHydrated, useMediaQuery } from "@/lib/motion";
+import { useHydrated, useMediaQuery, useReducedMotion } from "@/lib/motion";
 import { DESKTOP_QUERY } from "@/lib/slider";
 import { displayLinesOf, liveLinkOf, type Profile, type SelectedProject, type UiCopy } from "@/lib/types";
 
@@ -91,11 +91,13 @@ function PhonePlate({ project, first }: { readonly project: SelectedProject; rea
 }
 
 /**
- * The Projects page for touch and narrow screens: one framed plate per screen on
- * native vertical scroll-snap. The browser's own touch physics beat anything
- * simulated, and nothing here loads WebGL. The masthead opens the first
- * screen and scrolls away with it; a counter tracks the screen in view. A
- * phone on its side (`short:`) sets each plate beside its type instead.
+ * The Projects page for touch and narrow screens, as on desktop: one plate
+ * and the projects listed by name. The first screen is the masthead, the
+ * plate on stage in its bezel, and the live site and the case study under it;
+ * the list follows, and a tap on a name brings its plate on stage and scrolls
+ * back up to it. Nothing here loads WebGL, and the browser's own scrolling
+ * does the rest. A phone on its side (`short:`) sets the plate beside its
+ * links instead, under the masthead, which scrolls away.
  */
 export function MobileProjects({ projects, copy, liveLabel, profile }: Props) {
   const router = useRouter();
@@ -103,26 +105,23 @@ export function MobileProjects({ projects, copy, liveLabel, profile }: Props) {
   // See ProjectSlider: no plate claims the shared name until the device is
   // known, or hydration would briefly name both breakpoints' plates.
   const hydrated = useHydrated();
+  const reduced = useReducedMotion();
   const scrollerRef = useRef<HTMLDivElement>(null);
-  const screenRefs = useRef<(HTMLElement | null)[]>([]);
   const [active, setActive] = useState(0);
+  const count = projects.length;
+  const current = projects[active];
+  const live = current ? liveLinkOf(current) : undefined;
+  const announcement = current
+    ? copy.announce
+        .replace("{index}", String(active + 1))
+        .replace("{total}", String(count))
+        .replace("{name}", current.name)
+    : "";
 
-  useEffect(() => {
-    const root = scrollerRef.current;
-    if (isDesktop || !root) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (!entry.isIntersecting || !(entry.target instanceof HTMLElement)) continue;
-          const index = Number(entry.target.dataset.index);
-          if (Number.isInteger(index)) setActive(index);
-        }
-      },
-      { root, threshold: 0.6 },
-    );
-    for (const screen of screenRefs.current) if (screen) observer.observe(screen);
-    return () => observer.disconnect();
-  }, [isDesktop]);
+  const choose = (index: number) => {
+    setActive(index);
+    scrollerRef.current?.scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" });
+  };
 
   return (
     <div className="projects-frame desktop:hidden">
@@ -131,106 +130,126 @@ export function MobileProjects({ projects, copy, liveLabel, profile }: Props) {
         role="region"
         aria-label={copy.region}
         data-lenis-prevent
-        className="h-svh snap-y snap-mandatory overflow-y-auto overscroll-contain"
+        className="h-svh overflow-y-auto overscroll-contain"
       >
-        {projects.map((project, i) => {
-          const live = liveLinkOf(project);
-          return (
-            <section
-              key={project.slug}
-              aria-label={project.name}
-              className="relative flex h-svh snap-start flex-col overflow-hidden pb-10 short:h-auto short:pb-0"
-            >
-              {/* Below the nav's line at every size: the way home holds its
-                  left end on this page. */}
-              {i === 0 ? (
-                <SliderMasthead heading={copy.heading} intro={profile.intro} className="shrink-0 px-5 pt-16" />
-              ) : null}
+        <p className="sr-only" aria-live="polite" aria-atomic="true">
+          {announcement}
+        </p>
 
-              {/* The project's screen. On a short landscape screen the plate
-                  and the type sit side by side on one bottom line, and the
-                  masthead heads the first screen and scrolls away above it --
-                  there is no room for both. The plate is 16:10, the capture's
-                  own shape, so nothing is cropped from its header: half the
-                  width, as much as the height allows, and never so much that
-                  the type column falls under 17.5rem (after 3.75rem of
-                  gutters and gap, and the bezel's ring on both sides) -- the
-                  widest metadata line with the counter's room, and the
-                  clinic's address in the live link, each need about 17rem on
-                  one line. */}
+        {/* The first screen. On a short landscape screen it is a grid: the
+            plate down the left, the intro over the links on the right. */}
+        <div className="flex min-h-svh flex-col short:grid short:h-svh short:min-h-0 short:grid-cols-[auto_minmax(0,1fr)] short:grid-rows-[auto_1fr] short:gap-x-5 short:px-5 short:pb-5 short:pt-16 short:[--plate-w:min(50vw-2*var(--bezel),(100svh-5.25rem-2*var(--bezel))*1.6,100vw-3.75rem-17.5rem-2*var(--bezel))]">
+          {/* Below the nav's line at every size: the way home holds its
+              left end on this page. */}
+          <SliderMasthead
+            heading={copy.heading}
+            intro={profile.intro}
+            className="shrink-0 px-5 pt-16 short:col-start-2 short:row-start-1 short:p-0"
+          />
+
+          {/* The plate on stage, and the line under it. On a short landscape
+              screen the plate is 16:10, the capture's own shape, and ends on
+              the links' bottom line: half the width, as much as the height
+              under the nav allows, and never so much that the links' column
+              falls under 17.5rem (after 3.75rem of gutters and gap, and the
+              bezel's ring on both sides) -- the clinic's address in the live
+              link needs about 17rem on one line. */}
+          <div className="flex min-h-0 flex-1 flex-col pb-5 short:contents">
+            <div className="glass-bezel mx-5 mt-5 flex min-h-64 flex-1 flex-col short:col-start-1 short:row-span-2 short:row-start-1 short:m-0 short:min-h-0 short:flex-none short:self-end">
+              {/* A tap on the plate opens the project too. The link under it
+                  is the one keyboards and screen readers use, so the plate is
+                  not a second one. */}
               <div
-                ref={(screen) => {
-                  screenRefs.current[i] = screen;
+                onClick={() => {
+                  if (current) router.push(`/work/${current.slug}`, { transitionTypes: ["page"] });
                 }}
-                data-index={i}
-                className="flex min-h-0 flex-1 flex-col short:h-svh short:flex-none short:snap-start short:flex-row short:items-end short:gap-x-5 short:p-5 short:[--plate-w:min(50vw-2*var(--bezel),(100svh-2.5rem-2*var(--bezel))*1.6,100vw-3.75rem-17.5rem-2*var(--bezel))]"
+                className="relative min-h-0 flex-1 overflow-hidden rounded-(--plate-r) bg-ink short:aspect-[16/10] short:w-(--plate-w) short:flex-none"
               >
-                {/* The plate in its glass bezel. The view-transition name is
-                    the plate's, inside it, never the bezel's: the case-study
-                    hero sits in the same bezel and only the media morphs. */}
-                <div
-                  className={`glass-bezel mx-5 flex min-h-0 flex-1 flex-col ${i === 0 ? "mt-5" : "mt-16"} short:mx-0 short:mt-0 short:flex-none`}
-                >
-                  <SharedMedia slug={project.slug} enabled={hydrated && !isDesktop && i === active}>
-                    {/* A tap on the plate opens the project too. The title below is
-                        the link keyboards and screen readers use, so the plate is
-                        not a second one. */}
+                {/* Every plate is here, stacked; the one on stage shows. The
+                    view-transition name is the image's, inside the bezel,
+                    and only the plate on stage carries it. */}
+                {projects.map((project, i) => (
+                  <SharedMedia key={project.slug} slug={project.slug} enabled={hydrated && !isDesktop && i === active}>
                     <div
-                      onClick={() => router.push(`/work/${project.slug}`, { transitionTypes: ["page"] })}
-                      className="relative min-h-0 flex-1 overflow-hidden rounded-(--plate-r) bg-ink short:aspect-[16/10] short:w-(--plate-w) short:flex-none"
+                      aria-hidden={i !== active}
+                      className={`absolute inset-0 transition-opacity duration-500 ease-out-expo reduced:transition-none ${i === active ? "opacity-100" : "opacity-0"}`}
                     >
                       <PhonePlate project={project} first={i === 0} />
                     </div>
                   </SharedMedia>
-                </div>
-
-                <div className="relative -mt-7 px-5 short:mt-0 short:min-w-0 short:flex-1 short:px-0 short:@container">
-                  <Link href={`/work/${project.slug}`} transitionTypes={["page"]} className="block text-paper">
-                    {/* Short screens: the column's width, as 15vw is the
-                        screen's, but never taller than the screen leaves --
-                        13.25rem is the nav above (4rem, at least 15px under
-                        its type at any width) and the metadata, live link and
-                        padding below; two lines at 0.84 are 1.68em. */}
-                    <DisplayTitle
-                      lines={displayLinesOf(project)}
-                      className="text-[15vw] short:text-[min(17cqw,(100svh-13.25rem)/1.68)]"
-                    />
-                  </Link>
-                  <div className="meta glass-dark mt-4 grid gap-y-1 rounded-glass-sm px-4 py-3 text-paper">
-                    <p className="flex gap-x-6 tabular-nums">
-                      <span>
-                        {recordNumber(i)} / {project.category}
-                      </span>
-                      <span>{project.year}</span>
-                    </p>
-                    <p className="pr-16">{project.stack.slice(0, 3).join(" / ")}</p>
-                  </div>
-                  {/* A fixed height, which the counter's position allows for. */}
-                  {live ? (
-                    <LiveSiteLink
-                      href={live.href}
-                      label={liveLabel}
-                      project={project.name}
-                      className="mt-3 h-14 w-full px-4 text-[0.9375rem]"
-                    />
-                  ) : null}
-                </div>
+                ))}
               </div>
-            </section>
-          );
-        })}
-      </div>
+            </div>
 
-      <p
-        aria-hidden="true"
-        // Level with the last line of metadata, inside its strip, above the
-        // live link: the screen's bottom padding, the link's height and its
-        // margin, then the strip's padding and edge; and in from the right by
-        // the gutter, the strip's padding and edge.
-        className="meta pointer-events-none fixed bottom-[calc(2.5rem+3.5rem+0.75rem+0.75rem+1px)] right-[calc(1.25rem+1rem+1px)] z-10 text-right tabular-nums text-paper short:bottom-[calc(1.25rem+3.5rem+0.75rem+0.75rem+1px)]"
-      >
-        {recordNumber(active)} <span className="text-glass-paper-2">/ {recordNumber(projects.length - 1)}</span>
-      </p>
+            {current ? (
+              <div className="grid gap-y-3 px-5 pt-3 short:col-start-2 short:row-start-2 short:min-w-0 short:self-end short:px-0 short:pt-0">
+                {live ? (
+                  <LiveSiteLink
+                    href={live.href}
+                    label={liveLabel}
+                    project={current.name}
+                    className="h-14 w-full px-4 text-[0.9375rem]"
+                  />
+                ) : null}
+                <Link
+                  href={`/work/${current.slug}`}
+                  transitionTypes={["page"]}
+                  className="meta justify-self-start py-1 text-paper underline decoration-1 underline-offset-4"
+                >
+                  {copy.open}
+                </Link>
+              </div>
+            ) : null}
+          </div>
+        </div>
+
+        {/* The projects by name, as on desktop. The row on stage is lit and
+            carries its category, year and stack; a tap on another brings its
+            plate on stage. */}
+        <nav aria-label={copy.rail} className="glass-dark mx-5 mb-10 mt-5 p-2">
+          <ol className="grid gap-1">
+            {projects.map((project, i) => {
+              const on = i === active;
+              return (
+                <li key={project.slug}>
+                  <button
+                    type="button"
+                    onClick={() => choose(i)}
+                    aria-label={copy.thumbnail.replace("{name}", project.name)}
+                    aria-current={on ? "true" : undefined}
+                    className={`grid w-full grid-cols-[2rem_minmax(0,1fr)] rounded-glass-sm px-3.5 pb-4 pt-3.5 text-left transition-[color,background-color,box-shadow] duration-500 ease-out-expo focus-visible:outline-paper ${
+                      on
+                        ? "bg-white/[0.09] text-paper shadow-[inset_0_1px_0_var(--color-glass-shine-dark),inset_0_0_0_1px_var(--color-glass-dark-edge)]"
+                        : "text-paper/62"
+                    }`}
+                  >
+                    <span className={`meta pt-[0.3em] tabular-nums ${on ? "" : "text-paper/80"}`}>{recordNumber(i)}</span>
+                    <span className="min-w-0">
+                      {/* "KB Patient" on one line in the narrowest row. */}
+                      <DisplayTitle
+                        as="span"
+                        lines={displayLinesOf(project)}
+                        className="whitespace-nowrap text-[min(9.5vw,3rem)]"
+                      />
+                      <span className={`grid transition-[grid-template-rows] duration-500 ease-out-expo ${on ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}>
+                        <span className="overflow-hidden">
+                          <span className="meta block pt-3 tabular-nums">
+                            {project.category} / {project.year}
+                          </span>
+                          <span className="meta block pt-1 text-paper/90">{project.stack.slice(0, 3).join(" / ")}</span>
+                        </span>
+                      </span>
+                    </span>
+                  </button>
+                </li>
+              );
+            })}
+          </ol>
+          <p aria-hidden="true" className="meta px-3.5 pb-1.5 pt-3 tabular-nums text-paper">
+            {recordNumber(active)} <span className="text-glass-paper-2">/ {recordNumber(count - 1)}</span>
+          </p>
+        </nav>
+      </div>
     </div>
   );
 }

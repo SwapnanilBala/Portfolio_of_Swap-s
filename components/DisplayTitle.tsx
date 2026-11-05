@@ -3,8 +3,11 @@ import { Fragment } from "react";
 interface Props {
   readonly lines: readonly string[];
   readonly className?: string;
-  /** `p` where the title labels a link rather than heading a section. */
-  readonly as?: "h1" | "h2" | "p";
+  /**
+   * `p` where the title labels a link rather than heading a section; `span`
+   * inside a button, which may hold only phrasing content.
+   */
+  readonly as?: "h1" | "h2" | "p" | "span";
 }
 
 /**
@@ -21,7 +24,7 @@ interface Props {
  */
 export function DisplayTitle({ lines, className = "", as: Tag = "h2" }: Props) {
   return (
-    <Tag className={`display ${className}`}>
+    <Tag className={`display ${Tag === "span" ? "block " : ""}${className}`}>
       {lines.map((line, i) => (
         <Fragment key={line}>
           {i > 0 ? " " : null}

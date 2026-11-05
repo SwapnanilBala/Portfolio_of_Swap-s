@@ -18,7 +18,7 @@ export function SliderMasthead({ heading, intro, className = "" }: Props) {
       <h1 className="sr-only">{heading}</h1>
       {/* On a glass strip; the cap adds the strip's padding to the 50ch
           measure, so the line length is what it was without one. */}
-      <p className="glass-dark col-span-12 max-w-[calc(50ch+2rem)] rounded-glass-sm px-4 py-2 text-[0.8125rem] leading-[1.45] md:col-span-6 md:col-start-4 lg:col-span-5 lg:col-start-5">
+      <p className="glass-dark col-span-12 max-w-[calc(50ch+2rem)] rounded-glass-sm px-4 py-2 text-[0.8125rem] leading-[1.45] md:col-span-6 md:col-start-4 lg:col-span-5 lg:col-start-5 short:col-span-12 short:col-start-1">
         {intro}
       </p>
     </header>

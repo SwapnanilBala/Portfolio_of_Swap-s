@@ -10,6 +10,50 @@
   --plate-r: calc(var(--radius-glass) - var(--bezel));
 }
 
+/* The desktop page's frame, defined once: the list on the left, the stage
+   from its right edge to the window's, and the plate centred in the stage.
+   The plate is as wide as the stage allows less a gutter each side (so its
+   right edge sits a gutter in from the window's, and its left a gutter from
+   the list's), and no taller than leaves room for the line under it: the
+   bezel, a 1.25rem gap, the 4.5rem line, and the 6vh foot under that.
+   `--plate-x` is the plate's left edge in the window, for what sits outside
+   the stage (the glow, the line under the plate). The list runs from the
+   bezel's top to the line's bottom.
+
+   The list's names fit "KB Patient" on one line in the list's width (the
+   row's padding and the number's column are 6.25rem; uppercase display type
+   runs about 7em per 10 characters), and in its height: three two-line
+   names at 0.84 are 5.04em, and 14rem is the rows' padding, the details of
+   the row on stage and the counter. */
+.projects-list-frame {
+  --gut: 2rem;
+  --list-w: clamp(20rem, 28vw, 40rem);
+  --stage-l: calc(var(--gut) + var(--list-w));
+  --plate-top: 7.25rem;
+  --plate-w: min(100vw - var(--stage-l) - 2 * var(--gut) - 2 * var(--bezel), (94vh - var(--plate-top) - 2 * var(--bezel) - 5.75rem) * 1.6);
+  --plate-x: calc(var(--stage-l) + (100vw - var(--stage-l) - var(--plate-w)) / 2);
+  --foot: calc(var(--plate-top) + var(--plate-w) * 10 / 16 + var(--bezel) + 1.25rem);
+  --foot-h: 4.5rem;
+  --list-l: var(--gut);
+  --list-top: calc(var(--plate-top) - var(--bezel));
+  --list-h: calc(var(--foot) + var(--foot-h) - var(--list-top));
+  --name-size: min((var(--list-w) - 6.25rem) / 7, (var(--list-h) - 14rem) / 5.04);
+}
+
+/* A portrait window (a narrow desktop window, or a tablet with a mouse) has
+   no room beside the plate, so the list goes under the line instead: the
+   stage is the window's width, and the plate gives the list at least 40% of
+   the height. */
+@media (orientation: portrait) {
+  .projects-list-frame {
+    --list-w: calc(100vw - 2 * var(--gut));
+    --stage-l: 0px;
+    --plate-w: min(100vw - 2 * var(--gut) - 2 * var(--bezel), (60vh - var(--plate-top) - 2 * var(--bezel) - 5.75rem) * 1.6);
+    --list-top: calc(var(--foot) + var(--foot-h) + 1.25rem);
+    --list-h: calc(94vh - var(--list-top));
+  }
+}
+
 /* The soft gold glow behind the plate on stage (gold from Lagna Atelier's
    palette). A gradient, never a blurred element: it costs nothing while the
    slider moves over it. It stays still; only the plates travel. */
