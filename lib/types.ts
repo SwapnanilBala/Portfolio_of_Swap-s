@@ -409,17 +409,9 @@ export interface UiCopy {
   readonly index: {
     readonly heading: string;
     readonly description: string;
-    readonly grid: string;
-    readonly list: string;
-    readonly toggle: string;
-    readonly columns: {
-      readonly name: string;
-      readonly category: string;
-      readonly year: string;
-    };
     /**
-     * A destination's name under a tile with no case study, where the
-     * narrowest slot is about 13rem: one or two words, not a sentence.
+     * A destination's name under a row with no case study, where a phone's
+     * column is about 13rem: one or two words, not a sentence.
      */
     readonly destinations: Readonly<Record<LinkRole, string>>;
     /** The live sites' frames, after the grid or list. */

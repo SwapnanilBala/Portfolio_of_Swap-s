@@ -18,11 +18,10 @@ interface Props {
  *
  * Every frame is a 1440×900 window at 2x, so they share one 16:10 shape and
  * the rows line up without cropping anything. The number is the project's
- * Index record, which the grid and list above already cite.
+ * Index record, which the list above already cites.
  *
  * Shared by both trees, which pass their own kit: it renders on the server
- * and holds no state, so the grid-to-list Flip above never has to know it is
- * here.
+ * and holds no state.
  */
 export function IndexCaptures({ projects, copy, kit }: Props) {
   const { Plate } = kit;

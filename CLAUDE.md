@@ -49,9 +49,10 @@ animation library, plain CSS only") are reversed, deliberately.
   `noUncheckedIndexedAccess`).
 - **Tailwind CSS v4**, configured in `app/globals.css` (`@theme`,
   `@custom-variant`, `@utility`) — there is no `tailwind.config`.
-- **GSAP 3.15** with ScrollTrigger, SplitText and Flip, registered once in
+- **GSAP 3.15** with ScrollTrigger and SplitText, registered once in
   `lib/gsap.ts`. Import GSAP from there, never from `"gsap"` directly, so no
-  component can use an unregistered plugin.
+  component can use an unregistered plugin. Flip went with the Index's
+  grid-to-list switch (November 2026); register it again if something needs it.
 - **Lenis** for smooth scrolling, driven by GSAP's ticker.
 - **three.js**, plain, for the slider only. Not React Three Fiber: three
   plates need no reconciler, and R3F's own `react-reconciler` has to agree with
@@ -73,7 +74,7 @@ app/m/layout.tsx            phone tree: PhoneReveals
 app/m/...                   the same four pages for phones, served at the same URLs
 components/home/            ProjectSlider, SliderCanvas, ProjectThumbnailRail,
                             MobileProjects, SliderMasthead, LiveSiteLink
-components/index/           IndexPage, IndexView (Flip + preview), IndexCaptures, parts
+components/index/           IndexPage, IndexView (list + detail), IndexCaptures, parts
                             (grid, list, toggle, links), ProjectCover
 components/work/            CaseStudy, ProjectHero, CaseSection, MediaPlate,
                             MediaPair, CaseNav
@@ -141,9 +142,9 @@ throttled phone (0.5–0.7s from 1.0–1.4s), Speed Index 0.8–0.9s from
   SplitText, RevealLines, RevealPlate and MagneticLink on GSAP; `phoneKit`
   renders the same elements marked `data-m-reveal`. **A view never imports
   a kit**, or GSAP comes back into the phone bundles; the build's
-  per-page chunks are the check. The Index's grid, list and toggle live in
+  per-page chunks are the check. The Index's rows live in
   `components/index/parts.tsx` and both Index views render them, so the
-  markup cannot drift; only Flip and the pointer preview are desktop-only.
+  markup cannot drift; only the detail beside them is desktop-only.
 - **Phone reveals are CSS** ("Phone reveals" in `globals.css`): the same
   rise, line reveal and uncovering, with the desktop kit's timings.
   `PhoneReveals`, the tree's only motion script, marks elements
@@ -331,7 +332,7 @@ the whole vocabulary (`EASE`, `DURATION`, `META_LAG`); reach for it, not for
 one-off values.
 
 - **Reduced motion is a full path, not a fallback.** Everything positional is
-  removed: no inertia, no distortion, no Flip, no line reveals, page
+  removed: no inertia, no distortion, no line reveals, no crossfading detail, page
   transitions become a 150ms crossfade, Lenis is off, the custom cursor is off.
   `?motion=reduce` forces the same path (the head script copies it onto
   `<html data-motion>`), because the preview browser cannot emulate the media
@@ -446,31 +447,45 @@ one-off values.
 
 ## The Index
 
-- **The opening is a heading and an even grid** (October 2026, on request).
-  "Index" is display type at `clamp(4.5rem, 12vw, 11rem)` beside the
-  description and the year range: fitted to the full measure it was 435px
-  tall at 1440×900, half the first screen. Below the switch, every project
-  with a capture (`hasTile`) is one of a row of equal 16:10 tiles, three from
-  48rem, one below; the rest — the dot field and the two certificates — are
-  listed in type under them, one column each, with their summary and where
-  they lead. It replaced a loose asymmetric grid of six slots at their own
-  sizes and offsets, whose typographic plates were large ink boxes holding one
-  number each; with the live-sites section below, the opening read as a
-  collage. All six projects now start in the first screen at 1440×900.
-- **A capture is never cropped to the tile.** It is contained in the tile's
-  ink frame, centred, so covers of different shapes still make a row of equal
-  tiles (`ProjectCover`'s `framed`). Forcing covers into slot shapes once cut
-  headlines mid-word.
-- Captions stack (name, then type and year): side by side they wrapped into
-  each other in narrow tiles. The name's box hugs its text, because Flip
-  scales that box into the list row; the names in type are uppercase like
-  the row, so Flip never changes a word's case mid-flight.
+- **The opening is a heading, then a list beside a detail** (November 2026,
+  chosen from four mock-ups — a ledger of equal rows, the newest project
+  first, the projects grouped by year, and this). "Index" is display type
+  at `clamp(4.5rem, 12vw, 11rem)` beside the description and the year
+  range: fitted to the full measure it was 435px tall at 1440×900, half the
+  first screen. Below it, every project's name, number, category and year
+  are rows down the left (`IndexRows`), and the project under the pointer
+  or keyboard focus is open on the right: its cover, summary, stack and
+  first three figures. It opens on the first project, and the open row is
+  a brighter pane with an arrow, the other names a step quieter
+  (`glass-ink-2`, 7.6:1). At 1440×900 the first screen holds the heading,
+  the first four rows and the open cover. A certificate has neither a screen
+  nor a dataset, and its cover at this size was a large ink box holding one
+  number, so its summary takes the cover's place, large, on glass. It replaced an even grid of 16:10 tiles with the
+  certificates and the dot field in type beneath (October 2026), switched to
+  a list with GSAP Flip, which had replaced a loose asymmetric grid of six
+  slots at their own sizes.
+- **Every detail is rendered and stacked in one cell**, and the open one
+  crossfades in, so a switch never waits on an image and the panel's height
+  never moves under the pointer. The detail repeats the rows, so it is
+  `aria-hidden` and its cover is not a tab stop: the rows are the links, and
+  an entry without a case study lists its destinations under its row.
+- **One shared name per project, wherever it is shown.** From 48rem the open
+  detail's cover carries it, so opening a row morphs that cover into the
+  case-study hero. Below 48rem the detail is hidden and every row carries a
+  small cover — in a narrow desktop window, and always in the phone tree —
+  and those covers carry it instead (`sharedCovers`).
+- **A capture is never cropped to its frame.** It is contained in an ink
+  16:10 frame, centred, so covers of different shapes still read as one size
+  (`IndexCover`). Forcing covers into slot shapes once cut headlines
+  mid-word. A certificate's cover is its headline figure; in a row's small
+  cover, only the figure, sized to the cover, because the plate's labels
+  overflowed it.
 - Robust Health's cover is a product screen, not its landing page: the Index
   shows the product, not its marketing photography. Since October 2026 it is
   the signed-out quick-start catalogue, which replaced a dashboard capture
   from the earlier design.
 - **The live sites, frame by frame, close the Index** (`IndexCaptures`, after
-  the grid or list, in both trees): one record per project with `captures`,
+  the list, in both trees): one record per project with `captures`,
   its Index number, name and address in the label column, the frames two to
   a row from 40rem beside it. Every frame is a 1440×900 window at 2x, so all
   share 16:10 and nothing is cropped to line up. They are signed-out public
@@ -493,19 +508,19 @@ one-off values.
   production database, so seed logins were not used.
 - **An entry without a case study lists where it leads** under its name, one
   small section per link — Meta Database Engineer's certificate and its
-  repository side by side — in both layouts. The name still opens the first
+  repository side by side — under its row, in both trees. The name still opens the first
   link, so order `links` by what the entry is: the certificate before the
-  code. The row sits outside the name's link, which cannot contain another.
-  Its labels are `ui.index.destinations`, a word or two per role: the
-  narrowest column is about 13rem, and the case pages' sentences wrapped there.
+  code. The chips sit outside the name's link, which cannot contain another,
+  and focusing one opens its entry in the detail. Its labels are
+  `ui.index.destinations`, a word or two per role: a phone's column is about
+  13rem, and the case pages' sentences wrapped there.
 - **The fake news classifier has no screen, so its picture is its data**
   (`DotField`): LIAR's 10,269 training claims at one dot per five, laid down
   as fake, set aside, real — the class imbalance the project fought, in plain
   sight. Every count is from its RESULTS.md, and the hero's legend states
-  them. It is the case-study hero, and the list view's preview; in the grid
-  the project is listed in type, so opening it there crossfades rather than
-  morphs. Two arrangements of the same dots: `wide` (vertical bands, ~16:10)
-  for the preview and the hero on a wide screen, so that morph is one picture
+  them. It is the case-study hero, and its Index cover. Two arrangements of
+  the same dots: `wide` (vertical bands, ~16:10) for the cover and the hero
+  on a wide screen, so that morph is one picture
   growing; `tall` (stacked
   bands, portrait) for the hero on a phone, where the wide one filled less
   than half the plate.
@@ -585,8 +600,8 @@ forward) swap instantly.
 
 **Two rendered elements with one view-transition name cancel the whole
 transition.** `SharedMedia` takes `enabled` for exactly this: only the slide on
-screen, only the visible breakpoint's slider, only the list preview or the grid
-tile — never both.
+screen, only the visible breakpoint's slider, only the Index's open detail or
+its rows' small covers — never both.
 
 **React's development build warns about duplicates that are not there.** It
 records a named `<ViewTransition>` when it mounts or updates, but forgets it

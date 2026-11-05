@@ -1,7 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import { IndexGrid, IndexList, IndexToggle, type Layout } from "@/components/index/parts";
+import { IndexRows } from "@/components/index/parts";
 import type { Project, UiCopy } from "@/lib/types";
 
 interface Props {
@@ -10,24 +9,15 @@ interface Props {
 }
 
 /**
- * The Index on a phone: the same grid and list as the desktop's, from the
- * same parts, switched with a short fade rather than GSAP Flip, and with no
- * preview trailing a pointer a phone does not have. Keyed by layout, so each
- * switch mounts the new layout and its fade plays once.
+ * The Index on a phone: the desktop's list, from the same parts, with a
+ * small cover in every row in place of the detail beside it. Each cover
+ * carries the page transition's shared name, so opening a row morphs it into
+ * the case-study hero.
  */
 export function PhoneIndexView({ projects, copy }: Props) {
-  const [layout, setLayout] = useState<Layout>("grid");
-
   return (
-    <div>
-      <IndexToggle layout={layout} onSwitch={setLayout} copy={copy} count={projects.length} />
-      <div key={layout} className="animate-[m-fade_0.5s_var(--ease-out-expo)_both] reduced:animate-none">
-        {layout === "grid" ? (
-          <IndexGrid projects={projects} copy={copy} />
-        ) : (
-          <IndexList projects={projects} copy={copy} />
-        )}
-      </div>
+    <div className="px-5 pb-16 pt-5">
+      <IndexRows projects={projects} copy={copy} covers="always" sharedCovers />
     </div>
   );
 }
