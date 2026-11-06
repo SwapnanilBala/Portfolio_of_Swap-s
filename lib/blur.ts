@@ -22,7 +22,6 @@ export type BlurredMedia =
   | "/media/fens-oct-25.webp"
   | "/media/fens-oct-26-leaves.webp"
   | "/media/fens-oct-26-water.webp"
-  | "/media/kb-clinic-admin.webp"
   | "/media/kb-clinic-booking.webp"
   | "/media/kb-clinic-doctor.webp"
   | "/media/kb-clinic-hero.webp"
@@ -31,6 +30,7 @@ export type BlurredMedia =
   | "/media/kb-clinic-live-chambers.webp"
   | "/media/kb-clinic-live-day.webp"
   | "/media/kb-clinic-mobile.webp"
+  | "/media/kb-clinic-signin.webp"
   | "/media/lagna-atelier-android-birth-details.webp"
   | "/media/lagna-atelier-android-chart-hindi.webp"
   | "/media/lagna-atelier-android-home.webp"
@@ -91,24 +91,24 @@ export const BLUR_PLACEHOLDERS: Readonly<Record<BlurredMedia, string>> = {
     "data:image/webp;base64,UklGRk4AAABXRUJQVlA4IEIAAADQAQCdASoMAAkAAwBSJbACdADdSGa+UADOOUhMcG0vi7T7zyfiu0b5n/zUlg+CmnOc6XWTcUSmSRq676H4P8QAAAA=",
   "/media/fens-oct-26-water.webp":
     "data:image/webp;base64,UklGRk4AAABXRUJQVlA4IEIAAADwAQCdASoMAAkAAwBSJbACdADhlIUj0OAA/swuGRbPiNCyCIu6G83pP8bxV81Yw2oUuCL+gompwYj1ELXEbB1mAAA=",
-  "/media/kb-clinic-admin.webp":
-    "data:image/webp;base64,UklGRjIAAABXRUJQVlA4ICYAAACwAQCdASoMAAQAAwBSJZwAAudQDaMAAP73Jz897cFy0oeNzIAAAA==",
   "/media/kb-clinic-booking.webp":
-    "data:image/webp;base64,UklGRjAAAABXRUJQVlA4ICQAAABQAQCdASoMAA8AAwBSJZwABDOAAP70s+nf9LwGC3hVbOrbAAA=",
+    "data:image/webp;base64,UklGRiYAAABXRUJQVlA4IBoAAAAwAQCdASoMAAkAAwBSJaQAA3AA/vT6EXEAAA==",
   "/media/kb-clinic-doctor.webp":
-    "data:image/webp;base64,UklGRiwAAABXRUJQVlA4ICAAAACQAQCdASoMAAgAAwBSJZwAAudUxLAA/vcKVlcppZgAAA==",
+    "data:image/webp;base64,UklGRjgAAABXRUJQVlA4ICwAAABQAQCdASoMAAsAAwBSJZQABAAAAP700pxjZta+2rbzTfHa100hkF7V+5eAAA==",
   "/media/kb-clinic-hero.webp":
-    "data:image/webp;base64,UklGRjYAAABXRUJQVlA4ICoAAADwAQCdASoMAAgAAwBSJZQCdAEPhvcDgNAA/vXN3ClpLy/oCvi88OXeAAA=",
+    "data:image/webp;base64,UklGRjYAAABXRUJQVlA4ICoAAACwAQCdASoMAAgAAwBSJaQAAp2tu52AAP7220LexvYWysOcohvzjsC9AAA=",
   "/media/kb-clinic-live-bangla.webp":
-    "data:image/webp;base64,UklGRj4AAABXRUJQVlA4IDIAAADwAQCdASoMAAgAAwBSJZQCdAEfbjbjujAA/vXTCSXdUSWU3/FRCjCfuEGAkc15NYAAAA==",
+    "data:image/webp;base64,UklGRjgAAABXRUJQVlA4ICwAAADQAQCdASoMAAgAAwBSJaQAAp3Jmi32gAD+9ttC3sb2FsrZeLVBQFEFsVgAAA==",
   "/media/kb-clinic-live-chamber.webp":
-    "data:image/webp;base64,UklGRjYAAABXRUJQVlA4ICoAAADwAQCdASoMAAgAAwBSJZQCdAEf/wwbPYAA/vXQPf6lEscVEQyXj9d4gAA=",
+    "data:image/webp;base64,UklGRjIAAABXRUJQVlA4ICYAAAAwAQCdASoMAAgAAwBSJaQAA3AA/vU3r1BIRPk4SMMrlbvqzhgAAA==",
   "/media/kb-clinic-live-chambers.webp":
-    "data:image/webp;base64,UklGRjYAAABXRUJQVlA4ICoAAADQAQCdASoMAAgAAwBSJZQCdAEO9qYiwAD+9tioNqHtB835Ro/aTKYAAAA=",
+    "data:image/webp;base64,UklGRjIAAABXRUJQVlA4ICYAAAAwAQCdASoMAAgAAwBSJZQAA3AA/vU5ATYhPje2OFzO5AndPAAAAA==",
   "/media/kb-clinic-live-day.webp":
-    "data:image/webp;base64,UklGRjgAAABXRUJQVlA4ICwAAAAQAgCdASoMAAgAAwBSJZQCdAEQUNk32twAAP710BSpjSfMcS8nvFjM+EQAAA==",
+    "data:image/webp;base64,UklGRjQAAABXRUJQVlA4ICgAAACwAQCdASoMAAgAAwBSJaQAAujaXxjAAP74V+DE4IQZB1uUzY37wAAA",
   "/media/kb-clinic-mobile.webp":
-    "data:image/webp;base64,UklGRnAAAABXRUJQVlA4IGQAAAAQBACdASoMABoAPt1cpkyopSOiMAgBEBuJZQCsACIB/aSSBLU4g7OHgAD+6RQ3XzDWySQYKaHlSBbsGf6Zd4YHhyR/nkUms9EauCgHXd8GrLawr1jV/7k7VcV7zlP6Yr4no2AA",
+    "data:image/webp;base64,UklGRnIAAABXRUJQVlA4IGYAAADwAwCdASoMABoAPt1apkyopSOiMAgBEBuJaQAAUozLCICIt/xttGAAAP7vH4vfsGDIxAqSy7oF5tx6g/z4f2f7VFDS9S/zlFTO1xIE/Kpes//aPRPZDOk7ygFPX4G6snKmxWwAAAA=",
+  "/media/kb-clinic-signin.webp":
+    "data:image/webp;base64,UklGRjAAAABXRUJQVlA4ICQAAACQAQCdASoMAAIAAwBSJaQAAudZtgAA/vhOp6oOhNrGU44AAAA=",
   "/media/lagna-atelier-android-birth-details.webp":
     "data:image/webp;base64,UklGRoQAAABXRUJQVlA4IHgAAADQAwCdASoMABkAPt1apkyopSOiMAgBEBuJaQAAWp71WEMz4gv7mwAA/vIvcqrnzXhaut9adSaMcCQZ6FV+PBs01nDm19PFrFVBnW7VBa7O0bimFeAWFta/PtNsq4M8U/EJxbvehK4o//Wfp/k2w3/pNKcLA6IQAAA=",
   "/media/lagna-atelier-android-chart-hindi.webp":

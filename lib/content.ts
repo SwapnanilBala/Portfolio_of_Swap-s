@@ -617,45 +617,45 @@ export const content: SiteContent = {
         src: "/media/kb-clinic-hero.webp",
         width: 2880,
         height: 1800,
-        alt: "The clinic's booking page in its dark theme: “Book a visit with Dr. Kamalesh Bala”, four steps — town, chamber, day and time, your details — with the first open on Dinhata, Kolkata and Rampurhat, the doctor's chamber days this week, and an empty visit summary.",
+        alt: "The clinic's booking page in its dark theme: “Book a visit with Dr. Kamalesh Bala”, buttons to book or to see all chambers, the doctor's three chamber days this week beside it, and the first of four booking steps open on Dinhata, Kolkata and Rampurhat, with an empty visit summary.",
       },
       heroMobile: {
         src: "/media/kb-clinic-mobile.webp",
         width: 1170,
         height: 2532,
-        alt: "The clinic's booking page on a phone: the doctor's name and speciality, English, Bengali and Hindi switches, this week's chamber days, and the first step, choosing a town.",
+        alt: "The clinic's booking page on a phone: the doctor's name, English, Bengali and Hindi switches, the headline, Book a visit and See all chambers, and this week's three chamber days.",
       },
-      // Taken from the live site on 2026-10-21, signed out. The booking was
-      // walked as far as a day and time and no further: the details step
-      // asks for a patient's own, and nothing was submitted.
+      // Taken from the live site on 2026-11-05, after its redesign, signed
+      // out. The booking was walked to the details step and no further:
+      // nothing was typed and nothing was sent.
       captures: [
         {
           src: "/media/kb-clinic-live-chamber.webp",
           width: 2880,
           height: 1800,
           label: "Chamber",
-          alt: "The second step, after choosing Kolkata: two chambers, Laboni Estate and Salt Lake, each with its address.",
+          alt: "The second step, after choosing Kolkata: two chambers, Laboni Estate and Salt Lake, each with its address and the days it is open this week, and the visit summary filling in beside them.",
         },
         {
           src: "/media/kb-clinic-live-day.webp",
           width: 2880,
           height: 1800,
           label: "Day and time",
-          alt: "The third step at the Salt Lake chamber: the days ahead, those without a chamber marked closed, and half-hourly times from 10:00 am to 5:30 pm, with the visit summary filled in beside it.",
+          alt: "The third step at the Salt Lake chamber: the days ahead, those without a chamber marked closed, Monday chosen, and half-hourly times from 10:00 am to 5:30 pm in morning, afternoon and evening rows, with the visit summary beside it.",
         },
         {
           src: "/media/kb-clinic-live-chambers.webp",
           width: 2880,
           height: 1800,
           label: "Five chambers",
-          alt: "Where to find us: five chambers across Dinhata, Kolkata and Rampurhat, each with its address, the days it is open this week and a button to book there, then the three steps of a booking and a sign-in for patients who have booked before.",
+          alt: "Where to find us: five chambers across Dinhata, Kolkata and Rampurhat, each with its address, the days it is open this week and a button to book there, then how booking works in three steps: choose a day, tell us who you are, wait for the doctor.",
         },
         {
           src: "/media/kb-clinic-live-bangla.webp",
           width: 2880,
           height: 1800,
           label: "In Bengali",
-          alt: "The booking page in Bengali: the headline, the steps, the visit summary and the help card translated, the town names left in English.",
+          alt: "The booking page in Bengali: the headline, the week, the steps, the visit summary and the help card translated, the town and chamber names left in English.",
         },
       ],
       caseStudy: {
@@ -677,26 +677,27 @@ export const content: SiteContent = {
             body: [
               "Three surfaces over one set of records. Patients book and review their history and prescriptions; the doctor's dashboard lists a chosen day's appointments with each patient's details; the admin panel holds every patient and booking, with a CSV export for backup.",
             ],
-            // Public, signed-out pages only. The form is cropped to its fields:
-            // the account panel beside it states the password format.
+            // Public, signed-out pages only. The form is cropped to its
+            // fields, all empty; the doctor's page to its description, past
+            // the sign-in form.
             media: {
               kind: "pair",
               title: "The patient's form, the doctor's day",
-              body: "A patient books in one form: a phone number, which becomes the account, an optional email, name, age and sex, and weight and height in whichever units they think in. The doctor signs in to a workspace built around the day: the pending queue, availability, and prescriptions to upload.",
+              body: "A patient books in one form: name, age and sex, a WhatsApp number, which becomes the account, an optional reason for the visit, and an optional email, height and weight. The doctor signs in to bookings, schedule and prescriptions in one place: every booking for the day, a visit to confirm or decline, prescriptions in English, Bengali or Hindi, and the days and hours patients can book.",
               images: [
                 {
                   src: "/media/kb-clinic-booking.webp",
-                  width: 832,
-                  height: 1015,
+                  width: 1456,
+                  height: 1088,
                   label: "Booking",
-                  alt: "The booking form's fields on a warm grey ground: phone number with a +91 prefix, optional email, full name, age and sex, and optional weight and height, each with a switch to pounds or to feet and inches.",
+                  alt: "The booking form's fields, all empty, on the dark theme: full name, age, sex as Male, Female or Other, a WhatsApp number with a +91 prefix, an optional reason for the visit, and optional email, height in centimetres and weight in kilograms.",
                 },
                 {
                   src: "/media/kb-clinic-doctor.webp",
-                  width: 966,
-                  height: 653,
+                  width: 1008,
+                  height: 920,
                   label: "The doctor's day",
-                  alt: "A Daily Schedule card: review today's queue, move appointments forward and jump into patient details, over three rows — Pending Appointments, Availability Manager, Upload Prescription.",
+                  alt: "The doctor's sign-in page: bookings, schedule and prescriptions in one place. See every booking for the day, confirm or decline visits, write prescriptions in English, Bengali or Hindi, and set the days and hours patients can book; then two cards, today's bookings and those waiting.",
                 },
               ],
             },
@@ -708,12 +709,12 @@ export const content: SiteContent = {
             ],
             media: {
               kind: "image",
-              src: "/media/kb-clinic-admin.webp",
-              width: 1714,
-              height: 555,
-              alt: "The admin panel's header: Admin Panel set in a serif, Central view for patient records and booking operations, three tags — patient records, booking operations, data exports — an overview card listing the same three, and a link bar back to booking and on to the doctor dashboard.",
+              src: "/media/kb-clinic-signin.webp",
+              width: 2308,
+              height: 420,
+              alt: "Already booked? A sign-in strip under the booking page: sign in to see your visits and prescriptions, a phone number with a +91 prefix and a password, both empty, the note “Use the phone number you booked with”, and a Sign in button.",
               caption:
-                "The third surface: patient records, booking operations and data exports behind one sign-in, a link away from the booking page and the doctor's dashboard.",
+                "A returning patient signs in with the phone number they booked with, to see their visits and prescriptions.",
             },
           },
           {

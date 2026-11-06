@@ -18,21 +18,22 @@ and listed here instead of being written plausibly.
   previous design is at commit `17e793e` (`components/ProjectMedia.tsx`).
 - **2x recaptures of the in-product screenshots** — the reading, chart
   settings, wheel and houses for Lagna Atelier; onboarding, intake, progress,
-  dashboard and trainer view for Robust Health; the clinic's booking form,
-  doctor and admin pages. They are 1x captures (a 2560-wide screen at 100%),
-  so on a 125% or Retina screen they render smaller to stay sharp (see
+  dashboard and trainer view for Robust Health. They are 1x captures (a
+  2560-wide screen at 100%), so on a 125% or Retina screen they render smaller to stay sharp (see
   *Adding media* in the README). Take each screen at the same framing with display scaling
   at 200%, crop to the same component, and replace the file under the same
   name.
 
 ## Snapshots that drift
 
-- **The clinic's case study describes the earlier build.** The project is on
-  hold (October 2026), so its copy is left as written. The live site has
-  moved on: it confirms visits on WhatsApp rather than by email, runs in
-  English, Bengali and Hindi, and lists five chambers in three towns, and
-  the case study's booking-form, doctor and admin captures show the earlier
-  design. Its heroes and Index frames are the live site as of October 21
-  2026. Update the copy if the project resumes.
+- **The clinic's case study copy describes the earlier build.** Its
+  captures were retaken on November 5 2026 after the redesign, and their
+  captions describe only what each frame shows. The body copy has not
+  moved with the project: its README now names Neon Postgres (via `pg`)
+  and Twilio WhatsApp, where the stack and the engineering section say
+  Supabase and a confirmation email, and its own notes say WhatsApp is not
+  delivering yet, so no claim that it does. The project is changing
+  quickly: check what is deployed before rewriting the stack, the
+  engineering section or the figures.
 - Commit counts (719 on Lagna Atelier) and test counts are as of September 23
   2026. Refresh them in `lib/content.ts` when they move meaningfully.
