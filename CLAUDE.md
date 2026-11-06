@@ -534,11 +534,12 @@ narrower.
   pages, walked no further than a form's first choices — nothing typed,
   nothing submitted — so Lagna Atelier's are its landing screen's themes
   and languages, and Robust Health's walk its landing page, How It Works,
-  onboarding, a quick-start plan and the Spanish landing page. Lagna
-  Atelier's and the clinic's were taken October 21 2026, Robust Health's on
-  November 3 2026 after its redesign; each project's slider hero is from
-  the same round as its frames. Retake both together, and keep the note
-  under the heading true.
+  onboarding, a quick-start plan and the Spanish landing page. The
+  clinic's walk its booking to the details step, empty, and stop. Lagna
+  Atelier's were taken October 21 2026, Robust Health's on November 3 2026
+  and the clinic's on November 5 2026, each after its redesign; each
+  project's slider hero is from the same round as its frames. Retake both
+  together, and keep the note under the heading true.
 - **Capture in a guest browser.** A headless Edge profile on his machine
   inherits his Windows sign-in and filled the Robust Health sign-in forms
   with his saved email and password, unasked. `--guest` stops it; check
