@@ -176,6 +176,11 @@ Known corrections, so they are not "fixed" back from an older source:
 - **Robust Health runs entirely on Supabase**, so NeonDB is not in its stack,
   and its server uses the service-role client with authorisation in
   application code — so "Row-Level Security" is not claimed.
+- **The clinic runs on Neon Postgres, not Supabase**, and confirms visits
+  over WhatsApp through Twilio, not by email (its README, November 2026).
+  Its SQL files are still named "supabase-…", which is not a source for
+  the stack. WhatsApp delivery is not live yet, so the case study says it
+  is built and waiting, not that patients receive messages.
 - **Dates come from first commits.** Lagna Atelier and Robust Health start in
   March 2026. The old sites' "2025" was never backed by a repository.
 - The Robust Health landing page shows marketing counters ("84% satisfaction").

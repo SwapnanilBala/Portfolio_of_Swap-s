@@ -593,18 +593,24 @@ export const content: SiteContent = {
       name: "KB Patient Booking",
       displayLines: ["KB Patient", "Booking"],
       category: "Clinic booking system",
-      // First commit 2026-03-02; last push 2026-05-23.
+      // First commit 2026-03-02; resumed in October 2026, last push
+      // 2026-11-05. The copy below follows the repository's README as
+      // deployed on 2026-11-05 (Neon Postgres, Twilio WhatsApp): the SQL
+      // files still say "Supabase", but the app left it for Neon.
       year: "2026",
       started: 2026,
       type: "Built for a practice",
-      // Sole contributor: 34 of 34 commits (checked 2026-09-23).
+      // Sole contributor: 51 of 51 commits (checked 2026-11-05).
       role: "Sole developer",
-      stack: ["JavaScript", "Node.js", "Supabase", "PostgreSQL", "HTML / CSS"],
+      stack: ["JavaScript", "Node.js", "Express", "PostgreSQL", "Neon", "Twilio", "HTML / CSS"],
       summary:
-        "Appointment booking for an orthopaedic practice: a patient portal, a doctor's daily view, and an admin panel with CSV export.",
+        "Appointment booking for an orthopaedic practice with five chambers in three towns: a four-step booking in English, Bengali or Hindi, a dashboard where the doctor confirms each visit, and an admin panel with a full change history.",
+      // Chambers and towns from the live site's Where to find us; languages
+      // from its switcher and the README.
       figures: [
         { value: "3", label: "portals: patient, doctor, admin" },
-        { value: "7-day", label: "availability view" },
+        { value: "5", label: "chambers in three towns" },
+        { value: "3", label: "languages: English, Bengali, Hindi" },
       ],
       links: [
         // drkbalaortho.com no longer resolves, so the Vercel URL is used.
@@ -663,19 +669,19 @@ export const content: SiteContent = {
           {
             id: "overview",
             body: [
-              "A booking system for an orthopaedic practice that sees patients across more than one chamber. A patient picks a city and a chamber, books against the doctor's published availability, and gets an account in the same step.",
+              "A booking system for an orthopaedic practice that sees patients at five chambers in three towns. A patient picks a town, a chamber, a day and a time, and gets an account in the same step; nothing is confirmed until the doctor approves. Every label, message and date is in English, Bengali or Hindi, and the choice is remembered on the device.",
             ],
           },
           {
             id: "problem",
             body: [
-              "Three people need three different things from one appointment. The site states the aim in a line: simple scheduling for patients, fast visibility for the doctor and admin teams, and cleaner records across every appointment.",
+              "Three people need three different things from one appointment. A patient needs to know where the doctor will be this week and when; the doctor needs the day's requests in one place, to confirm or decline; the clinic needs every patient, booking and change on record.",
             ],
           },
           {
             id: "approach",
             body: [
-              "Three surfaces over one set of records. Patients book and review their history and prescriptions; the doctor's dashboard lists a chosen day's appointments with each patient's details; the admin panel holds every patient and booking, with a CSV export for backup.",
+              "Three surfaces over one set of records. Patients book, then see their next visit, past visits with the doctor's notes, and their prescriptions. The doctor's dashboard opens on the day's numbers and a week of bookings: each request is confirmed or declined with a reason the patient will read, availability is set per chamber, and prescriptions are typed on the clinic's letterhead, with a translation into Bengali or Hindi, or uploaded as a photo. The admin panel holds every patient and booking, the history of every change, and a CSV export.",
             ],
             // Public, signed-out pages only. The form is cropped to its
             // fields, all empty; the doctor's page to its description, past
@@ -705,7 +711,7 @@ export const content: SiteContent = {
           {
             id: "engineering",
             body: [
-              "A Node server over Supabase Postgres, with a confirmation email sent as each appointment is made. Accounts are keyed to the patient's phone number, so a returning patient signs in with the number they booked with.",
+              "An Express server over PostgreSQL on Neon, run on Vercel as one serverless function that also serves the pages. Accounts are keyed to the patient's phone number, so a returning patient signs in with the number they booked with. Staff sign in with tokens and are signed out after three minutes idle, and database triggers write an audit row for every insert, update and delete. The doctor's decision goes to the patient as a WhatsApp message through Twilio; each one is logged as sent, failed or skipped, and the dashboard warns the doctor when one does not go out.",
             ],
             media: {
               kind: "image",
@@ -719,7 +725,11 @@ export const content: SiteContent = {
           },
           {
             id: "outcome",
-            body: ["Live on Vercel, with all three surfaces deployed."],
+            // README, Known issues: the Twilio credentials are test ones and
+            // no message templates are approved yet.
+            body: [
+              "Live on Vercel, with all three surfaces deployed. WhatsApp delivery is built and logged, and waits on production Twilio credentials and approved message templates.",
+            ],
           },
         ],
       },

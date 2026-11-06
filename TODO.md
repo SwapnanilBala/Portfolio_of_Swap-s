@@ -26,14 +26,8 @@ and listed here instead of being written plausibly.
 
 ## Snapshots that drift
 
-- **The clinic's case study copy describes the earlier build.** Its
-  captures were retaken on November 5 2026 after the redesign, and their
-  captions describe only what each frame shows. The body copy has not
-  moved with the project: its README now names Neon Postgres (via `pg`)
-  and Twilio WhatsApp, where the stack and the engineering section say
-  Supabase and a confirmation email, and its own notes say WhatsApp is not
-  delivering yet, so no claim that it does. The project is changing
-  quickly: check what is deployed before rewriting the stack, the
-  engineering section or the figures.
+- **The clinic's WhatsApp delivery.** The case study says it waits on
+  production Twilio credentials and approved templates (the clinic's README,
+  November 5 2026). When messages go out, change its Outcome.
 - Commit counts (719 on Lagna Atelier) and test counts are as of September 23
   2026. Refresh them in `lib/content.ts` when they move meaningfully.
