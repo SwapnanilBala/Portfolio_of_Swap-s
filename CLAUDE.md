@@ -555,7 +555,11 @@ narrower.
   code. The chips sit outside the name's link, which cannot contain another,
   and focusing one opens its entry in the detail. Its labels are
   `ui.index.destinations`, a word or two per role: a phone's column is about
-  13rem, and the case pages' sentences wrapped there.
+  13rem, and the case pages' sentences wrapped there. The open pane is the
+  whole entry (the `<li>`), chips included, and the chips are outlined in
+  ink with a tint on hover (November 2026, reported): with the pane on the
+  link alone and glass chips, its lower edge ran into them and they went
+  white on white.
 - **The fake news classifier has no screen, so its picture is its data**
   (`DotField`): LIAR's 10,269 training claims at one dot per five, laid down
   as fake, set aside, real — the class imbalance the project fought, in plain
