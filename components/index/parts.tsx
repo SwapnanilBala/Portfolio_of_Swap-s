@@ -201,14 +201,19 @@ export function IndexRows({
         const open = project.slug === active;
         const activate = onActivate ? () => onActivate(project.slug) : undefined;
         return (
-          <li key={project.slug} className="border-b border-ink/10 last:border-b-0">
+          // The open pane is the whole entry, destinations included: set on
+          // the link alone, its lower edge and shadow ran into the chips.
+          <li
+            key={project.slug}
+            className={`rounded-glass-xs border-b last:border-b-0 transition-[background-color,box-shadow,border-color] duration-300 ${
+              open ? "index-row-open border-transparent" : "border-ink/10"
+            }`}
+          >
             <ProjectLink
               project={project}
               onPointerEnter={activate}
               onFocus={activate}
-              className={`group grid grid-cols-[2rem_1fr_auto] items-center gap-x-3 rounded-glass-xs px-2.5 py-3.5 transition-[background-color,box-shadow] duration-300 md:grid-cols-[2.5rem_1fr_auto] md:px-3 md:py-4 ${
-                open ? "index-row-open" : ""
-              }`}
+              className="group grid grid-cols-[2rem_1fr_auto] items-center gap-x-3 rounded-glass-xs px-2.5 py-3.5 md:grid-cols-[2.5rem_1fr_auto] md:px-3 md:py-4"
             >
               <span className="meta tabular-nums text-glass-ink-2">{recordNumber(index)}</span>
               <span className="min-w-0">
