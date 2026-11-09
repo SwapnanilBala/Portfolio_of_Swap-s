@@ -443,8 +443,11 @@ narrower.
   it is the site's one filled control. A project with no live address shows
   none.
   - Desktop: on a 4.5rem line 1.25rem under the plate, edge to edge with
-    its bezel — "Open the case study" as type on the left, the live link
-    flush right; the counter shares the line, under the list. It is one link for every
+    its bezel — "Open the case study" on the left, in display type with the
+    case nav's hairline arrow, sized by the plate (16–32px; two lines in an
+    800px window), so it weighs as much as the live link flush right
+    (November 2026: as small meta type it pointed visitors away from the
+    case study); the counter shares the line, under the list. It is one link for every
     plate, so a keyboard visitor on it keeps focus while the arrow keys
     change project; its address follows the plate in. The plate's height
     is capped so the boxes, the line and the margins always fit, which

@@ -644,8 +644,11 @@ export function ProjectSlider({ projects, copy, liveLabel }: Props) {
       </div>
 
       {/* Under the plate, edge to edge with its bezel: the way into the case
-          study on the left, as type, and the live site on the right, the
-          page's one solid control. The counter shares its line. */}
+          study on the left, in display type with a hairline arrow, as heavy
+          as the live site on the right, the page's one solid control. The
+          case study is where the work is explained, so it is not the
+          smaller of the two. Its size follows the plate and it may wrap to
+          two lines, which the line's height holds, in a narrow window. */}
       {current ? (
         <div
           ref={liveRef}
@@ -657,9 +660,17 @@ export function ProjectSlider({ projects, copy, liveLabel }: Props) {
             transitionTypes={["page"]}
             onFocus={() => warm(active)}
             onPointerEnter={() => warm(active)}
-            className="meta shrink-0 underline decoration-1 underline-offset-4"
+            className="group display flex min-w-0 items-center gap-[0.5em] text-[clamp(1rem,calc(var(--plate-w)*0.028),2rem)]"
           >
             {copy.open}
+            {/* The case nav's hairline arrow, travelling a few pixels on hover. */}
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 40 10"
+              className="h-[0.32em] w-[1.3em] shrink-0 overflow-visible transition-transform duration-500 ease-out-expo group-hover:translate-x-2 group-focus-visible:translate-x-2 reduced:transition-none"
+            >
+              <path d="M0 5h39M34 1l5 4-5 4" fill="none" stroke="currentColor" strokeWidth="1" vectorEffect="non-scaling-stroke" />
+            </svg>
           </Link>
           {live ? (
             <LiveSiteLink
