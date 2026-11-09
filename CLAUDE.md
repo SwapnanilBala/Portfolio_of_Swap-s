@@ -390,6 +390,14 @@ narrower.
   measured on the build (brightest 2% under each box). Names are sized by
   the list (`--name-size`) so "KB Patient" holds one line and three rows
   fit its height; titles are `whitespace-nowrap`, so `displayLines` hold.
+- **The panel's foot carries the project on stage, in brief** (November
+  2026, on request): its summary and first two figures, the Index's own
+  copy, under a hairline. With three projects the panel was half empty
+  glass. Every brief is stacked in one cell and crossfades, so the panel
+  never changes height. It shows only where the panel's content box is
+  34.5rem tall (from 1440×900; not at 1366×768, where the names fell to
+  25px), and there the names leave it 12.5rem (`--brief-h`). Text over the
+  glass measured 5.8:1 at worst.
 - **One physics loop** on `gsap.ticker` in `ProjectSlider` owns the state —
   target, current (following with inertia), velocity — and shares it by
   reference (`SliderMotion`) with `SliderCanvas`, which only draws, on the same

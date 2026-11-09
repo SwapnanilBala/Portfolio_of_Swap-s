@@ -31,7 +31,14 @@
    row's padding and the number's column are 6.25rem; uppercase display type
    runs about 7em per 10 characters), and in its height: three two-line names
    at 0.84 are 5.04em, and 12.5rem is the panel's and rows' padding and the
-   details of the row on stage. */
+   details of the row on stage. Where the panel is at least `--brief-min`
+   tall, the brief of the project on stage sits at its foot, and the names
+   leave it `--brief-h`: a step from nothing to that, so below the threshold
+   the names keep every pixel they had. About 36rem keeps the names near
+   their width-bound size where the brief shows (at 32rem, 1366x768, they
+   fell to 25px). The container query below restates it for the panel's
+   content box -- the panel less its padding and border, which is what a
+   container query measures -- as it cannot read a custom property. */
 .projects-list-frame {
   --gut: 2rem;
   --my: 5rem;
@@ -52,7 +59,22 @@
   --foot: calc(var(--list-top) + var(--box-h) + var(--gap));
   --count-top: var(--foot);
   --count-h: var(--foot-h);
-  --name-size: min((var(--list-w) - 6.25rem) / 7, (var(--list-h) - 12.5rem) / 5.04);
+  --brief-min: calc(34.5rem + 1.25rem + 2px);
+  --brief-h: clamp(0rem, (var(--list-h) - var(--brief-min)) * 1000, 12.5rem);
+  --name-size: min((var(--list-w) - 6.25rem) / 7, (var(--list-h) - 12.5rem - var(--brief-h)) / 5.04);
+}
+
+/* The panel is a size container, so the brief can ask for its height. */
+.projects-list {
+  container-type: size;
+}
+.projects-brief {
+  display: none;
+}
+@container (min-height: 34.5rem) {
+  .projects-brief {
+    display: grid;
+  }
 }
 
 /* A portrait window (a narrow desktop window, or a tablet with a mouse) has

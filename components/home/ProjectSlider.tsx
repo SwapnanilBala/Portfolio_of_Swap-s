@@ -474,7 +474,7 @@ export function ProjectSlider({ projects, copy, liveLabel }: Props) {
         ref={listRef}
         aria-label={copy.rail}
         data-reveal=""
-        className="glass-dark absolute left-(--list-l) top-(--list-top) flex h-(--list-h) w-(--list-w) flex-col p-2.5"
+        className="projects-list glass-dark absolute left-(--list-l) top-(--list-top) flex h-(--list-h) w-(--list-w) flex-col p-2.5"
       >
         <ol className="grid gap-1.5">
           {projects.map((project, i) => {
@@ -527,6 +527,37 @@ export function ProjectSlider({ projects, copy, liveLabel }: Props) {
             );
           })}
         </ol>
+
+        {/* The project on stage, in brief, at the panel's foot: its summary
+            and first two figures, the Index's own copy. Every project's is
+            stacked in one cell and the one on stage crossfades in, so the
+            panel never changes height. Shown only where the panel has the
+            room (glass-projects.css); the names give it that room. The live
+            region names the project; this repeats it at more length, so it
+            is read where it is, on stage only. */}
+        <div className="projects-brief mt-auto px-4 pb-3">
+          {projects.map((project, i) => (
+            <div
+              key={project.slug}
+              aria-hidden={i !== active}
+              className={`border-t border-paper/15 pt-5 [grid-area:1/1] transition-opacity duration-500 ease-out-expo reduced:transition-none ${
+                i === active ? "opacity-100" : "pointer-events-none opacity-0"
+              }`}
+            >
+              <p className="max-w-[36rem] text-pretty text-[0.875rem] leading-[1.45] text-paper/85">{project.summary}</p>
+              {/* Values on one row and labels on the next, through a
+                  subgrid, so a label that wraps never lifts its value. */}
+              <dl className="mt-4 grid grid-cols-2 grid-rows-[auto_auto] gap-x-5">
+                {project.figures.slice(0, 2).map((figure) => (
+                  <div key={figure.label} className="row-span-2 grid min-w-0 grid-rows-subgrid gap-y-1.5">
+                    <dt className="meta row-start-2 text-glass-paper-2">{figure.label}</dt>
+                    <dd className="display row-start-1 text-[1.75rem] tabular-nums">{figure.value}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+          ))}
+        </div>
       </nav>
 
       {/* Under the list, on the plate's line: the counter, which cites the
