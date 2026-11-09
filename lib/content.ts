@@ -393,11 +393,13 @@ export const content: SiteContent = {
         { role: "source" },
       ],
       selected: true,
+      // The product, not its landing page (November 2026, on request): the
+      // signed-out quick-start plan, from the same round as the Index frames.
       hero: {
-        src: "/media/robust-health-hero.webp",
+        src: "/media/robust-health-live-plan.webp",
         width: 2880,
         height: 1800,
-        alt: "Robust Health's landing page: “Train. Eat. Recover. Adapt.” in large white type, Adapt in orange, over a dimmed photograph of a woman training; a line on workouts, calorie and macro targets and sleep from about five minutes of questions; Get my plan and How it works buttons and sign-in links for members and coaches; and a row of glass panels — workouts, food targets, sleep goal, changes weekly, and 900+ exercises, EN+ES and $0 to bring your coach.",
+        alt: "A quick-start preview of German Volume Training: six days a week, about 72 minutes a session, 3,187 kcal and 165 g of protein a day, and a note that with no details entered the calorie, macro and water numbers are for a reference adult of 75 kg, 175 cm and 24 years, above the top of the daily targets and the week's workouts.",
       },
       heroMobile: {
         src: "/media/robust-health-mobile.webp",
@@ -619,11 +621,13 @@ export const content: SiteContent = {
         { role: "source" },
       ],
       selected: true,
+      // The product, not its landing page (November 2026, on request): the
+      // booking's day-and-time step, from the same round as the Index frames.
       hero: {
-        src: "/media/kb-clinic-hero.webp",
+        src: "/media/kb-clinic-live-day.webp",
         width: 2880,
         height: 1800,
-        alt: "The clinic's booking page in its dark theme: “Book a visit with Dr. Kamalesh Bala”, buttons to book or to see all chambers, the doctor's three chamber days this week beside it, and the first of four booking steps open on Dinhata, Kolkata and Rampurhat, with an empty visit summary.",
+        alt: "The clinic's booking at its third step, at the Salt Lake chamber: the days ahead, those without a chamber marked closed, Monday chosen, and half-hourly times from 10:00 am to 5:30 pm in morning, afternoon and evening rows, with the visit summary beside it.",
       },
       heroMobile: {
         src: "/media/kb-clinic-mobile.webp",

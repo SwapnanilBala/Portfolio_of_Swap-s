@@ -229,6 +229,11 @@ competes.
   capture worth showing. Full-bleed only comes back with imagery that carries
   no headline of its own — an in-product view such as the chart wheel — and
   those sit behind forms and logins, so they have to come from him.
+- **A hero shows the product where a signed-out walk reaches it** (November
+  2026, on request): Robust Health's is the quick-start plan and the
+  clinic's the booking's day-and-time step, both 2x frames from the same
+  round as their Index frames. Lagna Atelier's is still its landing page:
+  its product begins with a birth chart, which needs details typed in.
 - **Type** — Inter Tight throughout. `display` utility: 650 weight, −0.05em
   tracking, 0.84 line height, uppercase. `meta` utility: 11px, 500, uppercase.
   No mono: it is the developer-portfolio tell the brief asks to avoid. The

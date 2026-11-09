@@ -24,7 +24,6 @@ export type BlurredMedia =
   | "/media/fens-oct-26-water.webp"
   | "/media/kb-clinic-booking.webp"
   | "/media/kb-clinic-doctor.webp"
-  | "/media/kb-clinic-hero.webp"
   | "/media/kb-clinic-live-bangla.webp"
   | "/media/kb-clinic-live-chamber.webp"
   | "/media/kb-clinic-live-chambers.webp"
@@ -55,7 +54,6 @@ export type BlurredMedia =
   | "/media/robust-health-android-onboarding.webp"
   | "/media/robust-health-android-plan.webp"
   | "/media/robust-health-android-workout.webp"
-  | "/media/robust-health-hero.webp"
   | "/media/robust-health-intake.webp"
   | "/media/robust-health-live-how.webp"
   | "/media/robust-health-live-inside.webp"
@@ -95,8 +93,6 @@ export const BLUR_PLACEHOLDERS: Readonly<Record<BlurredMedia, string>> = {
     "data:image/webp;base64,UklGRiYAAABXRUJQVlA4IBoAAAAwAQCdASoMAAkAAwBSJaQAA3AA/vT6EXEAAA==",
   "/media/kb-clinic-doctor.webp":
     "data:image/webp;base64,UklGRjgAAABXRUJQVlA4ICwAAABQAQCdASoMAAsAAwBSJZQABAAAAP700pxjZta+2rbzTfHa100hkF7V+5eAAA==",
-  "/media/kb-clinic-hero.webp":
-    "data:image/webp;base64,UklGRjYAAABXRUJQVlA4ICoAAACwAQCdASoMAAgAAwBSJaQAAp2tu52AAP7220LexvYWysOcohvzjsC9AAA=",
   "/media/kb-clinic-live-bangla.webp":
     "data:image/webp;base64,UklGRjgAAABXRUJQVlA4ICwAAADQAQCdASoMAAgAAwBSJaQAAp3Jmi32gAD+9ttC3sb2FsrZeLVBQFEFsVgAAA==",
   "/media/kb-clinic-live-chamber.webp":
@@ -157,8 +153,6 @@ export const BLUR_PLACEHOLDERS: Readonly<Record<BlurredMedia, string>> = {
     "data:image/webp;base64,UklGRoYAAABXRUJQVlA4IHoAAADQAwCdASoMABkAPt1cpkyopSOiMAgBEBuJYgCdABZmY5rw8zZ6YAAA/TU0WA4hTvSy5VieTh7/UY6LSmySMy+tIL9xbq5OsxR0whO+K1F9k2qe8BVkvW9mpycfu9khsUIAbvSKh/V/ZSwDHN51HR+VXr/8PvdnLZAAAA==",
   "/media/robust-health-android-workout.webp":
     "data:image/webp;base64,UklGRogAAABXRUJQVlA4IHwAAABQBACdASoMABkAPt1ep00opSOiMAgBEBuJYgCdIIjDAeCXLvmn83GVHmjIAP7y1+AhIv7K7HzqNsayo/uN4QOW9BaxJVGHobChwafIni5emi+pC44GbZetUr0kYDaofhyBvt/qVFyPoLkA/f+n/H9RUm9DY966HwMHoAAA",
-  "/media/robust-health-hero.webp":
-    "data:image/webp;base64,UklGRkYAAABXRUJQVlA4IDoAAACwAQCdASoMAAgAAwBSJZwAAp3OSjEAAP74jZYDDIcccB7EgYR38e7mBU3thwe1akH1laHSfRfmgAAA",
   "/media/robust-health-intake.webp":
     "data:image/webp;base64,UklGRjgAAABXRUJQVlA4ICwAAABwAQCdASoMAAgAAwBSJZQCdAF1AAD+7oZSPtjw3+yJ7sKqTJdteopgEgAAAA==",
   "/media/robust-health-live-how.webp":
