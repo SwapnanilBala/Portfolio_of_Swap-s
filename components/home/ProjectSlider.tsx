@@ -535,39 +535,39 @@ export function ProjectSlider({ projects, copy, liveLabel }: Props) {
             room (glass-projects.css); the names give it that room. The live
             region names the project; this repeats it at more length, so it
             is read where it is, on stage only. */}
-        <div className="projects-brief mt-auto px-4 pb-3">
-          {projects.map((project, i) => (
-            <div
-              key={project.slug}
-              aria-hidden={i !== active}
-              className={`border-t border-paper/15 pt-5 [grid-area:1/1] transition-opacity duration-500 ease-out-expo reduced:transition-none ${
-                i === active ? "opacity-100" : "pointer-events-none opacity-0"
-              }`}
-            >
-              <p className="max-w-[36rem] text-pretty text-[0.875rem] leading-[1.45] text-paper/85">{project.summary}</p>
-              {/* Values on one row and labels on the next, through a
-                  subgrid, so a label that wraps never lifts its value. */}
-              <dl className="mt-4 grid grid-cols-2 grid-rows-[auto_auto] gap-x-5">
-                {project.figures.slice(0, 2).map((figure) => (
-                  <div key={figure.label} className="row-span-2 grid min-w-0 grid-rows-subgrid gap-y-1.5">
-                    <dt className="meta row-start-2 text-glass-paper-2">{figure.label}</dt>
-                    <dd className="display row-start-1 text-[1.75rem] tabular-nums">{figure.value}</dd>
-                  </div>
-                ))}
-              </dl>
-            </div>
-          ))}
+        <div className="mt-auto">
+          <div className="projects-brief px-4 pb-3">
+            {projects.map((project, i) => (
+              <div
+                key={project.slug}
+                aria-hidden={i !== active}
+                className={`border-t border-paper/15 pt-5 [grid-area:1/1] transition-opacity duration-500 ease-out-expo reduced:transition-none ${
+                  i === active ? "opacity-100" : "pointer-events-none opacity-0"
+                }`}
+              >
+                <p className="max-w-[36rem] text-pretty text-[0.875rem] leading-[1.45] text-paper/85">{project.summary}</p>
+                {/* Values on one row and labels on the next, through a
+                    subgrid, so a label that wraps never lifts its value. */}
+                <dl className="mt-4 grid grid-cols-2 grid-rows-[auto_auto] gap-x-5">
+                  {project.figures.slice(0, 2).map((figure) => (
+                    <div key={figure.label} className="row-span-2 grid min-w-0 grid-rows-subgrid gap-y-1.5">
+                      <dt className="meta row-start-2 text-glass-paper-2">{figure.label}</dt>
+                      <dd className="display row-start-1 text-[1.75rem] tabular-nums">{figure.value}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+            ))}
+          </div>
+
+          {/* The counter, at the panel's foot under the rows' own numbers:
+              it cites the same record numbers the Index uses. It sat on the
+              plate's line until November 2026, alone beside the two links. */}
+          <p aria-hidden="true" className="projects-count meta px-4 pb-2 pt-3 tabular-nums text-paper">
+            {recordNumber(active)}&nbsp;<span className="text-glass-paper-2">/ {recordNumber(count - 1)}</span>
+          </p>
         </div>
       </nav>
-
-      {/* Under the list, on the plate's line: the counter, which cites the
-          same record numbers the Index uses, in line with the rows' numbers. */}
-      <p
-        aria-hidden="true"
-        className="meta absolute left-(--list-l) top-(--count-top) flex h-(--count-h) items-center px-[1.625rem] tabular-nums text-paper"
-      >
-        {recordNumber(active)}&nbsp;<span className="text-glass-paper-2">/ {recordNumber(count - 1)}</span>
-      </p>
 
       {/* The stage: the plates travel inside it and it clips them, so at
           rest the neighbours wait just past its edges. The WebGL canvas

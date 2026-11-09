@@ -12,8 +12,8 @@
 
 /* The desktop page's frame, defined once: two boxes of one height side by
    side -- the list on the left, the plate in its bezel on the right -- and a
-   line under each: the counter under the list, the case study and the live
-   site under the plate. Symmetric, on request (November 2026): the boxes
+   line under the plate: the case study and the live site. The counter is at
+   the list's own foot (November 2026). Symmetric, on request (November 2026): the boxes
    share their top and bottom edges, the outer margins are equal, and the
    whole is centred in the window, at least `--my` from its top and bottom,
    which clears the nav and the way home.
@@ -31,7 +31,9 @@
    row's padding and the number's column are 6.25rem; uppercase display type
    runs about 7em per 10 characters), and in its height: three two-line names
    at 0.84 are 5.04em, and 12.5rem is the panel's and rows' padding and the
-   details of the row on stage. Where the panel is at least `--brief-min`
+   details of the row on stage. The counter at the panel's foot takes 2rem
+   more (`--count-r`) where the panel's content box is 16rem tall; a shorter
+   panel (800x600) has no room for it and goes without. Where the panel is at least `--brief-min`
    tall, the brief of the project on stage sits at its foot, and the names
    leave it `--brief-h`: a step from nothing to that, so below the threshold
    the names keep every pixel they had. About 36rem keeps the names near
@@ -57,19 +59,24 @@
   --plate-top: calc(var(--list-top) + var(--bezel));
   --plate-x: calc(var(--stage-l) + var(--gut) + var(--bezel));
   --foot: calc(var(--list-top) + var(--box-h) + var(--gap));
-  --count-top: var(--foot);
-  --count-h: var(--foot-h);
   --brief-min: calc(34.5rem + 1.25rem + 2px);
   --brief-h: clamp(0rem, (var(--list-h) - var(--brief-min)) * 1000, 12.5rem);
-  --name-size: min((var(--list-w) - 6.25rem) / 7, (var(--list-h) - 12.5rem - var(--brief-h)) / 5.04);
+  --count-r: clamp(0rem, (var(--list-h) - 17.25rem - 2px) * 1000, 2rem);
+  --name-size: min((var(--list-w) - 6.25rem) / 7, (var(--list-h) - 12.5rem - var(--count-r) - var(--brief-h)) / 5.04);
 }
 
 /* The panel is a size container, so the brief can ask for its height. */
 .projects-list {
   container-type: size;
 }
-.projects-brief {
+.projects-brief,
+.projects-count {
   display: none;
+}
+@container (min-height: 16rem) {
+  .projects-count {
+    display: block;
+  }
 }
 @container (min-height: 34.5rem) {
   .projects-brief {
@@ -79,7 +86,8 @@
 
 /* A portrait window (a narrow desktop window, or a tablet with a mouse) has
    no room beside the plate, so the boxes stack: the plate and its line at the
-   top, the list under them and its counter last, the same margins all round.
+   top, the list under them, its counter at its foot, the same margins all
+   round.
    The stage is the window's width, and the plate gives the list at least 40%
    of the height. */
 @media (orientation: portrait) {
@@ -93,9 +101,7 @@
     --plate-x: calc((100vw - var(--plate-w)) / 2);
     --foot: calc(var(--plate-top) + var(--plate-w) * 10 / 16 + var(--bezel) + var(--gap));
     --list-top: calc(var(--foot) + var(--foot-h) + var(--gap));
-    --count-h: 2.5rem;
-    --list-h: calc(100vh - var(--my) - var(--count-h) - var(--list-top));
-    --count-top: calc(var(--list-top) + var(--list-h));
+    --list-h: calc(100vh - var(--my) - var(--list-top));
   }
 }
 
