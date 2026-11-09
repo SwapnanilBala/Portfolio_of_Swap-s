@@ -229,11 +229,14 @@ competes.
   capture worth showing. Full-bleed only comes back with imagery that carries
   no headline of its own — an in-product view such as the chart wheel — and
   those sit behind forms and logins, so they have to come from him.
-- **A hero shows the product where a signed-out walk reaches it** (November
-  2026, on request): Robust Health's is the quick-start plan and the
-  clinic's the booking's day-and-time step, both 2x frames from the same
-  round as their Index frames. Lagna Atelier's is still its landing page:
-  its product begins with a birth chart, which needs details typed in.
+- **A hero shows the product, not its landing page** (November 2026, on
+  request): Robust Health's is the quick-start plan and the clinic's the
+  booking's day-and-time step, both 2x frames from the same round as their
+  Index frames. Lagna Atelier's is a chart cast on the live site, signed
+  out, for an invented reader (November 9 2026, with his permission to
+  type the details): the wheel, the planets' table and the week's energy.
+  Its birth details travel in the address and nothing is saved. Never a
+  real person's chart, by the same rule as the Android captures.
 - **Type** — Inter Tight throughout. `display` utility: 650 weight, −0.05em
   tracking, 0.84 line height, uppercase. `meta` utility: 11px, 500, uppercase.
   No mono: it is the developer-portfolio tell the brief asks to avoid. The
@@ -559,8 +562,9 @@ narrower.
   onboarding, a quick-start plan and the Spanish landing page. The
   clinic's walk its booking to the details step, empty, and stop. Lagna
   Atelier's were taken October 21 2026, Robust Health's on November 3 2026
-  and the clinic's on November 5 2026, each after its redesign; each
-  project's slider hero is from the same round as its frames. Retake both
+  and the clinic's on November 5 2026, each after its redesign; Robust
+  Health's and the clinic's heroes are from the same round as their
+  frames, Lagna Atelier's from November 9 (see *Design direction*). Retake both
   together, and keep the note under the heading true.
 - **Capture in a guest browser.** A headless Edge profile on his machine
   inherits his Windows sign-in and filled the Robust Health sign-in forms

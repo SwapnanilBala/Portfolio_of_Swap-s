@@ -36,6 +36,7 @@ export type BlurredMedia =
   | "/media/lagna-atelier-android-preferences.webp"
   | "/media/lagna-atelier-android-reading.webp"
   | "/media/lagna-atelier-android-timing.webp"
+  | "/media/lagna-atelier-chart.webp"
   | "/media/lagna-atelier-cover.webp"
   | "/media/lagna-atelier-hero.webp"
   | "/media/lagna-atelier-houses.webp"
@@ -117,6 +118,8 @@ export const BLUR_PLACEHOLDERS: Readonly<Record<BlurredMedia, string>> = {
     "data:image/webp;base64,UklGRn4AAABXRUJQVlA4IHIAAAAwAwCdASoMABkAPt1qqU4opqQiMAgBEBuJaQAAev+3eeAwAP7w1BOUmtIQyImwUK6ZGN8Pj3uS/w1SgfUDaPSJN/ztsP4iofuX9v3aMci9zAn0XnKJVDiv3w2g/tt568AZri2bFV8f+P+Do3jpBBgAAAA=",
   "/media/lagna-atelier-android-timing.webp":
     "data:image/webp;base64,UklGRmoAAABXRUJQVlA4IF4AAADwAwCdASoMABkAPt1qqU4opqQiMAgBEBuJaQAAWp/5X6ym2s6MyrUEAP7x6xd8tmlmzUg48Kax15y+6idMWo/fhcVDPfFaaFlU5bVovQjWtG5rxs/c6vh+xEMAAAAA",
+  "/media/lagna-atelier-chart.webp":
+    "data:image/webp;base64,UklGRjwAAABXRUJQVlA4IDAAAADQAQCdASoMAAgAAwBSJZwCw7D0jID4AAD+8uS2jrS7JMOWNr1h/T2bmMSKHkkAAAA=",
   "/media/lagna-atelier-cover.webp":
     "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACwAQCdASoMAAcAAwBSJZQCdADsj24AAP73glukekzGhzujOExQKByho0HuAAAA",
   "/media/lagna-atelier-hero.webp":

@@ -132,11 +132,15 @@ export const content: SiteContent = {
         },
       ],
       selected: true,
+      // The product, not its landing page (November 2026, on request): a
+      // chart cast on the live site, signed out, for an invented reader
+      // (no real person's birth details), on 2026-11-09. The details travel
+      // in the address and nothing was saved.
       hero: {
-        src: "/media/lagna-atelier-hero.webp",
+        src: "/media/lagna-atelier-chart.webp",
         width: 2880,
         height: 1800,
-        alt: "Lagna Atelier's landing screen in its dark theme: “Create your Vedic birth chart” in gold capitals on a starfield, the first of four steps — name, birth date, birth time, birthplace — asking what to call the reader, and a Live sky build panel waiting for its six details.",
+        alt: "A Lagna Atelier chart for an invented reader: the birth chart (Rashi, D1) as a constellation wheel with Aquarius rising, a table of each planet's sign, house and degree, and beside it the week's energy as a line from Saturday 7 to Friday 13 November, peaking on Monday the 9th, over four forecast cards.",
       },
       heroMobile: {
         src: "/media/lagna-atelier-mobile.webp",
