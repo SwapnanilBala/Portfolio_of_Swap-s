@@ -405,8 +405,10 @@ narrower.
   cannot skip past everything.
 - **Two boxes, symmetric** (November 2026, on request): the list and the
   plate's bezel are one height and share their top and bottom edges, with a
-  line under each — the counter under the list, the case study and the live
-  site under the plate. The outer margins are equal (a 2rem gutter, the
+  line under the plate — the case study and the live site. The counter is
+  at the list's own foot, under the rows' numbers (moved off the line in
+  November 2026, where it sat alone; hidden in a panel under 16rem, as at
+  800×600). The outer margins are equal (a 2rem gutter, the
   same between the boxes), and the whole is centred in the window, at
   least 5rem (`--my`) from its top and bottom. Before, the list ran down
   beside the line, the plate floated in its stage when the height capped
@@ -425,7 +427,7 @@ narrower.
   measured from the stage, not the window), never fixed, so no window shape
   shows a sliver of the next project. A portrait window has no room beside
   the plate, so there the stage is the window's width and the boxes stack:
-  plate and line, then the list and its counter. Plates dim as they
+  plate and line, then the list, its counter at its foot. Plates dim as they
   leave the stage and light as they arrive (`presenceAt`) — DOM opacity over
   the ink, and the same mix toward ink in the shader. A click opens a project
   only on the plate on stage; the ink around it does nothing.
@@ -433,8 +435,7 @@ narrower.
   (`app/styles/glass-projects.css`): the list's width and box, the stage's
   edges (`--stage-l`, `--stage-r`), `--plate-top`, `--plate-w`,
   `--plate-x` (the plate's left edge in the window, for the glow and the
-  line under it), `--foot` (that line's top) and `--count-top` (the
-  counter's). The canvas fills the stage, so the WebGL plates measure a DOM
+  line under it) and `--foot` (that line's top). The canvas fills the stage, so the WebGL plates measure a DOM
   plate's layout box inside it (`frameRef`) and step by the same
   `slideStep`; nothing restates the geometry in JavaScript.
 - **Every slide leads to its live site** (`LiveSiteLink`), on request: "big
@@ -447,7 +448,7 @@ narrower.
     case nav's hairline arrow, sized by the plate (16–32px; two lines in an
     800px window), so it weighs as much as the live link flush right
     (November 2026: as small meta type it pointed visitors away from the
-    case study); the counter shares the line, under the list. It is one link for every
+    case study). It is one link for every
     plate, so a keyboard visitor on it keeps focus while the arrow keys
     change project; its address follows the plate in. The plate's height
     is capped so the boxes, the line and the margins always fit, which
