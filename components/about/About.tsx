@@ -40,7 +40,9 @@ function Cell({
  * when he is free, the ways to reach him, and the resume -- with the statement
  * on the resume's line. Then the person, his portraits beside the intro, and
  * the record two parts to a row: experience beside education, technologies
- * beside current work. The photographs close it, one row of three, before a
+ * beside current work. With no experience listed (the Pointo internship came
+ * off in November 2026), education sits beside technologies and current work
+ * takes the full row. The photographs close it, one row of three, before a
  * compact footer. Each part is a frosted panel on a radiant ground, the
  * contacts small glass chips. Technologies are plain text lists joined by em dashes --
  * not a wall of coloured logos, which say only that a logo exists. One view
@@ -50,6 +52,7 @@ export function About({ kit }: { readonly kit: MotionKit }) {
   const { Text, Plate, Link: ContactLink } = kit;
   const { about, contact, profile, ui } = content;
   const labels = ui.aboutSectionLabels;
+  const hasExperience = about.experience.length > 0;
   const resume = contact.find((route) => route.key === "resume");
   const reach = contact.filter((route) => route.key !== "resume");
 
@@ -131,6 +134,7 @@ export function About({ kit }: { readonly kit: MotionKit }) {
 
           {/* Two panels to a row from 64rem; stacked, in reading order, below. */}
           <div className="grid grid-cols-12 gap-3.5 md:gap-5">
+            {hasExperience ? (
             <Cell id="experience" label={labels.experience} className="col-span-12 lg:col-span-6">
               <ol className="grid gap-8">
                 {about.experience.map((role) => (
@@ -154,6 +158,7 @@ export function About({ kit }: { readonly kit: MotionKit }) {
                 ))}
               </ol>
             </Cell>
+            ) : null}
 
             <Cell id="education" label={labels.education} className="col-span-12 lg:col-span-6">
               <ol className="grid gap-5">
@@ -208,7 +213,11 @@ export function About({ kit }: { readonly kit: MotionKit }) {
               </dl>
             </Cell>
 
-            <Cell id="exploring" label={labels.exploring} className="col-span-12 lg:col-span-6">
+            <Cell
+              id="exploring"
+              label={labels.exploring}
+              className={hasExperience ? "col-span-12 lg:col-span-6" : "col-span-12"}
+            >
               <ul className="grid gap-4">
                 {about.exploring.map((item) => (
                   <li key={item.title} className="grid gap-1 border-b border-ink/10 pb-4 last:border-b-0 last:pb-0">

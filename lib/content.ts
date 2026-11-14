@@ -886,21 +886,12 @@ export const content: SiteContent = {
     intro: [
       "I'm Swapnanil, an AI engineer in Boston, working toward an M.S. in Data Science at Northeastern's Khoury College through December 2027.",
       "I build the calculation layer myself. That has meant a sidereal ephemeris written by hand, a rules engine that fails the build when a rule is malformed, and a planner that rewrites next week against what was actually logged.",
-      "Before Boston I studied electronics and communication engineering in West Bengal, and worked on the data behind an EV-financing startup's weekly reporting in Kolkata. Away from a keyboard I play piano, with ABRSM Grade 4 at Distinction.",
+      "Before Boston I studied electronics and communication engineering in West Bengal. Away from a keyboard I play piano, with ABRSM Grade 4 at Distinction.",
     ],
-    experience: [
-      {
-        org: "P2G Mobility Tech (Pointo), an EV-financing startup",
-        role: "Program Analyst Intern, Technology",
-        period: "Nov 2024 — Jan 2025",
-        location: "Kolkata, India",
-        details: [
-          "Cleaned and consolidated the operational Excel datasets behind the internal dashboards: resolved missing values, recovered lost source files, and standardised records so weekly reporting could run off them.",
-          "Wrote SQL against the production database and built the recurring operational reports the project lead worked from.",
-          "Pitched the pay-to-own financing programme to e-rickshaw operators in the field, and the lithium-ion upgrade against the lead-acid batteries they were already running.",
-        ],
-      },
-    ],
+    // Empty on request (November 2026): the Pointo internship came off the
+    // resumes and the site together. The About page drops the panel while
+    // this list is empty.
+    experience: [],
     education: [
       {
         school: "Northeastern University, Khoury College of Computer Sciences",
