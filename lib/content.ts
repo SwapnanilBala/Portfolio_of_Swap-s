@@ -1088,12 +1088,13 @@ export const content: SiteContent = {
       detail: "linkedin.com/in/swapnanil-bala-854b722a7",
     },
     {
-      // The September 21 resume, with the phone number and personal address
-      // removed from the content stream and the mailto link rebuilt, because
-      // this repository is public. Regenerate the same way if it is replaced.
+      // The November 13 AI Engineer resume, built from
+      // Resume_Hub/_source/content/portfolio-site.json: the Northeastern
+      // address and no phone number, because this repository is public. That
+      // build fails if either private detail appears.
       key: "resume",
       href: "/resume.pdf",
-      detail: "Resume, October 2026 (PDF)",
+      detail: "Resume, November 2026 (PDF)",
     },
   ],
 
@@ -1124,9 +1125,9 @@ export const content: SiteContent = {
     caseMeta: { role: "Role", year: "Year", stack: "Stack", type: "Type" },
     landing: {
       availability: "Seeking a {availability}",
-      // The resume contact's detail says the same: "Resume, October 2026
+      // The resume contact's detail says the same: "Resume, November 2026
       // (PDF)". Change both when the file is replaced.
-      resumeNote: "October 2026 / PDF",
+      resumeNote: "November 2026 / PDF",
     },
     slider: {
       heading: "Projects",
